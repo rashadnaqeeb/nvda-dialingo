@@ -1,0 +1,237 @@
+backend fasttext, default en, configured ['ru', 'uk', 'bg', 'be', 'mk', 'sr']
+=== sentences/be.txt: 1000 lines, switched 100.0%, own language tagged 98.1%, 339 ms
+=== sentences/bg.txt: 1000 lines, switched 100.0%, own language tagged 99.1%, 270 ms
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 266 ms
+=== sentences/mk.txt: 1000 lines, switched 100.0%, own language tagged 99.7%, 341 ms
+=== sentences/ru.txt: 1000 lines, switched 100.0%, own language tagged 99.5%, 220 ms
+=== sentences/sr.txt: 1000 lines, switched 100.0%, own language tagged 97.6%, 285 ms
+=== sentences/uk.txt: 1000 lines, switched 100.0%, own language tagged 99.8%, 324 ms
+=== single-words/be.txt: 1000 lines, switched 100.0%, own language tagged 72.0%, 45 ms
+=== single-words/bg.txt: 1000 lines, switched 100.0%, own language tagged 54.8%, 50 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/mk.txt: 1000 lines, switched 100.0%, own language tagged 49.8%, 45 ms
+=== single-words/ru.txt: 1000 lines, switched 100.0%, own language tagged 90.3%, 48 ms
+=== single-words/sr.txt: 1000 lines, switched 100.0%, own language tagged 51.7%, 47 ms
+=== single-words/uk.txt: 1000 lines, switched 100.0%, own language tagged 78.1%, 51 ms
+=== word-pairs/be.txt: 1000 lines, switched 100.0%, own language tagged 88.0%, 74 ms
+=== word-pairs/bg.txt: 1000 lines, switched 100.0%, own language tagged 77.9%, 81 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 216 ms
+=== word-pairs/mk.txt: 1000 lines, switched 100.0%, own language tagged 69.0%, 101 ms
+=== word-pairs/ru.txt: 1000 lines, switched 100.0%, own language tagged 98.2%, 84 ms
+=== word-pairs/sr.txt: 1000 lines, switched 100.0%, own language tagged 73.3%, 73 ms
+=== word-pairs/uk.txt: 1000 lines, switched 100.0%, own language tagged 94.3%, 71 ms
+
+backend fasttext, default en, configured ['ar', 'fa', 'ur']
+=== sentences/ar.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 292 ms
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 262 ms
+=== sentences/fa.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 311 ms
+=== sentences/ur.txt: 1000 lines, switched 100.0%, own language tagged 99.5%, 323 ms
+=== single-words/ar.txt: 1000 lines, switched 100.0%, own language tagged 94.0%, 40 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/fa.txt: 1000 lines, switched 100.0%, own language tagged 83.5%, 41 ms
+=== single-words/ur.txt: 1000 lines, switched 100.0%, own language tagged 59.0%, 41 ms
+=== word-pairs/ar.txt: 1000 lines, switched 100.0%, own language tagged 98.9%, 68 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 95 ms
+=== word-pairs/fa.txt: 1000 lines, switched 100.0%, own language tagged 93.5%, 67 ms
+=== word-pairs/ur.txt: 1000 lines, switched 100.0%, own language tagged 67.3%, 69 ms
+
+backend fasttext, default en, configured ['hi', 'mr']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 265 ms
+=== sentences/hi.txt: 1000 lines, switched 100.0%, own language tagged 99.9%, 277 ms
+=== sentences/mr.txt: 1000 lines, switched 100.0%, own language tagged 98.9%, 265 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/hi.txt: 1000 lines, switched 100.0%, own language tagged 83.0%, 48 ms
+=== single-words/mr.txt: 1000 lines, switched 100.0%, own language tagged 72.9%, 46 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 100 ms
+=== word-pairs/hi.txt: 1000 lines, switched 100.0%, own language tagged 90.3%, 74 ms
+=== word-pairs/mr.txt: 1000 lines, switched 100.0%, own language tagged 85.6%, 75 ms
+
+backend fasttext, default en, configured ['zh', 'ja', 'ko']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 270 ms
+=== sentences/ja.txt: 412 lines, switched 100.0%, own language tagged 100.0%, 17 ms
+=== sentences/ko.txt: 1000 lines, switched 99.9%, own language tagged 99.9%, 40 ms
+=== sentences/zh.txt: 729 lines, switched 100.0%, own language tagged 99.5%, 65 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/ja.txt: 157 lines, switched 0.0%, own language tagged 0.0%, 2 ms
+=== single-words/ko.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== single-words/zh.txt: 1000 lines, switched 100.0%, own language tagged 68.4%, 35 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 116 ms
+=== word-pairs/ja.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== word-pairs/ko.txt: 656 lines, switched 100.0%, own language tagged 100.0%, 7 ms
+=== word-pairs/zh.txt: 1000 lines, switched 100.0%, own language tagged 71.4%, 24 ms
+
+backend fasttext, default en, configured ['he', 'el', 'ka', 'hy', 'th', 'bn', 'ta', 'te', 'gu', 'pa']
+=== sentences/bn.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 35 ms
+=== sentences/el.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 50 ms
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 261 ms
+=== sentences/gu.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 45 ms
+=== sentences/he.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 43 ms
+=== sentences/hy.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 44 ms
+=== sentences/ka.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 39 ms
+=== sentences/pa.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 43 ms
+=== sentences/ta.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 38 ms
+=== sentences/te.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 38 ms
+=== sentences/th.txt: 1000 lines, switched 99.9%, own language tagged 99.9%, 41 ms
+=== single-words/bn.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== single-words/el.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/gu.txt: 1000 lines, switched 99.1%, own language tagged 99.1%, 9 ms
+=== single-words/he.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== single-words/hy.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== single-words/ka.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== single-words/pa.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== single-words/ta.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== single-words/te.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== single-words/th.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 10 ms
+=== word-pairs/bn.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 10 ms
+=== word-pairs/el.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 11 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 103 ms
+=== word-pairs/gu.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 10 ms
+=== word-pairs/he.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 10 ms
+=== word-pairs/hy.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 10 ms
+=== word-pairs/ka.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 11 ms
+=== word-pairs/pa.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 11 ms
+=== word-pairs/ta.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 12 ms
+=== word-pairs/te.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 11 ms
+=== word-pairs/th.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 13 ms
+
+backend fasttext, default ru, configured ['uk', 'bg', 'be', 'mk', 'sr', 'en']
+=== sentences/be.txt: 1000 lines, switched 95.7%, own language tagged 95.7%, 875 ms
+=== sentences/bg.txt: 1000 lines, switched 95.1%, own language tagged 94.8%, 941 ms
+=== sentences/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 385 ms
+=== sentences/mk.txt: 1000 lines, switched 97.1%, own language tagged 96.5%, 1364 ms
+=== sentences/ru.txt: 1000 lines, switched 1.6%, own language tagged 0.0%, 191 ms
+  false switch: Последовавшее при этом сражение известно под именем сражения при Бичи -Хэд ([en]BeachyHead).
+  false switch: вторник, 4 апреля 00:58:23 2006 Автор : автору Тема : [en]Re: О Канаде трезво для тех кто сюда хочет.
+  false switch: Поездки организовываем совместно с нашими партнерами в этой стране – компанией[en]T.T.A.
+  false switch: Как понятно из названия, это стилизация под [en]Mac OSX.
+  false switch: Доступом в Интернет через [en]GPRS пользуются 19% и 12% женщин.
+=== sentences/sr.txt: 1000 lines, switched 93.6%, own language tagged 90.2%, 1180 ms
+=== sentences/uk.txt: 1000 lines, switched 98.7%, own language tagged 98.5%, 1036 ms
+=== single-words/be.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 16 ms
+=== single-words/bg.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 17 ms
+=== single-words/en.txt: 1000 lines, switched 100.0%, own language tagged 99.2%, 91 ms
+=== single-words/mk.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 16 ms
+=== single-words/ru.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 16 ms
+=== single-words/sr.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 15 ms
+=== single-words/uk.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 16 ms
+=== word-pairs/be.txt: 1000 lines, switched 81.0%, own language tagged 78.6%, 91 ms
+=== word-pairs/bg.txt: 1000 lines, switched 58.1%, own language tagged 58.0%, 83 ms
+=== word-pairs/en.txt: 1000 lines, switched 100.0%, own language tagged 99.9%, 113 ms
+=== word-pairs/mk.txt: 1000 lines, switched 49.1%, own language tagged 46.8%, 78 ms
+=== word-pairs/ru.txt: 1000 lines, switched 0.3%, own language tagged 0.0%, 74 ms
+  false switch: [uk]тоненький скрип
+  false switch: [sr]почве русским
+  false switch: [uk]схема нормальна
+=== word-pairs/sr.txt: 1000 lines, switched 59.1%, own language tagged 57.4%, 77 ms
+=== word-pairs/uk.txt: 1000 lines, switched 85.4%, own language tagged 85.4%, 76 ms
+
+backend fasttext, default uk, configured ['ru', 'en']
+=== sentences/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 33 ms
+=== sentences/ru.txt: 1000 lines, switched 97.1%, own language tagged 97.1%, 588 ms
+=== sentences/uk.txt: 1000 lines, switched 5.4%, own language tagged 0.0%, 250 ms
+  false switch: Як і кожна людина, яка мала нещастя бути «[ru]советским человеком».
+  false switch: 2010) Проект Закону про енергетичну ефективність будівель ([ru]проект н. д. Ю. Одарченка вручено 01.06.
+  false switch: [en]Firefox пропонує опцію виконання плагінів за запитом В [en]Firefox незабаром з'явиться вбудоване засіб настройки пол
+  false switch: Писемність у грецькій культурі [en]XXII-XII ст. грала обмежену роль.
+  false switch: Спеціальний подарунок від [en]Kleem Records - одна з груп зможе записати свою пісню безкоштовно [en]Kleem Records, Інтер
+=== single-words/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 7 ms
+=== single-words/ru.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 15 ms
+=== single-words/uk.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 16 ms
+=== word-pairs/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== word-pairs/ru.txt: 1000 lines, switched 92.8%, own language tagged 92.8%, 84 ms
+=== word-pairs/uk.txt: 1000 lines, switched 1.0%, own language tagged 0.0%, 63 ms
+  false switch: [ru]система уявлень
+  false switch: [ru]набили морду
+  false switch: [ru]стали центром
+  false switch: [ru]несхожими через
+  false switch: [ru]приходили забирали
+
+backend fasttext, default sr, configured ['ru', 'bg', 'mk']
+=== sentences/bg.txt: 1000 lines, switched 95.5%, own language tagged 95.0%, 975 ms
+=== sentences/mk.txt: 1000 lines, switched 96.7%, own language tagged 96.4%, 1341 ms
+=== sentences/ru.txt: 1000 lines, switched 96.5%, own language tagged 96.5%, 578 ms
+=== sentences/sr.txt: 1000 lines, switched 3.0%, own language tagged 0.0%, 382 ms
+  false switch: Његово прво владарско име гласило је: „Оснивање првог“ (Jiànyuán, [ja]建元).
+  false switch: [ru]Осим руских, у последњим данима рата оборио је и седам америчких авиона.
+  false switch: [mk]Општина се простире на површини од 4,84 -{km²}-.
+  false switch: [mk]Општина се простире на површини од 3,8 -{km²}-.
+  false switch: Овакве инфекције обично настају услед ширења ешерихије коли усходним путем, [mk]од отвора уретре, до осталиг структура.
+=== single-words/bg.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 29 ms
+=== single-words/mk.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 28 ms
+=== single-words/ru.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 30 ms
+=== single-words/sr.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 29 ms
+=== word-pairs/bg.txt: 1000 lines, switched 62.6%, own language tagged 59.0%, 103 ms
+=== word-pairs/mk.txt: 1000 lines, switched 50.0%, own language tagged 47.3%, 102 ms
+=== word-pairs/ru.txt: 1000 lines, switched 93.2%, own language tagged 93.2%, 89 ms
+=== word-pairs/sr.txt: 1000 lines, switched 5.5%, own language tagged 0.0%, 100 ms
+  false switch: [ru]начин стекли
+  false switch: [mk]човек треба
+  false switch: [ru]покрет заговарао
+  false switch: [mk]статус вјеројатно
+  false switch: [ru]денисом шефиком
+
+backend fasttext, default ar, configured ['fa', 'ur', 'en']
+=== sentences/ar.txt: 1000 lines, switched 5.2%, own language tagged 0.0%, 240 ms
+  false switch: الساعة الآن 06:41 [en]PM.
+  false switch: دشن معالي رئيس مدينة الملك عبد العزيز للعلوم والتقنية د. محمد السويل البوابة الالكترونية الرسمية لمبادرة الملك عبدا لله 
+  false switch: النتائج من تحليل ميكروأري من [en]LRRC3B ، معربا عن الأورام [en]xenograft تلطيخ [en]H&Eأقسام الأنسجة أشار إلى أن [en]LRRC
+  false switch: الساعة الآن 07:00 [en]PM.
+  false switch: ك الحرباء ، فإنه أيضا [en]Agamas أن تكون قادرة على التغيير ، وفقا لدولهم العقل اللون.
+=== sentences/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 33 ms
+=== sentences/fa.txt: 1000 lines, switched 99.7%, own language tagged 99.6%, 2320 ms
+=== sentences/ur.txt: 1000 lines, switched 99.4%, own language tagged 99.0%, 2811 ms
+=== single-words/ar.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 14 ms
+=== single-words/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 7 ms
+=== single-words/fa.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 14 ms
+=== single-words/ur.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 14 ms
+=== word-pairs/ar.txt: 1000 lines, switched 0.2%, own language tagged 0.0%, 60 ms
+  false switch: [fa]تتأکد بوجود
+  false switch: [fa]اتقانه استخدام
+=== word-pairs/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== word-pairs/fa.txt: 1000 lines, switched 81.5%, own language tagged 81.4%, 259 ms
+=== word-pairs/ur.txt: 1000 lines, switched 56.9%, own language tagged 44.3%, 239 ms
+
+backend fasttext, default hi, configured ['mr', 'en']
+=== sentences/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 32 ms
+=== sentences/hi.txt: 1000 lines, switched 3.7%, own language tagged 0.0%, 234 ms
+  false switch: 0 राजेश उत्‍साही प्रस्तुतकर्ता राजेश उत्‍साही पर 5:18 [en]am इसे ईमेल करेंइसे ब्लॉग करें!
+  false switch: [en]AAP भी इसपर चुप है.
+  false switch: [en]Alok Puranik जीवन ही पुलिया है, जन्म से मौत के बीच का माध्यम-पुलिया।
+  false switch: [en]Amit Srivastava21 दिसंबर 2014 को 4:52 [en]pm अनुकरणीय ।
+  false switch: [en]Google, संयुक्त राज्य अमेरिका और अन्य देशों में हमारे सर्वर पर व्यक्तिगत जानकारी संसाधित करता है.
+=== sentences/mr.txt: 1000 lines, switched 96.1%, own language tagged 96.0%, 1078 ms
+=== single-words/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 7 ms
+=== single-words/hi.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 15 ms
+=== single-words/mr.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 15 ms
+=== word-pairs/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== word-pairs/hi.txt: 1000 lines, switched 2.6%, own language tagged 0.0%, 63 ms
+  false switch: [mr]हिंदी जन्मदिन
+  false switch: [mr]पक्षकार इजाजत
+  false switch: [mr]पटकेंगे मगरमच्छ
+  false switch: [mr]चुनाव सामने
+  false switch: [mr]शेखचिल्ली वृक्ष
+=== word-pairs/mr.txt: 1000 lines, switched 73.7%, own language tagged 73.7%, 80 ms
+
+backend fasttext, default zh, configured ['ja', 'en']
+=== sentences/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 44 ms
+=== sentences/ja.txt: 412 lines, switched 100.0%, own language tagged 100.0%, 16 ms
+=== sentences/zh.txt: 729 lines, switched 0.0%, own language tagged 0.0%, 50 ms
+=== single-words/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 7 ms
+=== single-words/ja.txt: 157 lines, switched 0.0%, own language tagged 0.0%, 2 ms
+=== single-words/zh.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 13 ms
+=== word-pairs/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 10 ms
+=== word-pairs/ja.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 8 ms
+=== word-pairs/zh.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 13 ms
+
+backend fasttext, default ja, configured ['zh', 'en']
+=== sentences/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 32 ms
+=== sentences/ja.txt: 412 lines, switched 0.0%, own language tagged 0.0%, 25 ms
+=== sentences/zh.txt: 729 lines, switched 98.2%, own language tagged 98.2%, 65 ms
+=== single-words/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 7 ms
+=== single-words/ja.txt: 157 lines, switched 0.0%, own language tagged 0.0%, 2 ms
+=== single-words/zh.txt: 1000 lines, switched 56.4%, own language tagged 56.4%, 41 ms
+=== word-pairs/en.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, 9 ms
+=== word-pairs/ja.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 13 ms
+=== word-pairs/zh.txt: 1000 lines, switched 64.1%, own language tagged 64.1%, 30 ms
+

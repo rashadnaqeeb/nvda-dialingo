@@ -1,0 +1,27 @@
+Getting started
+
+Hey! Welcome to the beta test of my multilanguage NVDA addon (yes, the name will change when I come up with something better).
+
+This addon detects languages in 3 ways:
+
+1. Language tags in text documents, when properly applied. This is what all language switching addons have done for years.
+
+2. Script changes, so for example the change from English, which uses Latin script, to Arabic, which uses the Arabic alphabet. Also reasonably common, also pretty much foolproof.
+
+3. When no language tag is provided, the addon attempts to guess the language of each sentence clause it encounters. This is especially useful in a couple of situations. Some examples could include texting someone in a language that you speak but that isn't your system language, reading a book with second-language asides, or language learning where half your notes are in your native language while the other half are in the target language.
+
+It's this last method of language switching that I'm expecting to be the most buggy, and is what I'm looking for help testing. If you're interested in the technical details of how this works, you can read the Claude-written readme on GitHub. But the TL;DR is that it uses a little language model to guess at what language a series of words will be, as well as the Windows spellcheck dictionaries to determine its confidence levels. When it's unsure, it errs on the side of caution and sticks with your default language.
+
+
+How to set it up
+
+Install the addon, go to the NVDA settings, and scroll down to the Multilanguage settings. Tab to Add, then go through and add each language you speak. These are the languages the model will try and match against. The more same-script languages you add, the worse the results get, so I'd suggest limiting it to languages you actually speak.
+
+When adding a language, the addon checks if you have the Windows dictionary for that language. If you don't, it offers to install it for you, which significantly increases accuracy.
+
+Each language gets its own synth, speech rate, punctuation, and dictionary settings, all configurable in the addon's settings section.
+
+
+What I'm looking for from you
+
+Feedback on the addon switching when it shouldn't, not switching when it should, breaking with random synths I didn't test with, etc. If a particular line of text causes it issues, copying the line and sending it to me would be awesome.

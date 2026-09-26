@@ -1,0 +1,7 @@
+backend ensemble, configured ['fr', 'es', 'de', 'it', 'pt']
+=== de.txt: 3109 lines, switched 40.7%, own language tagged 40.7%, 740 ms
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, 401 ms
+=== es.txt: 3203 lines, switched 33.0%, own language tagged 33.0%, 874 ms
+=== fr.txt: 3161 lines, switched 49.1%, own language tagged 49.1%, 1127 ms
+=== it.txt: 3119 lines, switched 35.3%, own language tagged 35.3%, 898 ms
+=== pt.txt: 3212 lines, switched 24.6%, own language tagged 24.3%, 729 ms

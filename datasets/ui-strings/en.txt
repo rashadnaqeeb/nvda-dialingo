@@ -1,0 +1,3283 @@
+%, location of
+'No' symbol
+'Or' flowchart symbol
+() Version: Description:
+(all day)
+(ascending)
+(default color)
+(descending)
+(normal configuration)
+(not supported)
+0 matches
+1.5 line spacing
+1.5 lines
+10-point star
+100 percent Stacked Area
+100 percent Stacked Bar
+100 percent Stacked Column
+100 percent Stacked Cone Bar
+100 percent Stacked Cone Column
+100 percent Stacked Cylinder Bar
+100 percent Stacked Cylinder Column
+100 percent Stacked Line
+100 percent Stacked Line with Markers
+100 percent Stacked Pyramid Bar
+100 percent Stacked Pyramid Column
+12-point star
+12.5% gray
+16-point star
+24-point star
+25% gray
+32-point star
+3D 100 percent Stacked Bar
+3D 100 percent Stacked Column
+3D Area
+3D Clustered Bar
+3D Clustered Column
+3D Column
+3D Cone Column
+3D Cylinder Column
+3D Line
+3D Pie
+3D Pyramid Column
+3D Stacked Area
+3D Stacked Bar
+3D Stacked Column
+3D Surface
+3D Surface (wireframe)
+4-point star
+5-point star
+50% gray
+6-point star
+6.25% gray
+7-point star
+75% gray
+8-point star
+: by on
+A Remote Access session is already in progress. Disconnect before starting a new session.
+A dialog where you can set default dictionary by adding dictionary entries to the list
+A dialog where you can set temporary dictionary by adding dictionary entries to the edit box
+A dialog where you can set voice-specific dictionary by adding dictionary entries to the list
+A free and open source screen reader for Microsoft Windows
+A pattern is required.
+A portable copy already exists in the directory ''. Do you want to update it?
+A previous copy of NVDA has been found on your system. This copy will be updated.
+A profile cannot have an empty name.
+A version of this add-on is already installed. Would you like to update version to version ?
+About NVDA
+About add-on...
+About...
+Action unavailable in NVDA Windows Store version
+Action unavailable in a temporary version of NVDA
+Action unavailable in secure context
+Action unavailable when Remote Access is disabled
+Action unavailable while Windows is locked
+Action unavailable while a dialog requires a response
+Action unavailable while the braille mode is set to speech output
+Action unavailable. Braille is tethered to focus
+Actions
+Activate
+Activates or deactivates the configuration profile
+Activates the Add-on Store to browse and manage add-on packages for NVDA
+Activates the NVDA Python Console, primarily useful for development
+Activates the current object in the document
+Activates the text at the cursor if possible
+Add
+Add Dictionary Entry
+Add Symbol
+Add-on Information
+Add-on Installation
+Add-on Store
+Add-on Store Warning
+Add-on data update failure
+Add-on download failure
+Add-on download not safe: checksum failed for
+Add-on installation
+Add-on installation failure
+Add-on not supported
+Add-on store...
+Add-on updates available
+Add-ons
+Add-ons cannot be installed in the Windows Store version of NVDA
+Add-ons updated, restart NVDA to activate changes
+Advanced
+Afrikaans grade 1
+Afrikaans grade 2
+Akkadian (Borger) grade 1
+Akkadian (US) grade 1
+Alignment
+All
+All add-ons are now disabled. They will be re-enabled on the next restart unless you choose to disable them again.
+All caps on
+All dots
+All tracking settings disabled
+Allow NV Access to gather NVDA usage statistics
+Allow automatic updates to install incompatible add-ons
+Allow skim reading in Say All
+Allow someone to control this computer from elsewhere, or control another computer running NVDA with this one.
+Allow this computer to be controlled
+Alpha numeric input
+Already Connected
+Already connected
+Already in a content recognition result
+Already set as start of column headers
+Already set as start of row headers
+Already set row column as start of column headers
+Already set row column as start of row headers
+Alternate process flowchart symbol
+Always
+Always duck
+Always fill display
+Always include short character description when announcing candidates
+Always show a warning when enabling Screen Curtain
+An error has caused this feature () to be unavailable at this time. Restarting NVDA or Windows may solve this problem.
+An error has caused this feature to be unavailable at this time. Restarting NVDA or Windows may solve this problem.
+An updated version of NVDA is required. NVDA version or later.
+Annotations
+Announce selected candidate
+Answer to:
+Any
+Anywhere
+Application support
+Apply
+Appointment ,
+Arabic 8 dot computer braille
+Arabic grade 1
+Arabic grade 2
+Aragonese
+Arc
+Are you sure you want to continue?
+Are you sure you want to disconnect from the Remote Access session?
+Are you sure you want to install this add-on? Only install add-ons from trusted sources. Addon:
+Are you sure you want to remove all the entries in this dictionary?
+Are you sure you want to reset all gestures to their factory defaults? All of your user defined gestures, whether previously set or defined during this session, will be lost. This cannot be undone.
+Are you sure you wish to remove the add-on from NVDA? This cannot be undone.
+Area
+Arrows pointing left right up and down
+Articles
+Assamese grade 1
+At least one NVDA modifier key must be set. Caps lock will remain as an NVDA modifier key.
+At least one key must be used as the NVDA key.
+At least one sound split mode has to be checked.
+At least two speech modes have to be checked.
+Attachments
+Attempt to cancel speech for expired focus events:
+Audio
+Audio ducking mode:
+Audio ducking not supported
+Audio indication of focus and browse modes
+Audio output device:
+Author
+Author:
+Automatic
+Automatic ()
+Automatic (prefer Diff Match Patch)
+Automatic (prefer UIA)
+Automatic (prefer selective)
+Automatic Say All on page load
+Automatic connection
+Automatic dialect switching (when supported)
+Automatic focus mode for caret movement
+Automatic focus mode for focus changes
+Automatic language and dialect switching on
+Automatic language switching (when supported)
+Automatic language switching off
+Automatic language switching on
+Automatic refresh disabled
+Automatic refresh enabled
+Automatic scroll rate
+Automatic scrolling disabled
+Automatic scrolling enabled
+Automatic updates:
+Automatically check for updates to NVDA
+Automatically connect after NVDA starts
+Automatically report all available candidates
+Automatically say all on result
+Automatically zoom out of two-dimensional notation
+Available
+Available add-ons
+Available version
+Available version:
+Avoid splitting words when possible
+BCC:
+Back
+Back to normal view
+Balloon
+Bar of Pie
+Baseline
+Bashkir grade 1
+Baum/HumanWare/APH/Orbit braille displays
+Beep
+Beep and speak progress bar updates
+Beep at the beginning and end of math
+Beep for capitals
+Beep for progress bar updates
+Beep if typing lowercase letters when caps lock is on
+Beginning
+Begins interaction with math content
+Belarusian computer braille
+Belarusian literary braille
+Belarusian literary braille (detailed)
+Bengali grade 1
+Bent Up Arrow
+Bent arrow
+Beta or dev
+Bevel
+Bitmap placeholder
+Blindness
+Blink cursor
+Block arc
+Block quotes
+Bluetooth Serial: ()
+Bold off
+Bold on
+Bookmarks
+Both Colors and Styles
+Both Speech and Tones
+Both host and key must be set in the Remote Access section in order to automatically connect using an existing server after NVDA starts.
+Both host and key must be set.
+Both port and key must be set in the Remote Access category in order to automatically connect using a locally hosted server after NVDA starts.
+Both port and key must be set.
+Bottom
+Braille Display Error
+Braille Unicode normalization
+Braille Unicode normalization default ()
+Braille cursor
+Braille cursor is turned off
+Braille cursor off
+Braille cursor on
+Braille destination
+Braille display
+Braille display:
+Braille focus context presentation:
+Braille font attributes
+Braille input
+Braille input disabled
+Braille input enabled
+Braille mode
+Braille mode:
+Braille move system caret when routing review cursor
+Braille move system caret when routing review cursor default ()
+Braille show messages
+Braille show selection
+Braille show selection default ()
+Braille tethered
+Braille viewer
+Braille viewer disabled
+Braille viewer enabled
+Brightness controls audio coordinates volume
+Browse Mode
+Browse mode
+Browse...
+Bubble
+Bubble with 3D effects
+Built-in
+Bulgarian 8 dot computer braille
+Bulgarian grade 1
+Burmese
+Burmese grade 1
+Burmese grade 2
+Buttons
+CC:
+CTRL+ALT+N
+Callout with Arrows pointing left right up and down
+Callout with Double-ended horizontal Arrow
+Callout with Down Arrow
+Callout with Left Arrow
+Callout with Right Arrow
+Callout with UpArrow
+Callout with accent bar and callout line segments forming a U-shape
+Callout with angled callout line and accent bar
+Callout with angled line
+Callout with arrows that point up and down
+Callout with border and horizontal accent bar
+Callout with border, accent bar, and callout line segments forming a U-shape
+Callout with border, angled callout line, and accent bar
+Callout with border, diagonal straight line and accent bar
+Callout with callout line segments forming a U-shape
+Callout with diagonal callout line and accent bar
+Callout with diagonal straight line
+Callout with horizontal accent bar
+Callout with horizontal line
+Callout with no border and angled callout line
+Callout with no border and callout line segments forming a U-shape
+Callout with no border and diagonal callout line
+Can
+Can't change the active profile while an NVDA dialog is open
+Can't find the documentation window.
+Can't select text, press twice to copy
+Cancel
+Cancel install
+Cancel install of selected add-ons
+Candidate
+Cannot enable magnifier. Please disable screen curtain first.
+Cannot enable screen curtain while performing content recognition
+Cannot find in column headers
+Cannot find in row headers
+Cannot find row column in column headers
+Cannot find row column in row headers
+Cannot install NVDA add-on from . You must be running NVDA to be able to install add-ons.
+Cannot start magnifier. Another magnifier application may already be running.
+Cannot when Magnifier is not active.
+Cannot when Magnifier is not full-screen.
+Capital pitch change percentage
+Caps off
+Card flowchart symbol
+Caret movement timeout (in ms)
+Case sensitive
+Catalan grade 1
+Categories:
+Category :
+Category: "" Option: "\
+Cell Appearance
+Cell borders:
+Cell coordinates
+Cell height: pt
+Cell width: pt
+Center
+Center Title placeholder
+Central Kurdish
+Central Kurdish grade 1
+Change math navigation mode to larger
+Change math navigation mode to smaller
+Change selected symbol
+Change tracking off
+Change tracking on
+Change...
+Changes for
+Changes were made to add-ons. You must restart NVDA for these changes to take effect. Would you like to restart now?
+Channel
+Channel:
+Character
+Character: Replacement:
+Chart Elements
+Chart Plus symbol
+Chart Star Symbol
+Chart X Symbol
+Chart area
+Chart area, height: , width: , top: , left:
+Chart placeholder
+Chart title:
+Chart title: , type:
+Charts
+Check for update...
+Check only the add-ons you wish to copy to the system-wide configuration.
+Checking for Update
+Checking for update
+Chemical formulae:
+Chevron
+Chichewa (Malawi) literary braille
+Chinese (China, Mandarin) Current Braille System
+Chinese (China, Mandarin) Current Braille System (no tones)
+Chinese (China, Mandarin) Double-phonic Braille System
+Chinese (Hong Kong, Cantonese)
+Chinese (Taiwan, Mandarin)
+Chinese common braille (simplified Chinese characters)
+Choose Add-on Package File
+Circle with line through center
+Circular Arrow
+Clear the output pane
+Clickable
+Clicks the left mouse button once at the current mouse position
+Clicks the right mouse button at the current touch position. This is generally used to activate a context menu.
+Clicks the right mouse button once at the current mouse position
+Clipboard
+Clipboard received
+Clipboard sent
+Close
+Cloud callout
+Cloud shape
+Clustered Bar
+Clustered Column
+Clustered Cone Bar
+Clustered Cone Column
+Clustered Cylinder Bar
+Clustered Pyramid Bar
+Clustered Pyramid Column
+Collapsed
+Collate flowchart symbol
+Color filter
+Color filter:
+Colors
+Columns
+Command line option:
+Command not supported in this type of document. The tables have their first column cells automatically set as row headers.
+Command not supported in this type of document. The tables have their first row cells automatically set as column headers.
+Commands Quick Reference
+Comment
+Comment thread: by
+Comment: by
+Comment: by on
+Comments
+Community reviews
+Composition
+Configuration
+Configuration File Error
+Configuration Profiles
+Configuration applied
+Configuration profile triggers disabled
+Configuration profile triggers enabled
+Configuration profiles
+Configuration profiles...
+Configuration restored to factory defaults
+Configuration saved
+Configure visual aids.
+Confirm Deletion
+Confirm Disconnection
+Confirm before disconnecting when controlled
+Connect
+Connect and do not ask again for this server
+Connect to Another Computer
+Connect...
+Connected
+Connected as controlled computer
+Connecting
+Connector flowchart symbol
+Connects to a remote computer
+Content is not visible
+Continue
+Continue running
+Control another computer
+Controlling local computer
+Controlling remote computer
+Copied link
+Copied to clipboard
+Copied to clipboard:
+Copied:
+Copies a link to the current Remote Access session to the clipboard
+Copies content of the status bar of current application to the clipboard.
+Coptic 8 dot computer braille
+Coptic grade 1
+Copy
+Copy Settings to System-wide Configuration
+Copy a link to the current Remote Access session to the clipboard.
+Copy current user configuration
+Copy link
+Copy math as:
+Copy navigation focus to clipboard
+Copy portable configuration to current user account
+Copy version number
+Copying Settings
+Copyright (C) NVDA Contributors
+Corner
+Corners
+Could not disable screen curtain
+Could not disable the add-on: .
+Could not enable screen curtain
+Could not enable the add-on: .
+Could not find window.
+Could not gracefully terminate the following vision enhancement providers:
+Could not gracefully terminate the vision enhancement provider
+Could not load the display.
+Could not load the following vision enhancement providers:
+Could not load the synthesizer.
+Could not load the vision enhancement provider
+Could not save configuration - probably read only file system
+Could not save configuration; see the log for more details.
+Couldn't copy to clipboard.
+Counter-clockwise Circular arrow
+Create Portable NVDA
+Create a new folder for the portable copy
+Create desktop icon and shortcut key (control+alt+n)
+Create portable copy
+Create portable copy...
+Creating Portable Copy
+Croatian 8 dot computer braille
+Croatian grade 1
+Cross
+Cube
+Cuneiform (transliterated) grade 1
+Cuneiform (transliterated, compact diacritics) grade 1
+Current application ()
+Cursor blink rate (ms)
+Cursor shape for focus:
+Cursor shape for review:
+Curved Down Arrow
+Curved Left Arrow
+Curved Right Arrow
+Curved Up Arrow
+Curved Up Ribbon banner
+Curved arrow
+Custom
+Cycle through the braille Unicode normalization states
+Cycle through the braille cursor shapes
+Cycle through the braille move system caret when routing review cursor states
+Cycle through the braille show messages modes
+Cycle through the braille show selection states
+Cycle through the color filters
+Cycle through the possible modes to report table row and column headers
+Cycle through the speech Unicode normalization states
+Cycle through tracking modes
+Cycles between available touch modes
+Cycles between speech modes.
+Cycles font attribute reporting between speech, braille, speech and braille, and off.
+Cycles through audio ducking modes which determine when NVDA lowers the volume of other sounds
+Cycles through line indentation settings
+Cycles through options for how to report spelling or grammar errors
+Cycles through options for when to speak typed characters.
+Cycles through options for when to speak typed words.
+Cycles through paragraph navigation styles
+Cycles through sound split modes
+Cycles through speech symbol levels which determine what symbols are spoken
+Cycles through the available languages for Windows OCR
+Cycles through the cell border reporting settings
+Cycles through the possible choices for automatic language switching: off, language only and language and dialect.
+Czech 8 dot computer braille
+Czech grade 1
+DRAFT
+Danish 6 dot grade 1
+Danish 6 dot grade 1 (1993)
+Danish 6 dot grade 2
+Danish 6 dot grade 2 (1993)
+Danish 8 dot computer braille
+Danish 8 dot computer braille (1993)
+Danish 8 dot grade 1
+Danish 8 dot grade 1 (1993)
+Danish 8 dot grade 2
+Danish 8 dot grade 2 (1993)
+Dash
+Dashed heavy
+Dashed long
+Dashed long heavy
+Data Label
+Data Table
+Data flowchart symbol
+Data validation prompt:
+Date placeholder
+Date:
+Debug logging
+Decagon
+Decimal separator for numbers:
+Decision flowchart symbol
+Decrease the magnification level
+Decreases the currently active setting in the synth settings ring
+Decreases the currently active setting in the synth settings ring in a larger step
+Decreases the rate for braille automatic scroll
+Default
+Default ()
+Default (Only when necessary)
+Default (Where suitable)
+Default (Yes)
+Default Dictionary
+Default dictionary...
+Default navigation mode:
+Default output device
+Default update channel:
+Delay flowchart symbol
+Delayed descriptions for characters on cursor movement
+Delete
+Delete All Trusted Fingerprints
+Delete all trusted fingerprints
+Describe current item in math
+Describe next item in math
+Describe overview
+Describe placemarker in math
+Describe previous item in math
+Description:
+Desktop
+Destination of:
+Dev
+Diagonal stripe
+Diamond
+Dictionary Entry Error
+Dictionary entries
+Diff algorithm:
+Diffing
+Direct access storage flowchart symbol
+Directory Exists
+Disable
+Disable selected add-ons
+Disabled
+Disabled (incompatible)
+Disabled (incompatible), pending restart
+Disabled speak character when routing cursor in text
+Disabled, pending restart
+Disabling magnifier
+Disconnect
+Disconnect from the current Remote Access session.
+Disconnected
+Disconnects from the current Remote Access session
+Dismiss the recognition result
+Display
+Display Unit Label
+Display flowchart symbol
+Display nonprinting characters
+Displays one of the recent messages
+Displays the destination URL of the link at the position of caret or focus in a window, instead of just speaking it. May be preferred by braille users.
+Displays to detect automatically:
+Distribution:
+Do not report font attributes
+Do not update
+Do you wish to allow this computer to be controlled on server with key ?
+Do you wish to control the computer on server with key ?
+Docked
+Document
+Document Formatting
+Document Navigation
+Document flowchart symbol
+Document formatting
+Document information
+Document review
+Documentation
+Dodecagon
+Don't save
+Don't show this message again
+Donate
+Done
+Donut
+Dot 8
+Dot dash
+Dot dash heavy
+Dot dot dash
+Dot dot dash heavy
+Dot firmness
+DotPad Braille / Tactile Graphic display
+Dots 7 and 8
+Dotted
+Dotted heavy
+Double
+Double brace
+Double bracket
+Double line spacing
+Double space ( )
+Double wave
+Double-ended Arrow pointing up and down
+Double-ended Circular arrow
+Double-ended horizontal Arrow
+Doughnut
+Down Arrow
+Down Bars
+Download URL:
+Download failed
+Download update
+Downloaded, pending install
+Downloading
+Downloading Update
+Drop Lines
+Duck when outputting speech and sounds
+Dutch 6 dot
+Dutch 8 dot
+Each word capitalized
+EcoBraille displays
+Edge of table
+Edit
+Edit Dictionary Entry
+Editable Text
+Editing note for cell
+Editing profile
+Editor revisions
+Elapsed time not available
+Elements
+Elements List
+Emphasis
+Empty slide
+Emulate key press:
+Emulated system keyboard keys
+Emulates pressing on the system keyboard
+Enable
+Enable (override incompatibility)
+Enable Highlighting
+Enable Remote Access
+Enable add-on
+Enable browse mode on page load
+Enable loading custom code from Developer Scratchpad directory
+Enable magnifier (immediate effect)
+Enable mouse tracking
+Enable selected add-ons
+Enable touch interaction support
+Enabled
+Enabled (incompatible)
+Enabled (incompatible), pending restart
+Enabled logging categories
+Enabled speak character when routing cursor in text
+Enabled, pending restart
+Enabled/disabled:
+Enabling Screen Curtain will make the screen of your computer completely black. Ensure you will be able to navigate without any use of your screen before continuing. Do you wish to continue?
+End
+End of word
+Endnotes
+Endpoints
+English (U.K.) 8 dot computer braille
+English (U.K.) grade 1
+English (U.K.) grade 2
+English (U.S.) 6 dot computer braille
+English (U.S.) 8 dot computer braille
+English (U.S.) grade 1
+English (U.S.) grade 2
+English North American Braille Computer Code
+English grade 3
+Enhanced
+Enter gesture to emulate:
+Enter input gesture:
+Erases the last entered braille cell or character
+Error
+Error Bars
+Error Connecting
+Error Copying
+Error activating profile.
+Error checking for update.
+Error copying NVDA user settings
+Error creating profile - probably read only file system.
+Error deleting profile.
+Error downloading update.
+Error in appModule
+Error in brailling math
+Error in brailling math.
+Error in brailling math: see NVDA error log for details
+Error in navigating math
+Error in speaking math.
+Error in starting navigation of math.
+Error navigating math
+Error renaming profile.
+Error saving configuration profile triggers - probably read only file system.
+Error saving log:
+Error saving user defined gestures - probably read only file system.
+Error:
+Errors
+Esperanto grade 1
+Estonian 6 dot
+Estonian grade 0
+Ethiopic grade 1
+Eurobraille displays
+Even pages footer
+Even pages header
+Execute a previously downloaded NVDA update
+Exit
+Exit NVDA
+Exit math interaction
+Expand to computer braille for the word at the cursor
+Expanded
+Expanded symbol ()
+Exploded 3D Pie
+Exploded Doughnut
+Exploded Pie
+Explore NVDA user configuration directory
+Explosion
+Exponential
+External
+External IP:
+Extra dictionaries for character and symbol processing:
+Extract flowchart symbol
+Factory Defaults Restored
+Factory reset undone. Previous configuration restored.
+Failed to compile text paragraph regular expression:
+Failed to create portable copy: .
+Failed to install add-on from
+Failed to open add-on package file at - missing file or invalid file format
+Failed to restart Windows. Please restart Windows manually.
+Feature unavailable.
+Figures and captions
+File in Use
+Filipino grade 2
+Fill color:
+Fill display for context changes
+Fill type:
+Filled Radar
+Filter by:
+Find
+Finnish 6 dot
+Finnish 8 dot computer braille
+First character
+First page footer
+First page header
+Fixed
+Floor
+Focus context presentation:
+Focus mode
+Folded corner
+Follow System Caret
+Follow mouse
+Follow mouse cursor
+Follow navigator object
+Follow review cursor
+Follow system focus
+Font
+Font attributes
+Font name
+Font size
+Footer placeholder
+Footnotes
+Form fields
+Formatting
+Formatting display
+Formulas
+Forward to:
+Four small squares that define a rectangular shape
+Frames
+Freedom Scientific Focus/PAC Mate series
+French (unified) 6 dot computer braille
+French (unified) 8 dot computer braille
+French (unified) grade 2
+From:
+Full shaped mode
+Full width
+Fullscreen
+Funnel
+Gear with nine teeth
+Gear with six teeth
+General
+Generate Key
+Generating key
+Generating key...
+Georgian literary braille
+German 6 dot computer braille
+German 8 dot computer braille
+German grade 0
+German grade 0 (detailed)
+German grade 1
+German grade 1 (detailed)
+German grade 2
+German grade 2 (detailed)
+Get External IP
+Getting external IP
+Getting external IP...
+Global
+Graphic
+Graphics
+Grayscale
+Greek (Greece)
+Greek international braille (2-cell accented letters)
+Greek international braille (single-cell accented letters)
+Gridlines are visible
+Groupings
+Guess object position information when unavailable
+Gujarati grade 1
+HID keyboard input simulation
+HID keyboard input simulation is unavailable.
+HID keyboard simulation disabled
+HID keyboard simulation enabled
+HIMS Braille Sense/Braille EDGE/Smart Beetle/Sync Braille series
+Half of rectangular picture frame
+Half shaped mode
+Half width
+Handle keys from other applications
+Handled by application
+Handout Master view
+Handy Tech braille displays
+Has appointment
+Has conditional formatting
+Has data validation
+Header placeholder
+Headers
+Headings
+Heart
+Hebrew (Biblical) IHBC
+Hebrew (Biblical) Slim
+Hebrew (Biblical) full cantillation
+Hebrew computer braille
+Help
+Help, training and support
+Heptagon
+Hexagon
+Hi Lo Lines
+Hide nonprinting characters
+High risk logging level
+High-Low-Close
+Highlight browse mode cursor
+Highlight navigation focus with dots 7 and 8
+Highlight navigator object
+Highlight system focus
+Highlighted (marked) text
+Hindi grade 1
+Home
+Homepage
+Homepage:
+Horizontal scroll
+Host connection failed
+Host locally
+Host must be set.
+Host:
+Hover for cell routing
+HumanWare Brailliant BI/B series / BrailleNote Touch
+Hungarian 8 dot computer braille
+Hungarian grade 1
+Hungarian grade 2
+I have read and agree to the license agreement
+I understand that changing these settings may cause NVDA to function incorrectly.
+I understand that incompatible add-ons will be disabled and can be manually re-enabled at my own risk after installation.
+ID:
+IME closed
+IME opened
+IP address
+Icelandic 8 dot computer braille
+If pressed once, reports the current time. If pressed twice, reports the current date
+If pressed once, the text from the previously set start marker up to and including the current position of the review cursor is selected. If pressed twice, the text is copied to the clipboard
+Ignore blank lines for line indentation reporting
+Ignore blank lines for line indentation reporting off
+Ignore blank lines for line indentation reporting on
+Ignore mouse input from other applications
+Illegal MathML found.
+Impairment:
+Include incompatible add-ons
+Include layout tables
+Incompatible
+Incompatible Add-ons
+Incompatible Reason:
+Incompatible add-ons
+Incompatible reason
+Incomplete Pie with wedge missing
+Increase the magnification level
+Increases the currently active setting in the synth settings ring
+Increases the currently active setting in the synth settings ring in a larger step
+Increases the rate for braille automatic scroll
+Inflection
+Information
+Input
+Input Composition
+Input Gestures
+Input Message is
+Input Message is :
+Input gestures...
+Input table:
+Inputs braille dots via the braille keyboard
+Install
+Install (override incompatibility)
+Install NVDA
+Install NVDA on this computer
+Install NVDA...
+Install add-on
+Install date
+Install date:
+Install failed
+Install from external source
+Install pending update
+Install selected add-ons
+Installation of has been blocked. The minimum NVDA version required for this add-on is , your current NVDA version is
+Installed add-ons
+Installed incompatible add-ons
+Installed version
+Installed version:
+Installed, pending restart
+Installing
+Installing Add-on
+Installing NVDA
+Installing NVDA when connected to NVDA Remote Access as the controlled computer is not recommended.
+Insufficient Privileges
+Internal storage flowchart symbol
+International Phonetic Alphabet
+Interrupt speech while scrolling
+Invalid configuration
+Invalid math formatting found
+Inverted
+Irish grade 1
+Irish grade 2
+Isosceles triangle
+Israeli grade 1
+Italian 6 dot
+Italian 8 dot computer braille
+Italic off
+Italic on
+Japanese (Kantenji) literary braille
+Japanese (Rokuten Kanji) Braille
+Jump to placemarker in math
+Justified
+Kannada grade 1
+Kashmiri grade 1
+Kazakh grade 1
+Keep existing desktop shortcut
+Key
+Key words:
+Key:
+Keyboard
+Keyboard layout:
+Khmer grade 1
+Kinyarwanda literary braille
+Korean grade 1
+Korean grade 1 (2006)
+Korean grade 2
+Korean grade 2 (2006)
+Landmarks
+Landmarks and regions
+Landscape
+Language
+Language Configuration Change
+Language at caret position
+Language:
+Lao Grade 1
+Last NVDA version tested:
+Last spoken information
+Last tested NVDA version
+Last tested NVDA version:
+Latvian grade 1
+Learning disabilities
+Left
+Left Arrow
+Left aligned
+Left and up Arrows
+Left brace
+Left bracket
+Left click
+Left mouse button lock
+Left mouse button unlock
+Left right and up Arrows
+Legacy
+Legend entry for series of
+Legend entry of
+Legend key for Series of
+Lens
+Less than 1 minute remaining
+Level
+License
+License Agreement
+License URL:
+License:
+Lightning bolt
+Line
+Line Callout
+Line indentation reporting:
+Line inverse
+Line numbers
+Line spacing
+Line with Markers
+Linear
+Link has no apparent destination
+Link type
+Links
+Lists
+Lists various types of elements in this document
+Lists various types of elements in this spreadsheet
+Lithuanian 6 dot
+Lithuanian 8 dot
+Load Chromium virtual buffer when document busy.
+Loading NVDA. Please wait...
+Loading add-ons...
+Loading document...
+Lock screen not secure while using NVDA
+Locks or unlocks the left mouse button
+Locks or unlocks the right mouse button
+Log
+Log fragment copied to clipboard
+Log fragment start position marked, press again to copy to clipboard
+Log is unavailable
+Logarithmic
+Logging level:
+Logs information about the current navigator object which is useful to developers and activates the log viewer so the information can be examined.
+Low vision
+Lowercase
+Luganda literary braille
+Macedonian grade 1
+Magnetic disk flowchart symbol
+Magnifier
+Magnifier disabled
+Magnifier enabled
+Magnifier stopped due to an error. Please restart it.
+Major Gridlines
+Make screen black (immediate effect)
+Make sure you are connected to the internet and the URL is correct.
+Make sure you are connected to the internet, and the Add-on Store mirror URL is valid. Mirror URL:
+Make sure you are connected to the internet, and the NVDA update mirror URL is valid. Mirror URL:
+Malay grade 2
+Malayalam grade 1
+Manipuri grade 1
+Manual Activation
+Manual activate
+Manual activation
+Manual deactivate
+Manual input flowchart symbol
+Manual operation flowchart symbol
+Marathi grade 1
+Mark the current end of the log as the start of the fragment to be copied to clipboard by pressing again.
+Marks the current position of the review cursor as the start of text to be selected or copied
+Master Thumbnails
+Math
+Math Addition symbol
+Math Division symbol
+Math Equivalence symbol
+Math Multiplication symbol
+Math Non-equivalence symbol
+Math Subtraction symbol
+Math interaction not supported.
+Math navigation
+Maximum number of characters on one line
+Media Clip placeholder
+Medium
+Merge flowchart symbol
+Message from Remote Access Server
+Message timeout (sec)
+Microsoft Speech API version 4
+Microsoft Speech API version 5 (32 bit)
+Microsoft Speech API version 5 (64 bit)
+Microsoft UI Automation
+Migrate to add-on store
+Minimum NVDA version
+Minimum NVDA version:
+Minimum required NVDA version:
+Minor Gridlines
+Mirror server
+Miscellaneous
+Mixed case
+Mode:
+Modes available in the 'Cycle sound split mode' command
+Modes available in the 'Cycle sound split mode' command:
+Modes available in the Cycle speech mode command
+Modes available in the Cycle speech mode command:
+Mongolian grade 1
+Mongolian grade 2
+Moon
+Mouse
+Mouse audio coordinates off
+Mouse audio coordinates on
+Mouse text unit resolution
+Mouse tracking off
+Mouse tracking on
+Move back to last position in math
+Move focus
+Move navigator object to mouse
+Move system caret when routing review cursor
+Move the review cursor to the position marked as the start of text to be selected or copied
+Move to
+Move to cell or digit above in math
+Move to cell or digit below in math
+Move to end of column in math
+Move to end of line in math
+Move to end of math expression
+Move to focus
+Move to next item in math
+Move to next table cell or digit in math
+Move to previous item in math
+Move to previous table cell or digit in math
+Move to start of column in math
+Move to start of line in math
+Move to start of math expression
+Move to the next result
+Move to the previous result
+Moved above
+Moved above blank paragraph
+Moved below
+Moved below blank paragraph
+Movement by page not supported
+Moves past the end of the container element, such as a list or table
+Moves the braille display to the current focus
+Moves the braille display to the next line
+Moves the braille display to the previous line
+Moves the focus out of the current embedded object and into the document that contains it
+Moves the mouse pointer to the current navigator object
+Moves the navigator object and focus to the first row
+Moves the navigator object and focus to the last row
+Moves the navigator object and focus to the next row
+Moves the navigator object and focus to the previous row
+Moves the navigator object to the first column
+Moves the navigator object to the first object inside it
+Moves the navigator object to the last column
+Moves the navigator object to the next column
+Moves the navigator object to the next object
+Moves the navigator object to the object containing it
+Moves the navigator object to the previous column
+Moves the navigator object to the previous object
+Moves the review cursor to the bottom line of the current navigator object and speaks it
+Moves the review cursor to the first character of the line where it is situated in the current navigator object and speaks it
+Moves the review cursor to the first character of the selection, and speaks it
+Moves the review cursor to the last character of the line where it is situated in the current navigator object and speaks it
+Moves the review cursor to the last character of the selection, and speaks it
+Moves the review cursor to the next character of the current navigator object and speaks it
+Moves the review cursor to the next line of the current navigator object and speaks it
+Moves the review cursor to the next page of the current navigator object and speaks it
+Moves the review cursor to the next word of the current navigator object and speaks it
+Moves the review cursor to the previous character of the current navigator object and speaks it
+Moves the review cursor to the previous line of the current navigator object and speaks it
+Moves the review cursor to the previous page of the current navigator object and speaks it
+Moves the review cursor to the previous word of the current navigator object and speaks it
+Moves the review cursor to the top line of the current navigator object and speaks it
+Moves to the next available setting in the synth settings ring
+Moves to the next element of the selected type in browse mode touch navigation
+Moves to the next heading at level
+Moves to the next object in a flattened view of the object navigation hierarchy
+Moves to the previous available setting in the synth settings ring
+Moves to the previous element of the selected type in browse mode touch navigation
+Moves to the previous heading at level
+Moves to the previous object in a flattened view of the object navigation hierarchy
+Moves to the start of the container element, such as a list or table
+Movie
+Moving Average
+Multi line break
+Multi-document flowchart symbol
+Multiple key press timeout (ms):
+Mute remote
+Mute speech and sounds from the remote computer.
+Mute when controlling the local computer
+Muted remote
+Mutes or unmutes the speech coming from the remote computer
+NV Access shop
+NV Access web site
+NVDA Add-on Package (*.)
+NVDA Braille Viewer
+NVDA Development
+NVDA Language (requires restart):
+NVDA License
+NVDA Log Viewer
+NVDA Message
+NVDA Python Console
+NVDA Settings
+NVDA Speech Viewer
+NVDA Update
+NVDA Usage Data Collection
+NVDA add-on package
+NVDA in both channels and applications in both channels
+NVDA in both channels and applications on the left
+NVDA in both channels and applications on the right
+NVDA is unable to remove or overwrite a file.
+NVDA must be restarted for the new language to take effect.
+NVDA on the left and applications in both channels
+NVDA on the left and applications on the right
+NVDA on the right and applications in both channels
+NVDA on the right and applications on the left
+NVDA settings
+NVDA started
+NVDA started with screen curtain enabled
+NVDA version is available.
+NVDA web site
+NVDA's interface language is now forced from the command line. On the next restart, the language saved in NVDA's configuration will be used instead.
+Name
+Native app selection mode disabled
+Native app selection mode enabled
+Native input
+Native selection mode cannot be turned off in this browse mode document
+Native selection mode unsupported in this browse mode document
+Native selection mode unsupported in this document
+Natural pause after punctuation
+Navigating by sentence not supported in this document
+Navigation
+Navigation verbosity:
+Navigator object
+Nepali grade 1
+Never
+New
+New Profile
+New name:
+Newsgroup:
+Next
+No Series defined.
+No action
+No actions available for the selected add-ons
+No add-on selected.
+No additional details
+No braille
+No caret
+No case
+No comment thread on this cell
+No comments
+No containing object
+No controlled computers are connected
+No documentation found.
+No ducking
+No emoji
+No focus
+No formatting information
+No heading selected
+No help available here.
+No location information
+No long description
+No message yet
+No mirror
+No navigator object
+No new log entry to copy
+No next
+No next different style text
+No next heading at level
+No next paragraph
+No next review mode
+No next same style text
+No note on this cell
+No notes
+No objects inside
+No one else is connected
+No paragraph start marker (default)
+No previous
+No previous different style text
+No previous heading at level
+No previous paragraph
+No previous review mode
+No previous same style text
+No progress bar updates
+No selection
+No settings
+No shortcut key
+No speech
+No start marker set
+No status line found
+No symbol replacement
+No system battery
+No text to copy
+No title
+No track playing
+No update available.
+NonVisual Desktop Access
+Normal
+Normal view
+Northern Kurdish
+Northern Kurdish grade 0
+Norwegian 8 dot computer braille
+Norwegian grade 0
+Norwegian grade 1
+Norwegian grade 2
+Norwegian grade 3
+Not a link.
+Not connected
+Not in a container
+Not in a table cell
+Not in table
+Not installed
+Not math
+Not now
+Not on a note
+Not supported in this document
+Not supported in this document.
+Not the controlling computer
+Notched RightArrow
+Note
+Note: NVDA was started with add-ons disabled
+Notes
+Notes Master view
+Notes page
+Nothing
+Notify
+Notify for pending update on startup
+Number format:
+Number of lines per page
+Object Presentation
+Object edges positioned percent from left edge of screen, percent from top edge of screen, width is percent of screen, height is percent of screen
+Object has no location
+Object navigation
+Object placeholder
+Object review
+Octagon
+Off
+Off (H sub 2 O)
+Off-page connector flowchart symbol
+Offline storage flowchart symbol
+Only in NVDA test versions
+Only in edit controls
+Only when necessary
+Only when scrolling back
+Only when tethered automatically
+Open Add-on Store
+Open developer scratchpad directory
+Open-High-Low-Close
+Opens NVDA configuration directory for the current user.
+Opens the WX GUI inspection tool. Used to get more information about the state of GUI components.
+Opens the note editing dialog
+Optelec ALVA 6 series/protocol converter
+Options
+Options:
+Org Chart placeholder
+Organisation:
+Oriya grade 1
+Other Details:
+Out of table
+Outline
+Outline color: top=, bottom=, left=, right=
+Outline thickness: top=, bottom=, left=, right=
+Outline view
+Output code:
+Output pane cleared
+Output table:
+Oval
+Oval-shaped callout
+Package
+Page
+Pages
+Pages and spacing
+Pan the magnified view down
+Pan the magnified view left
+Pan the magnified view right
+Pan the magnified view to bottom edge
+Pan the magnified view to left edge
+Pan the magnified view to right edge
+Pan the magnified view to top edge
+Pan the magnified view up
+Panning step size (%):
+Papenmeier BRAILLEX newer models
+Papenmeier BRAILLEX older models
+Paragraph indentation
+Paragraph start marker:
+Paragraph style:
+Parallelogram
+Part of word
+Pass next key through
+Pattern
+Pause factor
+Pending removal
+Pentagon
+Performs the default action on the current navigator object (example: presses it if it is a button).
+Periodically refresh recognized content
+Persian 8 dot computer braille
+Persian grade 1
+Picture placeholder
+Pie
+Pie of Pie
+Pilcrow (¶)
+Pitch
+Pivot Chart Drop Zone
+Pivot Chart Field Button
+Plaque
+Plaque Tabs
+Play a sound for logged errors:
+Play a sound when auto-suggestions appear
+Play audio coordinates when mouse moves
+Play sound for spelling errors while typing
+Play sound when toggling Screen Curtain
+Play sounds when starting or exiting NVDA
+Please Donate
+Please disable screen curtain before using Windows OCR.
+Please specify a directory in which to create the portable copy.
+Please wait
+Please wait while NVDA attempts to repair your system's accessibility registrations...
+Please wait while NVDA is being installed
+Please wait while a portable copy of NVDA is created.
+Please wait while settings are copied to the system configuration.
+Please wait while the add-on is being installed.
+Please wait while your previous installation of NVDA is being updated.
+Plot area
+Plot area, inside height: , inside width: , inside top: , inside left:
+Plugged in
+Plugins reloaded
+Polish 8 dot computer braille
+Polish literary braille
+Polynomial
+Port:
+Portable Copy Exists
+Portable copy creation cancelled.
+Portable directory:
+Portrait
+Portuguese 6 dot computer braille
+Portuguese 8 dot computer braille
+Portuguese grade 1
+Portuguese grade 2
+Positioned at ,
+Postpone update
+Power
+Predefined process flowchart symbol
+Preferences
+Preparation flowchart symbol
+Presents, in browse mode, formatting info for the current review cursor position.
+Presents, in browse mode, formatting info for the text under the caret.
+Preserve
+Press twice to copy or reset the start marker
+Pressed once sets the keyboard focus to the navigator object, pressed twice sets the system caret to the position of the review cursor
+Pressing once reverts the current configuration to the most recently saved state. Pressing three times resets to factory defaults.
+Prevent display from turning off during say all or reading with braille
+Primary Category Axis
+Primary Series Axis
+Primary Value Axis
+Primary footer
+Primary header
+Print Preview
+Print layout
+Privacy and Security
+Proceed with installation (not recommended)
+Process flowchart symbol
+Profile
+Profile Triggers
+Profile name:
+Progress bar output:
+Publication date
+Publication date:
+Publisher
+Publisher:
+Punched tape flowchart symbol
+Punctuation/symbol level:
+Punctuation/symbol pronunciation...
+Punjabi grade 1
+Python Console
+Python console
+Quarter Pie Wedge
+Quits NVDA!
+RGB red , green , blue
+Radar
+Radar Axis Labels
+Radar with Data Markers
+Rate
+Rate boost
+Re-download update
+Re-enabling magnifier
+Read by paragraph
+Read current item in math
+Read current table cell in math
+Read mode
+Read next item in math
+Read placemarker in math
+Read previous item in math
+Reads all controls in the active window
+Reads from the review cursor up to the end of the current text, moving the review cursor as it goes
+Reads from the system caret up to the end of the text, moving the caret as it goes
+Reads the column vertically from the current cell downwards to the last cell in the column.
+Reads the current application status bar and moves navigator object into it.
+Reads the current application status bar.
+Reads the current application status bar. If pressed twice, spells the information. If pressed three times, copies the status bar to the clipboard
+Reads the current column vertically from top to bottom without moving the system caret.
+Reads the current row horizontally from left to right without moving the system caret.
+Reads the row horizontally from the current cell rightwards to the last cell in the row.
+Recognition failed
+Recognition language:
+Recognizes the content of the current navigator object with Windows OCR
+Recognizing
+Rectangle
+Rectangle with one rounded corner
+Rectangle with one snipped corner
+Rectangle with one snipped corner and one rounded corner
+Rectangle with two rounded corners diagonally-opposed
+Rectangle with two snipped corners diagonally-opposed
+Rectangle with two snipped corners that share a side
+Rectangle with two-rounded corners that share a side
+Rectangular callout
+Rectangular picture frame
+References
+Refresh F5
+Refresh of recognition result failed
+Refresh the recognition result
+Refreshed
+Refreshes the document content
+Registration for UI Automation events and property changes:
+Regular Expression error in the pattern field: "".
+Regular Expression error in the replacement field: "".
+Regular expression
+Regular expression for text paragraph navigation
+Relative
+Relative speech rate
+Relevance
+Reload plugins
+Reloads app modules and global plugins without restarting NVDA, which can be Useful for developers
+Remaining time not available
+Remember this choice for subsequent add-ons
+Remind me later
+Remote Access
+Remote Access Connection Request
+Remote Access Error
+Remote NVDA not connected
+Remotely connect to another computer running NVDA.
+Remove
+Remove add-on
+Remove all
+Remove selected add-ons
+Removed from column headers
+Removed from row headers
+Removed row column from column headers
+Removed row column from row headers
+Rename
+Rename Profile
+Repeat the last spoken information. Pressing twice shows it in a browsable message.
+Replace
+Replacement
+Report 'Normalized' when navigating by character
+Report 'has details' for structured annotations
+Report aria-description always
+Report background progress bars
+Report cell borders
+Report changes to the composition string
+Report changes to the reading string
+Report current position in math
+Report dynamic content changes
+Report errors
+Report errors in braille off
+Report errors in braille on
+Report formatting changes after the cursor (can cause a lag)
+Report global position in math
+Report language changes while reading
+Report line indentation
+Report link type off
+Report link type on
+Report live regions:
+Report mouse shape changes
+Report notifications
+Report object descriptions
+Report object position information
+Report object shortcut keys
+Report object when mouse enters it
+Report summary of any annotation details at the system caret.
+Report table headers
+Report the destination URL of the link at the position of caret or focus. If pressed twice, shows the URL in a window for easier review.
+Report tooltips
+Report transparent color values
+Report when objects support multiple selection
+Report when switching to language is not supported by synthesizer
+Reports a translation issue, if any. If pressed twice, presents the warning in browse mode
+Reports any comment in the comments window. If pressed twice, presents the comment in browse mode
+Reports any notes for translators. If pressed twice, presents the notes in browse mode
+Reports battery status and time remaining if AC is not plugged in
+Reports formatting info for the current review cursor position.
+Reports formatting info for the current review cursor position. If pressed twice, presents the information in browse mode
+Reports formatting info for the text under the caret.
+Reports formatting info for the text under the caret. If pressed twice, presents the information in browse mode
+Reports formatting info for the text under this braille cell
+Reports information about the location of the current navigator object.
+Reports information about the location of the currently focused object.
+Reports information about the location of the text at the caret, or location of the currently focused object if there is no caret.
+Reports information about the location of the text at the review cursor, or location of the navigator object if there is no text under review cursor.
+Reports information about the location of the text or object at the position of system caret. Pressing twice may provide further detail.
+Reports information about the location of the text or object at the review cursor. Pressing twice may provide further detail.
+Reports the current line under the application cursor. Pressing this key twice will spell the current line. Pressing three times will spell the line using character descriptions.
+Reports the current navigator object. Pressing twice spells this information, and pressing three times Copies name and value of this object to the clipboard
+Reports the elapsed time of the currently playing track, if any
+Reports the language for the text under the caret. If pressed twice, presents the information in browse mode
+Reports the length of the currently playing track, if any
+Reports the name of the current NVDA configuration profile
+Reports the new object or content under your finger if different to where your finger was last
+Reports the note on the current cell. If pressed twice, presents the information in browse mode
+Reports the note or comment thread on the current cell
+Reports the object and content directly under your finger
+Reports the object with focus. If pressed twice, spells the information. Pressing three times spells it using character descriptions.
+Reports the previous source text, if any. If pressed twice, presents the text in browse mode
+Reports the remaining time of the currently playing track, if any
+Reports the shortcut key of the currently focused object
+Reports the state of the screen curtain.
+Reports the symbol where the review cursor is positioned. Pressed twice, shows the symbol and the text used to speak it in browse mode
+Reports the text of the comment where the system caret is located. If pressed twice, presents the information in a browsable message
+Reports the text of the comment where the system caret is located.If pressed twice, presents the information in browse mode.
+Reports the text on the Windows clipboard. Pressing twice spells this information. Pressing three times spells it using character descriptions.
+Reports the title of the current application or foreground window. If pressed twice, spells the title. If pressed three times, copies the title to the clipboard
+Reset all settings to default state
+Reset all settings to saved state
+Reset configuration to factory defaults
+Reset gestures
+Reset to factory defaults
+Reset to the default navigation mode for each new equation
+Restart
+Restart NVDA
+Restart Windows
+Restart later
+Restart now
+Restart with add-ons disabled
+Restart with add-ons disabled and debug logging enabled
+Restart with debug logging enabled
+Restarts NVDA!
+Restore defaults
+Result
+Retrieved external IP, but port is most likely not currently forwarded.
+Retry install
+Retry installing selected add-ons
+Return
+Revert to saved configuration
+Review Cursor
+Review add-ons...
+Review cursor
+Reviews URL:
+Ribbon banner
+Ribbon with left and right arrows
+Right
+Right Arrow
+Right Arrow with Stripes
+Right aligned
+Right brace
+Right bracket
+Right click
+Right mouse button locked
+Right mouse button unlocked
+Right triangle
+Romanian
+Romanian 6 dot
+Rounded rectangle
+Rounded rectangle-shaped callout
+Routes the cursor to or activates the object under this braille cell
+Rows
+Rows and columns
+Run System Accessibility Repair Tool...
+Russian 6 dot computer braille
+Russian 8 dot computer braille
+Russian contracted braille
+Russian literary braille
+Russian literary braille (detailed)
+Same
+Sanskrit grade 1
+Save
+Save As
+Save as... Ctrl+S
+Save configuration
+Save configuration when exiting NVDA
+Saves the current NVDA configuration
+Say all
+Say cap before capitals
+Scatter
+Scatter with Lines
+Scatter with Lines and No Data Markers
+Scatter with Smoothed Lines
+Scatter with Smoothed Lines and No Data Markers
+Screen Curtain
+Screen curtain disabled
+Screen curtain enabled
+Screen curtain not available
+Screen review
+Scroll down at the mouse position
+Scroll left at the mouse position
+Scroll rate
+Scroll right at the mouse position
+Scroll up at the mouse position
+Scrolls the braille display back
+Scrolls the braille display forward
+Search:
+Secondary Category Axis
+Secondary Series Axis
+Secondary Value Axis
+Secure Desktop
+Security Warning
+Seika Braille Displays
+Seika Notetaker
+Select Braille Display
+Select NVDA Modifier Keys
+Select Synthesizer
+Select portable directory
+Select until the end of the current result
+Select until the start of the current result
+Selective
+Selects the next element type for browse mode touch navigation
+Selects the previous element type for browse mode touch navigation
+Send actual symbol to synthesizer
+Send clipboard
+Send control+alt+delete
+Send control+alt+delete to the controlled computer.
+Send the clipboard text to the remote computer.
+Sends control+alt+delete to the controlled computer.
+Sends the contents of the clipboard to the remote computer
+Sentence case
+Sepedi grade 1
+Sepedi grade 2
+Sequential access storage flowchart symbol
+Serbian Cyrillic grade 1
+Serbian grade 1
+Serial:
+Series Lines
+Series color:
+Server:
+Sesotho grade 1
+Sesotho grade 2
+Set Add-on Store Mirror Server
+Set NVDA Update Mirror
+Set as start of column headers
+Set as start of row headers
+Set placemarker in math
+Set row column as start of column headers
+Set row column as start of row headers
+Set the first value of the current setting in the synth settings ring
+Set the last value of the current setting in the synth settings ring
+Sets the navigator object to the current focus, and the review cursor to the position of the caret inside it, if possible.
+Sets the navigator object to the current object under the mouse pointer and speaks it
+Setswana grade 1
+Setswana grade 2
+Setting HID keyboard simulation not supported
+Settings...
+Shape
+Sheet ,
+Sheets
+Show Braille Viewer on Startup
+Show Speech Viewer on Startup
+Show cursor
+Show exit options when exiting NVDA
+Show indefinitely
+Show messages
+Show selection
+Show this dialog when NVDA starts
+Showing entire screen
+Shows NVDA's Add-on Store settings
+Shows NVDA's Advanced settings
+Shows NVDA's Windows OCR settings
+Shows NVDA's audio settings
+Shows NVDA's braille settings
+Shows NVDA's browse mode settings
+Shows NVDA's document formatting settings
+Shows NVDA's general settings
+Shows NVDA's input composition settings
+Shows NVDA's keyboard settings
+Shows NVDA's magnifier settings
+Shows NVDA's mouse settings
+Shows NVDA's object presentation settings
+Shows NVDA's privacy and security settings
+Shows NVDA's review cursor settings
+Shows NVDA's speech settings
+Shows NVDA's vision settings
+Shows a browseable message Listing information about a cell's appearance such as outline and fill colors, rotation and size
+Shows options related to selected text or text at the cursor
+Shows the NVDA Configuration Profiles dialog
+Shows the NVDA braille display selection dialog
+Shows the NVDA default dictionary dialog
+Shows the NVDA input gestures dialog
+Shows the NVDA menu
+Shows the NVDA symbol pronunciation dialog
+Shows the NVDA synthesizer selection dialog
+Shows the NVDA temporary dictionary dialog
+Shows the NVDA voice-specific dictionary dialog
+Shows the Remote Access settings
+Shows the long description at this position if one is found.
+Simple
+Simple review mode
+Simple review mode off
+Simple review mode on
+Single letter navigation off
+Single letter navigation on
+Single line break
+Single line spacing
+Sleep mode off
+Sleep mode on
+Slice color:
+Slide
+Slide Master view
+Slide Number placeholder
+Slide Show - complete
+Slide Sorter view
+Slide show -
+Slide show notes -
+Slide view
+Slovak grade 1
+Slovenian 8 dot computer braille
+Slovenian grade 1
+Small caps on
+Smiley face
+Somali
+Some operations on add-ons failed. See the log file for more details.
+Sort by column:
+Sort flowchart symbol
+Sound
+Sound split disabled
+Sound split mode:
+Source Code
+Source URL:
+Southern Vietnamese grade 1
+Spanish 8 dot computer braille
+Spanish for Greek text
+Spanish grade 1
+Spanish grade 2
+Speak
+Speak and beep
+Speak and braille font attributes
+Speak character when routing cursor in text
+Speak command keys
+Speak font attributes
+Speak new text in Windows Terminal via:
+Speak passwords in all enhanced terminals (may improve performance)
+Speak progress bar updates
+Speak typed characters
+Speak typed characters:
+Speak typed words
+Speak typed words:
+Speak when navigating by line or paragraph
+Speak when navigating by line or paragraph with braille off
+Speak when navigating by line or paragraph with braille on
+Speaks the filename of the active application along with the name of the currently loaded appModule
+Speaks the word of the current navigator object where the review cursor is situated. Pressing twice spells the word. Pressing three times spells the word using character descriptions
+Speech
+Speech Unicode normalization
+Speech Unicode normalization default ()
+Speech and braille
+Speech and sound
+Speech dictionaries
+Speech dictionaries:
+Speech interrupt for Enter key
+Speech interrupt for typed characters
+Speech mode
+Speech style:
+Speech verbosity:
+Speech viewer
+Spell it out (H 2 O)
+Spelling or grammar errors
+Spells the current application status bar.
+Stable
+Stacked Area
+Stacked Bar
+Stacked Column
+Stacked Cone Bar
+Stacked Cone Column
+Stacked Cylinder Bar
+Stacked Line
+Stacked Line with Markers
+Stacked Pyramid Bar
+Stacked Pyramid Column
+Standard HID Braille Display
+Start NVDA
+Start NVDA after I sign in
+Start marked
+Start of word
+Start the new portable copy after creation
+Status
+Status:
+Stored data flowchart symbol
+Strikethrough off
+Strikethrough on
+Style
+Styles
+Subject:
+Subscript
+Subtitle placeholder
+Success
+Successfully connected to the given URL.
+Successfully copied NVDA user settings
+Successfully created a portable copy of NVDA at
+Successfully installed NVDA. It is recommended to restart Windows after installing. NVDA may malfunction without a restart.
+Successfully retrieved IP address. Port is open.
+Successfully updated your installation of NVDA. It is recommended to restart Windows after updating. NVDA may malfunction without a restart.
+Suggestions
+Summing junction flowchart symbol
+Sun
+Superscript
+Superscripts and subscripts
+Surface (Top View wireframe)
+Surface (Top View)
+Swahili (Kenya) Grade 2
+Swahili (Kenya) grade 1
+Swahili (Kenya) grade 1.2
+Swahili (Kenya) grade 1.3
+Swahili (Kenya) grade 1.4
+Swahili (Kenya) grade 1.5
+Swedish 8 dot computer braille
+Swedish contracted braille
+Swedish partially contracted braille
+Swedish uncontracted braille
+Switches to the next review mode (e.g. object, document or screen) and positions the review position at the point of the navigator object
+Switches to the previous review mode (e.g. object, document or screen) and positions the review position at the point of the navigator object
+Switches whether the keyboard controls the local or remote computer
+Symbol
+Symbol "" is already present.
+Symbol Pronunciation ()
+Symbol level
+Symbol:
+Symbols
+Synthesizer
+Synthesizer Error
+Synthesizer:
+Syriac grade 1
+System Accessibility Repair Failed
+System Accessibility Repair Tool
+System caret
+System focus
+System status
+System-wide version
+Table description
+Table information
+Table placeholder
+Tables
+Tags
+Tamil grade 1
+Taskbar
+Tatar grade 1
+Telugu grade 1
+Temporarily disable all triggers
+Temporarily show an overview of the entire screen
+Temporary
+Temporary Screen curtain, enabled until next restart
+Temporary dictionary
+Temporary dictionary...
+Terminal programs
+Terminator flowchart symbol
+Terse
+Test...
+Tether Braille:
+Text
+Text copied.
+Text frame
+Text placeholder
+Text review
+Text unit resolution:
+Thai 8 dot computer braille
+Thai grade 0
+Thai grade 1
+Thai grade 2
+That profile already exists. Please choose a different name.
+The Remote Access server you have connected to is not compatible with this version of NVDA. Please use a different server.
+The System Accessibility Repair Tool has completed successfully. It is highly recommended that you restart your computer now, to make sure the changes take full effect.
+The System Accessibility Repair Tool was unsuccessful. This Windows error may provide more information.
+The URL you have entered failed the connection test.
+The URL you have entered failed the connection test. Are you sure you want to save it anyway?
+The URL you have entered has not been tested. Are you sure you want to save it without attempting to connect to it first?
+The URL you have entered is not valid. Check that it is correct and try again.
+The following add-ons are incompatible with NVDA version . These add-ons can not be enabled. Please contact the add-on author for further assistance.
+The following command line parameters are unknown to NVDA:
+The following options control the presentation of mathematical content.
+The following options control the types of document formatting reported by NVDA.
+The installation of NVDA failed. Please check the Log Viewer for more information.
+The installation path for NVDA has changed. it will now be installed in
+The next key that is pressed will not be handled at all by NVDA, it will be passed directly through to Windows.
+The profile will be permanently deleted. This action cannot be undone.
+The report links setting must be enabled to toggle report link type
+The response from the server was not recognised. Check the URL is correct before trying again.
+The result of content recognition is already automatically updated
+The screen overview is already active
+The server returned an error. Check that the URL is correct before trying again.
+The settings panel you tried to open is unavailable on this system.
+The specified directory '' is not empty. Proceeding will delete and replace existing files in the directory. Do you want to overwrite the contents of this folder?
+The system-wide NVDA configuration contains add-ons that are not present in your configuration. If you continue, these add-ons will be removed from the system-wide configuration.
+There is no text on the clipboard
+There was a network error. Check that you are connected to the internet and try again.
+There was a problem enabling Screen Curtain. The contents of your screen are still visible. You may attempt to enable Screen Curtain manually.
+Thick
+This change requires administrator privileges.
+This feature () is unavailable while on secure screens such as the sign-on screen or UAC prompt.
+This feature is unavailable while on secure screens such as the sign-on screen or UAC prompt.
+This trigger is already associated with another profile. If you continue, it will be removed from that profile and associated with this one. Are you sure you want to continue?
+Thumbnails
+Time to keep audio device awake after speech (seconds)
+Title Master view
+Title placeholder
+To create a portable copy of NVDA, please select the path and other options and then press Continue
+To edit this profile, you will need to manually activate it. Once you have finished editing, you will need to manually deactivate it to resume normal usage. Do you wish to manually activate it now?
+To install NVDA to your hard drive, please press the Continue button.
+To use an Albatross with NVDA, change the number of status cells in the Albatross's internal menu to at most , and restart the Albatross and NVDA if needed.
+To:
+Toggle HID keyboard simulation
+Toggle all magnifier tracking settings
+Toggle braille input
+Toggle magnifier mouse tracking
+Toggle magnifier navigator object tracking
+Toggle magnifier review cursor tracking
+Toggle magnifier system focus tracking
+Toggle math speech mode between read and describe
+Toggle periodical refresh of a Windows OCR result
+Toggle tethering of braille between the focus and the review position
+Toggle the braille cursor on and off
+Toggle the magnifier on and off
+Toggle the way context information is presented in braille
+Toggles HID keyboard simulation
+Toggles beeps that report mouse coordinates as the mouse moves
+Toggles between beeps, speech, beeps and speech, and off, for reporting progress bar updates
+Toggles between desktop and laptop keyboard layout
+Toggles between reporting the speaker notes or the actual slide content. This does not change what is visible on-screen, but only what the user can read with NVDA
+Toggles braille automatic scroll
+Toggles braille mode
+Toggles disabling of all configuration profile triggers. Disabling remains in effect until NVDA is restarted
+Toggles how much text will be spoken when the mouse moves
+Toggles native selection mode on and off
+Toggles on and off delayed descriptions for characters on cursor movement
+Toggles on and off if the screen layout is preserved while rendering the document content
+Toggles on and off reporting if clickable
+Toggles on and off speaking when navigating by lines or paragraph with braille
+Toggles on and off the ignoring of blank lines for line indentation reporting
+Toggles on and off the inclusion of layout tables in browse mode
+Toggles on and off the movement of the navigator object due to focus changes
+Toggles on and off the movement of the review cursor due to the caret moving.
+Toggles on and off the reporting of CLDR characters, such as emojis
+Toggles on and off the reporting of articles
+Toggles on and off the reporting of block quotes
+Toggles on and off the reporting of colors
+Toggles on and off the reporting of comments
+Toggles on and off the reporting of dynamic content changes, such as new text in dos console windows
+Toggles on and off the reporting of emphasis
+Toggles on and off the reporting of figures and captions
+Toggles on and off the reporting of font changes
+Toggles on and off the reporting of font size changes
+Toggles on and off the reporting of frames
+Toggles on and off the reporting of graphics
+Toggles on and off the reporting of groupings
+Toggles on and off the reporting of headings
+Toggles on and off the reporting of highlighted text
+Toggles on and off the reporting of landmarks
+Toggles on and off the reporting of line numbers
+Toggles on and off the reporting of line spacing
+Toggles on and off the reporting of link type
+Toggles on and off the reporting of links
+Toggles on and off the reporting of lists
+Toggles on and off the reporting of pages
+Toggles on and off the reporting of paragraph indentation
+Toggles on and off the reporting of revisions
+Toggles on and off the reporting of style changes
+Toggles on and off the reporting of superscripts and subscripts
+Toggles on and off the reporting of table cell coordinates
+Toggles on and off the reporting of tables
+Toggles on and off the reporting of text alignment
+Toggles on and off the speaking of command keys
+Toggles reporting spelling or grammar errors in braille
+Toggles simple review mode on and off
+Toggles sleep mode on and off for the active application.
+Toggles speaking the character under the cursor when routing cursor in text
+Toggles the NVDA Braille viewer, a floating window that allows you to view braille output, and the text equivalent for each braille character
+Toggles the NVDA Speech viewer, a floating window that allows you to view all the text that NVDA is currently speaking
+Toggles the reporting of information as the mouse moves
+Toggles the support of touch interaction
+Toggles whether Remote Access is connected
+Tones
+Tools
+Top
+Total time not available
+Touch Interaction
+Touch interaction disabled
+Touch interaction enabled
+Touch interaction not supported
+Touch navigation elements:
+Touch screen
+Touch typing mode
+Tracking
+Tracking mode
+Tracking mode:
+Tracking settings restored
+Translates any braille input
+Translates any braille input and presses the enter key
+Trap all non-command gestures from reaching the document
+Trapezoid
+Trapezoid with asymmetrical non-parallel sides
+Tries to read documentation for the selected autocompletion item.
+Triggers
+Triggers...
+Trim leading silence in speech audio
+Trust voice's language when processing characters and symbols
+Tshivenda grade 1
+Tshivenda grade 2
+Turkish 8 dot computer braille
+Turkish grade 1
+Turkish grade 2
+Turns input help on or off. When on, any input such as pressing a key on the keyboard will tell you what script is associated with that input, if any.
+Type
+Type exit() to exit the console
+Type help(object) to get help about object.
+Type the text you wish to find
+Type:
+U-shaped Arrow
+UIA notifications
+UIA when available
+URL:
+Ugaritic grade 1
+Ukrainian computer braille
+Ukrainian grade 1
+Ukrainian literary braille (detailed)
+Unable to configure user interface for Vision Enhancement Provider, it can not be enabled.
+Unable to connect to . Check that you have internet access, and that there are no mistakes in the host field.
+Unable to connect to the remote computer
+Unable to contact portcheck server, please manually retrieve your IP address
+Unable to copy
+Unable to copy a file. Perhaps it is currently being used by another process or you have run out of disc space on the drive you are copying to.
+Unable to copy status bar content to clipboard
+Unable to download add-on:
+Unable to establish a connection to the Add-on Store server.
+Unable to establish a connection to the NV Access server.
+Unable to fetch latest add-on data for compatible add-ons.
+Unable to fetch latest add-on data for incompatible add-ons.
+Unable to get the destination of this link.
+Unable to mark log position
+Unable to postpone update.
+Unable to save add-on as a file:
+Unable to send clipboard
+Unable to trigger control+alt+delete
+Underline off
+Underline on
+Undo
+Unicode Consortium data (including emoji)
+Unicode braille
+Unicode normalization
+Unified English Braille Code grade 1
+Unified English Braille Code grade 2
+Uninstall NVDA
+Unix shell-style wildcards
+Unknown braille display
+Unknown color
+Unknown command line parameters
+Unknown language
+Unknown power status
+Unknown status
+Unlabeled
+Unmuted remote
+Unplugged
+Unsupported input
+Untitled chart
+Up Arrow
+Up Bars
+Updatable add-ons
+Update
+Update (override incompatibility)
+Update Automatically
+Update Available
+Update Available (incompatible)
+Update all
+Update channel
+Update mirror
+Update now
+Update selected add-ons
+Update to NVDA
+Update to NVDA version has been downloaded and is ready to be applied.
+Update to NVDA version is ready to be applied.
+Updates are available for some of your installed add-ons.
+Updating NVDA
+Updating NVDA when connected to NVDA Remote Access as the controlled computer is not recommended.
+Updating add-ons...
+Uppercase
+Urdu grade 1
+Urdu grade 2
+Use CapsLock as an NVDA modifier key
+Use NVDA during sign-in
+Use NVDA during sign-in (requires administrator privileges)
+Use UI Automation to access Microsoft Excel spreadsheet controls when available
+Use UI Automation to access Microsoft Word document controls
+Use UIA with Microsoft Edge and other Chromium based browsers when available:
+Use WASAPI for SAPI 4 audio output:
+Use currently saved settings during sign-in and on secure screens (requires administrator privileges)
+Use enhanced event processing (requires restart)
+Use enhanced typed character support in legacy Windows Console when available
+Use existing
+Use modern audio output system (WASAPI)
+Use modern regular expression engine for speech dictionary entries:
+Use native math support in Word and Outlook
+Use screen layout (when supported)
+Use screen layout off
+Use screen layout on
+Use spelling functionality if supported
+Use this profile for:
+Use timeout
+User Guide
+User default
+User version
+Uzbek grade 1
+Validating URL...
+Variant
+Verbose
+Version
+Vertical Object placeholder
+Vertical Text placeholder
+Vertical Title placeholder
+Vertical scroll
+Vietnamese grade 0
+Vietnamese grade 1
+Vietnamese grade 2
+View License
+View log
+VipMud
+Virtual Buffers
+Virtually toggles the NVDA and shift keys to emulate a keyboard shortcut with braille input
+Virtually toggles the NVDA key to emulate a keyboard shortcut with braille input
+Virtually toggles the alt and shift keys to emulate a keyboard shortcut with braille input
+Virtually toggles the alt key to emulate a keyboard shortcut with braille input
+Virtually toggles the control and alt keys to emulate a keyboard shortcut with braille input
+Virtually toggles the control and shift keys to emulate a keyboard shortcut with braille input
+Virtually toggles the control key to emulate a keyboard shortcut with braille input
+Virtually toggles the control, alt, and shift keys to emulate a keyboard shortcut with braille input
+Virtually toggles the left windows and shift keys to emulate a keyboard shortcut with braille input
+Virtually toggles the left windows key to emulate a keyboard shortcut with braille input
+Virtually toggles the shift key to emulate a keyboard shortcut with braille input
+VirusTotal scan URL:
+VirusTotal scan results
+VirusTotal scan results:
+Vision
+Vision Enhancement Provider Error
+Visual Highlight
+Voice
+Voice dictionary ()
+Voice dictionary...
+Voice specific
+Volume
+Volume of NVDA sounds
+Volume of NVDA sounds follows voice volume
+Volume-High-Low-Close
+Volume-Open-High-Low-Close
+Waiting for Outlook...
+Waiting for Powerpoint...
+Walls
+Warning
+Warning!
+Warning: couldn't set volumes for sound split: one of audio sessions is either mono, or has more than 2 audio channels.
+Water droplet
+Wave
+Wave double
+Wave heavy
+Web layout
+Welcome dialog...
+Welcome to NVDA
+Welcome to NVDA!
+Welsh grade 1
+Welsh grade 2
+What would you like to do?
+What's new
+When entering an equation:
+Where suitable
+Whole word
+Windows Console support:
+Windows OCR
+Windows OCR not available
+Windows OneCore voices
+Words only
+Write the current configuration to nvda.ini
+X Error Bars
+Xhosa grade 1
+Xhosa grade 2
+Y Error Bars
+Yakut grade 1
+Yes
+Yiddish grade 1
+You are about to install version of , which appears to be already installed. Would you still like to update?
+You did not choose Talk as one of your speech mode options. Please note that this may result in no speech output at all. Are you sure you want to continue?
+You must choose a name for this profile.
+Your configuration file contains errors. Your configuration has been reset to factory defaults. More details about the errors can be found in the log file.
+Your configuration has been reset to factory defaults. Choose OK to keep factory defaults, or Undo to restore your previous configuration.
+Your gesture map file contains errors. More details about the errors can be found in the log file.
+Zoom (%):
+Zoom in all the way in math
+Zoom in in math
+Zoom out all the way in math
+Zoom out in math
+Zulu grade 1
+Zulu grade 2
+[remove]
+alert
+align center
+align centered across selection
+align distributed
+align fill
+align general
+align justify
+align left
+align right
+alignment
+all
+alphanumeric
+alt
+always
+and remaining
+animation
+annotations
+any dots
+app
+application
+applications
+aqua
+aqua-blue
+article
+articles
+as in
+at ,
+at least %.1f pt
+attachment
+audio
+automatic
+automatic color
+automatically
+back
+background
+background color
+background pattern
+backspace
+banner
+baseline
+beeps
+behind
+bkmk
+black
+blank
+block quote
+block quotes
+blue
+blue-purple
+bnnr
+bold
+bookmark
+border
+bottom edge
+box
+bqt
+braille keyboard
+break
+bright
+brown
+brown-yellow
+browse mode
+browser stop
+bsyind
+btn
+busy
+busy indicator
+button
+buttons
+calendar
+canvas
+cap
+caps lock
+caption
+caret
+caret moves review cursor off
+caret moves review cursor on
+case
+cbo
+cell
+cell deletion
+cell insertion
+cell merge
+centered
+change magnifier view
+change tracking mode
+character
+chart
+chart element
+check box
+check boxes
+check menu item
+checkable
+checked
+chk
+cinf
+clickable
+clk
+clock
+cmnt
+cmpl
+collapsed
+color
+color chooser
+column
+column break
+column header
+column of
+combo box
+combo boxes
+comment
+comment: by on
+complementary
+configuration profile active
+conflict
+content info
+continuous
+continuous section break
+control+shift+c
+copy as
+covers
+cropped
+ctrl
+current
+current date
+current location
+current page
+current step
+current time
+cursor
+cursor positioned from left edge of page, from top edge of page
+custom application 1
+custom application 2
+cycle color filters
+dark
+dark grey
+dark pale
+dash dot
+dash dot dot
+dashed
+data grid
+data item
+data point
+date edit
+day ::
+days ::
+debug
+debug (unredacted)
+debug warning
+decreased by from point ,
+default
+default style
+definition
+defunct
+del
+delayed character descriptions off
+delayed character descriptions on
+delete
+deleted
+deletion
+deletion:
+desktop
+desktop icon
+desktop pane
+details
+diagonal crosshatch
+diagonal stripe
+diagram
+dial
+dialog
+different style
+directory pane
+disabled
+display field
+display scroll
+display speech output
+doc
+document
+done dragging
+dot
+dotted
+double
+double strikethrough
+down arrow
+down-right diagonal line
+draggable
+dragging
+drbtn
+drft cmnt
+drop down button
+drop down button grid
+drop list
+drop target
+edit
+edit bar
+edit fields
+editable
+editing
+edt
+elapsed
+email
+embedded
+embedded object
+embedded objects
+emphasised
+enabled
+end
+end note
+endnote reference :
+endnote reference:
+enote
+enter
+errors
+escape
+even pages section break
+exactly pt
+expanded
+favorites
+fig
+figure
+figures
+file chooser
+filler
+find a text string from the current cursor position
+find the next occurrence of the previously entered text string from the current cursor's position
+find the previous occurrence of the previously entered text string from the current cursor's position
+first line indent
+flagged
+flick down
+flick left
+flick right
+flick up
+fnote
+focus moves navigator object off
+focus moves navigator object on
+focusable
+focused
+follow cursors
+font chooser
+font name
+font size
+foot note
+footer
+footnote reference :
+footnote reference:
+foreground color
+form
+form fields
+forward
+forwarded
+four snipped corners
+fraction Percent slice of
+frame
+frames
+frml
+from left edge of page
+from top edge of page
+gesture map File Error
+glass pane
+gra
+gradient
+grammar error
+grammar:
+graphic
+graphics
+green
+green-aqua
+grey
+grip
+grouping
+groupings
+hair
+half alphanumeric
+half checked
+half katakana
+half katakana roman
+half pressed
+hanging indent
+has
+has attachment
+has auto complete
+has comment
+has details
+has draft comment
+has formula
+has long description
+has note
+has resolved comment
+header
+header item
+heading
+heading 1
+heading 2
+heading 3
+heading 4
+heading 5
+heading 6
+heading level
+headings
+headings level
+help balloon
+hidden
+high importance
+highlight
+highlighted
+highlighted in
+hiragana
+hiragana roman
+hlght
+hlp
+hold
+home
+home page
+horizontal borders except outside
+horizontal stripe
+hot key field
+hover
+hover down
+hover up
+icon
+iconified
+image map
+increased by from point ,
+indent
+indicator
+info
+input help off
+input help on. Press again to turn it off.
+input window
+input/output
+ins
+insert
+inserted
+insertion
+insertion:
+invalid
+invalid entry
+invisible
+invoke
+is currently running.
+is editing
+italic
+item
+katakana
+katakana roman
+keyboard
+keyboard, all layouts
+label
+landmark
+landmarks
+laptop
+large
+larger
+layered pane
+layout
+layout tables off
+layout tables on
+ldesc
+left
+left alt
+left and right edges
+left arrow
+left control
+left edge
+left indent
+left shift
+left windows
+level
+light grey
+light pale
+line
+line scroll
+line spacing
+linear gradient
+link
+linked
+links
+list
+list item
+list items
+lists
+lmk
+lnk
+low importance
+main
+manual
+marked
+math
+math formulas
+media player
+medium
+medium dash dot
+medium dash dot dot
+medium dashed
+meeting request
+menu
+menu bar
+menu button
+menu item
+menu items
+minus
+mln
+mnu
+mnubar
+mnubtn
+mnuitem
+modal
+module is loaded.
+most
+moved from
+moved to
+moves to the first table column
+moves to the first table row
+moves to the last table column
+moves to the last table row
+moves to the next annotation
+moves to the next article
+moves to the next block quote
+moves to the next button
+moves to the next check box
+moves to the next combo box
+moves to the next different style text
+moves to the next edit field
+moves to the next embedded object
+moves to the next error
+moves to the next figure
+moves to the next form field
+moves to the next frame
+moves to the next graphic
+moves to the next grouping
+moves to the next heading
+moves to the next landmark
+moves to the next link
+moves to the next list
+moves to the next list item
+moves to the next math formula
+moves to the next menu item
+moves to the next progress bar
+moves to the next radio button
+moves to the next reference
+moves to the next same style text
+moves to the next separator
+moves to the next slider
+moves to the next tab
+moves to the next table
+moves to the next table column
+moves to the next table row
+moves to the next text paragraph
+moves to the next toggle button
+moves to the next unvisited link
+moves to the next vertically aligned paragraph
+moves to the next visited link
+moves to the previous annotation
+moves to the previous article
+moves to the previous block quote
+moves to the previous button
+moves to the previous check box
+moves to the previous combo box
+moves to the previous different style text
+moves to the previous edit field
+moves to the previous embedded object
+moves to the previous error
+moves to the previous figure
+moves to the previous form field
+moves to the previous frame
+moves to the previous graphic
+moves to the previous grouping
+moves to the previous heading
+moves to the previous landmark
+moves to the previous link
+moves to the previous list
+moves to the previous list item
+moves to the previous math formula
+moves to the previous menu item
+moves to the previous progress bar
+moves to the previous radio button
+moves to the previous reference
+moves to the previous same style text
+moves to the previous separator
+moves to the previous slider
+moves to the previous tab
+moves to the previous table
+moves to the previous table column
+moves to the previous table row
+moves to the previous text paragraph
+moves to the previous toggle button
+moves to the previous unvisited link
+moves to the previous vertically aligned paragraph
+moves to the previous visited link
+msel
+mslst
+multi line
+multi-select
+mute
+navi
+navigation
+never
+new column section break
+new page section break
+next track
+no bold
+no border lines
+no change from point ,
+no first line indent
+no hanging indent
+no highlight
+no indent
+no italic
+no left indent
+no more text after a block of links
+no more text before a block of links
+no next annotation
+no next article
+no next block quote
+no next button
+no next check box
+no next combo box
+no next edit field
+no next embedded object
+no next error
+no next figure
+no next form field
+no next frame
+no next graphic
+no next grouping
+no next heading
+no next landmark
+no next link
+no next list
+no next list item
+no next math formula
+no next menu item
+no next progress bar
+no next radio button
+no next reference
+no next separator
+no next slider
+no next tab
+no next table
+no next text paragraph
+no next toggle button
+no next unvisited link
+no next vertically aligned paragraph
+no next visited link
+no previous annotation
+no previous article
+no previous block quote
+no previous button
+no previous check box
+no previous combo box
+no previous edit field
+no previous embedded object
+no previous error
+no previous figure
+no previous form field
+no previous frame
+no previous graphic
+no previous grouping
+no previous heading
+no previous landmark
+no previous link
+no previous list
+no previous list item
+no previous math formula
+no previous menu item
+no previous progress bar
+no previous radio button
+no previous reference
+no previous separator
+no previous slider
+no previous tab
+no previous table
+no previous text paragraph
+no previous toggle button
+no previous unvisited link
+no previous vertically aligned paragraph
+no previous visited link
+no revised
+no right indent
+no status bar information
+no strikethrough
+non-link blocks
+none
+normal configuration
+normal configuration profile active
+normalized
+not
+not checked
+not deleted
+not emphasised
+not hidden
+not highlighted
+not inserted
+not marked
+not pressed
+not selected
+not strong
+not underlined
+note
+notes for translators
+nsel
+num lock
+numLock numpad 0
+numLock numpad 1
+numLock numpad 2
+numLock numpad 3
+numLock numpad 4
+numLock numpad 5
+numLock numpad 6
+numLock numpad 7
+numLock numpad 8
+numLock numpad 9
+numpad 1
+numpad 2
+numpad 3
+numpad 4
+numpad 5
+numpad 6
+numpad 7
+numpad 8
+numpad 9
+numpad decimal
+numpad delete
+numpad divide
+numpad enter
+numpad insert
+numpad minus
+numpad multiply
+numpad plus
+object has no location
+object mode
+obscured
+odd pages section break
+off
+off screen
+on-demand
+only below symbol's level
+opens dialog
+opens grid
+opens list
+opens tree
+option pane
+orange
+orange-yellow
+other item
+out of
+out of bookmark
+out of comment
+out of grammar error
+out of popular highlight
+out of spelling error
+out of table
+overflowing
+page
+page down
+page up
+pale
+pan down
+pan left
+pan right
+pan to bottom edge
+pan to left edge
+pan to right edge
+pan to top edge
+pan up
+pane
+panel
+paragraph
+paragraph number
+paragraph property
+password edit
+pattern
+picture
+pinch in
+pinch out
+pink
+pink-red
+pinned
+play pause
+pnl
+point font
+pressed
+previous source text
+previous track
+prgbar
+print screen
+profile activated
+profile deactivated
+progress bar
+progress bars
+property
+property page
+protected
+pt space before paragraph
+purple
+purple-pink
+pwdedt
+quadruple
+radio button
+radio buttons
+radio menu item
+rbtn
+read only
+received:
+reconcile
+rectangular gradient
+red
+red-brown
+red-orange
+redundant object
+reference:
+references
+refresh
+region
+released
+remaining
+replace
+replied
+replied all
+report CLDR characters off
+report CLDR characters on
+report alignment off
+report alignment on
+report articles off
+report articles on
+report block quotes off
+report block quotes on
+report colors off
+report colors on
+report comments off
+report comments on
+report dynamic content changes off
+report dynamic content changes on
+report emphasis off
+report emphasis on
+report figures and captions off
+report figures and captions on
+report font name off
+report font name on
+report font size off
+report font size on
+report frames off
+report frames on
+report graphics off
+report graphics on
+report groupings off
+report groupings on
+report headings off
+report headings on
+report highlighted off
+report highlighted on
+report if clickable off
+report if clickable on
+report landmarks and regions off
+report landmarks and regions on
+report line numbers off
+report line numbers on
+report line spacing off
+report line spacing on
+report links off
+report links on
+report lists off
+report lists on
+report pages off
+report pages on
+report paragraph indentation off
+report paragraph indentation on
+report revisions off
+report revisions on
+report style off
+report style on
+report superscripts and subscripts off
+report superscripts and subscripts on
+report table cell coordinates off
+report table cell coordinates on
+report tables off
+report tables on
+req
+required
+reverse diagonal stripe
+revised
+rgn
+rich edit
+right
+right alt
+right arrow
+right control
+right edge
+right indent
+right shift
+right windows
+root pane
+row
+row header
+rslvd cmnt
+ruler
+same page
+same style
+scrlbar
+scroll bar
+scroll lock
+scroll pane
+search
+search page
+sect
+section
+section property
+sel
+selectable
+selected
+selected instead
+selection removed
+sent:
+separator
+separators
+series
+series of
+sggstn
+shape
+shift
+show screen overview
+single
+skips backward past a block of links
+skips forward past a block of links
+slanted dash dot
+slice
+slider
+sliders
+small
+smaller
+smp
+solid
+some
+sorted
+sorted asc
+sorted ascending
+sorted desc
+sorted descending
+sound
+space
+space with any dots
+space with dot
+speak command keys off
+speak command keys on
+speech viewer disabled
+speech viewer enabled
+spelling and grammar:
+spelling error
+spelling:
+spin button
+splbtn
+split button
+split pane
+spnbtn
+square
+srch
+status bar
+stbar
+stop
+strikethrough
+strong
+style
+style definition
+style, outline level
+subMenu
+subject:
+submnu
+subscript
+suggestion
+superscript
+surrounding border
+switch
+swtch
+tab
+tab control
+tabctl
+table
+table body
+table footer
+table header
+table property
+table with and
+tables
+tabs
+talk
+tap
+tap and hold
+tear off menu
+terminal
+text
+text "" not found
+text frame
+text mode
+text paragraphs
+tgbtn
+thick
+thick diagonal crosshatch
+thin
+thin diagonal crosshatch
+thin diagonal stripe
+thin horizontal crosshatch
+thin horizontal stripe
+thin reverse diagonal stripe
+thin vertical stripe
+through
+through row column
+thumb control
+title bar
+title:
+tlbar
+tltip
+to focus
+to review
+toggle button
+toggle buttons
+toggle tracking settings
+tool bar
+tool tip
+top and bottom edges
+top edge
+total
+track change:
+translation issue
+transparent
+tree view
+tree view button
+tree view item
+trendline type: , name:
+trendline type: , name: , label:
+triggered
+triple
+tvbtn
+tvitem
+unavailable
+underline
+underlined
+unknown
+unknown input method
+unknown language
+unlocked
+unread
+unselected
+unvisited links
+up arrow
+up-right and down-right diagonal lines
+up-right diagonal line
+value
+vertical align bottom
+vertical align distributed
+vertical align justified
+vertical align middle
+vertical align top
+vertical borders except outside
+vertical paragraphs
+vertical stripe
+very dark
+very dark grey
+very dark pale
+very light grey
+video
+view
+view port
+visited
+visited links
+vlnk
+volume down
+volume up
+white
+white space
+window
+windows
+with and
+wnd
+word
+x-large
+x-small
+xx-large
+xx-small
+xxx-large
+yellow
+yellow-green
+zoom in
+zoom out

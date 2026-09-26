@@ -1,0 +1,3161 @@
+inconnu
+Erreur dans le module applicatif
+bannière
+complémentaire
+information sur le contenu
+principale
+recherche
+formulaire
+Pas d'atténuation
+Atténuation lors de la sortie de paroles et de sons
+Atténuation permanente
+fen
+càc
+btnr
+bmnu
+élmnu
+lstd
+aid
+sug
+élarb
+ong
+bpr
+indocp
+bdéf
+bét
+btnd
+ctn
+lég
+oemb
+notef
+noteb
+bsc
+btnp
+btnmnu
+btnrot
+btnarb
+édmdp
+effacé
+rgn
+mrq
+définition
+bscl
+sél
+smnu
+oblg
+invl
+mléd
+clq
+tcro
+tdéc
+mmp
+selm
+nsél
+bnr
+cmp
+prc
+nav
+rch
+Points 7 et 8
+Point 8
+Tous les points
+Seulement lors d'un changement de contexte
+Toujours
+Seulement lors d'un défilement arrière
+Automatique
+détails
+contient des
+lnv
+lstsm
+fin de
+cmt brln
+cmt rsl
+sgn
+Fermeté des points
+Saisie Braille
+Simulation de clavier HID
+Afficheur braille inconnu
+Port série Bluetooth : ()
+Série :
+Entrée non supportée
+relâché
+point
+espace avec point
+espace
+clavier braille
+espace avec n'importe quels points
+n'importe quels points
+Mode formulaire
+Mode navigation
+Non étiqueté
+Navigation par une seule lettre désactivée
+Navigation par une seule lettre activée
+Non supporté dans ce document
+Aller au titre suivant de niveau
+Aucun titre suivant de niveau
+Aller au titre précédent de niveau
+Aucun titre précédent de niveau
+titre de niveau
+Dresser la liste de différents types d'éléments dans le document courant
+Activer l'objet courant dans le document
+défaut
+Sélectionne le type d'élément suivant pour la navigation tactile par élément
+Sélectionne le type d'élément précédent pour la navigation tactile par élément
+Aller à l'élément suivant du type sélectionné pour la navigation tactile par élément
+Aller à l'élément précédent du type sélectionné pour la navigation tactile par élément
+Aller au titre suivant
+aucun titre suivant
+Aller au titre précédent
+aucun titre précédent
+titres
+Aller au tableau suivant
+aucun tableau suivant
+Aller au tableau précédent
+aucun tableau précédent
+tableaux
+Aller au lien suivant
+aucun lien suivant
+Aller au lien précédent
+aucun lien précédent
+liens
+Aller au lien visité suivant
+aucun lien visité suivant
+Aller au lien visité précédent
+aucun lien visité précédent
+liens visités
+Aller au lien non visité suivant
+aucun lien non visité suivant
+Aller au lien non visité précédent
+aucun lien non visité précédent
+liens non visités
+Aller au champ de formulaire suivant
+aucun champ de formulaire suivant
+Aller au champ de formulaire précédent
+aucun champ de formulaire précédent
+champs de formulaire
+Aller à la liste suivante
+aucune liste suivante
+Aller à la liste précédente
+aucune liste précédente
+listes
+Aller à l'élément de liste suivant
+aucun élément de liste suivant
+Aller à l'élément de liste précédent
+aucun élément de liste précédent
+éléments de liste
+Aller au bouton suivant
+aucun bouton suivant
+Aller au bouton précédent
+aucun bouton précédent
+boutons
+Aller à la zone d'édition suivante
+aucune zone d'édition suivante
+Aller à la zone d'édition précédente
+aucune zone d'édition précédente
+zones d'édition
+Aller au cadre suivant
+aucun cadre suivant
+Aller au cadre précédent
+aucun cadre précédent
+cadres
+Aller au séparateur suivant
+aucun séparateur suivant
+Aller au séparateur précédent
+aucun séparateur précédent
+séparateurs
+Aller au bouton radio suivant
+aucun bouton radio suivant
+Aller au bouton radio précédent
+aucun bouton radio précédent
+boutons radio
+Aller à la liste déroulante suivante
+aucune liste déroulante suivante
+Aller à la liste déroulante précédente
+aucune liste déroulante précédente
+listes déroulantes
+Aller à la case à cocher suivante
+aucune case à cocher suivante
+Aller à la case à cocher précédente
+aucune case à cocher précédente
+cases à cocher
+Aller au graphique suivant
+aucun graphique suivant
+Aller au graphique précédent
+aucun graphique précédent
+graphiques
+Aller à la citation suivante
+aucune citation suivante
+Aller à la citation précédente
+aucune citation précédente
+citations
+Sauter après la fin d'un bloc de liens
+plus de texte après un bloc de liens
+Remonter avant un bloc de liens
+plus de texte avant un bloc de liens
+blocs sans liens
+Aller à la région suivante
+aucune région suivante
+Aller à la région précédente
+aucune région précédente
+régions
+Aller à l'objet embarqué suivant
+aucun objet embarqué suivant
+Aller à l'objet embarqué précédent
+aucun objet embarqué précédent
+objets embarqués
+Aller à l'annotation suivante
+aucune annotation suivante
+Aller à l'annotation précédente
+aucune annotation précédente
+Aller à l'erreur suivante
+aucune erreur suivante
+Aller à l'erreur précédente
+aucune erreur précédente
+erreurs
+Aller au potentiomètre suivant
+aucun potentiomètre suivant
+Aller au potentiomètre précédent
+aucun potentiomètre précédent
+potentiomètres
+Aller à l'article suivant
+aucun article suivant
+Aller à l'article précédent
+aucun article précédent
+Aller au groupe suivant
+aucun groupe suivant
+Aller au groupe précédent
+aucun groupe précédent
+groupes
+Aller à l'onglet suivant
+aucun onglet suivant
+Aller à l'onglet précédent
+aucun onglet précédent
+onglets
+Aller à la figure suivante
+aucune figure suivante
+Aller à la figure précédente
+aucune figure précédente
+Aller à l'élément de menu suivant
+aucun élément de menu suivant
+Aller à l'élément de menu précédent
+aucun élément de menu précédent
+éléments de menu
+Aller au bouton bascule suivant
+aucun bouton bascule suivant
+Aller au bouton bascule précédent
+aucun bouton bascule précédent
+boutons bascule
+Aller à la barre de progression suivante
+aucune barre de progression suivante
+Aller à la barre de progression précédente
+aucune barre de progression précédente
+barres de progression
+Aller à la formule mathématique suivante
+aucune formule mathématique suivante
+Aller à la formule mathématique précédente
+aucune formule mathématique précédente
+formules mathématiques
+Aller au paragraphe de texte suivant
+aucun paragraphe de texte suivant
+Aller au paragraphe de texte précédent
+aucun paragraphe de texte précédent
+paragraphes de texte
+Aller au paragraphe suivant aligné verticalement
+aucun paragraphe suivant aligné verticalement
+Aller au paragraphe précédent aligné verticalement
+aucun paragraphe précédent aligné verticalement
+paragraphes alignés verticalement
+Aller au texte de même style suivant
+Aucun texte suivant de même style
+Aller au texte de même style précédent
+Aucun texte précédent de même style
+texte de même style
+Aller au texte de style différent suivant
+Aucun texte suivant de style différent
+Aller au texte de style différent précédent
+Aucun texte précédent de style différent
+texte de style différent
+aller à la référence suivante
+aucune référence suivante
+aller à la référence précédente
+aucune référence précédente
+références
+Liens
+Titres
+Champs de formulaire
+Boutons
+Régions
+Liste d'éléments
+Type :
+Filtrer par :
+Activer
+Aller à
+Pas de description longue
+Afficher la description longue à cette position s'il y en a une
+Pas dans un conteneur
+Aller au début de l'élément de conteneur tel qu'une liste ou un tableau
+Bas
+Aller à la fin de l'élément de conteneur tel qu'une liste ou un tableau
+Activer ou désactiver le mode d'affichage tel qu'à l'écran du contenu du document
+Non supporté dans ce document.
+Activer ou désactiver le mode de sélection natif
+Mode de sélection native non pris en charge dans ce document en mode navigation
+Le mode de sélection native ne peut pas être désactivé dans ce document en mode navigation
+Mode de sélection natif de l'application non pris en charge dans ce document
+Mode de sélection native de l'application activé
+Mode de sélection native de l'application désactivé
+aucun
+quelques-uns
+la plupart
+tous
+caractère
+jamais
+toujours
+seulement au-dessous du niveau du symbole
+Données du Consortium Unicode (incluant les emoji)
+blanc
+gris très clair
+gris clair
+gris
+gris foncé
+gris très foncé
+noir
+rouge
+rouge-orange
+jaune-orange
+jaune
+jaune-vert
+vert
+vert-cyan
+cyan
+bleu-cyan
+bleu
+bleu-violet
+violet
+violet-rose
+rose
+rose-rouge
+clair
+foncé
+très foncé
+pâle léger
+pâle
+pâle foncé
+pâle très foncé
+rouge-brun
+brun
+brun-jaune
+Certaines opérations sur les extensions ont échouées. Consulter le fichier journal pour plus de détails.
+Erreur
+Les paramètres de ligne de commande suivants sont inconnus de NVDA :
+Paramètres de ligne de commande inconnus
+Votre fichier de configuration contient des erreurs. Votre configuration a été réinitialisée aux valeurs par défaut. Vous trouverez plus de détails sur les erreurs dans le fichier log.
+Erreur dans le Fichier de Configuration
+Votre fichier de gestes contient des erreurs. Vous trouverez plus de détails dans le fichier log.
+Erreur dans le fichier de définition de gestes
+Chargement de NVDA. Veuillez patienter...
+NVDA a démarré avec le rideau d'écran activé
+NVDA démarré
+Rechercher
+Entrez le texte à rechercher
+Respecter la casse
+texte "" non trouvé
+Aucune correspondance
+Rechercher un texte à partir de la position courante du curseur
+Trouver l'occurrence suivante du texte recherché à partir de la position courante du curseur
+Trouver l'occurrence précédente du texte recherché à partir de la position courante du curseur
+Aucune sélection
+Pas dans une cellule de tableau
+Bordure de tableau
+Aller à la ligne suivante du tableau
+Aller à la ligne précédente du tableau
+Aller à la colonne suivante du tableau
+Aller à la colonne précédente du tableau
+Aller à la première ligne du tableau
+Aller à la dernière ligne du tableau
+Aller à la première colonne du tableau
+Aller à la dernière colonne du tableau
+Lit la ligne horizontalement de la cellule actuelle vers la droite jusqu'à la dernière cellule de la ligne.
+Lit la colonne verticalement de la cellule actuelle vers le bas jusqu'à la dernière cellule de la colonne.
+Lit la ligne actuelle horizontalement de gauche à droite sans déplacer le curseur système.
+Lit la colonne actuelle verticalement de haut en bas sans déplacer le curseur système.
+tables de disposition désactivées
+tables de disposition activées
+Activer ou désactiver l'inclusion des tables de disposition
+Pas de documentation trouvée.
+Licence de NVDA
+Revue de texte
+Navigation par objet
+Curseur système
+Souris
+Parole
+Profils de configuration
+Loupe
+Outils
+Écran tactile
+Focus système
+État du système
+Entrée
+Mise en forme des documents
+Accès à distance
+Navigation dans le contenu mathématique
+Pas de paramètres
+Faire défiler les modes d'atténuation audio pour déterminer comment NVDA atténue le volume des autres sons
+Atténuation audio non supportée
+Activer ou désactiver l'aide des commandes. Quand l'aide est activée, l'appui sur une touche annonce le script associé s'il existe.
+aide à la saisie activée. Appuyez sur pour la désactiver.
+aide à la saisie désactivée
+Activer ou désactiver le mode veille pour l'application en cours
+Mode veille désactivé
+Mode veille activé
+Annoncer la ligne courante sous le curseur d'application. Deux appuis: épeler la ligne. Trois appuis: épeler la ligne en code international.
+Simple clic gauche de la souris à sa position courante
+Clic gauche
+Simple clic droit de la souris à sa position courante
+Clic droit
+Verrouiller ou déverrouiller le bouton gauche de la souris
+Verrouiller ou déverrouiller le bouton droit de la souris
+Faires défiler vers le haut à la position de la souris
+Faire défiler vers le bas à la position de la souris
+Faire défiler vers la gauche à la position de la souris
+Faire défiler vers la droite à la position de la souris
+sélectionné
+Annoncer l'heure. Deux appuis: annoncer la date
+Aller à la première valeur du paramètre courant dans la boucle des paramètres du synthétiseur
+Aller à la dernière valeur du paramètre courant dans la boucle des paramètres du synthétiseur
+Augmenter la valeur du paramètre courant dans la boucle des paramètres synthétiseur
+Augmenter la valeur du paramètre courant dans la boucle des paramètres du synthétiseur d'un interval plus important
+Diminuer la valeur du paramètre courant dans la boucle des paramètres synthétiseur
+Diminuer la valeur du paramètre courant dans la boucle des paramètres du synthétiseur d'un interval plus important
+Aller au paramètre suivant dans la boucle des paramètres synthétiseur
+Aller au paramètre précédent dans la boucle des paramètres synthétiseur
+Bascule entre les dispositions de clavier ordinateur de bureau et ordinateur portable
+disposition
+Fait défiler les différentes options pour déterminer quand lire à voix haute les caractères saisis.
+Annoncer les caractères saisis
+Fait défiler les différentes options pour déterminer quand lire à voix haute les mots saisis.
+Annoncer les mots saisis
+Active ou désactive l'annonce des touches de commande
+écho des touches de commandes désactivé
+écho des touches de commandes activé
+Activer ou désactiver l'annonce des changements de police
+annonce du nom de la police désactivée
+annonce du nom de la police activée
+Activer ou désactiver l'annonce des changements de taille de la police
+annonce de la taille de la police désactivée
+annonce de la taille de la police activée
+Faire défiler la signalisation des attributs de police entre parole, braille, parole et braille, et désactivé.
+Ne pas signaler les attributs de police
+Signaler les attributs de police par la parole
+Signaler les attributs de police en braille
+Signaler les attributs de police par la parole et en braille
+Activer ou désactiver l'annonce des exposants et indices
+annonce des exposants et indices activée
+annonce des exposants et indices désactivée
+Activer ou désactiver l'annonce des modifications
+annonce des modifications désactivée
+annonce des modifications activée
+Activer ou désactiver l'annonce de l'emphase
+annonce de l'emphase désactivée
+annonce de l'emphase activée
+Activer ou désactiver l'annonce du texte surligné
+annoncer le surmignage
+annonce du surlignage désactivé
+Activer ou désactiver l'annonce des couleurs
+annonce des couleurs désactivée
+annonce des couleurs activée
+Activer ou désactiver l'annonce de l'alignement du texte
+annonce de l'alignement désactivée
+annonce de l'alignement activée
+Activer ou désactiver l'annonce des changements de style
+annonce du style désactivée
+annonce du style activée
+Faire défiler les choix possibles pour signaler les erreurs d'orthographe ou de grammaire
+Annonce des erreurs
+Active ou désactive le signalement des erreurs d'orthographe ou de grammaire en braille
+Signaler les erreurs en braille activé
+Signaler les erreurs en braille désactivé
+Activer ou désactiver le défilement automatique du braille
+Défilement automatique activé
+Défilement automatique désactivé
+Augmente la vitesse de défilement automatique du braille
+Vitesse de défilement
+Diminue la vitesse de défilement automatique du braille
+Activer ou désactiver l'annonce des pages
+annonce des pages désactivée
+annonce des pages activée
+Activer ou désactiver l'annonce des numéros de lignes
+annonce des numéros de lignes désactivée
+annonce des numéros de lignes activée
+Faire défiler les paramètres de retrait des lignes
+Signaler le retrait des lignes
+Activer ou désactiver ignorer les lignes vides pour l'annonce du retrait de ligne
+Ne pas ignorer les lignes vides pour l'annonce du retrait de ligne
+Ignorer les lignes vides pour l'annonce du retrait de ligne
+Activer ou désactiver l'annonce du retrait des paragraphes
+annonce du retrait des paragraphes désactivée
+annonce du retrait des paragraphes activée
+Activer ou désactiver l'annonce de l'interligne
+annonce de l'interligne désactivée
+annonce de l'interligne activée
+Activer ou désactiver l'annonce des tableaux
+annonce des tableaux désactivée
+annonce des tableaux activée
+Faire défiler les modes possibles pour annoncer les en-têtes de ligne et de colonne des tableaux
+Annonce des en-têtes de tableaux
+Activer ou désactiver l'annonce des coordonnées des cellules
+annonce des coordonnées des cellules désactivée
+annonce des coordonnées des cellules activée
+Faire défiler les paramètres d'annonce des bordures de cellules
+Annonce des bordures de cellules
+Activer ou désactiver l'annonce des liens
+annonce des liens désactivée
+annonce des liens activée
+Active ou désactive l'annonce du type de lien
+Annonce du type de lien activée
+Annonce du type de lien désactivée
+Le réglage d'annonce du type des liens doit être activé pour basculer l'annonce du type de lien
+Activer ou désactiver l'annonce des graphiques
+annonce des graphiques désactivée
+annonce des graphiques activée
+Activer ou désactiver l'annonce des commentaires
+annonce des commentaires désactivée
+annonce des commentaires activée
+Activer ou désactiver l'annonce des listes
+annonce des listes désactivée
+annonce des listes activée
+Activer ou désactiver l'annonce des titres
+annonce des titres désactivée
+annonce des titres activée
+Activer ou désactiver l'annonce des groupes
+annonce des groupes désactivée
+annonce des groupes activée
+Activer ou désactiver l'annonce des citations
+annonce des citations désactivée
+annonce des citations activée
+Activer ou désactiver l'annonce des régions
+annonce des repères et régions désactivée
+annonce des repères et régions activée
+Activer ou désactiver l'annonce des articles
+annonce des articles désactivée
+annonce des articles activée
+Activer ou désactiver l'annonce des cadres
+annonce des cadres désactivée
+annonce des cadres activée
+Activer ou désactiver l'annonce d'élément cliquable
+annoncer si cliquable désactivée
+annoncer si cliquable activée
+Activer ou désactiver l'annonce des figures et des légendes
+annonce des figures et légendes désactivée
+annonce des figures et légendes activée
+Faire défiler les choix possibles pour le changement automatique de langue : désactivé, langue uniquement et langue et dialecte.
+Changement automatique de langue désactivé
+Changement automatique de langue et de dialecte activé
+Changement automatique de langue activé
+Faire défiler les niveaux d'annonce des symboles pour déterminer quels symboles seront annoncés
+Niveau de symbole
+Activer ou désactiver la description différée des caractères lors du mouvement du curseur
+description différée des caractères activée
+description différée des caractères désactivée
+Déplacer le pointeur de la souris vers l'objet navigateur courant
+L'objet n'a pas de position
+Amener l'objet navigateur à l'objet actuellement sous le pointeur de la souris et le lire
+Déplacer l'objet navigateur vers la souris
+Passer au mode de revue suivant (ex. objet, document ou écran) et placer la position de revue au point de l'objet de navigation
+Aucun mode de revue suivant
+Passer au mode de revue précédent (ex. objet, document ou écran) et placer la position de revue au point de l'objet de navigation
+Aucun mode de revue précédent
+Activer et désactiver le mode de revue simple
+Mode de revue simple désactivé
+Mode de revue simple activé
+Annnoncer l'objet navigateur courant. Deux appuis: épeler l'information. trois appuis: copier le nom et le contenu de l'objet dans le presse-papiers
+Pas d'objet navigateur
+Pas d'information de position
+Annoncer des informations sur la position du texte sous le curseur de revue, ou la position de l'objet navigateur s'il n'y a pas de texte sous le curseur de revue.
+Annoncer des informations sur l'emplacement de l'objet navigateur actuel.
+Annoncer des informations sur la position du texte sous le signe d'insertion, ou la position de l'objet actuellement en focus s'il n'y a pas de signe d'insertion.
+Annoncer des informations sur la position de l'objet actuellement en focus.
+Annoncer des informations concernant la position du texte ou de l'objet sous le curseur de revue. Deux appuis: obtenir d'éventuels détails supplémentaires.
+Annoncer des informations concernant la position du texte ou de l'objet sous le curseur système. Deux appuis: obtenir d'éventuels détails supplémentaires.
+Amener l'objet navigateur au focus courant et le curseur de revue à la position du curseur si possible
+Aller au focus
+Amener le focus clavier à l'objet navigateur courant, deux appuis: amener le curseur système au curseur de revue
+Pas de focus
+Déplacer le focus
+Pas de point d'insertion
+Amener l'objet navigateur à l'objet le contenant
+Pas d'objet contenant
+Amener l'objet navigateur à l'objet suivant
+Pas d'objet suivant
+Amener l'objet navigateur à l'objet précédent
+Pas d'objet précédent
+Amener l'objet navigateur au premier objet qu'il contient
+Pas d'objets inclus
+Exécuter l'action par défaut sur l'objet navigateur courant. (Par exemple: appuyer s'il s'agit d'un bouton)
+Pas d'action
+Amener le curseur de revue en haut de l'objet navigateur courant et le lire
+Amener le curseur de revue à la ligne précédente de l'objet navigateur courant et la lire
+Haut
+Amener le curseur de revue à la ligne suivante de l'objet navigateur courant et la lire
+Amener le curseur de revue à la page précédente de l'objet navigateur courant et la lire
+Déplacement par page non pris en charge
+Amener le curseur de revue à la page suivante de l'objet navigateur courant et la lire
+Amener le curseur de revue à la dernière ligne de l'objet navigateur courant et la lire
+Amener le curseur de revue au mot précédent de l'objet navigateur courant et le lire
+Annoncer le mot de l'objet navigateur courant sur lequel se trouve le curseur de revue. Deux appuis: épeler le mot. Trois appuis: l'épeler en code international
+Amener le curseur de revue au mot suivant de l'objet navigateur courant et le lire
+Amener le curseur de revue au premier caractère de la ligne sur laquelle il se trouve dans l'objet navigateur courant et le lire
+Amener le curseur de revue au caractère précédent de l'objet navigateur courant et le lire
+Gauche
+Amener le curseur de revue au caractère suivant de l'objet navigateur courant et le lire
+Droite
+Amener le curseur de revue au dernier caractère de la ligne sur laquelle il se trouve dans l'objet navigateur courant et le lire
+Déplace le curseur de revue vers le premier caractère de la sélection et le lit à voix haute
+Déplace le curseur de revue vers le dernier caractère de la sélection et le lit à voix haute
+Annonce le symbol sur lequel le curseur de revue est positionné. Deux appuis: afficher le symbol et sa prononciation pendant la navigation
+Aucun symbole de remplacement
+Caractère : Remplacement :
+Symbole étendu ()
+Faire défiler les modes de parole.
+Déplacer le focus de l'objet embarqué actuel vers le document qui le contient
+Quitter NVDA !
+Redémarrer NVDA !
+Afficher le menu NVDA
+Lire à partir du curseur de revue jusqu'à la fin du texte en faisant suivre le curseur de revue
+Lire en partant du curseur système jusqu'à la fin du texte en faisant suivre le curseur système
+Pas d'information de mise en forme
+Mise en Forme
+Annoncer les informations de mise en forme pour la position courante du curseur de revue
+Affiche, en mode navigation, les informations de mise en forme pour la position courante du curseur de revue
+Annoncer les informations de mise en forme à la position actuelle du curseur de revue. Deux appuis: présenter l'information en mode navigation
+Annoncer les informations de mise en forme pour le texte sous le curseur applicatif.
+Afficher, en mode navigation, les informations de mise en forme pour le texte sous le curseur applicatif.
+Annoncer les informations de mise en forme à la position actuelle du curseur applicatif. Deux appuis: présenter l'information en mode navigation
+Annoncer le résumé de tous les détails d'annotation au niveau du curseur système.
+Pas de détails supplémentaires
+Annoncer l'objet ayant le focus. Deux appuis : épeler l'information. Trois appuis : l'épeler en code international.
+Ligne d'état non trouvée
+Lit la barre d'état de lapplication en cours
+pas d'information de barre d'état
+Épelle la barre d'état de lapplication en cours
+Copie le contenu de la barre d'état de l'application en cours dans le presse-papiers.
+Impossible de copier le contenu de la barre d'état dans le presse-papiers
+Lit la barre d'état de l'application en cours et y amène l'objet navigateur.
+Lire la barre d'état de l'application courante. Deux appuis: épeler l'information. Trois appuis: copier la barre d'état dans le presse-papiers
+Annoncer le raccourci clavier de l'objet actuellement en focus
+Pas de raccourci clavier
+Activer ou désactiver l'annonce des informations quand la souris se déplace
+Suivi de la souris désactivé
+Suivi de la souris activé
+Active ou désactive la sonorisation des coordonnées de la souris lors de son déplacement
+Sonoriser les coordonnées de la souris lors de son déplacement
+Ne pas sonoriser les coordonnées de la souris lors de son déplacement
+Définir la quantité de texte prononcée quand la souris se déplace
+Résolution d'unités de texte pour la souris :
+Annoncer le titre de l'application en cours ou de la fenêtre en avant-plan. Deux appuis: épeler le titre. Trois appuis: copier le titre dans le presse-papiers
+Pas de titre
+Annoncer tous les contrôles dans la fenêtre active
+Ouvrir l'outil d'inspection du GUI. Utilisé pour obtenir plus d'informations sur l'état des composants du GUI.
+Récupérer, pour les développeurs, des informations utiles concernant l'objet navigateur courant puis activer la visionneuse de journal pour que l'information puisse être examinée
+Marquer la fin actuelle du journal comme début du fragment de journal à copier par un second appui.
+Position de début du fragment de journal marquée, appuyez à nouveau pour copier dans le presse-papiers
+Impossible de marquer la position dans le journal
+Pas de nouvelle entrée de journal à copier
+Fragment de journal copié dans le presse-papiers
+Impossible de copier
+Ouvrir le répertoire de configuration de l'utilisateur courant
+Boucler entre bips, parole, bips et parole, silence pour l'annonce des mises à jour des barres de progression
+Aucune mise à jour de barre de progression
+Suivi vocal des barres de progression
+Suivi des barres de progression par des bips
+Suivi des barres de progression par des bips et vocalement
+Activer ou désactiver l'annonce des changements dynamiques de contenu, tel qu'un nouveau texte dans une fenêtre DOS
+annonce des changements dynamiques de contenu désactivée
+annonce des changements dynamiques de contenu activée
+Activer ou désactiver le suivi du curseur applicatif par le curseur de revue
+suivi du curseur système par le curseur de revue désactivé
+suivi du curseur système par le curseur de revue activé
+Activer ou désactiver le mouvement de l'objet navigateur lié au changement de focus
+suivi du focus par l'objet de navigation désactivé
+suivi du focus par l'objet de navigation activé
+Annoncer l'état de la batterie et le temps restant si l'adaptateur secteur n'est pas branché
+Ne pas traiter la touche suivante comme geste de commande mais l'envoyer directement à Windows
+Passer la touche suivante directement à l'application
+Annoncer le nom de fichier de l'application en cours ainsi que le nom du module applicatif chargé
+Le module est chargé.
+est en cours d'exécution.
+Afficher les paramètres généraux de NVDA
+Afficher le dialogue sélection du synthétiseur de NVDA
+Afficher les paramètres de parole de NVDA
+Afficher le dialogue de sélection de l'afficheur braille de NVDA
+Afficher les paramètres Braille de NVDA
+Afficher les paramètres audio de NVDA
+Afficher les paramètres de confidentialité et de sécurité de NVDA
+Afficher les paramètres de vision de NVDA
+Afficher les paramètres Clavier de NVDA
+Afficher les paramètres de souris de NVDA
+Afficher les paramètres du curseur de revue de NVDA
+Afficher les paramètres de Composition de Saisie de NVDA
+Afficher les paramètres de présentation des objets de NVDA
+Afficher les paramètre du mode navigation de NVDA
+Afficher les paramètres de mise en forme des documents de NVDA
+Afficher les paramètres d’accès à distance
+Afficher les paramètres de l'Addon Store de NVDA
+Affiche les paramètres de l'OCR Windows de NVDA
+Afficher les paramètres avancés de NVDA
+Afficher le dialogue Dictionnaire par défaut de NVDA
+Afficher le dialogue Dictionnaire de la voix de NVDA
+Afficher le dialogue Dictionnaire temporaire de NVDA
+Afficher le dialogue Prononciation des ponctuations et symboles de NVDA
+Afficher le dialogue Gestes de commandes de NVDA
+Afficher les paramètres de la loupe de NVDA
+Annoncer le nom du profil de configuration courant
+profil de configuration normale activé
+Profil de configuration activé
+Sauvegarder la configuration courante de NVDA
+Un appui : Rétablir la configuration au dernier état sauvegardé. Trois appuis: rétablir les paramètres par défaut.
+Activer la console Python de NVDA, essentiellement utile pour le développement
+Active l'Add-on Store pour rechercher et gérer les paquets d'extensions pour NVDA
+Activer ou désactiver la visionneuse de parole, une fenêtre flottante qui vous permet de voir le texte que NVDA est en train d'énoncer
+visionneuse de parole désactivée
+visionneuse de parole activée
+Activer ou désactiver la visioneuse braille, une fenêtre flottante qui vous permet de visualiser la sortie braille et le texte équivalent pour chaque caractère braille
+Visionneuse braille désactivée
+Visionneuse braille activée
+Basculer le suivi braille entre focus et curseur de revue
+Le Braille suit
+Basculer entre les modes braille
+Mode braille
+Faire défiler les choix pour Déplacer le curseur système lors du routage du curseur de revue
+Action indisponible. Le braille suit le focus
+Braille déplacer le curseur système lors du routage du curseur de revue Valeur par défaut ()
+Braille déplacer le curseur système lors du routage du curseur de revue
+Faire défiler les modes de présentation des informations contextuelles en braille
+Afficher le contexte du focus :
+Activer et désactiver le curseur braille
+Curseur braille désactivé
+Curseur braille activé
+Bascule l'annonce du caractère lors du routage du curseur dans le texte
+Activation de l'annonce du caractère lors du routage du curseur dans le texte
+Désactivation de l'annonce du caractère lors du routage du curseur dans le texte
+Active ou désactive le retour vocal lors de la navigation par lignes ou paragraphes en braille
+Retour vocal lors de la navigation par ligne ou paragraphe en braille activé
+Retour vocal lors de la navigation par ligne ou paragraphe en braille désactivé
+Faire défiler les formes de curseur braille
+Le curseur braille est désactivé
+Curseur braille
+Faire défiler les modes d'affichage des messages braille
+Affichage des messages braille
+Faire défiler les modes d'affichage de la sélection en braille
+Affichage de la sélection en braille Valeur par défaut ()
+Affichage de la sélection en braille
+Faire défiler les états de normalisation Unicode braille
+Normalisation Unicode Braille par défaut ()
+Normalisation Unicode Braille
+Annoncer le texte dans le presse-papiers de Windows. Deux appuis : épeler cette information. Trois appuis : l'épeler en code international.
+Il n'y a pas de texte dans le presse-papiers
+Marquer la position actuelle du curseur de revue comme début du texte à sélectionner ou copier
+Début marqué
+Amener le curseur de revue à la position marquée comme début du texte à sélectionner ou copier
+Pas de marque de début
+Sélectionner depuis le marqueur de début précédemment défini jusqu'à la position actuelle incluse. Deux appuis : copier le texte dans le presse-papiers
+Pressez deux fois pour copier ou réinitialisez le marqueur de début
+Pas de texte à copier
+Impossible de sélectionner le texte, pressez deux fois pour copier
+Faire défiler l'afficheur braille en arrière
+Faire défiler l'afficheur braille en avant
+Amener le curseur à cette cellule braille ou activer l'objet sous cette cellule braille
+Annoncer les informations de mise en forme pour le texte sous cette cellule braille
+Amener l'afficheur braille à la ligne précédente
+Amener l'afficheur braille à la ligne suivante
+Saisir les points braille au moyen du clavier braille
+Amener l'afficheur braille au focus courant
+Effacer la dernière cellule ou le dernier caractère braille entré
+Convertir toute saisie braille et appuyer sur entrée
+Convertir toute saisie braille
+Basculer virtuellement la touche majuscule pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement la touche contrôle pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement la touche alt pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement la touche Windows gauche pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement la touche NVDA pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement les touches contrôle et majuscule pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement les touches alt et majuscule pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement les touches Windows gauche et majuscule pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement les touches NVDA et majuscule pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement les touches contrôle et alt pour émuler un raccourci clavier par la saisie braille
+Basculer virtuellement les touches contrôle, alt et majuscule pour émuler un raccourci clavier par la saisie braille
+Recharger les modules globaux et applicatifs sans redémarrer NVDA, ce qui peut être utile pour les développeurs
+Modules rechargés
+Indique l'URL de destination du lien à la position du curseur ou du focus. Un double appui affiche l'URL dans une fenêtre pour un examen plus facile.
+Le lien n'a pas de destination apparente
+Graphique
+Destination de :
+Impossible d'obtenir la destination de ce lien.
+Pas un lien.
+Indique l'URL de destination du lien à la position du curseur ou du focus dans une fenêtre, au lieu de simplement l'énoncer. Peut être préféré par les utilisateurs de braille.
+Aller à l'objet suivant dans une représentation à plat de la hiérarchie de l'objet de navigation
+Aller à l'objet précédent dans une représentation à plat de la hiérarchie de l'objet de navigation
+Activer ou désactiver l'interaction tactile
+Interaction tactile non supportée
+Interaction tactile activée
+Interaction tactile désactivée
+Faire défiler les différents modes de toucher
+Annoncer l'objet et le contenu directement sous votre doigt
+Annoncer le nouvel objet ou contenu Sous votre doigt si la position de celui-ci a changé
+Simple clic droit de la souris à sa position courante. Ceci est généralement utilisé pour activer un menu contextuel.
+l'objet n'a pas de position
+Afficher le dialogue de configuration des profils de NVDA
+Activer ou désactiver tous les profils de configuration. La désactivation demeure effective jusqu'au redémarrage de NVDA
+Déclencheurs des profils de configuration désactivés
+Déclencheurs des profils de configuration activés
+Commencer l'interaction avec le contenu mathématique
+Pas un contenu mathématique
+Reconnaître le contenu de l'objet navigateur courant par la reconnaissance optique de caractères de Windows
+Reconnaissance optique de caractères de Windows indisponible
+Veuillez désactiver le rideau d'écran avant d'utiliser la reconnaissance optique de caractères de Windows.
+Faire défiler les langues disponibles pour la Reconnaissance optique de caractères de Windows
+Basculer l'actualisation périodique d'un résultat de la Reconnaissance Optique de Caractères de Windows
+Actualisation automatique activée
+Actualisation automatique désactivée
+Activer ou désactiver l'annonce des caractères CLDR, tels que les emojis
+annonce des caractères CLDR désactivée
+annonce des caractères CLDR activée
+Faire défiler les états de normalisation Unicode de la parole
+Normalisation Unicode de la parole par défaut ()
+Normalisation Unicode de la parole
+Rideau d'écran indisponible
+Rideau d'écran désactivé
+Impossible de désactiver le rideau d'écran
+Rideau d'écran activé
+Rideau d'écran temporaire, activé jusqu'au prochain redémarrage
+Annonce l’état du rideau d’écran.
+Activer et désactiver la loupe
+Augmenter le niveau de grossissement
+Diminuer le niveau de grossissement
+Déplacez la vue agrandie vers la gauche
+Déplacez la vue agrandie vers la droite
+Déplacez la vue agrandie vers le haut
+Déplacez la vue agrandie vers le bas
+Déplacez la vue agrandie au bord gauche
+Déplacez la vue agrandie au bord droit
+Déplacez la vue agrandie au bord supérieur
+Déplacez la vue agrandie au bord inférieur
+Faire défiler les filtres de couleur
+Activer/désactiver le suivi de la souris par la loupe
+Activer/désactiver le suivi du focus système par la loupe
+Activer/désactiver le suivi du curseur de revue par la loupe
+Activer/désactiver le suivi de l'objet navigateur par la loupe
+Activer/désactiver tous les paramètres de suivi de la loupe
+Faire défiler les modes de suivi
+Afficher temporairement un aperçu de tout l'écran
+Faire défiler les styles de navigation par paragraphe
+Faire défiler les modes de séparation du son
+Annonce la langue du texte sous le curseur. Un double appui présente l'information en mode navigation
+Langue inconnue
+(non pris en charge)
+Langue à la position du curseur
+Coupe ou réactive le son de la parole provenant de l’ordinateur distant
+Envoie le contenu du presse-papiers à l’ordinateur distant
+Copie un lien vers la session d’accès à distance actuelle dans le presse-papiers
+Se déconnecte de la session d’accès à distance actuelle
+Non connecté
+Se connecte à un ordinateur distant
+Déjà connecté
+Active ou désactive la connexion d’accès à distance
+Bascule entre le contrôle de l’ordinateur local ou distant
+Envoie contrôle+alt+suppr à l'ordinateur contrôlé.
+Répète la dernière information annoncée. Un double appui l'affiche dans une fenêtre
+Dernière information annoncée
+Impossible de changer de profil de configuration actif quand un dialogue de NVDA est ouvert
+Profil de configuration désactivé
+Activer ou désactiver le profil de configuration
+Touches émulées du clavier du système
+Divers
+Site Web de NVDA
+Désinstaller NVDA
+Explorer le répertoire de configuration utilisateur de NVDA
+Résumé des commandes
+Guide de l'utilisateur
+Quoi de neuf
+Paquet d'extension de NVDA
+arrière
+avant
+réactualiser
+arrêt du navigateur
+page de recherche
+favoris
+page d'accueil
+muet
+volume moins
+volume plus
+piste suivante
+piste précédente
+arrêt
+lecture pause
+courriel
+lecteur multimédia
+application spécifique 1
+application spécifique 2
+retour arrière
+verrouillage majuscules
+contrôle
+majuscule
+entrée
+pavNum entrée
+échap
+page précédente
+page suivante
+fin
+début
+effacement
+pavNum effacement
+flèche gauche
+flèche droite
+flèche haut
+flèche bas
+verrouillage numérique
+impression écran
+arrêt défilement
+pavNum 4
+pavNum 6
+pavNum 8
+pavNum 2
+pavNum 9
+pavNum 3
+pavNum 1
+pavNum 7
+pavNum 5
+pavNum divisé
+pavNum multiplié
+pavNum moins
+pavNum plus
+pavNum point décimal
+pavNum insertion
+pavnum verrouillé 0
+pavnum verrouillé 1
+pavnum verrouillé 2
+pavnum verrouillé 3
+pavnum verrouillé 4
+pavnum verrouillé 5
+pavnum verrouillé 6
+pavnum verrouillé 7
+pavnum verrouillé 8
+pavnum verrouillé 9
+insertion
+contrôle gauche
+contrôle droit
+windows gauche
+majuscule gauche
+majuscule droite
+alt gauche
+alt droit
+windows droite
+ordinateur de bureau
+ordinateur portable
+désactivé
+Clavier
+clavier, toutes les dispositions
+Utilisateur par défaut
+Aragonais
+Kurde Central
+Kurde du Nord
+Birman
+curseur
+Verrouiller le bouton gauche de la souris
+Déverrouiller le bouton gauche de la souris
+Bouton droit de la souris verrouillé
+Bouton droit de la souris déverrouillé
+étoile 10-point
+étoile 12-point
+étoile 16-point
+étoile 24-point
+étoile 32-point
+étoile 4-point
+étoile 5-point
+étoile 6-point
+étoile 7-point
+étoile 8-point
+bulle
+Flèche courbée
+Flèche haut courbée
+Biseau
+Arc Plein
+Canette
+Symbole de graphique plus
+Symbole de graphique en étoile
+Symbole graphique X
+Cercle avec ligne traversant le centre
+Flèche Circulaire
+Forme de nuage
+Pensées
+Coin
+Quatre coins rognés
+Croix
+flèche incurvée vers le bas
+bannière ruban
+Flèche Gauche incurvée
+Flèche incurvée vers la droite
+Flèche haut incurvée
+Bannière ruban incurvée vers le haut
+Décagone
+Bande en diagonale
+Diamant
+Dodécagone
+Bouée
+Accolades
+double crochet
+Double Vague
+Flèche bas
+Légende avec flèche vers le bas
+Symbole d'organigramme processus alternatif
+Organigramme de carte
+Organigramme de jonction
+Symbole d'organigramme connecteur
+Symbole d'organigramme données
+Symbole d'organigramme décision
+Symbole d'organigramme délai
+Symbole d'organigramme mémoire en accès direct
+Symbole d'organigramme écran
+Organigramme de document
+Symbole d'organigramme extraction
+Symbole d'organigramme mémoire interne
+Symbole d'organigramme disque magnétique
+Symbole d'organigramme saisie manuelle
+Symbole d'organigramme opération manuelle
+Symbole d'organigramme fusion
+Symbole d'organigramme multidocument
+Symbole d'organigramme mémoire hors ligne
+Symbole d'organigramme connecteur hors-page
+Symbole d'organigramme 'ou'
+Symbole d'organigramme processus prédéfini
+Symbole d'organigramme préparation
+Symbole d'organigramme processus
+Symbole d'organigramme bande perforée
+Symbole d'organigramme mémoire en accès séquentiel
+Symbole d'organigramme tri
+Symbole d'organigramme données en mémoire
+Symbole d'organigramme jonction cumulative
+Symbole d'organigramme terminateur
+Carré corné
+Cadre de dessin rectangulaire
+Entonnoir
+Engrenage à 6 dents
+Engrenage à 9 dents
+Cadre de demi dessin rectangulaire
+Cœur
+Heptagone
+Hexagone
+Défilement horizontal
+Triangle isocèle
+Flèche gauche
+Légende avec flèche gauche
+Accolade gauche
+Crochet gauche
+Flèche circulaire sens inverse des aiguilles d'une montre
+Flèche horizontale bidirectionnelle
+Légende avec flèche horizontale bidirectionnelle
+flèche circulaire bidirectionnelle
+Ruban avec flèches gauche et droite
+Flèche gauche droite et haut
+Flèche gauche et haut
+Éclair
+Légende de ligne
+Légende avec barre horizontale accentuée
+Légende avec bordure et barre horizontale accentuée
+Légende avec ligne horizontale
+Légende avec ligne droite diagonale
+Légende avec ligne de légende diagonale et barre accentuée
+Légende avec bordure, ligne droite diagonale et barre accentuée
+Légende sans bordure et ligne de légende diagonale
+Légende avec ligne en angle
+Légende avec ligne en angle et barre accentuée
+Légende avec bordure, ligne de légende en angle et barre accentuée
+Légende sans bordure et ligne de légende en angle
+Légende avec ligne de légende en 'u'
+Légende avec barre accentuée et ligne de légende en 'u'
+Légende avec bordure, barre accentuée et ligne de légende en 'u'
+Légende sans bordure et ligne de légende en 'u'
+Inversion de ligne
+Symbole mathématique division
+Symbole mathématique équivalence
+Symbole mathématique soustraction
+Symbole mathématique multiplication
+Symbole mathématique non-équivalence
+Symbole mathématique addition
+Lune
+Trapèze avec côtés non-parallèles assymétriques
+Symbole 'non'
+Flèche droite crantée
+Octogone
+Légende en forme d'oval
+Parallélogramme
+Pentagone
+Camembert incomplet avec secteur manquant
+quart de camembert
+Étiquette
+Feuilles d'étiquettes
+Flèches quadridirectionnelles
+Légende avec flèches quadridirectionnelle
+Légende rectangulaire
+Flèche droite
+Légende avec flèche droite
+Accolade droite
+Crochet droit
+Triangle rectangle
+Rectangle avec un angle arrondi
+Rectangle avec deux angles arrondis en diagonale
+Rectangle avec deux angles arrondis du même côté
+Rectangle arrondi
+Légende en forme de rectangle arrondi
+Émoticône
+Rectangle avec un angle rogné
+Rectangle avec deux angles rognés en diagonale
+Rectangle avec deux angles rognés du même côté
+Rectangle avec un angle rogné et un angle arrondi
+Quatre petits carrés définissant une forme rectangulaire
+Flèche droite avec bande
+Soleil
+Flèche incurvée
+Gouttelette d'eau
+Trapézoïde
+Flèche haut
+Légende avec flèche vers le haut
+Flèche bidirectionnelle haut bas
+Légende avec flèche bidirectionnelle haut bas
+Flèche en 'u'
+Défilement vertical
+Vague
+Retour
+Début
+Fin
+Suivant
+Aide
+Film
+Son
+Tapez help(object) pour obtenir de l'aide sur l'objet.
+Tapez exit() pour quitter la console
+Console Python de NVDA
+Revue de l'objet
+Revue du document
+Revue de l'écran
+Émuler l'appui de sur le clavier du système
+Visionneuse de parole de NVDA
+Montrer la Visionneuse de Parole au démarrage
+Langue
+Voix
+Variante
+Débit
+Débit accéléré
+Hauteur
+Inflexion
+Utilisez le système de sortie audio moderne (WASAPI)
+Pause naturelle après la ponctuation
+mode texte
+mode objet
+mode navigation
+simple
+pincer
+écarter
+taper
+taper et maintenir
+maintenir
+glisser vers le haut
+glisser vers le bas
+glisser vers la gauche
+glisser vers la droite
+survoler
+fin de survol
+Cette fonctionnalité n'est pas disponible sur les écrans sécurisés tels que l'écran de connexion ou l'invite UAC.
+Cette fonctionnalité () n'est pas disponible sur les écrans sécurisés tels que l'écran de connexion ou l'invite UAC.
+Fonctionnalité non disponible.
+Une erreur a rendu cette fonctionnalité indisponible pour le moment. Le redémarrage de NVDA ou de Windows pourrait résoudre ce problème.
+Une erreur a rendu cette fonctionnalité () indisponible pour le moment. Le redémarrage de NVDA ou de Windows pourrait résoudre ce problème.
+Message de NVDA
+Texte copié.
+Impossible de copier dans le presse-papiers.
+Fermer
+Copier
+contrôle+majus+c
+Copié dans le presse-papiers:
+Copié:
+Recherche d'une mise à Jour
+Recherche d'une mise à jour
+Assurez-vous d'être connecté à Internet et que l'URL du miroir de mise à jour de NVDA est valide. URL du miroir :
+Impossible d'établir une connexion au serveur NV Access.
+Erreur durang la vérification des mises à jour.
+Mise à jour de NVDA
+Aucune mise à jour disponible.
+La mise à jour vers la version de NVDA a été téléchargée et est prête à être appliquée.
+Passer en revue les extensions...
+Mettre à jour vers NVDA
+Re-télécharger la mise à jour
+NVDA version est disponible.
+Télécharger la mise à jour
+Me le rappeler plus tard
+La mise à jour vers la version de NVDA est prête à être appliquée.
+Mettre à jour maintenant
+Reporter la mise à jour
+Impossible de reporter la mise à jour.
+Téléchargement de la mise à jour
+Connexion en cours
+Téléchargement en cours
+Erreur durant le Téléchargement de la mise à jour.
+Faites un don s'il vous plaît
+Faire un don
+Pas maintenant
+Terminé
+Il est déconseillé de mettre à jour NVDA lorsque l’ordinateur contrôlé est connecté via l'accès à distance NVDA
+Avertissement
+Une revue d'écran gratuite et à source ouverte pour Microsoft Windows
+Impossible d'installer l'extension pour NVDA depuis . NVDA doit être en cours d'exécution pour pouvoir installer une extension.
+Échec de mise à jour des données des extensions
+Assurez-vous d'être connecté à Internet et que l'URL du miroir de l'Add-on Store est valide. URL du miroir :
+Impossible d'établir une connexion au serveur de l'Addon Store.
+Impossible de récupérer les dernières données d'extensions pour les extensions compatibles.
+Impossible de récupérer les dernières données d'extensions pour les extensions incompatibles.
+Échec de l'ouverture du fichier de paquet d'extension - fichier manquant ou format de fichier non valide
+Extension non supportée
+Échec de l'installation de l'extension depuis
+Échec du téléchargement de l'extension
+Impossible de télécharger l'extension :
+Impossible d'enregistrer l'extension en tant que fichier :
+Le téléchargement de l'extension n'est pas sécurisé : la somme de contrôle a échoué pour
+Toutes
+Stables
+Externe
+Défaut ()
+Identique
+Tous
+Ne pas mettre à jour
+Beta ou dev
+Activée
+Désactivée
+En attente de suppression
+Disponible
+Mise à jour disponible
+Mise à jour disponible (incompatible)
+Migrer vers add-on store
+Téléchargement échoué
+Téléchargé, en attente d'installation
+Installation en cours
+Installation échouée
+Installée, en attente de redémarrage
+Désactivée, en attente de redémarrage
+Désactivée (incompatible), en attente de redémarrage
+Désactivée (incompatible)
+Activée (incompatible), en attente de redémarrage
+Activée (incompatible)
+Activée, en attente de redémarrage
+État inconnu
+Extensions installées
+Mises à jour
+Extensions disponibles
+Extensions incompatibles installées
+Une version mise à jour de NVDA est requise. Version NVDA ou ultérieure.
+Je comprends que les extensions incompatibles seront désactivées et pourront être réactivées manuellement à mes risques et périls après l'installation.
+Affichage
+Essaie de lire la documentation pour l'élément de saisie semi-automatique sélectionné.
+Impossible de trouver la fenêtre de documentation.
+Pas de piste en cours
+Annoncer le temps restant de la piste en cours, s'il y a lieu
+restant
+Temps restant indisponible
+Annoncer le temps écoulé de la piste en cours, si disponible
+écoulé
+Temps écoulé indisponible
+Annoncer la durée de la piste en cours, si disponible
+au total
+Temps total indisponible
+Afficher les options relatives au texte sélectionné ou au texte sous le curseur
+%, position sur
+Pagee
+surligné
+non surligné
+surligné fois
+hors des surlignages fréquents
+Afficher l'un des messages récents
+Pas encore de message
+pièce jointe
+marqué
+Pièces jointes
+À :
+Groupe de discussion :
+CC :
+Objet :
+De :
+Date :
+Transférer à :
+Répondre à :
+Organisation :
+Distribution :
+Mots clés :
+CCI :
+non lu
+Console Python
+Effacer le volet de sortie
+Volet de sortie effacé
+Aller au résultat suivant
+Aller au résultat précédent
+Sélectionner jusqu'à la fin du résultat courant
+Sélectionner jusqu'au début du résultat courant
+Édition du profil
+répondu
+répondu à tous
+transféré
+importance haute
+importance faible
+objet :
+reçu :
+envoyé :
+En attente d'Outlook...
+(toute la journée)
+Rendez-vous ,
+Contient un rendez-vous
+demande de réunion
+Impossible de trouver la fenêtre .
+Annonce toutes les notes pour les traducteurs. Deux appuis présente les notes en mode navigation
+notes pour les traducteurs
+Annonce tous les commentaires dans la fenêtre de commentaires. Deux appuis présente le commentaire en mode navigation
+commentaire
+Annonce le texte source précédent, s'il y en a un. Deux appuis présente le texte en mode navigation
+texte source précédent
+Annonce un problème de traduction, s'il y en a un. Deux appuis présente l'avertissement en mode navigation
+problème de traduction
+Espace réservé de titre
+Espace réservé de texte
+Espace réservé de titre central
+Espace réservé de sous-titre
+Espace réservé de titre vertical
+Espace réservé de texte vertical
+Espace réservé d'objet
+Espace réservé de diagramme
+Espace réservé de graphique
+Espace réservé de Clip Média
+Espace réservé d'organigramme
+Espace réservé de tableau
+Espace réservé de numéro de diapositive
+Espace réservé d'en-tête
+Espace réservé de pied de page
+Espace réservé de date
+Espace réservé d'objet vertical
+Espace réservé d'image
+Mode Diapositive
+Mode Masque des diapositives
+Page de notes
+Afficher le document maître
+Masque de notes
+Mode plan
+Mode Trieuse de diapositives
+Afficher le masque de titre
+Affichage normal
+Aperçu avant impression
+Miniatures
+Miniatures de masques
+Diapositive
+autre élément
+couvre
+couvert par
+Basculer entre les notes de l'orateur et le diaporama proprement dit. Cela ne change pas ce qui est visible à l'écran mais seulement ce que l'utilisateur peut lire avec NVDA
+Notes du diaporama -
+Diaporama -
+Diaporama - terminé
+Pas de notes
+Diapositive vide
+En attente de Powerpoint...
+De à
+curseur positionné à du bord gauche de la page, du bord supérieur de la page
+gauche
+droite
+Suggestion
+Pas d'emoji
+Brouillon
+Mode page
+Mode web
+Mode lecture
+Suivi des modifications activé
+Suivi des modifications désactivé
+Aucun titre sélectionné
+Réduit
+Développé
+Séparation du son désactivée
+NVDA dans les deux canaux et applications dans les deux canaux
+NVDA à gauche et applications à droite
+NVDA à gauche et applications dans les deux canaux
+NVDA à droite et applications à gauche
+NVDA à droite et applications dans les deux canaux
+NVDA dans les deux canaux et applications à gauche
+NVDA dans les deux canaux et les applications à droite
+Avertissement : impossible de définir les volumes pour la séparation du son : l'une des sessions audio est soit mono, soit comporte plus de 2 canaux audio.
+Séries Optelec ALVA 6/convertisseur de protocole
+Simulation de clavier HID non supportée
+Simulation de clavier HID activée
+Simulation de clavier HID désactivée
+Activer ou désactiver la simulation de clavier HID
+Terminaux braille Baum/HumanWare/APH/Orbit
+HumanWare Séries Brailliant BI/b / Braillenote
+Terminaux EcoBraille
+Freedom Scientific séries Focus/PAC Mate
+défilement par plage
+défilement par ligne
+Terminaux braille Handy Tech
+Saisie braille activée
+Saisie braille désactivée
+Activer ou désactiver la saisie braille
+Terminaux braille au Standard HID
+HIMS Braille séries Sense/Braille EDGE/Smart Beetle/Sync Braille
+Pas de braille
+Papenmeier BRAILLEX modèles récents
+Papenmeier BRAILLEX modèles anciens
+Terminaux braille Seika
+Bloc-notes Braille Seika
+Pour utiliser un Albatross avec NVDA, modifiez le nombre de cellules d'état dans le menu interne de l'Albatros à maximum , et redémarrez l'Albatros et NVDA si nécessaire.
+Afficheur DotPad Braille / Tactile
+Destination du braille
+Texte
+Terminaux Eurobraille
+Simulation de clavier HID indisponible.
+Afrikaans intégral
+Afrikaans abrégé
+Akkadien (États-Unis) intégral
+Akkadien (Borger) intégral
+Arabe Braille informatique 8 points
+Arabe intégral
+Arabe abrégé
+Assamais intégral
+Bachkir intégral
+Bengali intégral
+Bélarusse Braille informatique
+Bélarusse Braille littéraire
+Bélarusse Braille littéraire (détaillé)
+Bulgare Braille informatique 8 points
+Bulgare intégral
+Catalan intégral
+Kurde central intégral
+Copte Braille informatique 8 points
+Copte Intégral
+Cunéiforme (translittéré) intégral
+Cunéiforme (translittéré, diacritiques compacts) intégral
+Galois intégral
+Galois abrégé
+Tchèque Braille informatique 8 points
+Tchèque intégral
+Danois Braille informatique 8 points
+Danois Braille informatique 8 points (1993)
+Danois intégral 6 points
+Danois intégral 6 points (1993)
+Danois intégral 8 points
+Danois intégral 8 points (1993)
+Danois abrégé 6 points
+Danois abrégé 6 points (1993)
+Danois abrégé 8 points
+Danois abrégé 8 points (1993)
+Allemand Braille informatique 6 points
+Allemand Braille informatique 8 points
+Allemand grade 0
+Allemand grade 0 (détaillé)
+Allemand intégral
+Allemand intégral (détaillé)
+Allemand abrégé
+Allemand abrégé (détaillé)
+Grec (Grèce)
+Anglais (Royaume-Uni) Braille informatique 8 points
+Anglais (Royaume-Uni) Intégral
+Anglais (Royaume-Uni) abrégé
+Anglais grade 3
+Anglais Nord Américain code Braille informatique
+Anglais unifié Code braille intégral
+Anglais unifié Code braille abrégé
+Anglais (États-Unis) Braille informatique 6 points
+Anglais (États-Unis) Braille informatique 8 points
+Anglais (États-Unis) intégral
+Anglais (États-Unis) abrégé
+Espéranto intégral
+Espagnol Braille informatique 8 points
+Espagnol intégral
+Espagnol abrégé
+Estonien 6 points
+Estonien grade 0
+Éthiopien intégral
+Perse Braille informatique 8 points
+Perse intégral
+Finnois 6 points
+Finnois Braille informatique 8 points
+Philippin abrégé
+Français (unifié) Braille littéraire 6 points
+Français (unifié) Braille informatique 8 points
+Français (unifié) abrégé
+Irlandais intégral
+Irlandais abrégé
+Gujarati intégral
+Grec Braille international (lettres accentuées sur 2 cellules)
+Grec Braille international (lettres accentuées sur une seule cellule)
+Espagnol pour le texte grec
+Hébreu (biblique) IHBC
+Hébreu (biblique) cantillation complète
+Hébreu (biblique) allégé
+Israélien intégral
+Hébreu Braille informatique
+Hindou intégral
+Croate Braille informatique 8 points
+Croate intégral
+Hongrois Braille informatique 8 points
+Hongrois intégral
+Hongrois abrégé
+Islandais Braille informatique 8 points
+Alphabet Phonétique International
+Italien 6 points
+Italien Braille informatique 8 points
+Japonais (Kantenji) braille littéraire
+Japonais (Rokuten Kanji) braille
+Kannada intégral
+Géorgien Braille littéraire
+Kazakhe intégral
+Khmer intégral
+Kurde du Nord grade 0
+Coréen intégral (2006)
+Coréen abrégé (2006)
+Coréen intégral
+Coréen abrégé
+Kashmiri intégral
+Laotien intégral
+Luganda Braille littéraire
+Lithuanien 8 points
+Lithuanien 6 points
+Letton intégral
+Macédonien intégral
+Malayalam intégral
+Manipuri intégral
+Malayalam abrégé
+Mongol intégral
+Mongol abrégé
+Marathi intégral
+Birman intégral
+Birman abrégé
+Néerlandais 6 points
+Néerlandais 8 points
+Norvégien Braille informatique 8 points
+Norvégien grade 0
+Norvégien intégral
+Norvégien abrégé
+Norvégien grade 3
+Népalais intégral
+Sepedi intégral
+Sepedi abrégé
+Chichewa (Malawi) braille littéraire
+Oriya intégral
+Polonais Braille informatique 8 points
+Polonais Braille littéraire
+Portugais braille informatique 6 points
+Portugais Braille informatique 8 points
+Portugais intégral
+Portugais abrégé
+Penjabi intégral
+Roumain 6 points
+Roumain
+Russe braille informatique 6 points
+Russe braille informatique 8 points
+Russe Braille littéraire
+Russe Braille littéraire (détaillé)
+Russe Braille abrégé
+Kinyarwanda Braille littéraire
+Sanskrit intégral
+Yakoute intégral
+Suédois Braille informatique 8 points
+Slovaque intégral
+Slovène Braille informatique 8 points
+Slovène intégral
+Sésotho intégral
+Sésotho abrégé
+Serbe intégral
+Serbe Cyrillique intégral
+Suédois Braille intégral
+Suédois Braille partiellement abrégé
+Suédois Braille abrégé
+Swahili (Kenya) intégral
+Swahili (Kenya) intégral 1.2
+Swahili (Kenya) intégral 1.3
+Swahili (Kenya) intégral 1.4
+Swahili (Kenya) intégral 1.5
+Swahili (Kenya) abrégé
+Syriaque intégral
+Tamoul intégral
+Tatare intégral
+Télougou intégral
+Thaï Braille informatique 8 points
+Thaï grade 0
+Thaï intégral
+Thaï abrégé
+Turque Braille informatique 8 points
+Turc intégral
+Turc abrégé
+Setswana intégral
+Setswana abrégé
+Ougaritique intégral
+Ukrainien intégral
+Ukrainien Braille littéraire (détaillé)
+Ukrainien Braille informatique
+Urdu intégral
+Urdu abrégé
+Usbek intégral
+Braille Unicode
+Vietnamien grade 0
+Tshivenda intégral
+Tshivenda abrégé
+Vietnamien intégral
+Vietnamien abrégé
+Vietnamien du sud intégral
+Xhosa intégral
+Xhosa abrégé
+Yiddish intégral
+Braille commun Chinois (caractères Chinois simplifié)
+Chinois (Chine, Mandarin) système braille actuel (pas de tons)
+Chinois (Chine, Mandarin) système braille actuel
+Chinois (Chine, Mandarin) système braille double-phonique
+Chinois (Hong Kong, Cantonais)
+Chinois (Taiwan, Mandarin)
+Zoulou intégral
+Zoulou abrégé
+Visionneuse Braille de NVDA
+Montrer la Visionneuse Braille au démarrage
+Survol pour routage vers une cellule
+Désactivé
+Seulement dans les contrôles d'édition
+Pendant une durée définie
+Indéfiniment
+automatiquement
+le focus
+la revue
+suivre les curseurs
+afficher la parole
+Sons
+Parole et sons
+Parole et son
+Lignes et colonnes
+Lignes
+Colonnes
+Couleurs et Styles
+Notifier
+Mettre à jour automatiquement
+Parole et braille
+Aucun marqueur de début de paragraphe (défaut)
+Deux espaces ( )
+Pied-de-mouche (¶)
+Bip
+Autoriser le contrôle de cet ordinateur
+Contrôler un autre ordinateur
+Utiliser un serveur existant
+Héberger localement
+avertissement de débogage
+entrée/sortie
+débogage
+débogage (non masqué)
+Seulement dans les versions de test de NVDA
+Oui
+Géré par l'application
+Un saut de ligne
+Saut de plusieurs lignes
+Jamais
+Seulement quand le braille suit automatiquement
+Comparaison du texte
+Notifications UIA
+Balises
+Résultat
+Activer le texte sous le curseur si possible
+Quitter et effacer le résultat de reconnaissance
+La reconnaissance a échoué
+Actualiser le résultat de la reconnaissance
+Le résultat de la reconnaissance de contenu est déjà automatiquement mis à jour
+L'actualisation du résultat de la reconnaissance a échoué
+Déjà dans un résultat de reconnaissance de contenu
+Le contenu n'est pas visible
+Reconnaissance en cours
+ligne de base
+indice
+exposant
+très très petit
+très petit
+petit
+moyen
+grand
+très grand
+très très grand
+très très très grand
+plus grand
+plus petit
+alignement à gauche
+alignement centré
+alignement à droite
+alignement justifié
+alignement distribué
+alignement centré sur plusieurs colonnes
+alignement standard
+alignement recopié
+alignement vertical en haut
+alignement vertical centré
+alignement vertical en bas
+alignement vertical justifié
+alignement vertical distribué
+en cours
+page courante
+étape courante
+position courante
+date actuelle
+heure actuelle
+fenêtre
+barre de titre
+volet
+dialogue
+case à cocher
+bouton radio
+texte
+édition
+bouton
+barre de menu
+élément de menu
+liste déroulante
+liste
+élément de liste
+graphique
+bulle d'aide
+suggestion
+lien
+arborescence
+élément d'Arborescence
+onglet
+potentiomètre
+barre de progression
+barre de défilement
+barre d'état
+tableau
+cellule
+colonne
+ligne
+cadre
+barre d'outils
+en-tête de colonne
+en-tête de ligne
+bouton déroulant
+horloge
+séparateur
+titre
+titre de niveau 1
+titre de niveau 2
+titre de niveau 3
+titre de niveau 4
+titre de niveau 5
+titre de niveau 6
+paragraphe
+citation
+en-tête de tableau
+corps de tableau
+pied de tableau
+boîte
+groupe
+page de propriété
+canevas
+légende
+élément de menu à cocher
+champ date
+icône
+volet de dossier
+objet embarqué
+note de fin
+pied de page
+note de bas de page
+volet miroir
+en-tête
+image interactive
+fenêtre de saisie
+étiquette
+élément de menu radio
+volet en couches
+objet redondant
+volet racine
+barre d'édition
+édition riche
+règle
+volet de défilement
+forme
+volet de fractionnement
+fenêtre d'affichage
+menu détachable
+cadre de texte
+bouton bascule
+bordure
+point d'insertion
+diagramme
+cadran
+bouton partagé
+bouton de menu
+grille de boutons déroulants
+mathématique
+poignée
+champ de raccourci clavier
+indicateur
+bouton rotatif
+son
+espace blanc
+bouton d'Arborescence
+Adresse IP
+icône du bureau
+fenêtre du bureau
+volet d'options
+sélecteur de couleur
+sélecteur de fichiers
+remplissage
+panneau
+édition du mot de passe
+sélecteur de police
+nom de la police
+taille de la police
+gras
+italique
+souligné
+couleur d'avant-plan
+couleur d'arrière-plan
+retrait
+alignement
+alerte
+grille de données
+élément de données
+élément d'en-tête
+molette
+calendrier
+vidéo
+élément de diagramme
+inséré
+région
+indicateur d'occupation
+un commentaire
+une suggestion
+bascule
+non
+non disponible
+focalisé
+occupé
+enfoncé
+coché
+semi-coché
+à moitié enfoncé
+en lecture seule
+développé
+réduit
+visité
+lié
+sous-Menu
+protégé
+obligatoire
+expiré
+entrée invalide
+autocomplétion
+multiligne
+iconisé
+hors écran
+sélectionnable
+focalisable
+cliquable
+éditable
+cochable
+glissable
+glissage en cours
+zone de dépôt
+trié
+trié par ordre croissant
+trié par ordre décroissant
+a une description longue
+épinglé
+contient une formule
+contient un commentaire
+obscurci
+rogné
+débordant
+déverrouillé
+a une note
+ouvre un dialogue
+ouvre une grille
+ouvre une liste
+ouvre une arborescence
+même page
+sélection multiple
+non sélectionné
+non enfoncé
+non coché
+glissage terminé
+vide
+Aucun paragraphe suivant
+Aucun paragraphe précédent
+URL :
+Tester...
+L'URL que vous avez entrée a échoué au test de connexion. Êtes-vous sûr de vouloir l'enregistrer malgré tout ?
+L'URL que vous avez entrée n'a pas été testée. Êtes-vous sûr de vouloir l'enregistrer sans essayer de vous y connecter au préalable ?
+Validation de URL...
+La connection à l'URL a réussi.
+Succès
+La réponse du serveur n'a pas été reconnue. Vérifiez que l'URL est correcte et réessayez.
+Le serveur a renvoyé une erreur. Vérifiez que l'URL est correcte et réessayez.
+Une erreur de réseau a eu lieu. Vérifiez que vous êtes connecté à Internet et réessayez.
+L'URL que vous avez entrée n'est pas valide. Vérifiez son exactitude et réessayez.
+Assurez-vous d'être connecté à Internet et que l'URL est correcte.
+L'URL que vous avez entrée a échoué au test de connexion.
+Configuration appliquée
+Configuration réinitialisée aux valeurs par défaut
+Configuration sauvegardée
+Impossible de sauvegarder la configuration - le système de fichiers est probablement protégé en écriture
+Impossible d'enregistrer la configuration; Voir le journal pour plus de détails.
+L'écran de paramètres que vous essayez d'ouvrir n'est pas disponible sur ce système.
+Copié dans le presse-papiers
+Copier le numéro de version
+À propos de NVDA
+Outil de réparation de l'accessibilité du système
+Veuillez patienter pendant que NVDA tente de réparer les enregistrements d'accessibilité de votre système...
+L'outil de réparation de l’accessibilité du système a échoué. Cette erreur Windows peut fournir plus d'informations.
+Échec de la réparation de l'accessibilité du système
+Paramètres...
+Paramètres de NVDA
+Dictionnaires de prononciation
+Prononciation des ponctuations et symboles...
+Gestes de commandes...
+Préférences
+Voir le journal
+Visionneuse de parole
+Visionneuse Braille
+Créer une copie portable...
+Installer NVDA...
+Exécutez l'outil de réparation de l'accessibilité du système...
+Recharger les modules
+Quitter
+Quitter NVDA
+Dictionnaire par défaut...
+Dialogue permettant d'enrichir le dictionnaire par défaut en ajoutant des entrées à la liste
+Dictionnaire de la voix...
+Dialogue permettant d'enrichir le dictionnaire de la voix en ajoutant des entrées à la liste
+Dictionnaire temporaire...
+Dialogue permettant d'enrichir le dictionnaire temporaire en ajoutant des entrées dans la zone d'édition
+Profils de configuration...
+Revenir à la configuration sauvegardée
+Remettre tous les paramètres à l'état sauvegardé
+Réinitialiser la configuration aux valeurs par défaut
+Remettre tous les paramètres à leur valeur par défaut
+Sauvegarder la configuration
+Enregistrer la configuration courante dans nvda.ini
+Page web de NV Access
+Aide, formation et support
+Boutique NV Access
+Licence
+Dialogue de bienvenue...
+Rechercher une mise à jour...
+À propos...
+Installer la mise à jour en attente
+Exécuter une mise à jour de NVDA précédemment téléchargée
+Veuillez patienter
+Des modifications ont été apportées aux extensions. Vous devez redémarrer NVDA pour que ces modifications prennent effet. Voulez-vous redémarrer maintenant ?
+Redémarrer NVDA
+À propos de cette extension...
+Échec à l'ouverture du fichier de l'extension à : fichier manquant ou format de fichier incorrect
+Installation de l'extension
+Vous êtes sur le point d'installer la version de , qui semble être déjà installée. Voulez-vous quand-même mettre à jour ?
+Une version de cette extension est déjà installée. Voulez-vous mettre à jour de la version à la version ?
+Installation de l'extension en cours
+Veuillez patienter durant l'installation de l'extension.
+Les extensions ne peuvent pas être installées sur la version Windows Store de NVDA
+Extensions incompatibles
+Les extensions suivantes sont incompatibles avec NVDA version . Ces extensions ne peuvent pas être activées. Veuillez contacter leurs auteurs pour plus d'assistance.
+Paquet
+Raison d'incompatibilité
+Action indisponible dans un contexte sécurisé
+Action non disponible dans la version Windows Store de NVDA
+Action indisponible lorsqu'une boîte de dialogue nécessite une réponse
+Action indisponible lorsque Windows est verrouillé
+Action non disponible dans une version temporaire de NVDA
+Action indisponible lorsque le mode braille est réglé sur l'affichage de la parole
+Action indisponible lorsque l’accès à distance est désactivé
+Restauration aux valeurs par défaut
+« Votre configuration a été réinitialisée aux valeurs par défaut. Choisissez OK pour conserver les valeurs par défaut, ou Annuler pour restaurer votre configuration précédente.
+Annuler
+La réinitialisation aux valeurs par défaut a été annulée. La configuration précédente a été restaurée.
+Profils de Configuration
+Nouveau
+Renommer
+Supprimer
+Déclencheurs...
+Désactiver temporairement tous les déclencheurs
+(configuration normale)
+manuel
+déclenché
+Erreur à l'activation du profil.
+Le profil sera supprimé définitivement. Cette action est irréversible.
+Confirmer la supression
+Erreur à la suppression du profil.
+Désactivation manuelle
+Activation manuelle
+Nouveau nom :
+Renommer le profil
+Un profil ne peut pas avoir un nom vide.
+Ce profil existe déjà. Veuillez choisir un nom différent.
+Erreur au renommage du profil.
+Application en cours ()
+Dire tout
+Impossible de sauvegarder les déclencheurs de profil de configuration : le système de fichiers est probablement protégé en écriture.
+Déclencheurs de Profil
+Déclencheurs
+Profil
+Nouveau Profil
+Nom du profil :
+Utiliser ce profil pour :
+Ce déclencheur est déjà associé à un autre profil. Si vous continuez, il sera supprimé d' l'autre profil et associé au nouveau. Voulez-vous continuer ?
+Vous devez choisir un nom pour ce profil.
+Erreur à la création du profil : le système de fichiers est probablement protégé en écriture.
+Pas d'aide disponible ici.
+Redémarrer
+Redémarrer avec les extensions désactivées et le journal activé en mode débogage
+Redémarrer avec les extensions désactivées
+Redémarrer avec le journal activé en mode débogage
+Toutes les extensions sont maintenant désactivées. elles seront réactivées au prochain redémarrage sauf si vous décidez de les désactiver à nouveau.
+La langue d'interface de NVDA est maintenant forcée depuis la ligne de commande. Au prochain redémarrage, la langue enregistrée dans la configuration de NVDA sera utilisée à la place.
+Que voulez-vous faire ?
+Entrez un geste de commande :
+Émuler l'appui de touche :
+Entrez le geste à émuler :
+Gestes de commandes
+Ajouter
+Réinitialiser aux valeurs par défaut
+Réinitialiser les gestes de commandes
+Impossible de sauvegarder les gestes définis par l'utilisateur : le système de fichiers est probablement protégé en écriture.
+Votre installation de NVDA a été mise à jour avec succès. Il est recommandé de redémarrer Windows après la mise à jour. NVDA peut mal fonctionner sans redémarrage.
+NVDA a été installé avec succès. Il est recommandé de redémarrer Windows après l'installation. NVDA peut mal fonctionner sans redémarrage.
+Démarrer NVDA
+Redémarrer Windows
+Échec du redémarrage de Windows. Veuillez redémarrer Windows manuellement.
+Mise à jour de NVDA en cours
+Installation de NVDA en cours
+Veuillez patienter durant la mise à jour de NVDA.
+Veuillez patienter durant l'installation de NVDA
+Fichier en cours d'utilisation
+L'installation de NVDA a échoué. Veuillez consulter la visionneuse de journal pour plus d'information.
+Installer NVDA
+Pour installer NVDA sur votre disque dur, veuillez activer le bouton Continuer.
+Une version précédente de NVDA a été trouvée sur votre système. Cette version sera mise à jour.
+Le chemin d'installation de NVDA a changé. Il sera maintenant installé dans :
+Utiliser NVDA lors de la connexion
+Conserver le raccourci clavier du bureau existant
+Créer une icône sur le bureau et le raccourci clavier (control+alt+n)
+Copier la configuration portable dans le compte de l'utilisateur en cours
+Continuer
+Procéder à l'installation (non recommandé)
+Une copie portable existe déjà dans le répertoire ''. Voulez-vous la mettre à jour ?
+Copie portable existante
+Le répertoire spécifié '' n'est pas vide. Cette procédure supprimera et remplacera les fichiers existants dans le répertoire. Voulez-vous écraser le contenu de ce dossier ?
+Répertoire existant
+Il est déconseillé d’installer NVDA lorsque l’ordinateur contrôlé est connecté via l'accès à distance NVDA
+Créer un NVDA portable
+Pour créer une copie portable de NVDA, veuillez choisir le chemin et les autres options, puis appuyez sur Continuer
+Répertoire portable :
+Parcourir...
+Sélectionnez le répertoire de la copie portable
+Créer un nouveau dossier pour la copie portable
+Copier la configuration utilisateur courante
+Démarrer la nouvelle copie portable après création
+Veuillez indiquer le répertoire où créer la copie portable.
+Création de copie portable annulée.
+Création d'une copie portable en cours
+Veuillez patienter durant la création d'une copie portable de NVDA.
+NVDA ne peut pas supprimer ou remplacer un fichier.
+Échec de la création de la copie portable : .
+Copie portable de NVDA créée avec succès dans
+Visionneuse du journal de NVDA
+Réactualiser F5
+Sauvegarder sous... Ctrl+S
+Journal
+Enregistrer Sous
+Erreur de sauvegarde du journal
+Le journal n'est pas disponible
+Enregistrer
+Appliquer
+Ne pas enregistrer
+Catégorie : "" Option : "\
+Configuration invalide
+Catégories :
+Général
+Option de ligne de commande :
+Langue de NVDA (nécessite un redémarrage pour prendre pleinement effet) :
+Sauvegarder la configuration en quittant
+Afficher les options d'arrêt en quittant NVDA
+Jouer des sons au démarrage ou à l'arrêt de NVDA
+Démarrer NVDA après ma connexion
+Utiliser NVDA lors de la connexion à Windows (nécessite des privilèges administrateur)
+Utiliser les paramètres NVDA actuellement sauvegardés pour l'écran de connexion et sur les écrans sécurisés (nécessite des privilèges administrateur)
+Vérifier automatiquement les mises à jour de NVDA
+Au démarrage, avertir d'une mise à jour en attente
+Miroir pour les mises à jour
+Modifier...
+Empêcher la désactivation de l'écran pendant dire tout ou pendant la lecture en braille
+Définir le miroir de mise à jour de NVDA
+Copie des paramètres en cours
+Veuillez patienter pendant que les paramètres sont copiés dans la configuration système.
+Impossible de copier un fichier. Il est peut-être utilisé par un autre processus ou vous manquez de place sur le disque sur lequel vous copiez.
+Erreur durant la copie
+Erreur de copie des paramètres utilisateur NVDA
+Paramètres utilisateur de NVDA copiés avec succès
+Cette modification requiert des privilèges administrateur.
+Privilèges insuffisants
+Aucun miroir
+Changement de Configuration de Langue
+NVDA doit être redémarré pour que la nouvelle langue prenne effet.
+Redémarrer maintenant
+Redémarrer plus tard
+Synthétiseur
+Modifier
+Choisir le Synthétiseur
+Synthétiseur :
+Changement automatique de langue (si supporté par le synthétiseur)
+Changement automatique de dialecte (si supporté par le synthétiseur)
+Annoncer les changements de langue pendant la lecture
+Signaler le passage à une langue non prise en charge par le synthétiseur
+Niveau de ponctuations et symboles :
+Se baser sur la langue de la voix pour le traitement des caractères et symboles
+Normalisation Unicode
+Annoncer 'Normalisé' lors de la navigation par caractère
+Pourcentage de changement de hauteur pour indiquer les majuscules
+Dire majuscule après les majuscules
+Émettre un bip pour signaler les majuscules
+Utiliser la fonction d'épellation si elle est supportée
+Dictionnaires supplémentaires pour le traitement des caractères et des symboles :
+Dictionnaires de prononciation :
+Modes disponibles dans la commande Faire défiler les modes de parole :
+Description différée des caractères lors du mouvement du curseur
+Vous n'avez pas choisi Activée comme l'une de vos options de mode de parole. Veuillez noter que cela peut rendre NVDA totalement muet. Êtes-vous sur de vouloir continuer?
+Au moins deux modes de parole doivent être cochés.
+Modes disponibles dans la commande Faire défiler les modes de parole
+Disposition du clavier :
+Choisir les touches NVDA
+Écho clavier par caractère :
+Écho clavier par mot :
+Interruption de la parole à la frappe d'un caractère
+Interruption de la parole à l'appui de la touche entrée
+Permettre le survol en mode dire tout
+Émettre un bip à la frappe d'un caractère minuscule quand le verrouillage majuscule est activé
+Dire les touches de commandes
+Jouer un son pour les fautes d'orthographe pendant la frappe
+Exécuter les touches d'autres applications
+Délai d'expiration pour les appuis multiples (ms) :
+Au moins une touche doit être définie comme touche NVDA.
+Annoncer les changements de forme de la souris
+Activer le suivi de la souris
+Résolution d'unités de texte:
+Annoncer l'objet quand la souris y entre
+La brillance modifie le volume des coordonnées audio
+Ignorer les commandes de souris d'autres applications
+Curseur de Revue
+Suivre le focus système
+Suivre le curseur système
+Suivre le curseur souris
+Mode de revue simple
+Composition de Saisie (Caractères Asiatiques)
+Annonce automatique de toutes les suggestions
+Annoncer la suggestion sélectionnée
+Toujours inclure la description courte du caractère durant l'annonce de la suggestion
+Annoncer les changements dans la chaîne en cours de lecture
+Annoncer les changements dans la chaîne de composition
+Présentation des Objets
+Vocal
+Par des Bips
+Vocal avec des bips
+Annoncer les suggestions
+Annoncer les notifications
+Annoncer les raccourcis clavier des objets
+Annoncer le rang de l'objet dans une liste
+Deviner le rang de l'objet quand l'information n'est pas disponible
+Annoncer lorsque les objets prennent en charge la sélection multiple
+Annoncer la description de l'objet
+Suivi des barres de progression :
+Suivre les barres de progression en arrière-plan
+Annoncer les changements dynamiques de contenu
+Jouer un son quand les auto-suggestions apparaissent
+Mode Navigation
+Nombre maximum de caractères par ligne
+Nombre de lignes par page
+Utiliser la disposition telle qu'à l'écran (quand c'est possible)
+Activer le mode navigation au chargement de la page
+Lecture automatique au chargement de la page
+Inclure les tables de visualisation
+Mode formulaire automatique lors des changements de focus
+Mode formulaire automatique lors du déplacement du curseur
+Indication audio du mode formulaire ou navigation
+Empêcher tous les gestes ne correspondant pas à des commandes d'atteindre le document
+Éléments de navigation tactile :
+Mathématiques
+Les options suivantes contrôlent la présentation du contenu mathématique.
+Handicap :
+Langue :
+Séparateur décimal pour les nombres :
+Style de parole :
+Verbosité de la parole :
+Débit de parole relatif
+Facteur de pause
+Bip au début et à la fin du contenu mathématique
+Formules chimiques :
+À l'entrée dans une équation :
+Lire
+Décrire un aperçu
+Mode de navigation par défaut :
+Retourner au mode de navigation par défaut pour chaque nouvelle équation
+Zoom arrière automatique sur les notations 2D
+Verbosité lors de la navigation :
+Copiez le contenu mathématique en tant que :
+Code d'affichage :
+Automatique ()
+Mettre en évidence le focus de navigation avec les points 7 et 8
+Prise en charge des applications
+Utiliser la prise en charge native des mathématiques dans Word et Outlook
+Mise en Forme des Documents
+Les options suivantes contrôlent les types de mises en forme de document annoncés par NVDA.
+Police
+Nom de la police
+Taille de la police
+Attributs de la police
+Exposants et indices
+Emphase
+Texte surligné (marqué)
+Couleurs
+Informations sur le document
+Commentaires
+Signets
+Modifications de l'éditeur
+Fautes d'orthographe ou de grammaire
+Pages et espacements
+Numéros de ligne
+Annonce de la mise en retrait des lignes :
+Mise en retrait des paragraphes
+Interligne
+Alignement
+Informations sur les tableaux
+Tableaux
+En-têtes
+Coordonnées des cellules
+Bordures de cellule :
+Éléments
+Type de lien
+Graphiques
+Listes
+Citations
+Groupes
+Repères et Régions
+Cadres
+Figures et légendes
+Cliquable
+Signaler les changements de mise en forme après le curseur (peut dégrader les performances)
+Navigation dans les documents
+Style de paragraphe :
+Impossible de charger le synthétiseur .
+Erreur de synthétiseur
+Périphérique de sortie audio :
+Mode d'atténuation audio :
+Le volume des sons NVDA suit le volume de la voix
+Volume des sons NVDA
+Mode de séparation du son :
+Durée de maintien en éveil du périphérique audio après la parole (secondes)
+Modes disponibles dans la commande 'Faire défiler les modes de séparation du son' :
+Au moins un mode de séparation du son doit être coché.
+Modes disponibles dans la commande 'Faire défiler les modes de séparation du son'
+Mises à jour automatique:
+Canal de mise à jour par défaut :
+Permettre aux mises à jour automatique d'installer des extensions incompatibles
+Miroir
+Définir le miroir pour l'Add-on Store
+Activer l'Accès à distance
+Confirmation avant la déconnexion pour l'ordinateur contrôlé
+Couper le son distant lors du contrôle de l'ordinateur local
+Se connecter automatiquement après le démarrage de NVDA
+Connexion automatique
+Mode :
+Serveur :
+Hôte :
+Port :
+Clé :
+Supprimer toutes les empreintes digitales de confiance
+Supprimer toutes les signatures approuvées
+L’hôte et la clé doivent être tous deux définis dans la section Accès à distance afin de se connecter automatiquement à l’aide d’un serveur existant après le démarrage de NVDA.
+Le port et la clé doivent être tous deux définis dans la section Accès à distance afin d'ouvrir une connexion automatique à l’aide d’un serveur hébergé localement après le démarrage de NVDA.
+Erreur d'Accès à distance
+Interaction tactile
+Activer le support de l'interaction tactile
+Mode de frappe tactile
+Reconnaissance Optique de Caractères de Windows
+Langue de reconnaissance :
+Actualiser périodiquement le contenu reconnu
+Dire tout automatique sur le résultat
+Développement de NVDA
+Activer le chargement de code personnalisé depuis le répertoire Bloc-notes du Développeur
+Ouvrir le répertoire Bloc-notes du Développeur
+Enregistrement des événements et modifications de propriété UI Automation :
+Automatique (préférer sélectif)
+Sélectif
+Utiliser UI Automation pour accéder aux Contrôles des documents Microsoft Word
+Défaut (Lorsque c'est adapté)
+Seulement si nécessaire
+Lorsque c'est adapté
+Utiliser UI Automation pour accéder aux contrôles des feuilles de calcul Microsoft Excel quand disponible
+Prise en charge de la Console Windows :
+Automatique (préférer UIA)
+UIA si disponible
+Héritée
+Utiliser UIA avec Microsoft Edge et les autres navigateurs basés sur Chromium si disponible :
+Défaut (seulement si nécessaire)
+Utiliser le traitement des événements amélioré (nécessite un redémarrage)
+Annoncer "contient des détails" pour les annotations structurées
+Toujours annoncer la description aria
+Signaler les régions actives :
+Programmes de terminaux
+Annoncer les mots de passe dans tous les terminaux améliorés (peut améliorer les performances)
+Utiliser le nouveau support de la frappe de caractères dans les anciennes consoles Windows quand disponible
+Algorithme de comparaison du texte :
+Automatique (préférer Diff Match Patch)
+Annoncer le nouveau texte dans le Terminal Windows via :
+Défaut (Oui)
+Essayer de couper la parole pour les événements de focus expirés :
+Supprimer le silence au début du flux audio de la parole
+Utilisez WASAPI pour la sortie audio SAPI 4 :
+Utilisez le moteur d'expressions régulières moderne pour les entrées du dictionnaire de prononciation :
+Tampons Virtuels
+Charger le tampon virtuel Chromium lorsque le document est occupé.
+Texte éditable
+Délai d'attente de mouvement du curseur (en ms)
+Annoncer la valeur des couleurs transparentes
+Journalisation de débogage
+Catégories de journalisation activées
+Jouer un son pour les erreurs journalisées :
+Expression régulière pour la navigation par paragraphes de texte
+Échec de la compilation de l'expression régulière pour les paragraphes de texte :
+Avancé
+Avertissement !
+Je comprends que modifier ces paramètre peut causer des dysfonctionnements de NVDA.
+Rétablir les paramètres par défaut
+Terminal braille
+Choisir l'Afficheur Braille
+Terminal Braille :
+Afficheurs à détecter automatiquement :
+Impossible de charger le terminal .
+Erreur d'affichage braille
+Table d'affichage :
+Table de saisie :
+Mode braille :
+Afficher le mot sous le curseur en braille informatique
+Montrer le curseur
+Curseur clignotant
+Vitesse de clignotement du curseur (ms)
+Forme du curseur pour le mode focus :
+Forme du curseur pour le mode revue :
+Affichage des message
+Durée d'affichage des messages (sec)
+Le Braille suit :
+Déplacer le curseur système lors du routage du curseur de revue
+Lire par paragraphe
+Marqueur de début de paragraphe :
+Afficher la sélection
+Affichage de la mise en forme
+Annoncer le caractère lors du routage du curseur dans le texte
+Retour vocal lors de la navigation par ligne ou par paragraphe
+Ne pas couper les mots quand c'est possible
+Interrompre la parole lors du défilement
+Vitesse de défilement automatique
+Impossible de charger le service d'amélioration visuelle
+Impossible de charger les services d'amélioration visuelle suivants :
+Erreur de Service d'Amélioration Visuelle
+Impossible d'arrêter proprement le service d'amélioration visuelle
+Impossible d'arrêter proprement les services d'amélioration visuelle suivants :
+Configurer les aides visuelles.
+Options :
+Impossible de configurer l'interface utilisateur pour le service d'amélioration visuelle, il ne peut être activé.
+Activer la loupe (effet immédiat)
+Zoom (%) :
+Filtre de couleur :
+Taille du pas de déplacement (%) :
+Suivi
+Suivre la souris
+Suivre le curseur de revue
+Suivre l'objet navigateur
+Mode de suivi :
+Confidentialité et sécurité
+Niveau de journalisation à haut risque
+Rideau d'Écran
+Rendre l'écran noir (effet immédiat)
+Émettre un son lors de l'activation/désactivation du Rideau d'Écran
+Niveau de journalisation :
+Autoriser NV Access à récupérer des statistiques d'utilisation de NVDA
+configuration normale
+Ajouter un Symbole
+Symbole :
+Prononciation du Symbole ()
+Symboles
+Symbole
+Remplacement
+Niveau
+Préserver
+Modifier le symbole sélectionné
+Envoyer le symbole réel au synthétiseur
+Le symbole "" est déjà présent.
+Éditer une Entrée du Dictionnaire
+Modèle
+Commentaire
+Un modèle est nécessaire.
+Erreur d'Entrée dans le Dictionnaire
+Erreur d'Expression Régulière dans le champ Modèle : "".
+Erreur d'Expression Régulière dans le champ Remplacement : "".
+Entrées du dictionnaire
+Mot réel
+casse
+Éditer
+Tout supprimer
+Ajouter une entrée au dictionnaire
+Voulez-vous vraiment supprimer toutes les entrées de ce dictionnaire ?
+Bienvenue dans NVDA
+Bienvenue dans NVDA !
+Utiliser verrouillage majuscules comme touche NVDA
+Afficher ce dialogue au démarrage de NVDA
+Au moins une touche doit être définie comme touche NVDA. Verrouillage majuscule restera comme touche NVDA.
+Installer NVDA sur cet ordinateur
+Créer une copie portable
+Continuer l'exécution
+Accord de licence
+Afficher la licence
+J'ai lu et accepté l'accord de licence
+Recueil de Données d'Utilisation de NVDA
+Canal de mise à jour
+Pas d'action disponible pour les extensions sélectionnées
+Installer les extensions sélectionnées
+Mettre à jour les extensions sélectionnées
+Essayer à nouveau d'installer les extensions sélectionnées
+Annuler l'installation des extensions sélectionnées
+Supprimer les extensions sélectionnées
+Activer les extensions sélectionnées
+Désactiver les extensions sélectionnées
+Chargement des extensions...
+Aucune extension sélectionnée.
+Description :
+État :
+Autres détails :
+Éditeur :
+Auteur :
+ID :
+Version installée :
+Version minimale de NVDA :
+Dernière version NVDA testée :
+Version disponible :
+Canal :
+Raison d'incompatibilité :
+Page web :
+Licence :
+URL de la Licence :
+URL de téléchargement :
+URL du code source :
+URL des avis :
+Date d'installation :
+Date de publication :
+Résultats de l’analyse par VirusTotal :
+URL de l’analyse par VirusTotal :
+Se souvenir de ce choix pour les extensions suivantes
+Voulez-vous vraiment supprimer l'extension de NVDA ? cette action ne peut pas être annulée.
+Suppression de l'extension
+Activation de l'extension
+L'installation de a été bloquée. La version minimum de NVDA requise pour cette extension est , votre version courante de NVDA est
+Échec d'installation de l'extension
+Voulez-vous vraiment installer cette extension ? N'installez que des extensions provenant de sources sûres. Extension :
+() Version : Description :
+Version minimum de NVDA requise :
+Dernière version de NVDA testée :
+Information sur l'extension
+Avertissement de l'Add-on Store
+Ne plus afficher ce message
+Mises à jour d'extensions disponibles
+Des mises à jour sont disponibles pour certaines de vos extensions installées.
+Ouvrir l'Add-on Store
+Tout mettre à jour
+Mise à jour des extensions...
+Des extensions ont été mises à jour, redémarrez NVDA pour activer les modifications
+Copie des paramètres dans la configuration système
+La configuration système de NVDA contient des extensions qui ne sont pas présents dans votre configuration. Si vous continuez, ces extensions seront supprimées de la configuration système.
+Cochez uniquement les extensions que vous souhaitez copier dans la configuration système.
+Extensions
+Nom
+Version utilisateur
+Version système
+Non installé
+[supprimer]
+Êtes-vous sûr de vouloir continuer ?
+Installer depuis une source externe
+Note : NVDA a été démarré avec les extensions désactivées
+Trier par colonne :
+Inclure les extensions incompatibles
+Activée/désactivée :
+Rechercher :
+Paquet d'extension de NVDA (*.)
+Choisir le fichier paquet de l'extension
+Pertinence
+État
+Version installée
+Version disponible
+Canal
+Éditeur
+Auteur
+Date de publication
+Date d'installation
+Version minimale de NVDA
+Dernière version NVDA testée
+(croissant)
+(décroissant)
+Installer
+Installer (ignorer l'incompatibilité)
+Mettre à jour
+Mettre à jour (ignorer l'incompatibilité)
+Réessayer l'installation
+Remplacer
+Annuler l'installation
+Désactiver
+Activer (ignorer l'incompatibilité)
+Page web
+Code source
+Avis de la communauté
+Résultats de l’analyse par VirusTotal
+Modifications de la
+Impossible d'activer l'extension : .
+Impossible de désactiver l'extension : .
+Quitter l'interaction mathématique
+Interaction mathématique non supportée.
+Erreur lors du démarrage de la navigation mathématique.
+Erreur lors de l'affichage en braille du contenu mathématique : voir le journal des erreurs NVDA pour plus de détails
+Erreur lors de la navigation dans le contenu mathématique
+Erreur lors de l'affichage en braille du contenu mathématique
+Copier le focus de navigation dans le presse-papiers
+Presse-papiers
+copier comme
+Mise en forme mathématique invalide trouvée
+Erreur lors de l'annonce du contenu mathématique.
+MathML illégal trouvé.
+Erreur lors de l'affichage en braille du contenu mathématique.
+Aller à l'élément précédent dans une expression mathématique
+Aller à l'élément suivant dans une expression mathématique
+Zoom arrière dans une expression mathématique
+Zoomer dans une expression mathématique
+Aller à la cellule de tableau ou au chiffre précédent dans une expression mathématique
+Aller à la cellule de tableau ou au chiffre suivant dans une expression mathématique
+Aller à la cellule de tableau ou au chiffre au-dessus dans une expression mathématique
+Aller à la cellule de tableau ou au chiffre au-dessous dans une expression mathématique
+Lire l'élément précédent dans une expression mathématique
+Lire l'élément suivant dans une expression mathématique
+Passer à un mode de navigation mathématique plus grand
+Passer à un mode de navigation mathématique plus petit
+Décrire l'élément précédent dans une expression mathématique
+Décrire l'élément suivant dans une expression mathématique
+Zoom arrière complet dans une expression mathématique
+Zoomer complètement dans une expression mathématique
+Annoncer la position courante dans une expression mathématique
+Annoncer la position globale dans une expression mathématique
+Lire l'élément courant dans une expression mathématique
+Lire la cellule courante du tableau dans une expression mathématique
+Basculer le mode de parole mathématique entre Lire et Décrire
+Décrire l'élément courant dans une expression mathématique
+Aller au début de l'expression mathématique
+Aller au début de la ligne dans une expression mathématique
+Aller au début de la colonne dans une expression mathématique
+Aller à la fin de l'expression mathématique
+Aller à la fin de la ligne dans une expression mathématique
+Aller à la fin de la colonne dans une expression mathématique
+Revenir à la dernière position dans une expression mathématique
+Aller au repère dans une expression mathématique
+Définir le repère dans une expression mathématique
+Lire le repère dans une expression mathématique
+Décrire le repère dans une expression mathématique
+Troubles de l'apprentissage
+Cécité
+Basse vision
+Personnalisé
+Concis
+Moyen
+Détaillé
+L'épeler (H 2 O)
+Désactivé (H sub 2 O)
+Amélioré
+Caractère
+Premier caractère
+Extrémités
+Tout
+Saisie native
+Saisie alphanumérique
+Mode plein
+Mode demi
+semi alphanumérique
+semi katakana
+alphanumérique
+semi katakana romain
+hiragana romain
+katakana romain
+IME ouvert
+IME fermé
+langue inconnue
+méthode de saisie inconnue
+Limites de l'objet positionnées à pour cent de la gauche de l'écran, pour cent du haut de l'écran, sa largeur est de pour cent de l'écran, sa hauteur est de pour cent de l'écran
+comme dans la
+Amener l'objet navigateur à la colonne suivante
+Amener l'objet navigateur à la colonne précédente
+Amener l'objet navigateur et le focus à la ligne suivante
+Amener l'objet navigateur et le focus à la ligne précédente
+Amener l'objet navigateur à la première colonne
+Amener l'objet navigateur à la dernière colonne
+Amener l'objet navigateur et le focus à la première ligne
+Amener l'objet navigateur et le focus à la dernière ligne
+Barre des tâches
+RVB rouge , vert , bleu
+Définir ligne colonne comme début des titres de colonnes
+Ligne colonne déjà défini comme début des titres de colonnes
+Ligne colonne supprimé des titres de colonnes
+Ligne colonne introuvable dans les titres de colonnes
+Définir ligne colonne comme début des titres de lignes
+Ligne colonne déjà défini comme début des titres de lignes
+Ligne colonne introuvable dans les titres de lignes
+Annonce le texte du commentaire où se trouve le curseur système. Un double appui affiche l'information en mode navigation.
+Pas de commentaire
+Pas dans un tableau
+invoquer
+Afficher un message navigable listant des informations sur l'apparence d'une cellule telles que les couleurs de contour et de remplissage, la rotation et la taille
+Largeur de cellule : pt
+Hauteur de cellule : pt
+Couleur de contour : haut=, bas=, gauche=, droite=
+Épaisseur du contour : haut=, bas=, gauche=, droite=
+Couleur de remplissage :
+Type de remplissage :
+Format des nombres :
+Demande une validation de données
+Message pour la validation des données :
+A une mise en forme conditionnelle
+Lignes de grille visibles
+Apparence de la cellule
+Erreur :
+est en train d'éditer
+de à
+Annoncer la note ou le fil de commentaires de la cellule courante
+Pas de note sur cette cellule
+Fil de commentaires : par
+Pas de fil de commentaire sur cette cellule
+Hors du tableau
+Erreurs
+Références
+insertion :
+suppression :
+suivi de modification :
+référence note de bas de page :
+référence note de fin :
+référence:
+Commentaire : par
+Commentaire : par le
+La navigation par phrases n'est pas supportée dans ce document
+Annonce le texte du commentaire où se trouve le curseur système. Un double appui affiche l'information en mode navigation
+Commande non supportée dans ce type de document. Les cellules de la première ligne des tableaux sont automatiquement définies comme en-têtes de colonne.
+Commande non supportée dans ce type de document. Les cellules de la première colonne des tableaux sont automatiquement définies comme en-têtes de ligne.
+Bureau
+Aire 3d
+Aire empilée 3D
+Aire empilée 100 pour cent
+Barres groupées 3D
+Barres empilées 3D
+Barres empilées 100 pour cent 3D
+Colonne 3D
+Histogramme groupé 3D
+Histogramme empilé 3D
+Histogramme empilé 100 pour cent 3D
+Ligne 3D
+Camembert 3D
+Secteur éclaté 3D
+Aire
+Aire empilée
+Barre groupée
+Barre de camembert
+Barre empilée
+Barre empilée 100 pour cent
+Bulle
+Bulle avec effets 3D
+Histogramme
+Colonne empilée
+Histogramme empilé 100 pour cent
+barre cônique groupée
+Barre cônique empilée
+Barre cônique empilée 100 pour cent
+Colonne cônique 3D
+Colonne cônique groupée
+Colonne cônique empilée
+Colonne Cônique empilée 100 pour cent
+Barre Cylindrique Groupée
+Barre Cylindrique Empilée
+Barre Cylindrique Empilée 100 pour cent
+Colonne Cylindrique 3D
+Colonne Cylindrique Empilée 100 pour cent
+Anneau
+Anneau éclaté
+Ligne
+Ligne avec Marqueurs
+Ligne empilée avec marqueurs
+Ligne Empilée avec Marqueurs 100 pour cent
+Ligne Empilée
+Ligne Empilée 100 pour cent
+Camembert
+Camembert éclaté
+Camembert de Camembert
+Barre Pyramidale Groupée
+Barre Pyramidale Empilée
+Barre Pyramidale Empilée 100 pour cent
+Colonne Pyramidale 3D
+Colonne Pyramidale Groupée
+Colonne Pyramidale Empilée
+Colonne Pyramidale Empilée 100 pour cent
+Radar Rempli
+Radar avec Marqueurs de Données
+Max-Min-Clôture
+Ouverture-Max-Min-Clôture
+Volume-Max-Min-Clôture
+Volume-Ouvert-Max-Min-Clôture
+Surface 3D
+Surface (vue du haut)
+Surface (Contour Vu du Haut)
+Surface 3D (contour)
+Nuage de points
+Nuage de points avec lignes
+Nuage de points avec lignes et sans marqueur de données
+Nuage de points avec ligne lissée
+Nuage de points avec ligne lissée et sans marqueur de données
+secteur
+point de données
+élément
+Couleur de la série :
+étiquette d'unité d'affichage
+Quadrillage majeur
+Quadrillage mineur
+Zone de dépôt de graphique à pivot
+Bouton de champ de graphique à pivot
+Barres du bas
+Lignes verticales
+Lignes min.-max.
+Étiquettes d'axe du radar
+Lignes de séries
+Barres du haut
+Coins
+Tableau de données
+Plancher
+Rien
+Murs
+Étiquette de donnée
+Barres d'erreur
+Barres d'erreur X
+Barres d'erreur Y
+Forme
+Titre du graphique : , type :
+séries
+Aucune Série définie.
+Éléments de Diagramme
+séries de
+Couleur des Sections :
+pas de changement à partir du point ,
+augmenté de à partir du point ,
+diminué de à partir du point ,
+Catégorie :
+valeur
+fraction Pour cent secteur de
+Axe des catégories primaires
+Axe des catégories secondaires
+Axe des valeurs primaires
+Axe des valeurs secondaires
+Axe des séries primaires
+Axe des séries secondaires
+titre :
+Exponentiel
+Linéaire
+Logarithmique
+Moyenne mobile
+Puissance
+encadré
+moins
+type de courbe : , nom : , étiquette :
+type de courbe : , nom :
+Titre du graphique :
+Graphique sans titre
+Hauteur de la zone graphique : , largeur : , haut : , gauche :
+Aire du graphique
+Hauteur interne de la zone de traçage : , largeur interne : , haut interne : , gauche interne :
+Zone de traçage
+Entrée de légendes pour les séries , de
+Entrée de légende sur
+Clé de légendes pour les séries , de
+(couleur par défaut)
+Couleur inconnue
+automatique
+Quadrillage en diagonale
+quadrillage fin en diagonale
+bande diagonale inversée
+12.5% grisé
+25% grisé
+50% grisé
+75% grisé
+6.25% grisé
+quadrillage horizontal fin
+bande horizontale
+bande diagonale fine inversée
+bande horizontale fine
+bande diagonale fine
+bande verticale fine
+quadrillage large en diagonale
+uni
+bande en diagonale
+bande verticale
+dégradé linéaire
+dégradé rectangulaire
+Dresser la liste de différents types d'éléments dans cette feuille de calcul
+Formules
+Feuilles
+Gras désactivé
+Gras activé
+Italique désactivé
+Italique activé
+Souligné désactivé
+Souligné activé
+Barré désactivée
+Barré activée
+définie comme début de titres de colonnes
+déjà définie comme début des titres de colonnes
+supprimée des titres de colonnes
+introuvable dans les titres de colonnes
+définie comme début des titres de lignes
+déjà définie comme début des titres de lignes
+supprimée des titres de lignes
+introuvable dans les titres de lignes
+Feuille ,
+Le Message d'Entrée est :
+Le Message d'Entrée est
+Annoncer la note de la cellule courante. Deux appuis: présenter les informations en mode navigation
+Pas sur une note
+Ouvrir le dialogue d'édition de note
+Édition de la note pour la cellule
+bordure supérieure
+bordure inférieure
+bordure gauche
+bordure droite
+ligne diagonale montante
+ligne diagonale descendante
+bordures horizontales internes
+bordures verticales internes
+continue
+discontinue
+tiret-point
+tiret-point point
+pointillée
+tiret-point incliné
+très fine
+fine
+moyenne
+épaisse
+moyenne tiret-point-point
+moyenne tiret-point
+moyenne discontinue
+bordure entourante
+bordures haute et basse
+bordures gauche et droite
+diagonales montante et descendante
+Mots uniquement
+Pointillés
+Épais
+Tirets
+Point tiret
+Point point tiret
+Ondulé
+Pointillés épais
+Tirets épais
+Point tiret épais
+Point point tiret épais
+Ondulation épaisse
+Tirets longs
+Ondulation double
+Tirets longs épais
+Pas de casse
+En minuscules
+En majuscules
+Majuscule en début de mot
+Majuscule en début de phrase
+Mélange majuscules minuscules
+Demi-chasse
+Pleine chasse
+suppression
+propriété
+numéro de paragraphe
+zone d'affichage
+réconcilier
+conflit
+remplacer
+propriété de paragraphe
+propriété de tableau
+propriété de section
+définition de style
+déplacé de
+déplacé vers
+insertion de cellule
+suppression de cellule
+fusion de cellules
+Notes de fin
+Pied de pages paires
+En-tête de pages paires
+Pied de première page
+En-tête de première page
+Notes de bas de page
+pied de page primaire
+En-tête primaire
+Cadre de texte
+commentaire : par le
+: par le
+orthographe :
+du bord gauche de la page
+du haut de la page
+1.5 lignes
+exactement pt
+au moins %.1f pt
+Description de tableau
+couleur automatique
+En majuscule
+Petites majuscules
+Majuscules désactivées
+Aligné à gauche
+centré
+Aligné à droite
+Justifié
+Exposant
+Indice
+Ligne de base
+Déplacé sous
+Déplacé sous le paragraphe vide
+Déplacé au-dessus de
+Déplacé au-dessus du paragraphe vide
+style , niveau hiérarchique
+fonte point
+Afficher les caractères non imprimables
+Masquer les caractères non imprimables
+Interligne simple
+Interligne double
+Interligne 1.5
+espace pt avant le paragraphe
+Toujours afficher un avertissement à l'activation du Rideau d'Écran
+Impossible d'activer le rideau d'écran lors de la reconnaissance de contenu
+Impossible d'activer le rideau d'écran
+Un problème est survenu lors de l'activation du rideau décran. Le contenu de l'écran est toujours visible. Vous pouvez essayer d'activer le rideau d'écran manuellement.
+L'activation du rideau d'écran rendra l'écran de votre ordinateur complétement noir. Assurez-vous de pouvoir naviguer sans l'aide de votre écran avant de continuer. Souhaitez-vous continuer?
+désactivée
+remplacée par des bips
+activée
+à la demande
+normalisé
+pas de retrait
+sélectionné en remplacement
+sélection supprimée
+à ligne column
+possède des détails
+niveau
+de et
+hors de
+colonne sur
+saut de section continu
+saut de section de nouvelle colonne
+saut de section de nouvelle page
+saut de section de pages paires
+saut de section de pages impaires
+saut de colonne
+style par défaut
+pas de bordure
+arrière-plan
+motif d'arrière-plan
+non inséré
+non effacé
+révisé
+non révisé
+non marqué
+surligné en
+non gras
+emphase
+sans emphase
+non italique
+double barré
+barré
+non barré
+non souligné
+masqué
+non masqué
+retrait gauche
+pas de retrait gauche
+retrait droit
+pas de retrait droit
+retrait négatif de première ligne
+pas de retrait négatif de première ligne
+retrait de première ligne
+pas de retrait de première ligne
+interligne
+contient un brouillon de commentaire
+contient un commentaire résolu
+hors de commentaire
+signet
+hors de signet
+faute d'orthographe
+hors de la faute d'orthographe
+erreur de grammaire
+hors de l'erreur de grammaire
+hors du tableau
+tableau de et
+Dictionnaire temporaire
+Dictionnaire par défaut
+N'importe où
+Expression régulière
+Mot entier
+Partie d'un mot
+Début d'un mot
+Fin d'un mot
+Caractères génériques de type shell Unix
+Temporaire
+Spécifique à la voix
+Défaut
+Intégré
+Dictionnaire de la voix ()
+aucune
+Voix Windows OneCore
+Microsoft Speech API version 5 (64 bits)
+Microsoft Speech API version 5 (32 bits)
+Pas de parole
+mot
+Positionné à ,
+à ,
+orthographe et grammaire :
+grammaire :
+couleur
+dégradé
+image
+motif
+jour ::
+jours ::
+Périphérique de sortie par défaut
+Écran de verrouillage non sécurisé lors de l'utilisation de NVDA
+Réactualisé
+Chargement du document...
+Réactualiser le contenu du document
+Disposition telle qu'à l'écran activée
+Disposition telle qu'à l'écran désactivée
+Mettre en évidence le focus système
+Mettre en évidence le curseur du mode navigation
+Mettre en évidence l'objet navigateur
+Mise en Évidence Visuelle
+Activer la mise en évidence
+Paysage
+État d'alimentation inconnu
+Pas de batterie
+Branché
+Débranché
+Temps restant moins d'une minute
+Temps restant et
+Temps restant
+Bureau Sécurisé
+bord gauche
+bord droit
+bord supérieur
+bord inférieur
+Loupe désactivée
+Loupe activée
+Filtre de couleur
+vue
+activé
+Tous les paramètres de suivi désactivés
+Paramètres de suivi restaurés
+Mode de suivi
+L'aperçu de l'écran est déjà actif
+Affichage de tout l'écran
+Impossible de lorsque la loupe n'est pas active.
+Impossible de lorsque la loupe n'est pas en mode plein écran.
+Impossible de démarrer la loupe. Une autre application d'agrandissement est peut-être déjà en cours d'exécution.
+La loupe s'est arrêtée en raison d'une erreur. Veuillez la redémarrer.
+Impossible d'activer la loupe. Veuillez d'abord désactiver le rideau d'écran.
+Désactivation de la loupe
+Réactivation de la loupe
+Retour à la vue normale
+Augmenter le zoom
+Diminuer le zoom
+déplacer vers la gauche
+déplacer vers la droite
+déplacer vers le haut
+déplacer vers le bas
+déplacer au bord gauche
+déplacer au bord droit
+déplacer au bord supérieur
+déplacer au bord inférieur
+activer/désactiver les paramètres de suivi
+faire défiler les filtres de couleur
+changer la vue de la loupe
+modifier le mode de suivi
+afficher un aperçu de l'écran
+Curseur de revue
+Objet navigateur
+Plein écran
+Fixe
+Ancrée
+Lentille
+Centre
+Relatif
+Niveaux de gris
+Inversé
+Action impossible depuis l'ordinateur connecté
+Parole distante coupée
+Parole distante rétablie
+Personne n'est connecté
+Impossible d’envoyer le presse-papiers
+Lien copié
+Confirmer la déconnexion
+Êtes-vous sûr de vouloir vous déconnecter de la session d'accès à distance ?
+Erreur de connexion
+Impossible de se connecter à l'ordinateur distant
+Une session d’accès à distance est déjà en cours. Déconnectez-vous avant de démarrer une nouvelle session.
+Se connecter à un autre ordinateur
+Connecté
+Aucun ordinateur contrôlé n'est connecté
+Contrôle de l'ordinateur local
+Contrôle de l'ordinateur distant
+Souhaitez-vous contrôler l’ordinateur sur le serveur avec la clé ?
+Souhaitez-vous autoriser le contrôle de cet ordinateur sur le serveur avec la clé ?
+Demande de connexion pour un accès à distance
+Déconnecté
+Connecté en tant qu’ordinateur contrôlé
+Presse-papiers envoyé
+Presse-papiers reçu
+Générer une clé
+L'adresse du serveur doit être renseignée.
+Génération de la clé
+Génération de la clé...
+Impossible de se connecter à . Vérifiez votre accès Internet et qu'il n'y a pas d'erreurs dans le champ hôte.
+Échec de la connection à l'hôte
+IP Publique :
+Obtenir l'adresse IP externe
+Clé
+Obtention de l'adresse IP externe
+Obtention de l'adresse IP externe...
+Adresse IP récupérée avec succès. Le port est ouvert.
+Adresse IP externe récupéré, mais le port n'est probablement pas actuellement redirigé.
+Impossible de contacter le serveur de vérification de port, veuillez récupérer votre adresse IP publique manuellement
+L'adresse du serveur et la clé doivent être tous deux renseignés.
+Le port et la clé doivent être tous deux renseignés.
+Avertissement de sécurité
+Se connecter et ne plus demander pour ce serveur
+Se connecter
+Impossible de déclencher un contrôle+alt+suppr
+Couper le son distant
+Couper la parole et les sons de l’ordinateur distant.
+Envoyer le presse-papiers
+Envoyer le texte du presse-papiers à l’ordinateur distant.
+Copier le lien
+Copier un lien vers la session d’accès à distance actuelle dans le presse-papiers.
+Envoyer Ctrl+Alt+Suppr
+Envoyer Contrôle+Alt+Supprimer à l’ordinateur contrôlé.
+Autoriser quelqu’un à contrôler cet ordinateur depuis n'importe où, ou contrôler un autre ordinateur exécutant NVDA avec celui-ci.
+Se connecter...
+Se connecter à distance à un autre ordinateur exécutant NVDA.
+Se déconnecter
+Se déconnecter de la session d’accès à distance actuelle.
+Le serveur d’accès à distance auquel vous vous êtes connecté est incompatible avec cette version de NVDA. Veuillez utiliser un autre serveur.
+Message du serveur d’accès à distance
+NVDA distant non connecté

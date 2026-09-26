@@ -1,0 +1,49 @@
+  FAIL 'sentence: malgre la haute estime que je professe pour the Orthodox Rus'
+       expected [None, 'fr', None, 'fr'] got [None, 'fr'] runs=[(None, 'sentence: '), ('fr', 'malgre la haute estime que je ')]
+  FAIL 'Oui, oui, je suis là.'
+       expected ['fr'] got [None, 'fr'] runs=[(None, 'Oui, '), ('fr', 'oui, je suis là.')]
+  FAIL 'Bonjour Pierre, comment vas-tu?'
+       expected ['fr'] got [None] runs=[(None, 'Bonjour Pierre, comment vas-tu')]
+  FAIL '"How plainly all these young people wear their hearts on their sleeves'
+       expected [None, 'fr', None] got [None] runs=[(None, '"How plainly all these young p')]
+  FAIL '"Cependant, mon cher," he remarked, examining his nails from a distanc'
+       expected [None, 'fr', None, 'fr', None, 'fr', None] got [None, 'fr', None, 'fr'] runs=[(None, '"Cependant, '), ('fr', 'mon cher," '), (None, 'he remarked, examining his nai'), ('fr', 'malgre la haute estime que je '), (None, '*')]
+  FAIL '"\'Dieu me la donne, gare a qui la touche!\'* They say he was very fine '
+       expected [None, 'fr', None, 'it', None] got [None, 'fr', None, 'it'] runs=[(None, '"\'Dieu me la donne, '), ('fr', 'gare a qui la touche!'), (None, "'* They say he was very fine w"), ('it', "'Dio mi l'ha dato. Guai a chi "), (None, '\'"')]
+  FAIL '¿Tú eres Miguel? No, yo no soy Miguel.'
+       expected ['es'] got ['es', None, 'es'] runs=[(None, '¿'), ('es', 'Tú eres Miguel? '), (None, 'No, '), ('es', 'yo no soy Miguel.')]
+  FAIL 'Orange, la naranja'
+       expected es got [None] runs=[(None, 'Orange, la naranja')]
+  FAIL '7'
+       expected [None] got [] runs=[(None, '7')]
+  FAIL '?'
+       expected [None] got [] runs=[(None, '?')]
+ensemble: 40/50 acceptance cases pass
+  (accents stripped)
+ensemble: 1257 paragraphs, 200000 chars, 623 ms total, slowest paragraph 8.2 ms, 4598 recognizer calls
+  25 foreign runs:
+    [fr] le Vicomte de Mortemart,
+    [fr] Contez nous cela,
+    [fr] au revoir!
+    [fr] gare a qui la touche!
+    [fr] Baton de gueules, engrele de gueules d’azur—maison Conde,”
+    [fr] une dame,
+    [fr] au revoir,”
+    [fr] mon cher,”
+    [fr] mon cher.
+    [fr] mon cher,”
+    [fr] mon cher!”
+    [fr] Madame de Genlis! Madame de Genlis!”
+    [fr] humanum est errare,
+    [fr] ma bonne,”
+    [fr] mon tres honorable Alphonse Karlovich,”
+    [fr] Vous comptez vous faire des rentes sur l’etat;
+    [fr] La balance y est...
+    [fr] Connaissez-vous le Proverbe:
+    [fr] Cela nous convient a merveille.
+    [fr] Je vous demande un peu,”
+    [fr] mon cousin,
+    [fr] mon cousin,”
+    [fr] un batard!”
+    [fr] mon cousin,
+    [fr] mon cousin,”

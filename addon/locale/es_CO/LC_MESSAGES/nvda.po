@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es_CO\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "Desactivado"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "Solo por escritura"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "Completa"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "Multilingüe"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "Cambia la detección de idioma: desactivada, solo por escritura, completa"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "Detección de idioma %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "Activa o desactiva la detección estricta de idioma"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "Detección estricta activada"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "Detección estricta desactivada"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "instalando"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "desconocido"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "falta"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "instalado"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "Se le pedirá permiso de administrador para instalar el diccionario de Windows para %s. Es necesario para una detección de idioma precisa."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Diccionario de Windows"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "No se inició: no se concedió el permiso de administrador."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "Instalando el diccionario de %s. NVDA avisará cuando termine."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "Diccionario de %s instalado."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "Instalación terminada, pero Windows aún no muestra el diccionario de %s. Reinicie Windows."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "El diccionario de %s no se instaló. Compruebe Windows Update o consulte el registro de NVDA."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "&Detección de idioma:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&Estricta: exigir también que la detección de idioma de Windows coincida"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "Detectar dentro del texto e&tiquetado con el idioma predeterminado"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "Usar voces de &Windows para idiomas que el sintetizador no habla"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "S&intetizador predeterminado:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&Idiomas (el predeterminado no necesita fila):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "Idioma"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "Sintetizador"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "Voz"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "velocidad"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "tono"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "Volumen"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "Símbolos"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "Diccionario"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "&Añadir..."
+
+msgid "&Edit..."
+msgstr "&Modificar..."
+
+msgid "&Remove"
+msgstr "E&liminar"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&Verificar paquete de idioma..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "Diccionario por &Voces..."
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "Cada fila habla con su propio sintetizador y su propia voz."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s elige su propia voz para cada idioma; sus filas fijan velocidad, tono y volumen. Las filas de otros sintetizadores y las voces de Windows se alojan automáticamente."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "No se pudo comprobar el diccionario de %s. Consulte el registro de NVDA."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "El diccionario de %s está instalado."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "Esta fila no tiene voz propia, así que se le aplica el diccionario por voz del sintetizador."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "Diccionario por Voces"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "Diccionario por voz para %s"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "No se pudo cargar el sintetizador. Consulte el registro de NVDA."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "Error"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "Editar idioma"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "Añadir idioma"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "&Sintetizador:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&Voz:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "Va&riante:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&Idioma:"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "ve&locidad"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "&tono"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "V&olumen"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&Entonación"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "Aumento de v&elocidad"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "&Nivel de Puntuación y símbolos:"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "Igual que NVDA"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&Probar"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "Introduzca un idioma."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s no es un código de idioma. Elija una voz o introduzca un código como fr o fr_FR."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "Ya hay una fila para %s. ¿Reemplazarla?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "Reemplazar idioma"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "Tabla de idiomas (multilingüe)"
+

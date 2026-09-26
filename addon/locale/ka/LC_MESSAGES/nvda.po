@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ka\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "გამორთულია"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "მხოლოდ დამწერლობით"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "სრული"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "მრავალენოვანი"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "ცვლის ენის ამოცნობას: გამორთული, მხოლოდ დამწერლობით, სრული"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "ენის ამოცნობა: %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "რთავს ან თიშავს ენის მკაცრ ამოცნობას"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "მკაცრი ამოცნობა ჩართულია"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "მკაცრი ამოცნობა გამორთულია"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "ყენდება"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "უცნობია"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "აკლია"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "დაყენებულია"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "%s ენისთვის Windows-ის ლექსიკონის დასაყენებლად მოგეთხოვებათ ადმინისტრატორის ნებართვა. ის საჭიროა ენის ზუსტი ამოცნობისთვის."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Windows-ის ლექსიკონი"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "არ დაწყებულა: ადმინისტრატორის ნებართვა არ გაცემულა."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "ყენდება %s ენის ლექსიკონი. დასრულებისას NVDA შეგატყობინებთ."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "%s ენის ლექსიკონი დაყენდა."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "დაყენება დასრულდა, მაგრამ Windows ჯერ არ აჩვენებს %s ენის ლექსიკონს. გადატვირთეთ Windows."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "%s ენის ლექსიკონი არ დაყენდა. შეამოწმეთ Windows Update ან NVDA-ს ჟურნალი."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "&ენის ამოცნობა:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&მკაცრი: საჭიროა Windows-ის ენის ამოცნობის თანხმობაც"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "ამოცნობა ნაგულისხმევი ენით &მონიშნულ ტექსტშიც"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "&Windows-ის ხმების გამოყენება ენებისთვის, რომლებზეც სინთეზატორი ვერ საუბრობს"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "ნაგულისხმევი &სინთეზატორი:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&ენები (ნაგულისხმევ ენას სტრიქონი არ სჭირდება):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "ენა"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "სინთეზატორი"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "ხმა"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "სიჩქარე"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "ტონი"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "ხმის სიმაღლე"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "სიმბოლოები"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "ლექსიკონი"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "&დამატება..."
+
+msgid "&Edit..."
+msgstr "&რედაქტირება..."
+
+msgid "&Remove"
+msgstr "&წაშლა"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&ენის პაკეტის შემოწმება..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "&ხმის ლექსიკონი......"
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "ყოველი სტრიქონი საკუთარი სინთეზატორითა და ხმით საუბრობს."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s თითოეული ენისთვის თავად ირჩევს ხმას; მისი სტრიქონები აყენებს სიჩქარეს, სიმაღლესა და ხმის დონეს. სხვა სინთეზატორების სტრიქონები და Windows-ის ხმები ავტომატურად მუშავდება."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "%s ენის ლექსიკონის შემოწმება ვერ მოხერხდა. იხილეთ NVDA-ს ჟურნალი."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "%s ენის ლექსიკონი დაყენებულია."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "ამ სტრიქონს საკუთარი ხმა არ აქვს, ამიტომ მასზე სინთეზატორის ხმის ლექსიკონი ვრცელდება."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "ხმის ლექსიკონი"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "ხმის ლექსიკონი %s-სთვის"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "სინთეზატორის ჩატვირთვა ვერ მოხერხდა. იხილეთ NVDA-ს ჟურნალი."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "შეცდომა"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "ენის რედაქტირება"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "ენის დამატება"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "&სინთეზატორი:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&ხმა:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "&ვარიანტი:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&ენა:"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "&სიჩქარე"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "&ტონი"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "ხმის სიმაღ&ლე"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&ინტონაცია"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "დამა&ტებითი სიჩქარე"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "პუნქტუაციის/სიმბოლოს &დონე:"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "როგორც NVDA-ში"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&შემოწმება"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "შეიყვანეთ ენა."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s ენის კოდი არ არის. აირჩიეთ ხმა ან შეიყვანეთ კოდი, მაგალითად fr ან fr_FR."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "%s ენისთვის სტრიქონი უკვე არსებობს. ჩავანაცვლო?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "ენის ჩანაცვლება"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "ენების ცხრილი (მრავალენოვანი)"
+

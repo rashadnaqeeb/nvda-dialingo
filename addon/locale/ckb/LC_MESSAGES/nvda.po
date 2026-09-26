@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ckb\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "لەکارکەوتوو"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "تەنیا بەپێی نووسین"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "تەواو"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "فرەزمانی"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "دۆزینەوەی زمان دەگۆڕێت: ناچالاک، تەنیا بەپێی نووسین، تەواو"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "دۆزینەوەی زمان: %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "دۆزینەوەی توندی زمان چالاک یان ناچالاک دەکات"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "دۆزینەوەی توند چالاکە"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "دۆزینەوەی توند ناچالاکە"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "دادەمەزرێت"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "نەزانراو"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "نییە"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "دامەزراوە"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "داوای مۆڵەتی بەڕێوەبەرت لێدەکرێت بۆ دامەزراندنی فەرهەنگی Windows بۆ %s. بۆ دۆزینەوەی وردی زمان پێویستە."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "فەرهەنگی Windows"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "دەست پێنەکرا: مۆڵەتی بەڕێوەبەر نەدرا."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "فەرهەنگی %s دادەمەزرێت. NVDA کاتێک تەواو بوو ڕایدەگەیەنێت."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "فەرهەنگی %s دامەزرا."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "دامەزراندن تەواو بوو، بەڵام Windows هێشتا فەرهەنگی %s پیشان نادات. Windows دووبارە دەست پێبکەرەوە."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "فەرهەنگی %s دانەمەزرا. Windows Update یان لۆگی NVDA بپشکنە."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "&دۆزینەوەی زمان:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&توند: پێویستە دۆزینەوەی زمانی Windows-یش ڕازی بێت"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "لە ناو دەقی &نیشانکراو بە زمانی بنەڕەتیش بدۆزەرەوە"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "دەنگەکانی &Windows بەکاربهێنە بۆ ئەو زمانانەی سینسایزەر ناتوانێت بیانڵێت"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "&سینسایزەری بنەڕەت:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&زمانەکان (زمانی بنەڕەت پێویستی بە ڕیز نییە):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "زمان"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "دەنگ دووبارەکەرەوە"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "دەنگ"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "ڕێژە"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "تیژی دەنگ"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "ئاستی دەنگ"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "هێمایەکان"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "فەرهەنگ"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "&زیادبکە..."
+
+msgid "&Edit..."
+msgstr "&دەستکاری بکە..."
+
+msgid "&Remove"
+msgstr "&لابردن"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&پشتڕاستکردنەوەی پاکێجی زمان..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "&فەرهەنگی دەنگی..."
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "هەر ڕیزێک بە سینسایزەر و دەنگی خۆی قسە دەکات."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s بۆ هەر زمانێک دەنگی خۆی هەڵدەبژێرێت؛ ڕیزەکانی خێرایی، بەرزی و ئاستی دەنگ دادەنێن. ڕیزەکانی سینسایزەرەکانی تر و دەنگەکانی Windows بە شێوەی خۆکار بەڕێوە دەبرێن."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "فەرهەنگی %s نەپشکنرا. لۆگی NVDA ببینە."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "فەرهەنگی %s دامەزراوە."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "ئەم ڕیزە دەنگی تایبەت بە خۆی نییە، بۆیە فەرهەنگی دەنگی سینسایزەرەکە بۆی جێبەجێ دەکرێت."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "فەرهەنگی دەنگی"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "فەرهەنگی دەنگ بۆ %s"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "سینسایزەرەکە بار نەکرا. لۆگی NVDA ببینە."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "هەڵە"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "دەستکاری زمان"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "زیادکردنی زمان"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "دەنگ دووبارەکەرەوە:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&دەنگ:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "&هەمەجۆری:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&زمان:"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "&ڕێژە"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "&تیژی دەنگ"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "&ئاستی دەنگ"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&ڕێکخستنی تیژی دەنگ"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "&بەرزکردنەوەی ڕێژە"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "ئاستی خاڵبەندی/هێما:"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "وەک NVDA"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&تاقیکردنەوە"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "زمانێک بنووسە."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s کۆدی زمان نییە. دەنگێک هەڵبژێرە یان کۆدێک وەک fr یان fr_FR بنووسە."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "پێشتر ڕیزێک بۆ %s هەیە. بیگۆڕیت؟"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "گۆڕینی زمان"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "خشتەی زمانەکان (فرەزمانی)"
+

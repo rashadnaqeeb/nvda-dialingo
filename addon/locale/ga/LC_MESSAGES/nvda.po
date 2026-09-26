@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ga\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "as feidhm"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "De réir scripte amháin"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "Iomlán"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "Ilteangach"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "Athraíonn brath teanga: as, de réir scripte amháin, iomlán"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "Brath teanga: %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "Cuireann brath dian teanga ann nó as"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "Brath dian ann"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "Brath dian as"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "á shuiteáil"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "anaithnid"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "ar iarraidh"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "suiteáilte"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "Iarrfar cead riarthóra ort chun foclóir Windows a shuiteáil don teanga %s. Tá sé riachtanach le teanga a bhrath go cruinn."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Foclóir Windows"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "Níor tosaíodh: níor tugadh cead riarthóra."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "Foclóir %s á shuiteáil. Cuirfidh NVDA in iúl nuair a bheidh sé déanta."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "Foclóir %s suiteáilte."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "Suiteáil críochnaithe, ach ní thaispeánann Windows foclóir %s fós. Atosaigh Windows."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "Níor suiteáladh foclóir %s. Seiceáil Windows Update nó logchomhad NVDA."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "&Brath teanga:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&Dian: bíodh brath teanga Windows ar aon intinn freisin"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "Braith freisin i dtéacs atá &clibeáilte leis an teanga réamhshocraithe"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "Úsáid guthanna &Windows do theangacha nach labhraíonn an sintéiseoir"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "S&intéiseoir réamhshocraithe:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&Teangacha (ní gá ró don teanga réamhshocraithe):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "Teanga"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "Sintéiseoir"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "Guth"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "Ráta"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "Airde"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "Láine"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "Siombailí"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "Foclóir"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "&Cuir Leis..."
+
+msgid "&Edit..."
+msgstr "&Eagar..."
+
+msgid "&Remove"
+msgstr "&Bain"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&Fíoraigh pacáiste teanga..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "Foclóir &gutha..."
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "Labhraíonn gach ró lena shintéiseoir agus lena ghuth féin."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "Roghnaíonn %s a ghuth féin do gach teanga; socraíonn a rónna luas, airde agus airde fuaime. Óstáiltear rónna do shintéiseoirí eile agus guthanna Windows go huathoibríoch."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "Níorbh fhéidir foclóir %s a sheiceáil. Féach logchomhad NVDA."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "Tá foclóir %s suiteáilte."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "Níl guth dá cuid féin ag an ró seo, mar sin baineann foclóir gutha an tsintéiseora leis."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "Foclóir gutha"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "Foclóir gutha do %s"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "Níorbh fhéidir an sintéiseoir a lódáil. Féach logchomhad NVDA."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "Earráid"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "Cuir teanga in eagar"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "Cuir teanga leis"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "&Sintéiseoir:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&Guth:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "M&alairt:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&Teanga:"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "&Ráta"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "A&irde"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "&Láine"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&Casadh"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "Méadú rá&ta"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "&Leibhéal poncaíochta/siombailí:"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "Mar an gcéanna le NVDA"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&Tástáil"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "Cuir teanga isteach."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "Ní cód teanga é %s. Roghnaigh guth nó cuir cód isteach ar nós fr nó fr_FR."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "Tá ró ann cheana do %s. É a athsholáthar?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "Athsholáthair teanga"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "Tábla teangacha (ilteangach)"
+

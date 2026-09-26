@@ -1,0 +1,4 @@
+* text=auto
+*.pyd binary
+*.ftz binary
+*.mo binary

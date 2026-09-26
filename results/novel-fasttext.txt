@@ -1,0 +1,48 @@
+  FAIL '"Cependant, mon cher," he remarked, examining his nails from a distanc'
+       expected [None, 'fr', None] got ['fr', None] runs=[(None, '"'), ('fr', 'Cependant, mon cher," '), (None, 'he remarked, examining his nai')]
+  FAIL 'Oui, oui, je suis là.'
+       expected ['fr'] got [None, 'fr'] runs=[(None, 'Oui, '), ('fr', 'oui, je suis là.')]
+  FAIL '"Cependant, mon cher," he remarked, examining his nails from a distanc'
+       expected [None, 'fr', None, 'fr', None, 'fr', None] got ['fr', None, 'fr', None, 'fr'] runs=[(None, '"'), ('fr', 'Cependant, mon cher," '), (None, 'he remarked, examining his nai'), ('fr', 'malgre la haute estime que je '), (None, ' Russian army, '), ('fr', "j'avoue que votre victoire n'e"), (None, '*')]
+  FAIL '"\'Dieu me la donne, gare a qui la touche!\'* They say he was very fine '
+       expected [None, 'fr', None, 'it', None] got [None, 'fr', None, 'it'] runs=[(None, '"\'Dieu me la donne, '), ('fr', 'gare a qui la touche!'), (None, "'* They say he was very fine w"), ('it', "'Dio mi l'ha dato. Guai a chi "), (None, '\'"')]
+  FAIL '¿Tú eres Miguel? No, yo no soy Miguel.'
+       expected ['es'] got ['es', None, 'es'] runs=[(None, '¿'), ('es', 'Tú eres Miguel? '), (None, 'No, '), ('es', 'yo no soy Miguel.')]
+  FAIL 'Orange, la naranja'
+       expected es got [None] runs=[(None, 'Orange, la naranja')]
+  FAIL '7'
+       expected [None] got [] runs=[(None, '7')]
+  FAIL '?'
+       expected [None] got [] runs=[(None, '?')]
+fasttext: 42/50 acceptance cases pass
+  (accents stripped)
+fasttext: 1257 paragraphs, 200000 chars, 489 ms total, slowest paragraph 7.3 ms, 4615 recognizer calls
+  28 foreign runs:
+    [fr] le Vicomte de Mortemart,
+    [fr] Contez nous cela, Vicomte.”
+    [fr] au revoir!
+    [fr] gare a qui la touche!
+    [fr] Baton de gueules, engrele de gueules d’azur—maison Conde,”
+    [fr] une dame,
+    [fr] au revoir,”
+    [fr] mon cher,”
+    [fr] mon cher.
+    [fr] I am fond of you,
+    [fr] comme il faut,
+    [fr] mon cher,”
+    [fr] mon cher!”
+    [fr] Madame de Genlis! Madame de Genlis!”
+    [fr] humanum est errare,
+    [fr] ma bonne,”
+    [fr] mon tres honorable Alphonse Karlovich,”
+    [fr] Vous comptez vous faire des rentes sur l’etat;
+    [fr] La balance y est...
+    [fr] * Hors d’oeuvres.
+    [fr] Connaissez-vous le Proverbe:
+    [fr] Cela nous convient a merveille.
+    [fr] Je vous demande un peu,”
+    [fr] mon cousin,
+    [fr] mon cousin,”
+    [fr] un batard!”
+    [fr] mon cousin,
+    [fr] mon cousin,”

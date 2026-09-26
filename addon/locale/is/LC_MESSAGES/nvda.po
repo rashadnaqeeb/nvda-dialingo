@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: is\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "Slökkt"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "Aðeins eftir ritkerfi"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "Full"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "Fjöltyngi"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "Skiptir um tungumálagreiningu: slökkt, aðeins eftir ritkerfi, full"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "Tungumálagreining: %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "Kveikir eða slekkur á strangri tungumálagreiningu"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "Ströng greining á"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "Ströng greining af"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "verið að setja upp"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "óþekkt"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "vantar"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "uppsett"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "Beðið verður um stjórnandaheimild til að setja upp Windows-orðabók fyrir %s. Hún er nauðsynleg fyrir nákvæma tungumálagreiningu."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Windows-orðabók"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "Ekki hafið: stjórnandaheimild var ekki veitt."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "Verið er að setja upp orðabók fyrir %s. NVDA lætur vita þegar því er lokið."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "Orðabók fyrir %s uppsett."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "Uppsetningu lokið, en Windows sýnir ekki orðabók fyrir %s enn. Endurræstu Windows."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "Orðabók fyrir %s var ekki sett upp. Athugaðu Windows Update eða NVDA-atvikaskrána."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "Tungumála&greining:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&Ströng: krefjast þess einnig að tungumálagreining Windows sé sammála"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "Greina einnig í texta sem er &merktur með sjálfgefna tungumálinu"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "Nota &Windows-raddir fyrir tungumál sem talgervillinn talar ekki"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "Sjálfgefinn &talgervill:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&Tungumál (sjálfgefið tungumál þarf enga röð):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "Tungumál"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "Talgervill"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "Rödd"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "Hraði"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "Tónhæð"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "hljóðstyrkur"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "Tákn"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "Orðabók"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "&Bæta við..."
+
+msgid "&Edit..."
+msgstr "&Breyta..."
+
+msgid "&Remove"
+msgstr "&Fjarlægja"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&Staðfesta tungumálapakka..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "&Raddorðabók"
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "Hver röð talar með eigin talgervli og rödd."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s velur eigin rödd fyrir hvert tungumál; raðir þess stilla hraða, tónhæð og hljóðstyrk. Raðir annarra talgervla og Windows-raddir eru hýstar sjálfkrafa."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "Ekki tókst að athuga orðabók fyrir %s. Sjá NVDA-atvikaskrána."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "Orðabók fyrir %s er uppsett."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "Þessi lína hefur enga eigin rödd, svo raddorðabók talgervilsins gildir um hana."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "Raddorðabók"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "Raddorðabók fyrir %s"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "Ekki tókst að hlaða talgervlinum. Sjá NVDA-atvikaskrána."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "Villa"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "Breyta tungumáli"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "Bæta við tungumáli"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "&Talgervill:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&Rödd:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "&breyta:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&Tungumál:"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "&Hraði"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "&Tónhæð"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "hl&jóðstyrkur"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&Áhersla"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "au&ka hraða"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "Greinarmerkja og tákn&lesstig"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "Sama og í NVDA"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&Prófa"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "Sláðu inn tungumál."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s er ekki tungumálakóði. Veldu rödd eða sláðu inn kóða eins og fr eða fr_FR."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "Það er þegar til röð fyrir %s. Skipta henni út?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "Skipta um tungumál"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "Tungumálatafla (fjöltyngi)"
+

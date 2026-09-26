@@ -1,0 +1,10 @@
+backend fasttext, configured ['fr', 'es', 'de', 'it', 'pt']
+=== de.txt: 3109 lines, switched 51.4%, own language tagged 51.4%, 315 ms
+=== en.txt: 3283 lines, switched 0.1%, own language tagged 0.0%, 329 ms
+  false switch: [fr]Afrikaans grade 1
+  false switch: [fr]Afrikaans grade 2
+  false switch: [fr]numpad plus
+=== es.txt: 3203 lines, switched 50.3%, own language tagged 49.1%, 479 ms
+=== fr.txt: 3161 lines, switched 60.0%, own language tagged 59.8%, 508 ms
+=== it.txt: 3119 lines, switched 59.2%, own language tagged 59.0%, 501 ms
+=== pt.txt: 3212 lines, switched 41.3%, own language tagged 40.1%, 401 ms

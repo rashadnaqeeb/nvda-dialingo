@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ne\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "बन्द"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "लिपि अनुसार मात्र"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "पूर्ण"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "बहुभाषी"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "भाषा पहिचान बदल्छ: बन्द, लिपि अनुसार मात्र, पूर्ण"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "भाषा पहिचान: %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "कडा भाषा पहिचान खोल्छ वा बन्द गर्छ"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "कडा पहिचान खुला"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "कडा पहिचान बन्द"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "स्थापना हुँदै"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "अज्ञात"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "छैन"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "स्थापित"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "%s का लागि Windows शब्दकोश स्थापना गर्न तपाईंसँग प्रशासक अनुमति मागिनेछ। सही भाषा पहिचानका लागि यो आवश्यक छ।"
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Windows शब्दकोश"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "सुरु भएन: प्रशासक अनुमति दिइएन।"
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "%s शब्दकोश स्थापना हुँदैछ। सकिएपछि NVDA ले जानकारी दिनेछ।"
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "%s शब्दकोश स्थापना भयो।"
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "स्थापना सकियो, तर Windows ले अझै %s शब्दकोश देखाएको छैन। Windows पुनः सुरु गर्नुहोस्।"
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "%s शब्दकोश स्थापना भएन। Windows Update वा NVDA लग हेर्नुहोस्।"
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "भाषा &पहिचान:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&कडा: Windows को भाषा पहिचानको सहमति पनि चाहिने"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "पूर्वनिर्धारित भाषाले &ट्याग गरिएको पाठमा पनि पहिचान गर्ने"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "सिन्थेसाइजरले बोल्न नसक्ने भाषाका लागि &Windows का आवाज प्रयोग गर्ने"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "पूर्वनिर्धारित &सिन्थेसाइजर:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&भाषाहरू (पूर्वनिर्धारित भाषालाई पङ्क्ति चाहिँदैन):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "भाषा "
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "संश्लेषक"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "आवाज"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "दर"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "चर्कोपना"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "आयतन"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "चिन्ह"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "शब्दकोश"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "थपि देउ..."
+
+msgid "&Edit..."
+msgstr "&सम्पादन..."
+
+msgid "&Remove"
+msgstr "&हटाउ"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&भाषा प्याक प्रमाणित गर्नुहोस्..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "&आवाजको ढुकुटी"
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "हरेक पङ्क्ति आफ्नै सिन्थेसाइजर र आवाजले बोल्छ।"
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s ले हरेक भाषाका लागि आफ्नै आवाज छान्छ; यसका पङ्क्तिहरूले गति, पिच र आवाजको स्तर तय गर्छन्। अन्य सिन्थेसाइजरका पङ्क्ति र Windows का आवाजहरू स्वतः सम्हालिन्छन्।"
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "%s शब्दकोश जाँच गर्न सकिएन। NVDA लग हेर्नुहोस्।"
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "%s शब्दकोश स्थापित छ।"
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "यो पङ्क्तिको आफ्नै आवाज छैन, त्यसैले यसमा सिन्थेसाइजरको आवाज शब्दकोश लागू हुन्छ।"
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "आवाजको ढुकुटी"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "%s का लागि आवाज शब्दकोश"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "सिन्थेसाइजर लोड हुन सकेन। NVDA लग हेर्नुहोस्।"
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "गल्थी"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "भाषा सम्पादन"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "भाषा थप्नुहोस्"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "&संश्लेषक:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&आवाज:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "&स्वर:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&भाषा :"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "&दर"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "&चर्कोपना"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "आय&तन"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&उतार-चढाव"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "दर &वृद्धि"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "चिन्ह/सङ्केत &तह:"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "NVDA जस्तै"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&परीक्षण"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "एउटा भाषा लेख्नुहोस्।"
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s भाषा कोड होइन। कुनै आवाज छान्नुहोस् वा fr वा fr_FR जस्तो कोड लेख्नुहोस्।"
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "%s का लागि पहिले नै एउटा पङ्क्ति छ। यसलाई बदल्ने?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "भाषा बदल्नुहोस्"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "भाषा तालिका (बहुभाषी)"
+

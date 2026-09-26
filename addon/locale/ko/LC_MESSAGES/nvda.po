@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ko\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "끔"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "문자 체계로만"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "전체"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "다국어"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "언어 감지 전환: 끄기, 문자 체계로만, 전체"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "언어 감지 %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "엄격한 언어 감지 켜기/끄기"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "엄격한 감지 켬"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "엄격한 감지 끔"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "설치 중"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "알 수 없음"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "없음"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "설치됨"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "%s Windows 사전을 설치하기 위해 관리자 권한을 요청합니다. 정확한 언어 감지에 필요합니다."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Windows 사전"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "시작되지 않음: 관리자 권한이 부여되지 않았습니다."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "%s 사전을 설치하는 중입니다. 완료되면 NVDA가 알려 드립니다."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "%s 사전이 설치되었습니다."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "설치가 끝났지만 Windows에 %s 사전이 아직 표시되지 않습니다. Windows를 다시 시작하세요."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "%s 사전이 설치되지 않았습니다. Windows 업데이트 또는 NVDA 로그를 확인하세요."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "언어 감지(&D):"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "엄격: Windows 언어 감지의 동의도 요구(&S)"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "기본 언어로 태그된 텍스트 안에서도 감지(&T)"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "음성 엔진이 말할 수 없는 언어에 Windows 음성 사용(&W)"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "기본 음성 엔진(&Y):"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "언어(&L) (기본 언어는 행이 필요 없음):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "언어"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "음성 합성 엔진"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "음성"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "음성 속도"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "음성 높이"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "음성 크기"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "기호"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "사전"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "추가 (&A)..."
+
+msgid "&Edit..."
+msgstr "수정 (&E)..."
+
+msgid "&Remove"
+msgstr "제거 (&R)"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "언어 팩 확인(&V)..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "보이스 발음 사전 (&V)..."
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "각 행은 자체 음성 엔진과 음성으로 말합니다."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s은(는) 언어마다 자체 음성을 고릅니다. 그 행은 속도, 높낮이, 음량을 설정합니다. 다른 음성 엔진의 행과 Windows 음성은 자동으로 호스팅됩니다."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "%s 사전을 확인할 수 없습니다. NVDA 로그를 확인하세요."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "%s 사전이 설치되어 있습니다."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "이 행에는 고유 음성이 없으므로 음성 엔진의 음성 사전이 적용됩니다."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "보이스 발음 사전"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "%s 음성 사전"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "음성 엔진을 불러올 수 없습니다. NVDA 로그를 확인하세요."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "오류"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "언어 편집"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "언어 추가"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "음성 엔진 (&S):"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "음성 (&V):"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "음성 버전 (&A):"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "언어 (&L):"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "음성 속도 (&R)"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "음성 높이 (&P)"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "음성 크기 (&O)"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "억양 (&I)"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "음성 속도 부스트 (&T)"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "구두점/기호 출력 수준 (&L):"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "NVDA와 같음"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "테스트(&T)"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "언어를 입력하세요."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s은(는) 언어 코드가 아닙니다. 음성을 고르거나 fr 또는 fr_FR 같은 코드를 입력하세요."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "%s에 대한 행이 이미 있습니다. 바꾸시겠습니까?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "언어 바꾸기"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "언어 표 (다국어)"
+

@@ -1,0 +1,54 @@
+# Known gaps
+
+Things found and deliberately left alone, with the reason. When one is fixed, delete it.
+
+## Left by decision
+
+- One configured Latin-script language takes all Latin text it is detected in. Left as designed.
+- Latin names inside non-Latin text (a French name in Russian) often go to the English row. Part of the item above.
+- Close neighbours in a non-Latin script without a Windows spelling dictionary (Serbian and Russian, Hindi and Marathi) are sometimes confused. Measured; there is no dictionary to check against.
+- A single Japanese word is often a single kana and is not switched. By design: one character is too little to tell.
+- A synthesizer that reports only Chinese (AiSound) sends English to a Windows voice when Windows voices are on, although it reads English itself. A row for English on that synthesizer keeps English there.
+
+## Speech: could stall until the next keypress
+
+- A synthesizer that fails silently, with neither an index nor done afterwards, holds all speech until the next cancel. Seen in the code of RHVoice (a message it cannot start) and Sonata (its helper process failing). A watchdog per piece would recover it, but a long line at a slow rate can legitimately run a long time without an index, so a watchdog could cut off good speech. Left until it is seen to happen.
+- A synthesizer the add-on does not know, which reports done only once it is idle and fails right after a successful piece, has that done taken for the done of the successful piece. OneCore, Eloquence, and SAPI 4 are known and excluded. Rare.
+
+## Speech: audible but not blocking
+
+- 32-bit SAPI 5 voices, through NVDA's bridge: done comes before the audio ends, so the next voice can clip the tail, and a change of voice on the same synthesizer can cut the end of the previous piece. The add-on cannot see the player in the other process.
+- Over NVDA's 32-bit bridge (SAPI 4, SAPI 5, AiSound), inflection cannot be set; the row's inflection is ignored. NVDA's gap.
+- Any 32-bit synthesizer in the table keeps NVDA's audio ducking off for as long as the language table is in use, not just while that row speaks. Loading it only when needed would delay the first utterance by the start of a process.
+- A break at the very start of a piece on another synthesizer is trimmed as leading silence by NVDA's audio player.
+- Sonata: two Sonata voices in the table (the default and a row, or two rows) reload a model on NVDA's main thread at every switch between them, freezing NVDA briefly.
+- Sonata: a narrow window where the done of a cancelled utterance can land after the next one starts.
+- eSpeak's rate multiplier is approximate, as in NVDA itself.
+- Eloquence: the language and voice annotations it emits stay in effect on the instance into its next piece; only its memory of the last language is reset, on a change of voice.
+- Acapela: a change of voice queues a stop on the driver's own thread, which every cancel ends and restarts, so in a rare order the stop could run while the next piece is starting and silence it. Read from the code only; not seen.
+
+## Settings side effects
+
+- Sonata remembers the last variant used per voice in its own settings; a Sonata row's variant is written there, so using that voice outside the table opens it in the row's variant.
+- Vocalizer and Acapela: a row that carries no rate, pitch, or volume speaks at that voice's own engine values (Acapela resets all three on every change of voice). Rows made in the dialog always carry them.
+- Vocalizer: its own settings panel re-initializes its engine when Vocalizer is not the synthesizer in use, which it is not while hosted. Expected to be harmless; not verified.
+- Vocalizer: voices added while it is hosted are not seen until the table is rebuilt, and removing its licence does not switch away from it while hosted.
+- eSpeak pitch and inflection 50 read back as 51, so the value is set again at each row switch. Harmless.
+- With several Windows voices for one language, the implicit Windows row uses the first in registry order. A row picks another.
+
+## Not supported
+
+- Code Factory's Vocalizer and Eloquence pack, the older Vocalizer Expressive driver, the original Sonata, and Dual Voice cannot load in NVDA 2026 (32-bit code in a 64-bit NVDA, or too old for its add-on API).
+- WorldVoice is refused as a row and as the default: it is a language table itself and breaks an eSpeak guest and NVDA's index tracking.
+- Acapela's own driver before 1.9.5 cannot load in NVDA 2026 (32-bit).
+
+## Acapela driver that plays through its engine
+
+Handled from its code alone, without running it. To check once it can be run:
+
+- Whether its engine queues a second call or cuts the first short. It is sent one piece at a time either way, which costs nothing NVDA does not do itself.
+- Whether its engine reports the end of a call cancelled by a reset. If it does, that done can finish the next piece early.
+- Which number its engine reports for a mark it was given one higher; either is handled.
+- It reports every notification for its newest instance, not the one speaking. The add-on keeps one instance, taking over the settings dialog's; a second one would get the first's notifications.
+- It ignores pitch and volume commands, so a capital letter is not raised, and it resolves a rate command against a fixed value rather than its own rate. NVDA sends rate commands only from SSML, which is rare.
+- It reports no language for its voices, so the language table cannot tell which language a row's voice speaks; the row's language is what the user entered.

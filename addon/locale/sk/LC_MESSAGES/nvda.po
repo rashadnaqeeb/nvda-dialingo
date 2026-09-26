@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: multilanguage\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: sk\n"
+
+#. Translators: A detection mode: no language detection.
+msgid "Off"
+msgstr "Vypnuté"
+
+#. Translators: A detection mode: only text in another writing system is switched.
+msgid "By script only"
+msgstr "Len podľa písma"
+
+#. Translators: A detection mode: text in the default script is detected clause by clause too.
+msgid "Full"
+msgstr "Úplné"
+
+#. Translators: The name of the add-on's script category and settings panel.
+msgid "Multilanguage"
+msgstr "Viacjazyčnosť"
+
+#. Translators: Description of a script.
+msgid "Cycles language detection: off, by script only, full"
+msgstr "Prepína rozpoznávanie jazyka: vypnuté, len podľa písma, úplné"
+
+#. Translators: Reported when the detection mode changes; %s is the mode's name.
+msgid "Language detection %s"
+msgstr "Rozpoznávanie jazyka: %s"
+
+#. Translators: Description of a script.
+msgid "Toggles strict language detection"
+msgstr "Prepína prísne rozpoznávanie jazyka"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection on"
+msgstr "Prísne rozpoznávanie zapnuté"
+
+#. Translators: Reported when strict mode is turned on or off.
+msgid "Strict detection off"
+msgstr "Prísne rozpoznávanie vypnuté"
+
+#. Translators: Shown in the languages list while the Windows dictionary is being installed.
+msgid "installing"
+msgstr "inštaluje sa"
+
+#. Translators: Shown in the languages list when whether the language's Windows dictionary is
+msgid "unknown"
+msgstr "neznámy"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is missing.
+msgid "missing"
+msgstr "chýba"
+
+#. Translators: Shown in the languages list when the language's Windows dictionary is installed.
+msgid "installed"
+msgstr "nainštalovaný"
+
+#. Translators: Asks to install the Windows dictionary; %s is a language name.
+msgid "You will be asked to grant administrator permission to install the Windows dictionary for %s. It is required for accurate language detection."
+msgstr "Budete požiadaní o oprávnenie správcu na inštaláciu slovníka Windows pre jazyk %s. Je potrebný na presné rozpoznávanie jazyka."
+
+#. Translators: Title of the dialogs about the Windows dictionary install.
+msgid "Windows dictionary"
+msgstr "Slovník Windows"
+
+#. Translators: Message when the elevated install did not start.
+msgid "Not started: administrator permission was not given."
+msgstr "Nespustené: oprávnenie správcu nebolo udelené."
+
+#. Translators: Announced when the dictionary install starts; %s is a language name.
+msgid "Installing the %s dictionary. NVDA will report when done."
+msgstr "Inštaluje sa slovník pre jazyk %s. NVDA oznámi dokončenie."
+
+#. Translators: Message when the Windows dictionary finished installing; %s is a language name.
+msgid "%s dictionary installed."
+msgstr "Slovník pre jazyk %s nainštalovaný."
+
+#. Translators: Message when the install ended but the dictionary is still not found; %s is a language name.
+msgid "Install finished, but Windows does not show the %s dictionary yet. Restart Windows."
+msgstr "Inštalácia dokončená, ale Windows slovník pre jazyk %s zatiaľ nezobrazuje. Reštartujte Windows."
+
+#. Translators: Message when the install failed; %s is a language name.
+msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
+msgstr "Slovník pre jazyk %s nebol nainštalovaný. Skontrolujte Windows Update alebo protokol NVDA."
+
+#. Translators: Label of the detection mode combo box.
+msgid "Language &detection:"
+msgstr "&Rozpoznávanie jazyka:"
+
+#. Translators: Label of a check box.
+msgid "&Strict: also require Windows language detection to agree"
+msgstr "&Prísne: vyžadovať aj súhlas rozpoznávania jazyka Windows"
+
+#. Translators: Label of a check box.
+msgid "Detect inside text &tagged with the default language"
+msgstr "Rozpoznávať aj v texte &označenom predvoleným jazykom"
+
+#. Translators: Label of a check box.
+msgid "Use &Windows voices for languages the synthesizer cannot speak"
+msgstr "Používať hlasy &Windows pre jazyky, ktoré hlasový výstup nevie"
+
+#. Translators: Label of the combo box that picks the synthesizer for the default language.
+msgid "Default s&ynthesizer:"
+msgstr "Predvolený h&lasový výstup:"
+
+#. Translators: Label of the languages list; the default language has no row.
+msgid "&Languages (the default needs no row):"
+msgstr "&Jazyky (predvolený jazyk riadok nepotrebuje):"
+
+#. Translators: Column headers of the languages list.
+msgid "Language"
+msgstr "Jazyk"
+
+#. Translators: Column headers of the languages list.
+msgid "Synthesizer"
+msgstr "Hlasový výstup"
+
+#. Translators: Column headers of the languages list.
+msgid "Voice"
+msgstr "Hlas"
+
+#. Translators: Column headers of the languages list.
+msgid "Rate"
+msgstr "Tempo"
+
+#. Translators: Column headers of the languages list.
+msgid "Pitch"
+msgstr "Výška"
+
+#. Translators: Column headers of the languages list.
+msgid "Volume"
+msgstr "Hlasitosť"
+
+#. Translators: Column headers of the languages list.
+msgid "Symbols"
+msgstr "Symboly"
+
+#. Translators: Column headers of the languages list.
+msgid "Dictionary"
+msgstr "Slovník"
+
+#. Translators: Buttons of the languages list.
+msgid "&Add..."
+msgstr "&Pridať..."
+
+msgid "&Edit..."
+msgstr "&Upraviť..."
+
+msgid "&Remove"
+msgstr "&Odstrániť"
+
+#. Translators: Button that checks whether the selected language's Windows language pack (its dictionary) is installed and offers to install it.
+msgid "&Verify language pack..."
+msgstr "&Overiť jazykový balík..."
+
+#. Translators: Button that edits the voice dictionary of the selected row's voice.
+msgid "V&oice dictionary..."
+msgstr "Slo&vník pre aktuálny hlas..."
+
+#. Translators: A note in the settings panel.
+msgid "Each row speaks with its own synthesizer and voice."
+msgstr "Každý riadok hovorí vlastným hlasovým výstupom a hlasom."
+
+#. Translators: A note in the settings panel; %s is the current synthesizer.
+msgid "%s picks its own voice per language; its rows set rate, pitch, and volume. Rows for other synthesizers, and Windows voices, are hosted automatically."
+msgstr "%s si pre každý jazyk volí vlastný hlas; jeho riadky nastavujú rýchlosť, výšku a hlasitosť. Riadky iných hlasových výstupov a hlasy Windows sa obsluhujú automaticky."
+
+#. Translators: Message when whether the selected language's Windows dictionary is installed could
+msgid "Could not check the %s dictionary. See the NVDA log."
+msgstr "Slovník pre jazyk %s sa nepodarilo skontrolovať. Pozrite protokol NVDA."
+
+#. Translators: Message when the selected language's Windows dictionary is already installed; %s is its name.
+msgid "The %s dictionary is installed."
+msgstr "Slovník pre jazyk %s je nainštalovaný."
+
+#. Translators: Message when the selected row has no voice whose dictionary could be edited.
+msgid "This row has no voice of its own, so the synthesizer's voice dictionary applies to it."
+msgstr "Tento riadok nemá vlastný hlas, platí preň teda slovník hlasu hlasového výstupu."
+
+#. Translators: Title of the messages about a row voice's dictionary.
+msgid "Voice dictionary"
+msgstr "Slovník pre aktuálny hlas"
+
+#. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
+msgid "Voice dictionary for %s"
+msgstr "Slovník hlasu pre %s"
+
+#. Translators: Message when a synthesizer fails to load.
+msgid "Synthesizer could not be loaded. See the NVDA log."
+msgstr "Hlasový výstup sa nepodarilo načítať. Pozrite protokol NVDA."
+
+#. Translators: Message when a synthesizer cannot be loaded.
+msgid "Error"
+msgstr "Chyba"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Edit language"
+msgstr "Upraviť jazyk"
+
+#. Translators: Title of the dialog that edits a language of the table.
+msgid "Add language"
+msgstr "Pridať jazyk"
+
+#. Translators: Label of the synthesizer combo box in the language dialog.
+msgid "&Synthesizer:"
+msgstr "&Hlasový výstup:"
+
+#. Translators: Label of the voice combo box in the language dialog.
+msgid "&Voice:"
+msgstr "&Hlas:"
+
+#. Translators: Label of the variant combo box in the language dialog.
+msgid "V&ariant:"
+msgstr "V&ariant:"
+
+#. Translators: Label of the language combo box in the language dialog.
+msgid "&Language:"
+msgstr "&Jazyk:"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Rate"
+msgstr "&Tempo"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Pitch"
+msgstr "&Výška"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "V&olume"
+msgstr "H&lasitosť"
+
+#. Translators: Labels of the parameter sliders in the language dialog.
+msgid "&Inflection"
+msgstr "&Intonácia"
+
+#. Translators: Label of a check box in the language dialog.
+msgid "Rate &boost"
+msgstr "Znáso&biť tempo"
+
+#. Translators: Label of the combo box that picks how much punctuation and how many symbols are
+msgid "Pu&nctuation/symbol level:"
+msgstr "Úroveň interpunkcie"
+
+#. Translators: The choice that speaks this language's punctuation at NVDA's own level.
+msgid "Same as NVDA"
+msgstr "Rovnako ako NVDA"
+
+#. Translators: Label of the button that speaks a sample with the chosen voice.
+msgid "&Test"
+msgstr "&Vyskúšať"
+
+#. Translators: Message when the language field is empty.
+msgid "Enter a language."
+msgstr "Zadajte jazyk."
+
+#. Translators: Message when the language field holds something other than a language code; %s is the text.
+msgid "%s is not a language code. Pick a voice or enter a code such as fr or fr_FR."
+msgstr "%s nie je kód jazyka. Vyberte hlas alebo zadajte kód, napríklad fr alebo fr_FR."
+
+#. Translators: Asks whether a new or edited row replaces another row for the same language; %s is
+msgid "There is already a row for %s. Replace it?"
+msgstr "Pre jazyk %s už riadok existuje. Nahradiť ho?"
+
+#. Translators: Title of the message that asks whether to replace a language's row.
+msgid "Replace language"
+msgstr "Nahradiť jazyk"
+
+#. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
+msgid "Language table (multilanguage)"
+msgstr "Tabuľka jazykov (viacjazyčnosť)"
+

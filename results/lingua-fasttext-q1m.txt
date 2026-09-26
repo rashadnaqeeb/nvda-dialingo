@@ -1,0 +1,10 @@
+backend fasttext, configured ['fr', 'es']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 279 ms
+=== sentences/es.txt: 1000 lines, switched 98.2%, own language tagged 98.2%, 2740 ms
+=== sentences/fr.txt: 1000 lines, switched 98.2%, own language tagged 98.2%, 2113 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/es.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 10 ms
+=== single-words/fr.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 11 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, 102 ms
+=== word-pairs/es.txt: 1000 lines, switched 60.7%, own language tagged 60.6%, 297 ms
+=== word-pairs/fr.txt: 1000 lines, switched 80.6%, own language tagged 80.6%, 302 ms

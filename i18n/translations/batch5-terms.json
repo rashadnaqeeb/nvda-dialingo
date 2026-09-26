@@ -1,0 +1,101 @@
+{
+ "af_ZA": {
+  "T2": "&Stem:",
+  "T3": "V&ariant:",
+  "T4": "&Taal:",
+  "T5": "Taal",
+  "T6": "Sintetiseerder",
+  "T7": "Stem",
+  "T8": "Spoed",
+  "T9": "Toonhoogte",
+  "T10": "Volume",
+  "T11": "&Spoed",
+  "T12": "&Toonhoogte",
+  "T13": "V&olume",
+  "T14": "&Intonasie",
+  "T15": "Fout",
+  "T16": "&Voeg by...",
+  "T17": "&Wysig...",
+  "T18": "&Verwyder",
+  "S38": "Spoed&hupstoot"
+ },
+ "am": {
+  "T1": "&ሲንተሳይዘር፦",
+  "T6": "ሲንተሳይዘር",
+  "T9": "ቅላጼ",
+  "T12": "&ቅላጼ",
+  "T15": "ስህተት",
+  "T17": "&አርትዕ...",
+  "S38": "የፍጥነት &ማበረታቻ",
+  "T19": "የድምፅ መዝገበ ቃላት",
+  "T20": "የድምፅ &መዝገበ ቃላት..."
+ },
+ "an": {
+  "T3": "V&ariant:",
+  "T6": "Sintetizador",
+  "T15": "Error"
+ },
+ "id": {
+  "T3": "V&arian:",
+  "T6": "Sintesis",
+  "T10": "Volume",
+  "T13": "V&olume",
+  "S38": "Percepatan &laju"
+ },
+ "is": {
+  "T6": "Talgervill",
+  "S38": "Auka &hraða"
+ },
+ "so": {
+  "T1": "&Codbixiye:",
+  "T2": "&Cod:",
+  "T3": "&Nooc:",
+  "T4": "&Luqad:",
+  "T5": "Luqad",
+  "T6": "Codbixiye",
+  "T7": "Cod",
+  "T8": "Xawaare",
+  "T9": "Dhawaaq",
+  "T10": "Heerka codka",
+  "T11": "&Xawaare",
+  "T12": "&Dhawaaq",
+  "T13": "Heerka c&odka",
+  "T14": "&Luuq",
+  "T15": "Khalad",
+  "T16": "&Ku dar...",
+  "T17": "&Wax ka beddel...",
+  "T18": "&Tirtir",
+  "S38": "Xawaare &dheeraad ah",
+  "T19": "Qaamuuska codka",
+  "T20": "Qaamuuska &codka..."
+ },
+ "sq": {
+  "T6": "Sintetizatori",
+  "T17": "&Ndrysho...",
+  "S38": "Shpejtim i &shpejtësisë"
+ },
+ "th": {
+  "T6": "ซินธิไซเซอร์",
+  "T17": "&แก้ไข...",
+  "S38": "เร่ง&ความเร็ว"
+ },
+ "ur": {
+  "T1": "&سنتھیسائزر:",
+  "T4": "&زبان:",
+  "T5": "زبان",
+  "T6": "سنتھیسائزر",
+  "T15": "خرابی",
+  "T16": "&شامل کریں...",
+  "T17": "&ترمیم...",
+  "T18": "&ہٹائیں",
+  "S38": "رفتار &بڑھاؤ",
+  "T19": "آواز کی لغت",
+  "T20": "آواز کی &لغت..."
+ },
+ "nb_NO": {
+  "T3": "V&ariant:"
+ },
+ "nn_NO": {
+  "T3": "V&ariant:"
+ }
+}

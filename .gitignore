@@ -1,0 +1,23 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+
+# Build output: rebuilt by build.py
+dist/
+*.nvda-addon
+
+# Local virtual environments
+.venv/
+venv/
+env/
+
+# Editor, OS, and tool files
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+.claude/
