@@ -79,6 +79,13 @@ def acceptance(backend):
     for t in ["Documents", "Documents list", "Send message", "Si", "Orange", "Claude Code v2.1.37", "Claude Code", "claude-fable-5-1", "Sort options", "Sort Options", "Welcome to Claude Code", "Anna Pavlovna Scherer"]:
         case(E, t, [None])
     case(E, "Hola, buenos días", ["es"])
+    # Headlines: every word capitalized or in capitals, where case marks no names or abbreviations.
+    H = Detector(backend, "en", ["en", "hu"])
+    case(H, "Az Európai Autóipar Halála", ["hu"])
+    case(H, "MOST VAGY SOHA! 🤩 | X-MEN ORIGINS: WOLVERINE", ["hu", None])
+    case(H, "Pisti és Nessaj a harc mesterei 😂", ["hu"])
+    for t in ["Send Us Your Feedback Today", "READ THE FULL STORY HERE", "Mario Moreno, muerte"]:
+        case(E, t, [None])
     for t in ["y", "o", "e", "a", "I", "ñ", "Y", "7", "?"]:
         case(D, t, [None])
     # Script mode: other scripts go by script alone, a lone borrowed letter stays.

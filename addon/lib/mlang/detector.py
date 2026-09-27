@@ -73,6 +73,24 @@ def common_words(text):
     return out
 
 
+def headline(text):
+    """Whether a clause is a headline, where case says nothing of names or abbreviations: two or more words
+    in capitals ("MOST VAGY SOHA"), or three or more that all start with one ("Az Európai Autóipar Halála").
+    Two capitalized words alone are as often a name ("Mario Moreno")."""
+    ws = [w for w in words(text) if any(c.isupper() or c.islower() for c in w)]
+    if len(ws) < 2 or not all(w[0].isupper() for w in ws):
+        return False
+    return len(ws) >= 3 or not any(c.islower() for w in ws for c in w)
+
+
+def scored_words(text):
+    """The words a clause is judged by: in a headline all of them, lowercased, since the recognizer reads
+    capitals poorly; elsewhere the common ones."""
+    if headline(text):
+        return [w.lower() for w in words(text)]
+    return common_words(text)
+
+
 def is_text(piece):
     return sum(1 for c in piece if c.isalpha()) >= 2
 
@@ -201,14 +219,14 @@ class Detector:
         exists for English clauses mistaken for another language, which the English dictionary spells."""
         if self.dictionaries_decide(text, language):
             return True
-        return self.is_near_certain(" ".join(common_words(text)), language)
+        return self.is_near_certain(" ".join(scored_words(text)), language)
 
     def survives_dictionaries(self, text, language):
         """A clause the default dictionary accepts whole switches only if the guess's own dictionary accepts it
         too and the guess is near certain between the two languages; a clause the default rejects a word of stands."""
         if self.dictionary is None:
             return True
-        scored = self._scored(" ".join(common_words(text)))
+        scored = self._scored(" ".join(scored_words(text)))
         if self.dictionary.rejects_a_word(scored, self.default_tag) is not False:
             return True
         if self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is True:
@@ -216,7 +234,7 @@ class Detector:
         return self.is_near_certain(scored, language)
 
     def hypothesis(self, text, counting_names=False, candidates=None):
-        ws = words(text) if counting_names else common_words(text)
+        ws = words(text) if counting_names else scored_words(text)
         scored = self._scored(" ".join(ws))
         if not is_text(scored):
             return None
@@ -246,7 +264,7 @@ class Detector:
         what the recognizer cannot."""
         if self.dictionary is None:
             return False
-        scored = self._scored(" ".join(common_words(text)))
+        scored = self._scored(" ".join(scored_words(text)))
         if self.dictionary.rejects_a_word(scored, self.default_tag) is not True:
             return False
         return self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is False
@@ -257,6 +275,9 @@ class Detector:
         if not guess or guess[0] == self.default:
             return False
         lang, conf = guess
+        if headline(text):
+            # Names are scored in a headline, so it switches only near certain, never on the dictionaries alone.
+            return conf >= EMBEDDED_FLOOR and self.survives_dictionaries(text, lang)
         if conf >= FLOOR:
             return self.survives_dictionaries(text, lang)
         return conf >= DICTIONARY_FLOOR and self.dictionaries_decide(text, lang)
@@ -476,7 +497,7 @@ class Detector:
 
         scored = set()
         for i, (s, e, _) in enumerate(cls):
-            if len(common_words(chunk[s:e])) >= 2:
+            if len(scored_words(chunk[s:e])) >= 2:
                 scored.add(i)
                 g = guess(i)
                 if self.switches(chunk[s:e], g):
@@ -550,9 +571,10 @@ class Detector:
             # suits a recognizer whose confidence grows with the text; fastText dips on a two-word
             # fragment ("Orthodox army" scored 0.89 between "Russian army" at 0.999 and "the army" at 0.98),
             # so every length is tried and the rest is still held to the foreign and embedded floors.
+            # Two words at least, counted as words: "mesterei 😂" is one, and a lone word is never judged.
             found = None
             for length in range(2, len(ws) - 1):
-                if self.is_default(end(length)):
+                if len(words(end(length))) >= 2 and self.is_default(end(length)):
                     found = length
             return found
 

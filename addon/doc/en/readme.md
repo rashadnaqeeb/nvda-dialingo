@@ -54,6 +54,7 @@ Strict mode asks Windows' own language detection to agree with the add-on's reco
 
 - A single word never switches. Two or more ordinary words are needed.
 - Names, abbreviations, numbers, paths, and identifiers are not counted.
+- Headlines are the exception: in a line of three or more words that all start with a capital, or two or more in capitals, every word counts, and the line must be nearly certain to switch.
 - A short clause follows the language of its neighbors in the same sentence: "No" in "¿Tú eres Miguel? No, yo no soy Miguel." stays Spanish.
 - A foreign clause between clauses of the default language must be nearly certain.
 - A clause the default language's spelling dictionary accepts whole needs stronger evidence. Windows' spelling dictionaries are used where installed.
