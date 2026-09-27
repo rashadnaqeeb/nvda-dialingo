@@ -1,8 +1,8 @@
-backend fasttext, configured ['fr', 'es', 'de', 'it', 'pt']
-=== de.txt: 3109 lines, switched 51.9%, own language tagged 51.9%, 916 ms
-=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, 428 ms
+backend fasttext, default en, configured ['fr', 'es', 'de', 'it', 'pt']
+=== de.txt: 3109 lines, switched 52.1%, own language tagged 51.9%, 2628 ms
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, 739 ms
   false switch: [de]drft cmnt
-=== es.txt: 3203 lines, switched 55.6%, own language tagged 55.4%, 1508 ms
-=== fr.txt: 3161 lines, switched 71.8%, own language tagged 71.6%, 1588 ms
-=== it.txt: 3119 lines, switched 61.4%, own language tagged 61.2%, 1439 ms
-=== pt.txt: 3212 lines, switched 45.8%, own language tagged 44.8%, 1238 ms
+=== es.txt: 3203 lines, switched 78.4%, own language tagged 78.2%, 3236 ms
+=== fr.txt: 3161 lines, switched 80.0%, own language tagged 79.8%, 3032 ms
+=== it.txt: 3119 lines, switched 61.5%, own language tagged 61.2%, 2958 ms
+=== pt.txt: 3212 lines, switched 54.1%, own language tagged 45.0%, 2871 ms

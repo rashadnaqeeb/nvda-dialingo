@@ -58,8 +58,10 @@ def acceptance(backend):
     case(A, "\"Well, mon cher,\" said the vicomte, \"your little princess is very nice.\"", [None, "fr", None])
     # Expectations list the runs that hold letters; a bare quote run does not count.
     case(A, "\"Cependant, mon cher,\" he remarked, examining his nails from a distance.", ["fr", None])
-    for t in ["Pierre looked at Lorrain.", "Attendez", "Oui", "Pierre, said the vicomte."]:
+    for t in ["Pierre looked at Lorrain.", "Oui", "Pierre, said the vicomte."]:
         case(A, t, [None])
+    # A lone word goes by the dictionaries: these need the English, French, and Spanish ones installed.
+    case(A, "Attendez", ["fr"])
     case(A, "sentence: malgre la haute estime que je professe pour the Orthodox Russian army, j'avoue que votre victoire n'est pas des plus victorieuses", [None, "fr", None, "fr"])
     case(A, "Oui, oui, je suis là.", ["fr"])
     case(A, "tyler whitcomb , demain, je passerai chez le garagiste et je lui demanderai combien coûte la réparation de la voiture. Et je vous tiendrai au courant de sa réponse. Merci mille fois pour votre aide, vraiment. , 8:05 PM  message", [None, "fr", None])
@@ -70,8 +72,11 @@ def acceptance(backend):
     italian = "\"'Dieu me la donne, gare a qui la touche!'* They say he was very fine when he said that,\" he remarked, repeating the words in Italian: \"'Dio mi l'ha dato. Guai a chi la tocchi!'\""
     case(C, italian, ["fr", None])
     case(C3, italian, ["fr", None, "it"])
-    for t in ["No", "OK", "Cancel", "Documents", "Send message", "Guardar", "60 sesenta", "Lesson 11 (32 points)", "Pierre looked at Lorrain."]:
+    for t in ["No", "OK", "Cancel", "Documents", "Send message", "Lesson 11 (32 points)", "Pierre looked at Lorrain.",
+              "Spotify", "paris", "numLock", "Nessaj"]:
         case(D, t, [None])
+    for t in ["Guardar", "Cancelar", "60 sesenta"]:
+        case(D, t, ["es"])
     for t in ["¿Tú eres Miguel? No, yo no soy Miguel.", "Hola, buenos días"]:
         case(D, t, ["es"])
     for t in ["Orange, la naranja", "Desk, el escritorio"]:

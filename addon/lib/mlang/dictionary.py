@@ -180,6 +180,18 @@ class Dictionary:
             if store is not None:
                 store.clear()
 
+    def rejects_everywhere(self, text, language):
+        """rejects_a_word in every installed region of the language: US English rejects "metres" and
+        Canadian English knows it."""
+        verdict = self.rejects_a_word(text, language)
+        if verdict is not True:
+            return verdict
+        root = base(language)
+        for tag in self.tags or ():
+            if base(tag) == root and self.rejects_a_word(text, tag) is False:
+                return False
+        return True
+
     def rejects_a_word(self, text, language):
         key = (language, text)
         if key in self.cache:

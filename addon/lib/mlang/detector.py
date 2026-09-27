@@ -18,6 +18,7 @@ EMBEDDED_FLOOR = 0.98
 SCRIPT_FLOOR = 0.5
 DICTIONARY_FLOOR = 0.5
 UNCONFIGURED_MARGIN = 3.0
+LONE_WORD_LETTERS = 4
 # Arabic, Devanagari, Armenian, Ethiopic, and full-width marks as well as the Latin ones.
 CLAUSE_ENDS = set('"“”«»,;:()!?.—–\n。，¿¡،؛؟।॥։።፣፤！？；：、')
 SENTENCE_ENDS = set('.!?。\n؟।॥։።！？')
@@ -476,12 +477,51 @@ class Detector:
     # ------------------------------------------------------------ full mode
 
     def by_clause(self, text):
+        lone = self.lone_word(text)
+        if lone:
+            return [(lone, text)]
         runs = []
         for index, chunk in enumerate(text.split(SEPARATOR)):
             if index > 0:
                 runs.append((runs[-1][0] if runs else None, SEPARATOR))
             runs += self.clause_runs(chunk)
         return merge(runs)
+
+    def lone_word(self, text):
+        """The language of text that is one word alone, as a button or a link is, or None. The recognizer
+        cannot tell one word, so the dictionaries do: the default's rejects it in every installed region and
+        exactly one configured language's accepts it. Against a configured language with no dictionary the
+        recognizer arbitrates, but never against the default, whose dictionary has spoken: it calls "Cancelar"
+        English at 0.89 and "fraser" at 0.60. "Keresés" beside an English default is Hungarian; "Spotify",
+        which the English dictionary knows, is not, nor "paris", which it knows capitalized, nor "numLock"."""
+        if self.dictionary is None:
+            return None
+        ws = words(text)
+        if len(ws) != 1 or len(ws[0]) < LONE_WORD_LETTERS or not any(c.islower() for c in ws[0]):
+            return None
+        w = ws[0]
+        if any(a.islower() and b.isupper() for a, b in zip(w, w[1:])):
+            return None  # an identifier
+        scored = self._scored(w)
+        if self.dictionary.rejects_everywhere(scored, self.default_tag) is not True:
+            return None
+        if w.islower() and self.dictionary.rejects_a_word(scored.capitalize(), self.default_tag) is False:
+            return None  # a name, written small
+        accepting, unknown = [], []
+        for code in self.clause_candidates:
+            if code != self.default:
+                verdict = self.dictionary.rejects_a_word(scored, self.spelling[code])
+                if verdict is False:
+                    accepting.append(code)
+                elif verdict is None:
+                    unknown.append(code)
+        if len(accepting) != 1:
+            return None
+        if not unknown:
+            return accepting[0]
+        self.calls += 1
+        g = self.backend.constrained(scored, accepting + unknown)
+        return accepting[0] if g and g[0] == accepting[0] and g[1] >= DICTIONARY_FLOOR else None
 
     def clause_runs(self, chunk):
         if not any(c.isalpha() for c in chunk):
