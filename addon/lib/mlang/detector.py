@@ -57,13 +57,17 @@ def words(text):
     return [w for w in (word(p) for p in _SPLIT.split(text)) if w]
 
 
+def shouted(w):
+    return any(c.isupper() for c in w) and not any(c.islower() for c in w)
+
+
 def common_words(text):
     """Words that are not names or abbreviations: a capital word of fewer than five letters is an
     abbreviation in any position; a capitalized word after the first is a name unless shouted. A word of a
     script without case (Arabic, Hebrew, Devanagari) is neither."""
     out = []
     for index, w in enumerate(words(text)):
-        capitals = any(c.isupper() for c in w) and not any(c.islower() for c in w)
+        capitals = shouted(w)
         if capitals and len(w) < 5:
             continue
         if index > 0 and w[0].isupper():
@@ -86,10 +90,11 @@ def headline(text):
 
 def scored_words(text):
     """The words a clause is judged by: in a headline all of them, lowercased, since the recognizer reads
-    capitals poorly; elsewhere the common ones."""
+    capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "KIHÍVÁSOK a
+    STÚDIÓN KÍVÜL" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
     if headline(text):
         return [w.lower() for w in words(text)]
-    return common_words(text)
+    return [w.lower() if shouted(w) else w for w in common_words(text)]
 
 
 def is_text(piece):

@@ -89,7 +89,9 @@ def acceptance(backend):
     case(H, "Az Európai Autóipar Halála", ["hu"])
     case(H, "MOST VAGY SOHA! 🤩 | X-MEN ORIGINS: WOLVERINE", ["hu", None])
     case(H, "Pisti és Nessaj a harc mesterei 😂", ["hu"])
-    for t in ["Send Us Your Feedback Today", "READ THE FULL STORY HERE", "Mario Moreno, muerte"]:
+    # Some words in capitals, not a headline: they are scored lowercased.
+    case(H, "Nem várt KIHÍVÁSOK a STÚDIÓN KÍVÜL 🧑", ["hu"])
+    for t in ["Send Us Your Feedback Today", "READ THE FULL STORY HERE", "Read the FULL STORY here", "Mario Moreno, muerte"]:
         case(E, t, [None])
     for t in ["y", "o", "e", "a", "I", "ñ", "Y", "7", "?"]:
         case(D, t, [None])

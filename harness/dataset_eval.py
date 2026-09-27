@@ -1,10 +1,10 @@
 """Dataset evaluation: switch rates over a directory of <kind>/<lang>.txt files.
 
 Usage: python dataset_eval.py <backend> <dataset root> [configured, default fr,es] [--default L] [--limit N] [--show N]
-    [--case title|upper]
+    [--case title|upper|mixed]
 A line in the default language (English unless --default names another) with any tag is a false switch; a line
-in a configured language is a hit when its own language is tagged. --case recases every line as a headline: each word
-capitalized, or all in capitals.
+in a configured language is a hit when its own language is tagged, and its letters in that language are counted too.
+--case recases every line: as a headline, each word capitalized or all in capitals, or mixed, every other word in capitals.
 """
 import os
 import sys
@@ -25,7 +25,12 @@ def capitalized(line):
     return " ".join(cap(t) for t in line.split(" "))
 
 
-CASES = {"title": capitalized, "upper": str.upper}
+def mixed(line):
+    # Every other word in capitals, from the second, as titles shout a few words: "Nem várt KIHÍVÁSOK a STÚDIÓN".
+    return " ".join(t.upper() if i % 2 else t for i, t in enumerate(line.split(" ")))
+
+
+CASES = {"title": capitalized, "upper": str.upper, "mixed": mixed}
 
 
 def main():
@@ -64,6 +69,7 @@ def main():
         if recase:
             lines = [recase(l) for l in lines]
         switched = hits = 0
+        letters = own = 0
         misses = []
         t0 = time.perf_counter()
         for line in lines:
@@ -73,12 +79,18 @@ def main():
                 switched += 1
             if lang in tags:
                 hits += 1
+            for l, t in runs:
+                n = sum(1 for c in t if c.isalpha())
+                letters += n
+                if l == lang:
+                    own += n
             if lang == default and tags:
                 misses.append("".join(f"[{l}]{t}" if l else t for l, t in runs))
         ms = (time.perf_counter() - t0) * 1000
         rel = os.path.relpath(path, root).replace("\\", "/")
         pct = lambda n: f"{100 * n / max(1, len(lines)):.1f}%"
-        print(f"=== {rel}: {len(lines)} lines, switched {pct(switched)}, own language tagged {pct(hits)}, {ms:.0f} ms")
+        print(f"=== {rel}: {len(lines)} lines, switched {pct(switched)}, own language tagged {pct(hits)}, "
+              f"letters in own language {100 * own / max(1, letters):.1f}%, {ms:.0f} ms")
         for m in misses[:show]:
             print(f"  false switch: {m[:120]}")
 
