@@ -149,6 +149,18 @@ def _after_playing(synth, func):
         func()
 
 
+def _eloquence(synth):
+    """The engine module of the IBMTTS Eloquence driver (ibmeci), which holds its audio player, or None.
+    Eloquence reports each mark once the audio before it is fed to its player, from the thread that feeds it,
+    and done from a timer started 0.3 seconds after its synthesis ends."""
+    if getattr(synth, "name", None) != "ibmeci":
+        return None
+    engine = getattr(sys.modules.get(type(synth).__module__), "_ibmeci", None)
+    if getattr(engine, "player", None) is None or not all(hasattr(engine, a) for a in ("idleTimer", "speaking")):
+        return None
+    return engine
+
+
 def _settings_dialog_open():
     """Whether one of NVDA's settings dialogs is open. Its panels change settings live, save them on OK, and
     reload them from the configuration on Cancel, so nothing may be stored before then. True when it
@@ -644,7 +656,22 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             # rebuilding its audio, so it waits for the audio to play out.
             _after_playing(synth, lambda: self.scheduler.on_index(synth, index))
             return
+        engine = _eloquence(synth) if self.scheduler.is_marker(index) else None
         self.scheduler.on_index(synth, index)
+        if engine is not None:
+            # The end of a piece, its audio fed and still playing: the next guest may start when it has played
+            # rather than on Eloquence's done, 0.3 seconds later. This runs on the thread that feeds the
+            # player, so nothing of the piece is fed after the request.
+            try:
+                engine.player.feed(None, 0, onDone=lambda: self._on_eloquence_played(synth, engine, index))
+            except Exception:
+                log.debugWarning("multilanguage: Eloquence's player could not report the end of a piece", exc_info=True)
+
+    def _on_eloquence_played(self, synth, engine, marker):
+        if self.scheduler.on_played(synth, marker) and not engine.speaking:
+            # Its done, from before a piece sent to it next, would end that piece while it still speaks.
+            # Its player idles by itself.
+            engine.idleTimer.cancel()
 
     def _on_guest_done(self, synth=None):
         if synth is None or synth is self:

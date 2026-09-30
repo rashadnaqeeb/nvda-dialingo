@@ -14,6 +14,8 @@ done-speaking semantics are. Two waits govern the seams:
   report marks when audio is queued rather than played, and done is the signal that the audio has ended.
   The next guest would otherwise talk over the previous one's tail. So does a change of voice on the same
   guest: some drivers stop their audio, or rebuild their engine, to change voice (Vocalizer, SAPI 5).
+  Where the driver can tell when a guest's audio up to its last marker has played, it says so (on_played),
+  and that frees the guest as done would; Eloquence reports done 0.3 seconds later.
 
 Most drivers report done once their queue is empty, but several report it after each speak call, with the
 next call still queued (eSpeak, Vocalizer, SAPI 5 without WASAPI). A done that arrives after one of the
@@ -132,6 +134,7 @@ class Scheduler:
         self.current_voice = None  # the voice the last piece set on current_guest, when its row gives one
         self.busy_guest = None  # a guest that was sent speech and has not reported done since
         self.reached = {}  # id(guest) -> markers it reached whose calls have not reported done
+        self.last_marker = {}  # id(guest) -> the end marker it reached last
         self.speaking = False  # whether NVDA is owed a done notification
         self.paused = False
 
@@ -154,6 +157,7 @@ class Scheduler:
             self.index_map.clear()
             self.busy_guest = None
             self.reached.clear()
+            self.last_marker.clear()
             self.current_key = None
             self.speaking = False
             self.paused = False
@@ -189,6 +193,7 @@ class Scheduler:
             if self.busy_guest is guest:
                 self.busy_guest = None
             self.reached.pop(id(guest), None)
+            self.last_marker.pop(id(guest), None)
 
     # ------------------------------------------------------------ guest side
 
@@ -207,6 +212,7 @@ class Scheduler:
             if nvda_index is None:
                 piece = self.inflight.get(index)
                 if piece is not None:
+                    self.last_marker[id(guest)] = index
                     # Its end reached, the piece's indexes were passed too, whether or not the guest reported
                     # them (Acapela reports only the last mark of each block of audio), and so were the guest's
                     # pieces sent before it, whose markers were lost the same way.
@@ -231,6 +237,18 @@ class Scheduler:
             for passed_index in passed:
                 self.notify_index(passed_index)
             self._progress()
+        return True
+
+    def on_played(self, guest, marker):
+        """A guest's audio up to one of its end markers has played. If that is the last marker it reached and
+        nothing of it is in flight, it is free for another guest to follow without waiting for its done.
+        Whether it was freed."""
+        with self.lock:
+            if (self.busy_guest is not guest or self.last_marker.get(id(guest)) != marker
+                    or any(p.guest is guest for p in self.inflight.values())):
+                return False
+            self.busy_guest = None
+        self._progress()
         return True
 
     def on_done(self, guest):

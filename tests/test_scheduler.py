@@ -272,6 +272,57 @@ class SchedulerTests(unittest.TestCase):
         self.h.run_main()
         self.assertEqual(texts(self.h.guests["B"].spoken[0]), ["un"])
 
+    def reach_markers(self, guest):
+        """Report every index the guest was sent, without done; the last end marker."""
+        marker = None
+        for items in list(guest.queued):
+            for item in items:
+                if isinstance(item, IndexCommand):
+                    marker = item.index
+                    self.h.scheduler.on_index(guest, item.index)
+        guest.queued.clear()
+        return marker
+
+    def test_played_audio_frees_the_guest_before_its_done(self):
+        """Eloquence's audio played out: the next guest need not wait for its late done, which is then ignored."""
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.h.run_main()
+        self.assertTrue(self.h.scheduler.on_played(a, marker))
+        self.h.run_main()
+        b = self.h.guests["B"]
+        self.assertEqual(texts(b.spoken[0]), ["un"])
+        self.assertFalse(self.h.scheduler.on_done(a))
+        b.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+
+    def test_played_audio_of_an_earlier_piece_does_not_free_the_guest(self):
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.h.scheduler.cancel()
+        self.h.speak([LangChangeCommand("en"), "two", LangChangeCommand("fr"), "deux"])
+        newer = self.reach_markers(a)
+        self.assertNotEqual(marker, newer)
+        self.assertFalse(self.h.scheduler.on_played(a, marker))
+        self.h.run_main()
+        self.assertEqual(self.h.guests.get("B", FakeGuest("B")).spoken, [])
+        self.assertTrue(self.h.scheduler.on_played(a, newer))
+        self.h.run_main()
+        self.assertEqual(texts(self.h.guests["B"].spoken[0]), ["deux"])
+
+    def test_played_audio_does_not_free_a_guest_with_a_piece_in_flight(self):
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("de"), "eins", LangChangeCommand("fr"), "un"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["eins"])
+        self.assertFalse(self.h.scheduler.on_played(a, marker))
+        self.h.run_main()
+        self.assertEqual(self.h.guests.get("B", FakeGuest("B")).spoken, [])
+
     def test_done_reported_once_per_stream(self):
         self.h.speak([LangChangeCommand("en"), "one", IndexCommand(1)])
         a = self.h.guests["A"]
