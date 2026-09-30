@@ -35,6 +35,7 @@ from mlang.scripts import base  # noqa: E402
 from mlang.sequence import filter_sequence  # noqa: E402
 
 from . import context, settings  # noqa: E402
+from .grid import GridLabels  # noqa: E402
 
 addonHandler.initTranslation()
 
@@ -110,6 +111,7 @@ class Engine:
         self.failed = False
         self.words = reader_words()
         self.unit_context = None  # set by the plugin once the caret speech wrappers are installed
+        self.grid = GridLabels()
         self.lock = threading.Lock()
         self.ready = threading.Event()
         threading.Thread(target=self._warm, name="multilanguage-warm", daemon=True).start()
@@ -236,13 +238,20 @@ class Engine:
         try:
             detector = self.current()
             if detector is not None:
-                sequence = filter_sequence(
-                    sequence,
-                    detector,
-                    detector.default_tag,
-                    config.conf[T.CONFIG_SECTION]["detectInDefaultTagged"],
-                    unit_language=self.unit_context.language_for if self.unit_context else None,
-                )
+                try:
+                    detector.labels = self.grid.current()
+                except Exception:
+                    log.debugWarning("multilanguage: grid labels unavailable", exc_info=True)
+                try:
+                    sequence = filter_sequence(
+                        sequence,
+                        detector,
+                        detector.default_tag,
+                        config.conf[T.CONFIG_SECTION]["detectInDefaultTagged"],
+                        unit_language=self.unit_context.language_for if self.unit_context else None,
+                    )
+                finally:
+                    detector.labels = ()
         except Exception:
             log.error("multilanguage: detection failed on a sequence", exc_info=True)
         try:

@@ -135,6 +135,43 @@ def clauses(chunk):
     return out
 
 
+def labelled(chunk, cls, labels):
+    """The clauses split where a field label starts, as (clauses, label indexes). A label is a whole word or
+    words, matched in its case: a grid row reads "From Erik Holm, Subject specialpedagog på skolan", and
+    judged whole, "Subject" pulls the Swedish subject toward English, and makes "specialpedagog" a name."""
+    if not labels:
+        return cls, set()
+    ordered = sorted(labels, key=len, reverse=True)
+    out, marked = [], set()
+    for s, e, sentence in cls:
+        cursor = s
+        i = s
+        while i < e:
+            at_word = i == s or chunk[i - 1].isspace()
+            found = None
+            if at_word:
+                for label in ordered:
+                    end = i + len(label)
+                    if end <= e and chunk.startswith(label, i) and (end == e or chunk[end].isspace()):
+                        found = end
+                        break
+            if found is None:
+                i += 1
+                continue
+            before = chunk[cursor:i].rstrip()
+            if before:
+                out.append([cursor, cursor + len(before), sentence])
+            marked.add(len(out))
+            out.append([i, found, sentence])
+            i = found
+            while i < e and chunk[i].isspace():
+                i += 1
+            cursor = i
+        if cursor < e:
+            out.append([cursor, e, sentence])
+    return out, marked
+
+
 def merge(runs):
     out = []
     for lang, text in runs:
@@ -157,6 +194,8 @@ class Detector:
     dictionary: a dictionary.Dictionary, or None for no spelling evidence.
     mode: off, script, or full.
     reader_words: lowercased strings that are the reader's own vocabulary, never scored.
+    labels: the field labels of what is being read (a grid's column headers), each its own clause in the
+    default language; set by the caller for each sequence.
     """
 
     def __init__(self, backend, default="en", configured=(), dictionary=None, mode=MODE_FULL, reader_words=()):
@@ -164,6 +203,7 @@ class Detector:
         self.mode = mode
         self.dictionary = dictionary
         self.reader_words = set(reader_words)
+        self.labels = ()
         self.calls = 0
         self.configure(default, configured)
 
@@ -531,7 +571,9 @@ class Detector:
     def clause_runs(self, chunk):
         if not any(c.isalpha() for c in chunk):
             return [(None, chunk)]
-        cls = clauses(chunk)
+        cls, held = labelled(chunk, clauses(chunk), self.labels)
+        # A label's value with every word capitalized is a name, not a headline: "From Lotte Janssen Visser".
+        held |= {i + 1 for i in held if i + 1 < len(cls) and i + 1 not in held and headline(chunk[cls[i + 1][0]:cls[i + 1][1]])}
         langs = [None] * len(cls)
         guesses = {}
 
@@ -542,7 +584,7 @@ class Detector:
 
         scored = set()
         for i, (s, e, _) in enumerate(cls):
-            if len(scored_words(chunk[s:e])) >= 2:
+            if i not in held and len(scored_words(chunk[s:e])) >= 2:
                 scored.add(i)
                 g = guess(i)
                 if self.switches(chunk[s:e], g):
@@ -572,7 +614,7 @@ class Detector:
         while not settled:
             settled = True
             for i in range(len(cls)):
-                if langs[i] is not None or i in scored:
+                if langs[i] is not None or i in scored or i in held:
                     continue
                 neighbors = [langs[j] for j in (i - 1, i + 1) if 0 <= j < len(cls) and cls[j][2] == cls[i][2] and langs[j]]
                 if not neighbors:

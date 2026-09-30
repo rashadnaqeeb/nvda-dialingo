@@ -119,6 +119,18 @@ def acceptance(backend):
     case(Detector(backend, "ja", ["ja", "zh"]), "東京に行きました。東京都庁。", [None])
     case(Detector(backend, "en", ["en", "sr", "ru"]), "Београд је главни и највећи град Србије. Москва является столицей России.", ["sr", "ru"])
     case(Detector(backend, "sr", ["sr", "ru"]), "Данас је леп дан и идем у продавницу да купим хлеб. Сегодня хорошая погода, и я иду в магазин.", [None, "ru"])
+    # A grid row joins each column header to its cell; the headers are labels, and each cell is read alone.
+    headers = ("From", "Subject", "Received", "Size")
+    for langs, text, expect in [
+        (["en", "sv"], "has attachment From Erik Holm, Subject specialpedagog på skolan, Received Wed 2026-09-30 14:17, Size 50 KB,  row 3  2 of 5000  level 1", [None, "sv", None]),
+        (["en", "sv"], "unread From Anna Berg, Subject Välkommen till kursen, Received Wed 2026-09-30 14:17, Size 21 KB,", [None, "sv", None]),
+        (["en", "fr"], "From Jean Dupont, Subject Réunion de demain matin, Received Wed 2026-09-30 14:17, Size 31 KB,", [None, "fr", None]),
+        # A name in capitals after a label is a name, not a headline.
+        (["en", "nl"], "unread From Lotte Janssen Visser, Subject Weekly status report, Received Wed 2026-09-30 13:00, Size 20 KB,", [None]),
+    ]:
+        G = Detector(backend, "en", langs)
+        G.labels = headers
+        case(G, text, expect)
 
     passed = 0
     for det, text, expect, mode in cases:
