@@ -53,9 +53,11 @@ Strict mode asks Windows' own language detection to agree with the add-on's reco
 ## What full mode does and does not switch
 
 - Two or more ordinary words are needed for the language to be guessed. Text that is a single word, such as a button or a link, switches only on the spelling dictionaries: the default language's dictionary must reject it and exactly one other configured language's dictionary must know it. Install the dictionary for each language you configure; the panel offers to.
-- Names, abbreviations, numbers, paths, and identifiers are not counted.
+- Names, abbreviations, numbers, paths, and identifiers are not counted. With German configured, a capitalized word that is clearly a German noun ("Dateifreigabe") counts, since German capitalizes every noun; a German name ("Müller", "Berlin") still does not.
 - Headlines are the exception: in a line of three or more words that all start with a capital, or two or more in capitals, every word counts, and the line must be nearly certain to switch.
 - A short clause follows the language of its neighbors in the same sentence: "No" in "¿Tú eres Miguel? No, yo no soy Miguel." stays Spanish.
+- A sentence made only of short clauses is judged as a whole, and a one-word sentence follows the rest of its line: "¡Hola! Soy Alberto, encantado." is read in Spanish.
+- The Spanish opening marks "¿" and "¡" are read by the voice of the sentence they open.
 - A foreign clause between clauses of the default language must be nearly certain.
 - A clause the default language's spelling dictionary accepts whole needs stronger evidence. Windows' spelling dictionaries are used where installed.
 - A confident guess for a language nobody configured is left alone: Italian is not read by the Spanish voice.

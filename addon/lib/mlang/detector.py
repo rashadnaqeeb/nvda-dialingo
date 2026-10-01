@@ -19,9 +19,15 @@ SCRIPT_FLOOR = 0.5
 DICTIONARY_FLOOR = 0.5
 UNCONFIGURED_MARGIN = 3.0
 LONE_WORD_LETTERS = 4
+# Languages that capitalize every noun, so a capital inside a sentence is not a sign of a name.
+NOUN_CAPITALIZING = {"de", "lb"}
+# Scripts written with no space between words, where a clause counts as one word.
+UNSPACED = frozenset(("Hani", "Hira", "Kana", "Thai", "Laoo", "Khmr", "Mymr"))
 # Arabic, Devanagari, Armenian, Ethiopic, and full-width marks as well as the Latin ones.
 CLAUSE_ENDS = set('"“”«»,;:()!?.—–\n。，¿¡،؛؟।॥։።፣፤！？；：、')
 SENTENCE_ENDS = set('.!?。\n؟।॥։።！？')
+# Marks that open a clause, read with the clause after them; every other mark goes with the clause before.
+OPENERS = set('¡¿')
 DASHES = set('—–')
 JOINERS = set("'’-")
 # Inside a word: the joiners Persian and the Indic scripts write between letters.
@@ -61,17 +67,18 @@ def shouted(w):
     return any(c.isupper() for c in w) and not any(c.islower() for c in w)
 
 
-def common_words(text):
+def common_words(text, noun=None):
     """Words that are not names or abbreviations: a capital word of fewer than five letters is an
-    abbreviation in any position; a capitalized word after the first is a name unless shouted. A word of a
-    script without case (Arabic, Hebrew, Devanagari) is neither."""
+    abbreviation in any position; a capitalized word after the first is a name unless shouted, or unless
+    noun(word) says it is a noun of a language that capitalizes them. A word of a script without case
+    (Arabic, Hebrew, Devanagari) is neither."""
     out = []
     for index, w in enumerate(words(text)):
         capitals = shouted(w)
         if capitals and len(w) < 5:
             continue
         if index > 0 and w[0].isupper():
-            if capitals:
+            if capitals or (noun is not None and noun(w)):
                 out.append(w)
             continue
         out.append(w)
@@ -88,13 +95,13 @@ def headline(text):
     return len(ws) >= 3 or not any(c.islower() for w in ws for c in w)
 
 
-def scored_words(text):
+def scored_words(text, noun=None):
     """The words a clause is judged by: in a headline all of them, lowercased, since the recognizer reads
     capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "KIHÍVÁSOK a
     STÚDIÓN KÍVÜL" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
     if headline(text):
         return [w.lower() for w in words(text)]
-    return [w.lower() if shouted(w) else w for w in common_words(text)]
+    return [w.lower() if shouted(w) else w for w in common_words(text, noun)]
 
 
 def is_text(piece):
@@ -122,8 +129,10 @@ def clauses(chunk):
     while i < n:
         ch = chunk[i]
         dash = ch == "-" and previous == "-"
+        # A hyphen with a space on both sides is a dash, as in a title: "Wormhole - Einfache, private Dateifreigabe".
+        hyphen = ch == "-" and previous is not None and previous.isspace()
         spaced = (i + 1 == n) or chunk[i + 1].isspace()
-        separates = spaced if (ch in DASHES or dash) else (ch in CLAUSE_ENDS)
+        separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS)
         if separates:
             close(max(start, i - 1) if dash else i)
             if ch in SENTENCE_ENDS:
@@ -260,20 +269,43 @@ class Detector:
         splits on whitespace alone and knows "vas" and "tu" where it may not know "vas-tu"."""
         return text.replace("’", "'").replace("-", " ")
 
+    def scored_words(self, text):
+        return scored_words(text, self.is_noun)
+
+    def is_noun(self, w):
+        """Whether a capitalized word inside a clause is a noun of a configured language that capitalizes its
+        nouns, rather than a name: the default's dictionary does not know it, and the recognizer, on the word
+        alone, is near certain of that language. "Dateifreigabe" is German at 0.998; "Müller", "Berlin", and
+        "Mozilla" fall short, and stay names. Where the noun language's dictionary is installed it must know
+        the word too, which keeps out Icelandic, Afrikaans, and Scandinavian words that only look German; it
+        knows "Müller" and "Mozilla" as well, so it cannot stand alone."""
+        nouns = [c for c in self.clause_candidates if c in NOUN_CAPITALIZING and c != self.default]
+        if not nouns or len(w) < LONE_WORD_LETTERS:
+            return False
+        if self.dictionary is not None:
+            if self.dictionary.rejects_a_word(w, self.default_tag) is False:
+                return False
+            verdicts = [self.dictionary.rejects_a_word(w, self.spelling[c]) for c in nouns]
+            if True in verdicts and False not in verdicts:
+                return False
+        self.calls += 1
+        g = self.backend.constrained(self._scored(w), self.clause_candidates)
+        return bool(g) and g[0] in nouns and g[1] >= EMBEDDED_FLOOR
+
     def is_embedded(self, text, language):
         """Whether a foreign clause beside default-language clauses of its sentence keeps its tag: the
         near-certain two-way guess, or the two dictionaries agreeing it is foreign. The embedded floor
         exists for English clauses mistaken for another language, which the English dictionary spells."""
         if self.dictionaries_decide(text, language):
             return True
-        return self.is_near_certain(" ".join(scored_words(text)), language)
+        return self.is_near_certain(" ".join(self.scored_words(text)), language)
 
     def survives_dictionaries(self, text, language):
         """A clause the default dictionary accepts whole switches only if the guess's own dictionary accepts it
         too and the guess is near certain between the two languages; a clause the default rejects a word of stands."""
         if self.dictionary is None:
             return True
-        scored = self._scored(" ".join(scored_words(text)))
+        scored = self._scored(" ".join(self.scored_words(text)))
         if self.dictionary.rejects_a_word(scored, self.default_tag) is not False:
             return True
         if self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is True:
@@ -281,7 +313,7 @@ class Detector:
         return self.is_near_certain(scored, language)
 
     def hypothesis(self, text, counting_names=False, candidates=None):
-        ws = words(text) if counting_names else scored_words(text)
+        ws = words(text) if counting_names else self.scored_words(text)
         scored = self._scored(" ".join(ws))
         if not is_text(scored):
             return None
@@ -311,7 +343,7 @@ class Detector:
         what the recognizer cannot."""
         if self.dictionary is None:
             return False
-        scored = self._scored(" ".join(scored_words(text)))
+        scored = self._scored(" ".join(self.scored_words(text)))
         if self.dictionary.rejects_a_word(scored, self.default_tag) is not True:
             return False
         return self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is False
@@ -630,22 +662,48 @@ class Detector:
 
         scored = set()
         for i, (s, e, _) in enumerate(cls):
-            if i not in held and len(scored_words(chunk[s:e])) >= 2:
+            if i not in held and len(self.scored_words(chunk[s:e])) >= 2:
                 scored.add(i)
                 g = guess(i)
                 if self.switches(chunk[s:e], g):
                     langs[i] = g[0]
         leanings = {guess(i)[0] for i in scored if guess(i)}
+        switched = {langs[i] for i in scored if langs[i]}
+        # A sentence none of whose clauses has two scored words is scored whole, and its clauses that lean
+        # the same way follow it: "Soy Alberto, encantado." is "Soy encantado", Spanish at 0.9996. A sentence
+        # with fewer than two scored words in all ("¡Hola!") is kept for the line's agreed language below.
+        # Where words are not spaced, two clauses would pass for two words, so the rule stands down.
+        lone = []
+        for sentence in sorted({c[2] for c in cls}) if self.default_script not in UNSPACED else ():
+            members = [i for i in range(len(cls)) if cls[i][2] == sentence and i not in held]
+            if not members or any(i in scored for i in members):
+                continue
+            # Judged as one clause: a capitalized word that opened a later clause is a name here ("Hola, Pedro.").
+            joined = " ".join(w for i in members for w in self.scored_words(chunk[cls[i][0]:cls[i][1]]))
+            if len(self.scored_words(joined)) < 2:
+                lone += members
+                continue
+            g = self.hypothesis(joined)
+            if g:
+                leanings.add(g[0])
+            if self.switches(joined, g):
+                switched.add(g[0])
+                for i in members:
+                    if guess(i) and guess(i)[0] == g[0]:
+                        langs[i] = g[0]
         agreed = None
         if len(leanings) == 1:
             leaning = next(iter(leanings))
-            if leaning in self.spoken and leaning != self.default and any(langs[i] == leaning for i in scored):
+            if leaning in self.spoken and leaning != self.default and leaning in switched:
                 agreed = leaning
         if agreed:
             # A clause whose hypothesis was withheld, because a language no row speaks outranked the
             # constrained pick, stays untagged rather than following the line.
             for i in scored:
                 if langs[i] is None and guess(i):
+                    langs[i] = agreed
+            for i in lone:
+                if guess(i) and guess(i)[0] == agreed:
                     langs[i] = agreed
         # A foreign clause beside a scored default clause of its sentence, with no foreign neighbor, is embedded
         # in default-language speech and keeps its tag only at the embedded floor.
@@ -682,11 +740,20 @@ class Detector:
         runs = []
         cursor = 0
         for i, (s, e, _) in enumerate(cls):
-            runs.append((runs[-1][0] if runs else None, chunk[cursor:s]))
-            if langs[i]:
-                runs += self.peeled(chunk[s:e], langs[i])
-            else:
-                runs.append((None, chunk[s:e]))
+            # The gap before a clause goes with the clause before it, but for the opening marks at its end:
+            # "¿" in "Hello everyone. ¿Cómo estás?" is read by the Spanish voice.
+            opening = s
+            while opening > cursor and chunk[opening - 1].isspace():
+                opening -= 1
+            end = opening
+            while opening > cursor and chunk[opening - 1] in OPENERS:
+                opening -= 1
+            if opening == end:
+                opening = s
+            runs.append((runs[-1][0] if runs else None, chunk[cursor:opening]))
+            clause = self.peeled(chunk[s:e], langs[i]) if langs[i] else [(None, chunk[s:e])]
+            clause[0] = (clause[0][0], chunk[opening:s] + clause[0][1])
+            runs += clause
             cursor = e
         runs.append((runs[-1][0] if runs else None, chunk[cursor:]))
         return runs

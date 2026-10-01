@@ -1,9 +1,10 @@
-"""Detector rules that need no recognizer: typing echo by keyboard, and a lone character by its script."""
+"""Detector rules that need no real recognizer: typing echo by keyboard, a lone character by its script,
+Cantonese beside Mandarin, and the clause rules over a recognizer answering from a table."""
 import unittest
 
 import nvda_stub  # noqa: F401
 
-from mlang.detector import Detector
+from mlang.detector import Detector, clauses, common_words
 
 
 class NoRecognizer:
@@ -143,6 +144,63 @@ class ChineseTests(unittest.TestCase):
     def test_a_yue_row_is_written_in_han(self):
         d = self.detector(["yue", "zh_CN"], {"我哋去食飯啦": ("yue", 1.0)})
         self.assertEqual(d.tagged("我哋去食飯啦"), [("yue", "我哋去食飯啦")])
+
+
+class ClauseTests(unittest.TestCase):
+    def detector(self, configured, answers):
+        d = Detector(Recognizer(answers), "en_US", configured)
+        d.configure("en_US", configured)
+        return d
+
+    def test_a_spaced_hyphen_splits_clauses(self):
+        text = "Wormhole - Einfache"
+        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["Wormhole", "Einfache"])
+
+    def test_a_hyphen_inside_or_against_a_word_does_not(self):
+        for text in ["e-mail address", "from -5 to 5", "well-known -- maybe"]:
+            self.assertEqual(len(clauses(text)), 2 if "--" in text else 1, text)
+
+    def test_a_noun_is_counted_where_a_name_is_not(self):
+        self.assertEqual(common_words("private Dateifreigabe"), ["private"])
+        self.assertEqual(common_words("private Dateifreigabe", lambda w: w == "Dateifreigabe"), ["private", "Dateifreigabe"])
+
+    def test_german_nouns_need_a_german_row_and_a_near_certain_guess(self):
+        answers = {"Dateifreigabe": ("de", 0.998), "Berlin": ("de", 0.79)}
+        d = self.detector(["de_DE"], answers)
+        self.assertTrue(d.is_noun("Dateifreigabe"))
+        self.assertFalse(d.is_noun("Berlin"))
+        self.assertFalse(self.detector(["es_ES"], answers).is_noun("Dateifreigabe"))
+
+    def test_an_installed_german_dictionary_must_know_the_noun(self):
+        class Dictionary:
+            known = {"en_US": set(), "de_DE": {"Dateifreigabe"}}
+
+            def rejects_a_word(self, text, language):
+                return text not in self.known[language]
+
+        answers = {"Dateifreigabe": ("de", 0.998), "Hreinlæti": ("de", 0.99)}
+        d = Detector(Recognizer(answers), "en_US", ["de_DE"], Dictionary())
+        self.assertTrue(d.is_noun("Dateifreigabe"))
+        self.assertFalse(d.is_noun("Hreinlæti"))
+
+    def test_an_opening_mark_goes_with_the_clause_after_it(self):
+        d = self.detector(["es_ES"], {"Hello everyone": ("en", 1.0), "Cómo estás amigo": ("es", 1.0)})
+        self.assertEqual(d.tagged("Hello everyone. ¿Cómo estás amigo?"),
+                         [(None, "Hello everyone. "), ("es_ES", "¿Cómo estás amigo?")])
+
+    def test_a_sentence_of_short_clauses_is_scored_whole(self):
+        answers = {"Soy encantado": ("es", 1.0), "Hola": ("es", 0.99), "Soy": ("es", 1.0), "encantado": ("es", 1.0)}
+        d = self.detector(["es_ES"], answers)
+        self.assertEqual(d.tagged("¡Hola! Soy Alberto, encantado."), [("es_ES", "¡Hola! Soy Alberto, encantado.")])
+
+    def test_a_name_opening_a_later_clause_does_not_count(self):
+        d = self.detector(["es_ES"], {"Hola Pedro": ("es", 1.0), "Hola": ("es", 0.99), "Pedro": ("es", 0.99)})
+        self.assertEqual(d.tagged("Hola, Pedro."), [(None, "Hola, Pedro.")])
+
+    def test_a_one_word_sentence_needs_the_line_to_agree(self):
+        answers = {"Thanks": ("en", 0.9), "Hola amigo": ("es", 1.0), "Hola": ("es", 0.99), "amigo": ("es", 0.99)}
+        d = self.detector(["es_ES"], answers)
+        self.assertEqual(d.tagged("Thanks. Hola, amigo."), [(None, "Thanks. "), ("es_ES", "Hola, amigo.")])
 
 
 if __name__ == "__main__":

@@ -91,7 +91,22 @@ def acceptance(backend):
     case(H, "Pisti és Nessaj a harc mesterei 😂", ["hu"])
     # Some words in capitals, not a headline: they are scored lowercased.
     case(H, "Nem várt KIHÍVÁSOK a STÚDIÓN KÍVÜL 🧑", ["hu"])
-    for t in ["Send Us Your Feedback Today", "READ THE FULL STORY HERE", "Read the FULL STORY here", "Mario Moreno, muerte"]:
+    for t in ["Send Us Your Feedback Today", "READ THE FULL STORY HERE", "Read the FULL STORY here"]:
+        case(E, t, [None])
+    # A name is still not a headline; the line's Spanish word is read in Spanish by the sentence rule.
+    case(E, "Mario Moreno, muerte", [None, "es"])
+    # A sentence of short clauses is scored whole; a one-word sentence follows the line's agreed language.
+    for t in ["¡Hola! Soy Alberto, encantado.", "¡Hola amigos! Soy Alberto, encantado.", "Hola, soy Alberto, encantado."]:
+        case(D, t, ["es"])
+    case(D, "Thanks, Pedro. Hola, amigo.", [None, "es"])
+    for t in ["Yes, sure, fine.", "Done. Saved, closed."]:
+        case(D, t, [None])
+    # An opening mark is read with the clause after it.
+    case(D, "He said hello to everyone. ¿Cómo estás hoy, amigo?", ("es", "¿Cómo estás hoy, amigo?"), "last run")
+    case(D, "He said hello to everyone. ¡Qué bonito día hace hoy!", ("es", "¡Qué bonito día hace hoy!"), "last run")
+    # German nouns are not names, and a spaced hyphen splits a title; names that read German stay names.
+    case(E, "Wormhole - Einfache, private Dateifreigabe — Mozilla Firefox", [None, "de", None])
+    for t in ["I met Hans Müller in Berlin yesterday.", "We took the train from Hamburg to the Bahnhof."]:
         case(E, t, [None])
     for t in ["y", "o", "e", "a", "I", "ñ", "Y", "7", "?"]:
         case(D, t, [None])
@@ -138,6 +153,8 @@ def acceptance(backend):
         got = worded(runs)
         if mode == "last":
             ok = runs[-1][0] == expect
+        elif mode == "last run":
+            ok = runs[-1] == expect
         else:
             # A line with no letters has no worded run; it counts as untagged.
             ok = got == expect or (not got and expect == [None])
