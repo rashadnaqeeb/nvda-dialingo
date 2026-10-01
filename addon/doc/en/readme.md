@@ -82,6 +82,8 @@ NVDA's synth settings ring has a Language lock entry, after the synthesizer's ow
 
 While a language in the table is locked, the rest of the ring shows that language's settings instead of your default voice's, and changing one saves it to that language at once. On the Language table synthesizer that is its voice, variant, rate, rate boost, pitch, inflection, and volume, as its synthesizer offers them; a language spoken by your own synthesizer has rate, pitch, and volume, since that synthesizer picks the voice. Choosing a new voice keeps the language's variant; if the new voice does not have it, pick another with the Variant entry.
 
+While a language in the table is locked, the ring also speaks that language: its entries' names, and words such as on, off, and Automatic, come from NVDA's and the add-on's translations for it, so the language's voice is not reading another language's words. Voice names, the names of languages in the lock, and settings of synthesizer add-ons are left as they are. A language NVDA has no translation for keeps NVDA's own.
+
 The choice is saved, and stays until you set it back to Automatic. A language later removed from the table returns the lock to Automatic.
 
 Right after the Language lock comes a language detection entry.

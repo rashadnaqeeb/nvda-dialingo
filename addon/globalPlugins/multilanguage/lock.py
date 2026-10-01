@@ -13,6 +13,13 @@
 #
 # After the lock comes language detection: the detection mode, or, locked to a row, whether detection may
 # switch to that row's language once the lock is back on Automatic.
+#
+# Locked to a row, the ring speaks that row's language: its entries' names and values come from NVDA's and
+# the add-on's catalogs for that language, since the row's voice reads NVDA's own language poorly.
+
+import functools
+import gettext
+import os
 
 import addonHandler
 import config
@@ -28,11 +35,17 @@ from speech import getCurrentLanguage
 
 from mlang import hosts, prosody
 from mlang import table as T
+from mlang.catalogs import Catalog, Words, catalog
 from mlang.detector import MODE_FULL, MODE_OFF, MODES
 from mlang.hosts import DRIVER_NAME
-from mlang.scripts import code
+from mlang.scripts import base, code, normalize
 
 addonHandler.initTranslation()
+
+_addon = addonHandler.getCodeAddon()
+
+# The context NVDA translates the ring's names of synthesizer settings in.
+RING_CONTEXT = "synth setting"
 
 AUTOMATIC = ""
 DEFAULT = "default"
@@ -282,6 +295,62 @@ def row_entries(synth):
     return entries
 
 
+# ------------------------------------------------------------ the ring in the locked language
+
+
+@functools.lru_cache(maxsize=8)
+def words_for(lang):
+    """The ring's words in `lang`: the add-on's catalog first, for its own entries, whose words NVDA has in
+    other senses ("Off"), then NVDA's."""
+    tag = normalize(lang)
+    english = base(tag) == "en"
+    installed = getattr(languageHandler, "installedTranslation", None)
+    current = installed() if installed is not None else None
+    if current is None:
+        current = gettext.translation("nvda", os.path.join(globalVars.appDir, "locale"), [languageHandler.getLanguage()], fallback=True)
+    nvda = gettext.translation("nvda", os.path.join(globalVars.appDir, "locale"), [tag], fallback=True)
+    ours = gettext.translation("nvda", os.path.join(_addon.path, "locale"), [tag], fallback=True)
+    return Words(
+        Catalog(catalog(_addon.getTranslationsInstance()), catalog(ours), english),
+        Catalog(catalog(current), catalog(nvda), english),
+    )
+
+
+class Renamed:
+    """A driver setting under another name, for one ring; everything else is the setting's own."""
+
+    def __init__(self, setting, displayName):
+        self._setting = setting
+        self.displayName = displayName
+
+    def __getattr__(self, name):
+        return getattr(self.__dict__["_setting"], name)
+
+
+def localize(entries, lang):
+    """The ring's entries named, and their values reported, in `lang`. A name or value neither catalog has,
+    such as a voice's, stays as it is."""
+    words = words_for(lang)
+    for entry in entries:
+        try:
+            if isinstance(entry, RowDetection):
+                name = words("%s detection") % language_name(entry.lang)
+            else:
+                name = words(entry.setting.displayName, RING_CONTEXT)
+            entry.setting = Renamed(entry.setting, name)
+            entry._getReportValue = functools.partial(lambda report, val: words(report(val)), entry._getReportValue)
+        except Exception:
+            log.debugWarning(f"multilanguage: a ring entry could not be put in {lang}", exc_info=True)
+
+
+def locked_row_language():
+    """The language of the row the lock holds, when NVDA speaks another; else None."""
+    value = stored(T.load(config.conf))
+    if value in (AUTOMATIC, DEFAULT) or base(value) == base(languageHandler.getLanguage()):
+        return None
+    return value
+
+
 # ------------------------------------------------------------ the ring
 
 
@@ -326,6 +395,12 @@ def install():
                 ring._current = len(ring.settings) - 1
         except Exception:
             log.error("multilanguage: language detection could not be added to the synth settings ring", exc_info=True)
+        try:
+            lang = locked_row_language()
+            if lang:
+                localize(ring.settings, lang)
+        except Exception:
+            log.error("multilanguage: the synth settings ring could not be put in the locked language", exc_info=True)
 
     updateSupportedSettings._mlang_original = original
     synthSettingsRing.SynthSettingsRing.updateSupportedSettings = updateSupportedSettings
