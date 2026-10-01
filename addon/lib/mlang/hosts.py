@@ -7,6 +7,8 @@ the synth settings ring and the voice dictionary at the new instance, and it reg
 its settings on every configuration save. A guest must do none of that to the user's setup, so after
 creating one the current synthesizer's ring and dictionary are restored and the save hook removed.
 """
+from . import trace
+
 DRIVER_NAME = "languageTable"
 
 # Synthesizers that cannot be hosted. WorldVoice is a language table of its own: it re-raises its engines'
@@ -339,9 +341,11 @@ def apply_row(guest, row, log=None):
         try:
             if not guest.isSupported(setting):
                 continue
+            start = trace.now()
             if read(guest, setting) == value:
                 continue
             setattr(guest, setting, value)
+            trace.trace(f"set {setting}={value!r} on {trace.name(guest)} in {trace.ms(start)}")
             if setting == "voice" and log and getattr(guest, "voice", value) != value:
                 # SAPI 5 ignores a voice it does not have; the row then speaks in the voice last used.
                 log.debugWarning(f"multilanguage: {guest.name} has no voice {value!r}")

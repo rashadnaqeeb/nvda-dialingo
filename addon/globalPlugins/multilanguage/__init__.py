@@ -28,6 +28,7 @@ from speech.extensions import filter_speechSequence  # noqa: E402
 from speech.languageHandling import getSpeechSequenceWithLangs  # noqa: E402
 
 from mlang import policy, prosody, voicedict, winvoices  # noqa: E402
+from mlang import trace as tr  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME, REFUSED  # noqa: E402
@@ -438,7 +439,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         super().terminate()
 
     def filter(self, value):
-        return self.engine.filter(value)
+        start = tr.now()
+        result = self.engine.filter(value)
+        tr.trace(f"filter {tr.text(value) if isinstance(value, list) else ''} in {tr.ms(start)}")
+        return result
 
     def on_synth_changed(self, synth=None, isFallback=False, **kwargs):
         # A synthesizer the user picks becomes the one the language table hosts; a fallback after another
