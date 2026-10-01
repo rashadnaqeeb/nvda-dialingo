@@ -61,6 +61,10 @@ Strict mode asks Windows' own language detection to agree with the add-on's reco
 - A confident guess for a language nobody configured is left alone: Italian is not read by the Spanish voice.
 - Tags from applications are distrusted when the text contradicts them: a Russian tag on Latin text is dropped, and a French tag is dropped from clauses that read as the default language.
 
+## Chinese: Mandarin and Cantonese
+
+A row for Chinese (Hong Kong) or Chinese (Macau), the languages Cantonese voices report, is Cantonese. With rows for both Mandarin and Cantonese, text written in spoken Cantonese is read by the Cantonese voice and all other Chinese, in simplified or traditional characters, by the Mandarin voice. With only one Chinese row, it reads all Chinese.
+
 ## Typing echo
 
 With NVDA's typed character or typed word echo on, what you type, and a character you delete with backspace, is read in the language of your keyboard layout, as long as a language row or one of your voices speaks it. With the keyboard set to French, typed letters, punctuation, and words are read in French. A letter in a writing system the keyboard does not write, such as Chinese from an input method on another keyboard, goes to the voice for its writing system.

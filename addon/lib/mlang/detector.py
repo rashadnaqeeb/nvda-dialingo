@@ -481,13 +481,16 @@ class Detector:
             return options[0]
         self.calls += 1
         g = self.backend.constrained(piece, options)
-        if g and g[1] >= SCRIPT_FLOOR:
+        # Cantonese is chosen over Mandarin only near certain: the recognizer names text written in Cantonese
+        # ("我哋去食飯啦") at 0.99 and more, and standard written Chinese, which Hong Kong and Taiwan write too, Mandarin.
+        if g and g[1] >= (FLOOR if g[0] == "yue" and "zh" in options else SCRIPT_FLOOR):
             return g[0]
         return options[0]
 
     def script_options(self, scripts_here):
         """The languages that write a foreign-script piece, best first: the configured ones in table order,
-        else the voices'. Kana means Japanese, hangul Korean, and pure Han a Chinese voice before the others."""
+        else the voices'. Kana means Japanese, hangul Korean, and pure Han a Chinese voice before the others,
+        Mandarin before Cantonese."""
         options = []
         for table in (self.script_languages, self.voice_languages):
             for script in scripts_here:
@@ -502,16 +505,16 @@ class Detector:
             elif "Hang" in scripts_here:
                 options = [c for c in options if "Hang" in S.scripts_of(self.tag_of(c))] or options
             else:
-                # Pure Han: a Chinese voice before a Japanese or Korean one.
+                # Pure Han: a Chinese voice before a Japanese or Korean one, and Mandarin before Cantonese.
                 order = {c: i for i, c in enumerate(list(self.spoken) + list(self.voice_spelling))}
-                options.sort(key=lambda c: (S.scripts_of(self.tag_of(c)) != {"Hani"}, order.get(c, 999)))
+                options.sort(key=lambda c: (S.scripts_of(self.tag_of(c)) != {"Hani"}, c == "yue", order.get(c, 999)))
         return options
 
     def keyboard(self, text, keyboard):
         """The language typing echo reads `text` in: the keyboard layout's language where a row or a voice
         speaks it and the text holds no letter of a script it does not write, the default's own tag when that
         is the default; otherwise None, and the text goes by its script. A row in the keyboard's exact
-        spelling is taken over another dialect of its language (a Hong Kong keyboard, a zh_HK row)."""
+        spelling is taken over another dialect of its language (a Taiwan keyboard, a zh_TW row beside zh_CN)."""
         if self.mode == MODE_OFF or not keyboard:
             return None
         tag = S.normalize(keyboard)

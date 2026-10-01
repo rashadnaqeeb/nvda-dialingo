@@ -110,6 +110,8 @@ A run in a script the default language does not write is tagged as follows:
 
 A lone letter borrowed as a symbol stays with the default voice. Han, kana, and hangul are grouped within a sentence: kana means Japanese, hangul means Korean, and pure Han goes to Chinese before Japanese or Korean. A group holding a script the default does not write is foreign, so a Japanese sentence with kanji in Chinese text is Japanese. Words run together in those scripts, so their runs are not split into clauses.
 
+Cantonese and Mandarin are two languages. A row for Chinese of Hong Kong or Macau (`zh_HK`, `zh_MO`, the tags the voices for Cantonese report) or for `yue` is Cantonese, compared as `yue`, as fastText names written Cantonese; Windows lists Latin for `yue`, so it is taken as written in Han. With rows for both, pure Han goes to the Cantonese row only when fastText is near certain (0.9) it is written Cantonese ("我哋去食飯啦"), and otherwise to Mandarin, whatever the rows' order: standard written Chinese is Mandarin to it, in traditional characters too, which Hong Kong writes formally and Taiwan writes as Mandarin. With one Chinese row, that row takes all Chinese, tagged text included: `Table.row_for` falls back from the exact tag to the same language (`scripts.code`) to the same base language. Lingua's Chinese test lines, with both rows configured, went to Cantonese for none of 729 sentences, 2 of 1,000 word pairs, and 6 of 1,000 single words.
+
 ### Clause rules
 
 In full mode, text in the default script is detected clause by clause among the default language and the configured languages of that script. The rules live in `mlang/detector.py`, shared by the add-on and the harness.
@@ -231,7 +233,7 @@ The commands behind these figures, run from the project folder with `PY` set as 
   - `doc/en/readme.md`: the user guide.
   - `locale/<lang>/`: catalogs and translated manifests for the 63 languages NVDA is translated into. Generated; do not edit by hand.
 - `build.py`: zips `addon/` into `dist/multilanguage-<version>.nvda-addon` and renders the user guide to HTML.
-- `tests/`: unit tests for the scheduler, the sequence filter, the prosody pass, the language pack check, the host's stored settings, voice dictionaries, the config table and rows, script runs and language codes, and the detector's typing echo rules (keyboard language and script), run on plain Python with `nvda_stub.py` standing in for `speech.commands`.
+- `tests/`: unit tests for the scheduler, the sequence filter, the prosody pass, the language pack check, the host's stored settings, voice dictionaries, the config table and rows, script runs and language codes, the detector's typing echo rules (keyboard language and script), and Cantonese beside Mandarin, run on plain Python with `nvda_stub.py` standing in for `speech.commands`.
 - `harness/`: measurement over the shipped detector.
   - `harness.py`: the acceptance cases, plus a paragraph runner for any plain text file.
   - `dataset_eval.py`: switch and hit rates over a directory of `<kind>/<lang>.txt` sample files.

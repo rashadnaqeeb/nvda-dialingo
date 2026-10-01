@@ -10,7 +10,7 @@ Imports speech.commands, so it runs inside NVDA or under the test stub.
 """
 from speech.commands import LangChangeCommand, PitchCommand, RateCommand, VolumeCommand
 
-from .scripts import base
+from .scripts import base, code
 
 COMMANDS = {"rate": RateCommand, "pitch": PitchCommand, "volume": VolumeCommand}
 
@@ -78,15 +78,17 @@ def offsets(rows, configured, supported):
 
 def offsets_for(table, lang):
     """A language's offsets from `offsets`, found as Table.row_for finds its row: its own spelling first,
-    then any row of the same base language, so two dialect rows keep their own."""
+    then a row of the same language (code()), then of the same base language, so two dialect rows keep
+    their own."""
     if not lang:
         return None
     wanted = lang.replace("-", "_").lower()
     for row_lang, entry in table.items():
         if row_lang.replace("-", "_").lower() == wanted:
             return entry
-    b = base(lang)
-    for row_lang, entry in table.items():
-        if base(row_lang) == b:
-            return entry
+    for key in (code, base):
+        k = key(lang)
+        for row_lang, entry in table.items():
+            if key(row_lang) == k:
+                return entry
     return None

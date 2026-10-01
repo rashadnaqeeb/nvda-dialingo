@@ -5,7 +5,7 @@ to it like any other setting. No NVDA import here; the caller hands in `config.c
 """
 import json
 
-from .scripts import base, normalize
+from .scripts import base, code, normalize
 
 CONFIG_SECTION = "multilanguage"
 CONFSPEC = {
@@ -88,7 +88,9 @@ class Table:
         return [r.lang for r in self.rows]
 
     def row_for(self, lang, exact=False):
-        """The row for a language: its own spelling first, then any row of the same base language."""
+        """The row for a language: its own spelling first, then a row of the same language (code(): a
+        Cantonese zh_HK row is not one for zh_TW), then any row of the same base language, so one Chinese row
+        still takes all Chinese."""
         if not lang:
             return None
         wanted = lang.replace("-", "_").lower()
@@ -97,6 +99,10 @@ class Table:
                 return r
         if exact:
             return None
+        c = code(lang)
+        for r in self.rows:
+            if code(r.lang) == c:
+                return r
         b = base(lang)
         for r in self.rows:
             if r.base == b:

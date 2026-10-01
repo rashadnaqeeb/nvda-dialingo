@@ -36,9 +36,17 @@ def base(language):
 _ALIASES = {"no": "nb", "tl": "fil"}
 
 
+# Chinese of Hong Kong and Macau is Cantonese: the voices Windows and the synthesizers list for zh-HK speak
+# it, and the recognizer answers 'yue' for text written in Cantonese, 'zh' for standard written Chinese.
+_CANTONESE_REGIONS = {"HK", "MO"}
+
+
 def code(language):
-    """The base code languages are compared by: base(), with a recognizer's alias mapped, 'nb' for 'no_NO'."""
+    """The base code languages are compared by: base(), with a recognizer's alias mapped, 'nb' for 'no_NO',
+    and 'yue' for Chinese of Hong Kong or Macau, so a Cantonese row is not taken for a Mandarin one."""
     b = base(language)
+    if b == "zh" and any(p.upper() in _CANTONESE_REGIONS for p in language.replace("-", "_").split("_")[1:]):
+        return "yue"
     return _ALIASES.get(b, b)
 
 
@@ -77,7 +85,9 @@ def scripts_of(language):
     if not language:
         return frozenset(("Latn",))
     listed = None
-    if _kernel32 is not None:
+    if base(language) in _OVERRIDES and not _names_script(language):
+        listed = _OVERRIDES[base(language)]
+    elif _kernel32 is not None:
         buf = ctypes.create_unicode_buffer(85)
         n = _kernel32.GetLocaleInfoEx(windows_tag(language), LOCALE_SSCRIPTS, buf, 85)
         if n:
@@ -97,6 +107,9 @@ def _names_script(language):
     parts = language.replace("-", "_").split("_")[1:]
     return any(len(p) == 4 and p.isalpha() for p in parts)
 
+
+# Where Windows is wrong: it lists Latin for 'yue' and 'yue-HK', though Cantonese is written in Han.
+_OVERRIDES = {"yue": ["Hant"]}
 
 # Scripts a language is also written in that Windows leaves out of an untagged locale: 'sr' and 'sr_RS' list
 # Latin alone, though Serbian pages are mostly Cyrillic.

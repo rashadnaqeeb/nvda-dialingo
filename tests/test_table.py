@@ -29,5 +29,17 @@ class MalformedTest(unittest.TestCase):
         self.assertEqual([r.lang for r in rows], ["fr"])
 
 
+class RowForTest(unittest.TestCase):
+    def test_another_dialect_finds_the_row_of_its_language(self):
+        table = Table([Row("zh_HK", "oneCore"), Row("zh_CN", "oneCore"), Row("fr_FR", "espeak")])
+        self.assertEqual(table.row_for("zh_TW").lang, "zh_CN")
+        self.assertEqual(table.row_for("zh_MO").lang, "zh_HK")
+        self.assertEqual(table.row_for("yue").lang, "zh_HK")
+        self.assertEqual(table.row_for("fr_CA").lang, "fr_FR")
+        # One Chinese row still takes text tagged with the other.
+        self.assertEqual(Table([Row("zh_HK", "oneCore")]).row_for("zh_CN").lang, "zh_HK")
+        self.assertEqual(Table([Row("zh_CN", "oneCore")]).row_for("zh_HK").lang, "zh_CN")
+
+
 if __name__ == "__main__":
     unittest.main()

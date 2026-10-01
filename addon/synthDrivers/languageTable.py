@@ -44,7 +44,7 @@ from synthDriverHandler import VoiceInfo, synthDoneSpeaking, synthIndexReached  
 from mlang import hosts, policy, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.scheduler import Scheduler  # noqa: E402
-from mlang.scripts import base  # noqa: E402
+from mlang.scripts import code  # noqa: E402
 
 addonHandler.initTranslation()
 
@@ -214,7 +214,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         self.table = T.load(config.conf)
         self.guests = {}
         self._failed = set()
-        self._windows_rows = {}  # base language -> implicit row on a Windows voice, or None
+        self._windows_rows = {}  # language code -> implicit row on a Windows voice, or None
         self.scheduler = Scheduler(
             LangChangeCommand,
             IndexCommand,
@@ -377,7 +377,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
     def _row_for_lang(self, lang):
         # The default's own language is the default voice's in any dialect: NVDA opens an utterance with the
         # default's tag ("en_US"), and a row for "en_GB" would otherwise take all speech.
-        if lang and base(lang) == base(self.language or ""):
+        if lang and code(lang) == code(self.language or ""):
             return None
         row = self.table.row_for(lang)
         if row is not None:
@@ -400,7 +400,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         None sends the text to the host."""
         if not policy.windows_voices_wanted(config.conf) or self.host_name == winvoices.ONECORE:
             return None
-        key = winvoices.base(lang)
+        key = winvoices.code(lang)
         if key in self._windows_rows:
             return self._windows_rows[key]
         row = None

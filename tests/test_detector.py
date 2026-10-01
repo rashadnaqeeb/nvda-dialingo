@@ -88,10 +88,61 @@ class KeyboardTests(unittest.TestCase):
         self.assertEqual(d.character("ж"), "ru_RU")
 
     def test_exact_row_is_taken_over_another_dialect(self):
+        d = detector("en_US", ["zh_CN", "zh_TW"])
+        self.assertEqual(d.keyboard("我", "zh_TW"), "zh_TW")
+        self.assertEqual(d.keyboard("我", "zh_CN"), "zh_CN")
+        self.assertEqual(d.keyboard("我", "zh_SG"), "zh_CN")
+
+    def test_hong_kong_keyboard_reaches_the_cantonese_row(self):
         d = detector("en_US", ["zh_CN", "zh_HK"])
         self.assertEqual(d.keyboard("我", "zh_HK"), "zh_HK")
-        self.assertEqual(d.keyboard("我", "zh_CN"), "zh_CN")
         self.assertEqual(d.keyboard("我", "zh_TW"), "zh_CN")
+
+
+class Recognizer:
+    """Answers constrained() from a table of (language, probability) by text."""
+
+    def __init__(self, answers):
+        self.answers = answers
+
+    def constrained(self, text, languages):
+        return self.answers.get(text)
+
+    def free(self, text):
+        return self.answers.get(text)
+
+    def probability(self, text, language):
+        return 0.0
+
+
+class ChineseTests(unittest.TestCase):
+    def detector(self, configured, answers):
+        d = Detector(Recognizer(answers), "en_US", configured)
+        d.configure("en_US", configured)
+        return d
+
+    def test_cantonese_and_mandarin_rows_are_two_languages(self):
+        d = self.detector(["zh_HK", "zh_CN"], {"我哋去食飯啦": ("yue", 1.0), "我們去吃飯吧": ("zh", 1.0)})
+        self.assertEqual(d.tagged("我哋去食飯啦"), [("zh_HK", "我哋去食飯啦")])
+        self.assertEqual(d.tagged("我們去吃飯吧"), [("zh_CN", "我們去吃飯吧")])
+
+    def test_unclear_chinese_goes_to_mandarin_whatever_the_order(self):
+        d = self.detector(["zh_HK", "zh_CN"], {"多謝": ("yue", 0.8), "睇": None})
+        self.assertEqual(d.tagged("多謝"), [("zh_CN", "多謝")])
+        self.assertEqual(d.tagged("睇"), [("zh_CN", "睇")])
+
+    def test_one_chinese_row_takes_all_chinese(self):
+        d = self.detector(["zh_HK"], {})
+        self.assertEqual(d.tagged("我們去吃飯吧"), [("zh_HK", "我們去吃飯吧")])
+        d = self.detector(["zh_CN"], {})
+        self.assertEqual(d.tagged("我哋去食飯啦"), [("zh_CN", "我哋去食飯啦")])
+
+    def test_lone_character_goes_to_mandarin_first(self):
+        self.assertEqual(self.detector(["zh_HK", "zh_CN"], {}).character("我"), "zh_CN")
+
+    def test_a_yue_row_is_written_in_han(self):
+        d = self.detector(["yue", "zh_CN"], {"我哋去食飯啦": ("yue", 1.0)})
+        self.assertEqual(d.tagged("我哋去食飯啦"), [("yue", "我哋去食飯啦")])
 
 
 if __name__ == "__main__":

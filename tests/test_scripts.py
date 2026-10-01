@@ -49,6 +49,19 @@ class CodeTests(unittest.TestCase):
         self.assertEqual(S.code("fil_PH"), "fil")
         self.assertEqual(S.code("fr_FR"), "fr")
 
+    def test_chinese_of_hong_kong_and_macau_is_cantonese(self):
+        self.assertEqual(S.code("zh_HK"), "yue")
+        self.assertEqual(S.code("zh-MO"), "yue")
+        self.assertEqual(S.code("zh_Hant_HK"), "yue")
+        self.assertEqual(S.code("yue"), "yue")
+        self.assertEqual(S.code("zh_TW"), "zh")
+        self.assertEqual(S.code("zh_CN"), "zh")
+
+    def test_cantonese_is_written_in_han(self):
+        self.assertEqual(S.scripts_of("yue"), frozenset({"Hani"}))
+        self.assertEqual(S.scripts_of("yue_HK"), frozenset({"Hani"}))
+        self.assertEqual(S.scripts_of("zh_HK"), frozenset({"Hani"}))
+
 
 class FakeModel:
     def __init__(self, labels):

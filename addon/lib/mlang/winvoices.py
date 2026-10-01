@@ -10,7 +10,7 @@ import functools
 import os
 import winreg
 
-from .scripts import base
+from .scripts import base, code
 
 ONECORE = "oneCore"
 _ROOTS = (
@@ -91,12 +91,12 @@ def voices():
 
 @functools.lru_cache(maxsize=1)
 def by_language():
-    """{base language: [(voice id, display name, locale)]}, in registry order, so the first is the one
+    """{language code (scripts.code): [(voice id, display name, locale)]}, in registry order, so the first is the one
     Windows lists first for the language."""
     table = {}
     for voice_id, name, locales in voices():
         for locale in locales:
-            table.setdefault(base(locale), []).append((voice_id, name, locale))
+            table.setdefault(code(locale), []).append((voice_id, name, locale))
     return table
 
 
@@ -116,8 +116,12 @@ def languages():
 
 def voice_for(language):
     """(voice id, display name, locale) of the Windows voice for a language: an exact locale match first,
-    else the first voice of the base language; None when Windows has none."""
-    entries = by_language().get(base(language))
+    else the first voice of the language, else of its base language (a Mandarin voice for Cantonese
+    beats none); None when Windows has none."""
+    entries = by_language().get(code(language))
+    if not entries:
+        b = base(language)
+        entries = next((e for e in by_language().values() if base(e[0][2]) == b), None)
     if not entries:
         return None
     wanted = language.replace("-", "_").lower()
