@@ -464,7 +464,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     def filter(self, value):
         start = tr.now()
         result = self.engine.filter(value)
-        tr.trace(f"filter {tr.text(value) if isinstance(value, list) else ''} in {tr.ms(start)}")
+        if isinstance(result, list):
+            tags = [i.lang for i in result if isinstance(i, LangChangeCommand)]
+            tr.trace(f"filter {tr.text(result)} tagged {tags} in {tr.ms(start)}, default {getCurrentLanguage()}")
         return result
 
     def on_synth_changed(self, synth=None, isFallback=False, **kwargs):

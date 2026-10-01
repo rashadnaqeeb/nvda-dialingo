@@ -149,7 +149,10 @@ class Scheduler:
 
     def speak(self, seq, row_for_lang, default_row):
         pieces = cut(seq, row_for_lang, default_row, self.LangChangeCommand)
-        tr.trace("speak: " + "; ".join(f"{p.row.lang}/{p.row.synth} {tr.text(p.items)}" for p in pieces))
+        tr.trace("speak: " + "; ".join(
+            f"{p.row.lang}/{p.row.synth} {tr.text(p.items)}"
+            + "".join(f" [{i.lang}]" for i in p.items if isinstance(i, self.LangChangeCommand))
+            for p in pieces))
         with self.lock:
             self.pending.extend(pieces)
         self.pump()

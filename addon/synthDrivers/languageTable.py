@@ -261,6 +261,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             self.guest(winvoices.ONECORE)
         synthIndexReached.register(self._on_guest_index)
         synthDoneSpeaking.register(self._on_guest_done)
+        tr.trace(f"table: host {self.host_name}, default {self.default_row().lang}, rows "
+                 + (", ".join(f"{r.lang}/{r.synth}" + ("" if r.synth in self.guests else " (not loaded)")
+                              for r in self.table.rows) or "none"))
         T.listeners.append(self._on_table_saved)
 
     def terminate(self):
