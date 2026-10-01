@@ -156,7 +156,10 @@ PLAYED_TIMEOUT = 1.0
 
 
 def _after_playing(synth, func):
-    """Call `func` when what the guest has fed its player so far has played, as SAPI 5 does for its bookmarks."""
+    """Call `func` when what the guest has fed its player so far has played, as SAPI 5 does for its bookmarks.
+    Never from inside one of the player's callbacks, which SAPI 5's marks are reported from: NVDA's player runs
+    them while walking its list of pending callbacks, and a feed inside one adds to that list and corrupts it,
+    which crashes NVDA."""
     try:
         synth.player.feed(None, 0, onDone=func)
     except Exception:
@@ -671,11 +674,6 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         if getattr(synth, "name", None) == "AcaTTS" and isinstance(index, int) and index % 2:
             # Acapela writes each mark one higher than it is given; the scheduler gives only even ones.
             index -= 1
-        if self.scheduler.is_marker(index) and _reports_before_playing(synth):
-            # The end of a piece: the next piece may change this guest's voice, which SAPI 5 does by
-            # rebuilding its audio, so it waits for the audio to play out.
-            _after_playing(synth, lambda: self.scheduler.on_index(synth, index))
-            return
         engine = _eloquence(synth) if self.scheduler.is_marker(index) else None
         if not self.scheduler.on_index(synth, index):
             if _done_early(synth):
@@ -710,6 +708,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             # OneCore's done from before a cancel, arriving after the next piece was queued.
             return
         if _reports_before_playing(synth):
+            # Reported from its speaking thread, outside its player's callbacks. Changes of guest and voice wait
+            # for it, so it is held until the audio has played; its marks need no holding, since a change of row
+            # alone waits only until the text before them is synthesized.
             _after_playing(synth, lambda: self.scheduler.on_done(synth))
             return
         held = self.scheduler.holding(synth)
