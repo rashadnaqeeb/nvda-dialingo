@@ -430,6 +430,73 @@ class SchedulerTests(unittest.TestCase):
         h.run_main()
         self.assertEqual(texts(a.spoken[1]), ["eins"])
 
+    def test_early_done_holds_the_guest_until_its_audio_played(self):
+        """32-bit SAPI 5 reports its marks and done when its synthesis ends, then each mark again once played."""
+        self.h.scheduler.done_early = lambda guest: guest.name == "A"
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.h.scheduler.on_done(a)
+        self.h.run_main()
+        self.assertEqual(self.h.guests.get("B", FakeGuest("B")).spoken, [])
+        self.assertIsNotNone(self.h.scheduler.holding(a))
+        self.assertTrue(self.h.scheduler.on_played(a, marker))
+        self.h.run_main()
+        self.assertEqual(texts(self.h.guests["B"].spoken[0]), ["un"])
+        self.assertIsNone(self.h.scheduler.holding(a))
+
+    def test_early_done_holds_a_change_of_voice_on_the_same_guest(self):
+        table = Table([Row("en", "A", voice="v1"), Row("de", "A", voice="v2")])
+        h = Harness(table)
+        h.scheduler.done_early = lambda guest: True
+        h.speak([LangChangeCommand("en"), "one", LangChangeCommand("de"), "eins"])
+        a = h.guests["A"]
+        marker = [i.index for i in a.queued[0] if isinstance(i, IndexCommand)][-1]
+        h.scheduler.on_index(a, marker)
+        h.scheduler.on_done(a)
+        h.run_main()
+        self.assertEqual(len(a.spoken), 1)
+        self.assertTrue(h.scheduler.on_played(a, marker))
+        h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["eins"])
+
+    def test_early_done_does_not_hold_the_same_voice(self):
+        self.h.scheduler.done_early = lambda guest: guest.name == "A"
+        self.h.speak([LangChangeCommand("en"), "one"])
+        a = self.h.guests["A"]
+        self.reach_markers(a)
+        self.h.scheduler.on_done(a)
+        self.h.speak([LangChangeCommand("en"), "two"])
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+
+    def test_release_frees_a_held_guest_without_the_played_report(self):
+        self.h.scheduler.done_early = lambda guest: guest.name == "A"
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+        a = self.h.guests["A"]
+        self.reach_markers(a)
+        self.h.scheduler.on_done(a)
+        token = self.h.scheduler.holding(a)
+        self.assertFalse(self.h.scheduler.release(a, object()))
+        self.assertTrue(self.h.scheduler.release(a, token))
+        self.h.run_main()
+        self.assertEqual(texts(self.h.guests["B"].spoken[0]), ["un"])
+
+    def test_release_of_an_old_hold_does_nothing_after_a_cancel(self):
+        self.h.scheduler.done_early = lambda guest: guest.name == "A"
+        self.h.speak([LangChangeCommand("en"), "one"])
+        a = self.h.guests["A"]
+        self.reach_markers(a)
+        self.h.scheduler.on_done(a)
+        token = self.h.scheduler.holding(a)
+        self.h.scheduler.cancel()
+        self.assertIsNone(self.h.scheduler.holding(a))
+        self.h.speak([LangChangeCommand("en"), "two", LangChangeCommand("fr"), "deux"])
+        self.reach_markers(a)
+        self.h.scheduler.on_done(a)
+        self.assertFalse(self.h.scheduler.release(a, token))
+        self.h.run_main()
+        self.assertEqual(self.h.guests.get("B", FakeGuest("B")).spoken, [])
+
     def test_a_reached_marker_reports_what_the_guest_passed_without_reporting(self):
         """Acapela reports only the last mark of each block of audio."""
         self.h.speak([LangChangeCommand("en"), "one", IndexCommand(1)])

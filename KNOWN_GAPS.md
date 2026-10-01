@@ -22,7 +22,7 @@ Things found and deliberately left alone, with the reason. When one is fixed, de
 
 ## Speech: audible but not blocking
 
-- 32-bit SAPI 5 voices, through NVDA's bridge: done comes before the audio ends, so the next voice can clip the tail, and a change of voice on the same synthesizer can cut the end of the previous piece. The add-on cannot see the player in the other process.
+- 32-bit SAPI 5 voices, through NVDA's bridge: the add-on cannot see the player in the other process, so it waits for SAPI 5 to report a piece's end marker a second time, once its audio has played. Its first reports, and its done, come when synthesis ends. SAPI 5 holds back the first 50 ms of audio and may let a mark play just before the audio ahead of it, so the next voice can still start a few tens of milliseconds early. If the second report never comes, the next voice waits a second.
 - Over NVDA's 32-bit bridge (SAPI 4, SAPI 5, AiSound), inflection cannot be set; the row's inflection is ignored. NVDA's gap.
 - Any 32-bit synthesizer in the table keeps NVDA's audio ducking off for as long as the language table is in use, not just while that row speaks. Loading it only when needed would delay the first utterance by the start of a process.
 - A break at the very start of a piece on another synthesizer is trimmed as leading silence by NVDA's audio player.

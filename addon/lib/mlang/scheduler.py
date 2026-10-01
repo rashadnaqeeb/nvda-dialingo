@@ -15,7 +15,9 @@ done-speaking semantics are. Two waits govern the seams:
   The next guest would otherwise talk over the previous one's tail. So does a change of voice on the same
   guest: some drivers stop their audio, or rebuild their engine, to change voice (Vocalizer, SAPI 5).
   Where the driver can tell when a guest's audio up to its last marker has played, it says so (on_played),
-  and that frees the guest as done would; Eloquence reports done 0.3 seconds later.
+  and that frees the guest as done would; Eloquence reports done 0.3 seconds later. A guest whose done comes
+  before its audio has played (32-bit SAPI 5, whose player is in another process) is held after its done
+  until on_played, or until the driver gives up waiting (release).
 
 Most drivers report done once their queue is empty, but several report it after each speak call, with the
 next call still queued (eSpeak, Vocalizer, SAPI 5 without WASAPI). A done that arrives after one of the
@@ -100,7 +102,7 @@ class Scheduler:
     def __init__(self, LangChangeCommand, IndexCommand, guest_for_row, apply_row, notify_index, notify_done,
                  run_on_main, log=None, notifies_indexes=lambda guest: True, notifies_done=lambda guest: True,
                  adapt=None, done_drains=lambda guest: False, settles=lambda guest: False,
-                 serial=lambda guest: False):
+                 serial=lambda guest: False, done_early=lambda guest: False):
         self.LangChangeCommand = LangChangeCommand
         self.IndexCommand = IndexCommand
         self.guest_for_row = guest_for_row
@@ -121,6 +123,8 @@ class Scheduler:
         # NVDA sends the synthesizer in use one utterance at a time: for an engine not known to queue a second
         # call rather than cut the first short.
         self.serial = serial
+        # Whether a guest's done comes before its audio has played, so that it is held until on_played.
+        self.done_early = done_early
         # adapt(guest, row, items) -> the items as the guest is to be sent them (prosody rebased on the row).
         self.adapt = adapt or (lambda guest, row, items: items)
         self.log = log or (lambda msg: None)
@@ -135,6 +139,7 @@ class Scheduler:
         self.busy_guest = None  # a guest that was sent speech and has not reported done since
         self.reached = {}  # id(guest) -> markers it reached whose calls have not reported done
         self.last_marker = {}  # id(guest) -> the end marker it reached last
+        self.held = {}  # id(guest) -> a token for a guest done early and held until its audio has played
         self.speaking = False  # whether NVDA is owed a done notification
         self.paused = False
 
@@ -158,6 +163,7 @@ class Scheduler:
             self.busy_guest = None
             self.reached.clear()
             self.last_marker.clear()
+            self.held.clear()
             self.current_key = None
             self.speaking = False
             self.paused = False
@@ -194,6 +200,7 @@ class Scheduler:
                 self.busy_guest = None
             self.reached.pop(id(guest), None)
             self.last_marker.pop(id(guest), None)
+            self.held.pop(id(guest), None)
 
     # ------------------------------------------------------------ guest side
 
@@ -248,6 +255,24 @@ class Scheduler:
                     or any(p.guest is guest for p in self.inflight.values())):
                 return False
             self.busy_guest = None
+            self.held.pop(id(guest), None)
+        self._progress()
+        return True
+
+    def holding(self, guest):
+        """The token of a guest held after an early done, for `release`, or None when it is not held."""
+        with self.lock:
+            return self.held.get(id(guest))
+
+    def release(self, guest, token):
+        """Free a guest held after an early done whose audio is taken to have played without on_played saying
+        so, if it is still the same hold and nothing of it is in flight. Whether it was freed."""
+        with self.lock:
+            if (self.held.get(id(guest)) is not token or self.busy_guest is not guest
+                    or any(p.guest is guest for p in self.inflight.values())):
+                return False
+            del self.held[id(guest)]
+            self.busy_guest = None
         self._progress()
         return True
 
@@ -264,7 +289,10 @@ class Scheduler:
             self.reached.pop(id(guest), None)
             # A piece being handed to the guest right now is not finished by a done from before it.
             was_busy = self.busy_guest is guest and len(markers) == len(mine)
-            if was_busy:
+            if was_busy and self.done_early(guest):
+                # Its audio still plays: no other guest or voice may follow until on_played or release.
+                self.held[id(guest)] = object()
+            elif was_busy:
                 self.busy_guest = None
             unreported = []
             for m in markers:

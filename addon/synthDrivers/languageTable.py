@@ -18,6 +18,7 @@
 
 import os
 import sys
+import threading
 from collections import OrderedDict
 
 import addonHandler
@@ -141,6 +142,19 @@ def _more_queued(synth):
         return False
 
 
+def _done_early(synth):
+    """NVDA's 32-bit SAPI 5, in another process: with its audio on WASAPI, which NVDA's bridge cannot turn off, it
+    reports every mark not yet played and then done when its synthesis ends, while up to its player's buffer
+    (0.4 seconds) is still to play, and reports each mark again once the audio before it has played. That second
+    report of a piece's end marker frees it (on_played); its done does not."""
+    return getattr(synth, "name", None) == "sapi5_32"
+
+
+# How long a guest held after an early done may go without the report that its audio played before it is
+# freed anyway: longer than the most audio it can still hold when it reports done.
+PLAYED_TIMEOUT = 1.0
+
+
 def _after_playing(synth, func):
     """Call `func` when what the guest has fed its player so far has played, as SAPI 5 does for its bookmarks."""
     try:
@@ -230,6 +244,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             done_drains=_done_drains,
             settles=lambda guest: guest.name in SETTLES,
             serial=_serial,
+            done_early=_done_early,
         )
         self._load_host()
         if self.host is None:
@@ -662,7 +677,12 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             _after_playing(synth, lambda: self.scheduler.on_index(synth, index))
             return
         engine = _eloquence(synth) if self.scheduler.is_marker(index) else None
-        self.scheduler.on_index(synth, index)
+        if not self.scheduler.on_index(synth, index):
+            if _done_early(synth):
+                # A mark reported again once the audio before it has played: the end marker of the guest's
+                # last piece frees it.
+                self.scheduler.on_played(synth, index)
+            return
         if engine is not None:
             # The end of a piece, its audio fed and still playing: the next guest may start when it has played
             # rather than on Eloquence's done, 0.3 seconds later. This runs on the thread that feeds the
@@ -692,7 +712,26 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         if _reports_before_playing(synth):
             _after_playing(synth, lambda: self.scheduler.on_done(synth))
             return
+        held = self.scheduler.holding(synth)
         self.scheduler.on_done(synth)
+        token = self.scheduler.holding(synth)
+        if token is not None and token is not held:
+            self._release_later(self.scheduler, synth, token)
+
+    def _release_later(self, scheduler, synth, token):
+        """Free a guest held after its early done if the report that its audio played never comes: the end
+        marker of its piece may have played before its synthesis ended, so that it was reported only once, or
+        its synthesis failed."""
+        def release():
+            if scheduler.paused:
+                # Its audio is paused too; the wait starts over.
+                self._release_later(scheduler, synth, token)
+            else:
+                scheduler.release(synth, token)
+
+        timer = threading.Timer(PLAYED_TIMEOUT, release)
+        timer.daemon = True
+        timer.start()
 
     def _notify_index(self, index):
         synthIndexReached.notify(synth=self, index=index)
