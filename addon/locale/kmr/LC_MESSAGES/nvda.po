@@ -268,6 +268,10 @@ msgstr "Ji bo %s jixwe rêzek heye. Bila were guhertin?"
 msgid "Replace language"
 msgstr "Zimên li şûnê deyne"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "otomatîk"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "Tabloya zimanan (pirzimanî)"

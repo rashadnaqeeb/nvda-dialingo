@@ -268,6 +268,10 @@ msgstr "%s ಗಾಗಿ ಈಗಾಗಲೇ ಒಂದು ಸಾಲು ಇದೆ. 
 msgid "Replace language"
 msgstr "ಭಾಷೆಯನ್ನು ಬದಲಾಯಿಸಿ"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "ಸ್ವಯಂಚಾಲಿತ"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "ಭಾಷಾ ಕೋಷ್ಟಕ (ಬಹುಭಾಷಾ)"

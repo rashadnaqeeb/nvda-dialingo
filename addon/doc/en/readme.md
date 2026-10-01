@@ -69,8 +69,18 @@ A row for Chinese (Hong Kong) or Chinese (Macau), the languages Cantonese voices
 
 With NVDA's typed character or typed word echo on, what you type, and a character you delete with backspace, is read in the language of your keyboard layout, as long as a language row or one of your voices speaks it. With the keyboard set to French, typed letters, punctuation, and words are read in French. A letter in a writing system the keyboard does not write, such as Chinese from an input method on another keyboard, goes to the voice for its writing system.
 
-## Scripts
+## Language lock
 
+NVDA's synth settings ring has a Language lock entry, after the synthesizer's own settings. Move to it with NVDA+Control+left or right arrow (NVDA+Shift+Control on the laptop layout) and change it with NVDA+Control+up or down arrow.
+
+- Automatic, the default, switches languages as configured.
+- Your default language, or any language in the table, reads everything in that language, with its voice and settings, and switches nothing: neither detection nor the languages applications tag their text with. Characters and their descriptions are read in it too.
+
+While a language in the table is locked, the rest of the ring shows that language's settings instead of your default voice's, and changing one saves it to that language at once. On the Language table synthesizer that is its voice, variant, rate, rate boost, pitch, inflection, and volume, as its synthesizer offers them; a language spoken by your own synthesizer has rate, pitch, and volume, since that synthesizer picks the voice. Choosing a new voice keeps the language's variant; if the new voice does not have it, pick another with the Variant entry.
+
+The choice is saved, and stays until you set it back to Automatic. A language later removed from the table returns the lock to Automatic.
+
+## Scripts
 Two scripts, without default gestures, are in the Speech category of NVDA's Input Gestures dialog: one cycles the detection mode, one toggles strict mode.
 
 ## Licenses

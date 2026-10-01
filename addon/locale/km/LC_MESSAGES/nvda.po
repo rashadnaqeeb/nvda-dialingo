@@ -268,6 +268,10 @@ msgstr "មានជួរសម្រាប់ %s រួចហើយ។ ជំ�
 msgid "Replace language"
 msgstr "ជំនួសភាសា"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "ស្វ័យប្រវត្តិ"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "តារាងភាសា (ពហុភាសា)"

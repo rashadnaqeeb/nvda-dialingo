@@ -268,6 +268,10 @@ msgstr "پێشتر ڕیزێک بۆ %s هەیە. بیگۆڕیت؟"
 msgid "Replace language"
 msgstr "گۆڕینی زمان"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "ئۆتۆماتيكى"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "خشتەی زمانەکان (فرەزمانی)"

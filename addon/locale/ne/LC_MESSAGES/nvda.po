@@ -268,6 +268,10 @@ msgstr "%s का लागि पहिले नै एउटा पङ्क�
 msgid "Replace language"
 msgstr "भाषा बदल्नुहोस्"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "स्वचालित"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "भाषा तालिका (बहुभाषी)"

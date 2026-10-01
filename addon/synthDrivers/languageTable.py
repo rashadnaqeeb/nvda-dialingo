@@ -538,6 +538,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
         queueHandler.queueFunction(queueHandler.eventQueue, rebuild)
 
+    def update_row(self, row):
+        """A row's values changed from the synth settings ring: its next piece applies them, since the row's
+        key changed. Unlike a saved table, no guest is rebuilt and speech goes on."""
+        self.table.upsert(row)
+
     def _on_table_saved(self, table):
         section = config.conf[T.CONFIG_SECTION]
         if section["defaultSynth"] and section["defaultSynth"] != self.host_name:

@@ -32,9 +32,9 @@ from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME, REFUSED  # noqa: E402
 from mlang.scripts import base  # noqa: E402
-from mlang.sequence import filter_sequence  # noqa: E402
+from mlang.sequence import filter_sequence, locked_sequence  # noqa: E402
 
-from . import context, settings  # noqa: E402
+from . import context, lock, settings  # noqa: E402
 from .grid import GridLabels  # noqa: E402
 
 addonHandler.initTranslation()
@@ -185,15 +185,21 @@ class Engine:
                 self.dictionary = False
         return self.dictionary or None
 
+    def language_lock(self):
+        """The language lock in effect: lock.AUTOMATIC, lock.DEFAULT, or a row's language."""
+        self._sync_table()
+        return lock.stored(self.table)
+
     def current(self):
-        """The detector for the current configuration, default language, and table; None when off or broken."""
+        """The detector for the current configuration, default language, and table; None when off, locked to
+        one language, or broken."""
         if self.failed or not self.ready.is_set():
             return None
         section = config.conf[T.CONFIG_SECTION]
         mode = section["mode"]
         if mode not in MODES:
             mode = "full"
-        if mode == MODE_OFF:
+        if mode == MODE_OFF or self.language_lock():
             return None
         default = getCurrentLanguage()
         self._sync_table()
@@ -235,6 +241,16 @@ class Engine:
         return self.available
 
     def filter(self, sequence):
+        try:
+            locked = self.language_lock()
+        except Exception:
+            log.error("multilanguage: the language lock could not be read", exc_info=True)
+            locked = lock.AUTOMATIC
+        if locked:
+            try:
+                sequence = locked_sequence(sequence, lock.language(locked))
+            except Exception:
+                log.error("multilanguage: the language lock failed on a sequence", exc_info=True)
         try:
             detector = self.current()
             if detector is not None:
@@ -395,11 +411,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         filter_speechSequence.moveToEnd(getSpeechSequenceWithLangs, last=True)
         synthDriverHandler.synthChanged.register(self.on_synth_changed)
         gui.settingsDialogs.NVDASettingsDialog.categoryClasses.append(settings.MultilanguagePanel)
-        if config.conf[T.CONFIG_SECTION]["mode"] != MODE_OFF or rows_apply_to_current_synth():
+        if (
+            config.conf[T.CONFIG_SECTION]["mode"] != MODE_OFF
+            or rows_apply_to_current_synth()
+            or lock.language(self.engine.language_lock())
+        ):
             ensure_language_switching()
         settings.follow_table()
+        try:
+            lock.install()
+        except Exception:
+            log.error("multilanguage: could not add the language lock to the synth settings ring", exc_info=True)
 
     def terminate(self):
+        lock.uninstall()
         settings.engine = None
         self.engine.unit_context = None
         self.unit_context.uninstall()

@@ -31,6 +31,8 @@ from logHandler import log
 from mlang import table as T
 from mlang.scripts import base
 
+from . import lock
+
 
 def keyboard_language():
     """The language of the focused window's keyboard layout, as NVDA spells it, or None."""
@@ -184,7 +186,15 @@ class UnitContext:
 
     def locale_for(self, text, locale):
         """The locale a spelling helper should use for `text`: the caller's, unless the context language
-        stands in for it (no locale, or the default language's tag when that is detected through)."""
+        stands in for it (no locale, or the default language's tag when that is detected through). Under the
+        language lock, the locked language, None for the default."""
+        try:
+            locked = self.engine.language_lock()
+        except Exception:
+            log.debugWarning("multilanguage: the language lock could not be read", exc_info=True)
+            locked = lock.AUTOMATIC
+        if locked:
+            return lock.language(locked)
         if self.language is None:
             return locale
         if locale is not None and not self.overrides(locale):

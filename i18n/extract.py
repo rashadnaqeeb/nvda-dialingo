@@ -27,6 +27,7 @@ SOURCES = [
     "addon/globalPlugins/multilanguage/__init__.py",
     "addon/globalPlugins/multilanguage/settings.py",
     "addon/globalPlugins/multilanguage/context.py",
+    "addon/globalPlugins/multilanguage/lock.py",
     "addon/synthDrivers/languageTable.py",
 ]
 

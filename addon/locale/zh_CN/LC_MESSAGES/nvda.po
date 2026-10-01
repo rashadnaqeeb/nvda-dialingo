@@ -268,6 +268,10 @@ msgstr "已有 %s 的行。要替换吗？"
 msgid "Replace language"
 msgstr "替换语言"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "自动"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "语言表（多语言）"

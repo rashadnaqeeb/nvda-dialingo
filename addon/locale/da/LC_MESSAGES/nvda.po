@@ -268,6 +268,10 @@ msgstr "Der findes allerede en række for %s. Vil du erstatte den?"
 msgid "Replace language"
 msgstr "Erstat sprog"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "Automatisk"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "Sprogtabel (flersproget)"

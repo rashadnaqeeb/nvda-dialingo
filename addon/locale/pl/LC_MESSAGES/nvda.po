@@ -268,6 +268,10 @@ msgstr "Wiersz dla języka %s już istnieje. Zastąpić go?"
 msgid "Replace language"
 msgstr "Zastąp język"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "Automatyczne"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "Tabela języków (wielojęzyczność)"

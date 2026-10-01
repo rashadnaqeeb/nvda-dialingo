@@ -19,6 +19,9 @@ CONFSPEC = {
     # Whether a language with no row that the synthesizer in use cannot speak goes to the Windows voice
     # installed for it.
     "useWindowsVoices": "boolean(default=True)",
+    # The language lock, set from NVDA's synth settings ring: empty for automatic switching, "default" for
+    # all speech in the default language, or a row's language for all speech in that row's.
+    "lock": "string(default='')",
 }
 
 # Settings a row can carry, in the order they are applied to a synthesizer: the voice first, because

@@ -268,6 +268,10 @@ msgstr "Υπάρχει ήδη γραμμή για τη γλώσσα %s. Να α�
 msgid "Replace language"
 msgstr "Αντικατάσταση γλώσσας"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "Αυτόματο"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "Πίνακας γλωσσών (πολυγλωσσία)"

@@ -19,7 +19,7 @@ Install the addon, go to the NVDA settings, and scroll down to the Multilanguage
 
 When adding a language, the addon checks if you have the Windows dictionary for that language. If you don't, it offers to install it for you, which significantly increases accuracy.
 
-Each language gets its own synth, speech rate, punctuation, and dictionary settings, all configurable in the addon's settings section.
+Each language gets its own synth, speech rate, punctuation, and dictionary settings, all configurable in the addon's settings section. You can also use the NVDA synth ring, hold ctrl shift nvda left and right arrows, move to the language lock setting, change the language, adjust the settings for that language, move the lock back to automatic. the language lock can also be used to disable language switching and lock to a specific language, though iti doesn't change your NVDA language itself.
 
 
 What I'm looking for from you

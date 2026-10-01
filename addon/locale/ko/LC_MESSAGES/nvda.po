@@ -268,6 +268,10 @@ msgstr "%s에 대한 행이 이미 있습니다. 바꾸시겠습니까?"
 msgid "Replace language"
 msgstr "언어 바꾸기"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "자동 연결"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "언어 표 (다국어)"

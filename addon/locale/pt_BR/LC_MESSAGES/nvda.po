@@ -268,6 +268,10 @@ msgstr "Já existe uma linha para %s. Substituí-la?"
 msgid "Replace language"
 msgstr "Substituir idioma"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "Automático"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "Tabela de idiomas (multilíngue)"

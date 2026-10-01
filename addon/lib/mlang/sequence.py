@@ -72,3 +72,12 @@ def filter_sequence(seq, detector, default_language, detect_in_default_tagged=Tr
             out.append(LangChangeCommand(tag))
             changed = True
     return out if changed else seq
+
+
+def locked_sequence(seq, language):
+    """The sequence spoken in one language, for the language lock: every language command dropped, and, for a
+    language other than the default (None), one in front. NVDA repeats it before each string."""
+    out = [item for item in seq if not isinstance(item, LangChangeCommand)]
+    if language is not None and any(isinstance(item, str) for item in out):
+        out.insert(0, LangChangeCommand(language))
+    return out

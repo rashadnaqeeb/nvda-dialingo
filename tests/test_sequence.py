@@ -4,7 +4,7 @@ import unittest
 import nvda_stub  # noqa: F401
 from speech.commands import CharacterModeCommand, IndexCommand, LangChangeCommand
 
-from mlang.sequence import filter_sequence
+from mlang.sequence import filter_sequence, locked_sequence
 
 
 class FakeDetector:
@@ -93,6 +93,20 @@ class SequenceTests(unittest.TestCase):
         seq = ["bonjour"]
         self.assertIs(filter_sequence(seq, self.det, "en"), seq)
         self.det.mode = "full"
+
+
+class LockedSequenceTests(unittest.TestCase):
+    def test_locked_to_a_language_drops_every_tag_and_leads_with_its_own(self):
+        seq = ["Say ", LangChangeCommand("fr"), "bonjour", LangChangeCommand(None), IndexCommand(1)]
+        out = locked_sequence(seq, "es")
+        self.assertEqual(out, [LangChangeCommand("es"), "Say ", "bonjour", IndexCommand(1)])
+
+    def test_locked_to_the_default_drops_every_tag(self):
+        seq = [LangChangeCommand("fr"), "bonjour", LangChangeCommand(None)]
+        self.assertEqual(locked_sequence(seq, None), ["bonjour"])
+
+    def test_a_sequence_without_text_gets_no_tag(self):
+        self.assertEqual(locked_sequence([IndexCommand(1)], "es"), [IndexCommand(1)])
 
 
 if __name__ == "__main__":

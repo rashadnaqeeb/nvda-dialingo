@@ -268,6 +268,10 @@ msgstr "כבר קיימת שורה עבור %s. להחליף אותה?"
 msgid "Replace language"
 msgstr "החלפת שפה"
 
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "אוטומטי"
+
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
 msgstr "טבלת שפות (רב-לשוניות)"
