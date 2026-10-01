@@ -216,6 +216,7 @@ class Detector:
         self.spelling = {}  # base code -> configured spelling, the default first
         for tag in [default] + list(configured):
             self.spelling.setdefault(S.code(tag), S.normalize(tag))
+        self.configured = {S.normalize(tag) for tag in configured}
         self.spoken = list(self.spelling)
         # Languages of the default script are the clause candidates; the others are reached by script.
         self.script_languages = {}
@@ -462,23 +463,7 @@ class Detector:
         recognizer's confident pick among several, its free guess when nobody configured the script."""
         if "other" in scripts_here:
             return self._free_guess(piece, scripts_here)
-        options = []
-        for table in (self.script_languages, self.voice_languages):
-            for script in scripts_here:
-                for code in table.get(script, ()):
-                    if code not in options:
-                        options.append(code)
-            if options:
-                break
-        if scripts_here & S.CJK:
-            if "Hira" in scripts_here or "Kana" in scripts_here:
-                options = [c for c in options if "Hira" in S.scripts_of(self.tag_of(c))] or options
-            elif "Hang" in scripts_here:
-                options = [c for c in options if "Hang" in S.scripts_of(self.tag_of(c))] or options
-            else:
-                # Pure Han: a Chinese voice before a Japanese or Korean one.
-                order = {c: i for i, c in enumerate(list(self.spoken) + list(self.voice_spelling))}
-                options.sort(key=lambda c: (S.scripts_of(self.tag_of(c)) != {"Hani"}, order.get(c, 999)))
+        options = self.script_options(scripts_here)
         if self.default in options:
             if len(options) == 1:
                 return None
@@ -499,6 +484,64 @@ class Detector:
         if g and g[1] >= SCRIPT_FLOOR:
             return g[0]
         return options[0]
+
+    def script_options(self, scripts_here):
+        """The languages that write a foreign-script piece, best first: the configured ones in table order,
+        else the voices'. Kana means Japanese, hangul Korean, and pure Han a Chinese voice before the others."""
+        options = []
+        for table in (self.script_languages, self.voice_languages):
+            for script in scripts_here:
+                for code in table.get(script, ()):
+                    if code not in options:
+                        options.append(code)
+            if options:
+                break
+        if scripts_here & S.CJK:
+            if "Hira" in scripts_here or "Kana" in scripts_here:
+                options = [c for c in options if "Hira" in S.scripts_of(self.tag_of(c))] or options
+            elif "Hang" in scripts_here:
+                options = [c for c in options if "Hang" in S.scripts_of(self.tag_of(c))] or options
+            else:
+                # Pure Han: a Chinese voice before a Japanese or Korean one.
+                order = {c: i for i, c in enumerate(list(self.spoken) + list(self.voice_spelling))}
+                options.sort(key=lambda c: (S.scripts_of(self.tag_of(c)) != {"Hani"}, order.get(c, 999)))
+        return options
+
+    def keyboard(self, text, keyboard):
+        """The language typing echo reads `text` in: the keyboard layout's language where a row or a voice
+        speaks it and the text holds no letter of a script it does not write, the default's own tag when that
+        is the default; otherwise None, and the text goes by its script. A row in the keyboard's exact
+        spelling is taken over another dialect of its language (a Hong Kong keyboard, a zh_HK row)."""
+        if self.mode == MODE_OFF or not keyboard:
+            return None
+        tag = S.normalize(keyboard)
+        lang = S.code(tag)
+        if lang not in self.spelling and lang not in self.voice_spelling:
+            return None
+        if any(script == "other" for script, _, _ in S.letter_runs(text, S.scripts_of(tag))):
+            return None
+        if lang == self.default:
+            return self.default_tag
+        return tag if tag in self.configured else self.tag_of(lang)
+
+    def character(self, text):
+        """The language to spell a lone character in when no line places it, as one typed or deleted: by its
+        script alone, in the configured spelling, or None for the default's scripts. One letter is too little
+        for the recognizer, so where several languages write the script the first of script_options is taken,
+        and a script no configured language or voice writes is left to the default."""
+        if self.mode == MODE_OFF or not any(c.isalpha() for c in text):
+            return None
+        if self.default_script == "Latn" and not S.may_leave_latin(text):
+            return None
+        known = self.foreign_scripts | {self.default_script}
+        segs = S.segments(text, self.default_script, known, S.scripts_of(self.default_tag))
+        foreign = [s for s, _, _ in segs if s is not None]
+        if len(foreign) != 1 or "other" in foreign[0]:
+            return None
+        options = self.script_options(foreign[0])
+        if not options or self.default in options:
+            return None
+        return self.tag_of(options[0])
 
     def tag_of(self, code):
         return self.spelling.get(code) or self.voice_spelling.get(code) or code

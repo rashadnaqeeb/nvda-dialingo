@@ -13,10 +13,16 @@
 # treats it: the character description NVDA builds from that locale would otherwise come out in the
 # default language, and be spoken by the default voice, after the character itself was read in the
 # line's language. The "detect in default-tagged text" setting turns that off along with the rest.
+#
+# Typing echo follows the keyboard layout: a typed character, one deleted with backspace, and a typed word
+# are read in the keyboard's language where a row or a voice speaks it. A letter of a script the keyboard
+# does not write goes to the language of its script, a word to detection.
 
 import contextlib
 
 import config
+import keyboardHandler
+import languageHandler
 import speech
 import speech.speech as speech_impl
 import textInfos
@@ -26,11 +32,21 @@ from mlang import table as T
 from mlang.scripts import base
 
 
+def keyboard_language():
+    """The language of the focused window's keyboard layout, as NVDA spells it, or None."""
+    try:
+        return languageHandler.windowsLCIDToLocaleName(keyboardHandler.getInputHkl() & 0xFFFF)
+    except Exception:
+        log.debugWarning("multilanguage: the keyboard layout's language could not be read", exc_info=True)
+        return None
+
+
 class UnitContext:
     def __init__(self, engine):
         self.engine = engine
         self.language = None  # the context language while a wrapped call runs, None otherwise
         self.unit_text = None
+        self.keyboard = None  # the keyboard layout's language while NVDA echoes typing
         self.last_line = None
         self.last_runs = None
         self.last_key = None  # the engine's configuration key the cached runs were made under
@@ -41,6 +57,8 @@ class UnitContext:
     def install(self):
         self._patch("speakTextInfo", self._speakTextInfo)
         self._patch("spellTextInfo", self._spellTextInfo)
+        self._patch("speakTypedCharacters", self._speakTypedCharacters)
+        self._patch("speakSpelling", self._speakSpelling)
         self._patch("getSpellingSpeech", self._getSpellingSpeech)
         self._patch("getSingleCharDescription", self._getSingleCharDescription)
 
@@ -76,6 +94,55 @@ class UnitContext:
                 return self.originals["spellTextInfo"](info, *args, **kwargs)
         return self.originals["spellTextInfo"](info, *args, **kwargs)
 
+    def _speakTypedCharacters(self, ch, *args, **kwargs):
+        """Typing echo: the word NVDA echoes when a word ends is read in the keyboard's language too."""
+        self.keyboard = keyboard_language()
+        try:
+            return self.originals["speakTypedCharacters"](ch, *args, **kwargs)
+        finally:
+            self.keyboard = None
+
+    def _speakSpelling(self, text, locale=None, *args, **kwargs):
+        """A lone character spelled outside any context, as one typed or deleted with backspace, is spoken
+        in the keyboard's language, or by its script where the keyboard does not write it."""
+        language = None
+        if self.unit_text is None and (locale is None or self.overrides(locale)):
+            language = self.echo_language(text)
+        if language is None:
+            return self.originals["speakSpelling"](text, locale, *args, **kwargs)
+        self.language, self.unit_text = language, text.strip()
+        try:
+            return self.originals["speakSpelling"](text, locale, *args, **kwargs)
+        finally:
+            self.language, self.unit_text = None, None
+
+    def echo_language(self, text):
+        """The language a typed or deleted character is echoed in, None for the default."""
+        if not isinstance(text, str) or len(text.strip()) != 1:
+            return None
+        detector = self.engine.current()
+        if detector is None:
+            return None
+        try:
+            ch = text.strip()
+            language = detector.keyboard(ch, self.keyboard or keyboard_language()) or detector.character(ch)
+        except Exception:
+            log.debugWarning("multilanguage: no echo language for a spelled character", exc_info=True)
+            return None
+        return language if language and base(language) != base(detector.default_tag) else None
+
+    def typed_word_language(self, text):
+        """The keyboard's language for a typed word, the default's own tag when it is the default, or None
+        where the keyboard does not write the word, which is then detected."""
+        detector = self.engine.current()
+        if detector is None:
+            return None
+        try:
+            return detector.keyboard(text, self.keyboard)
+        except Exception:
+            log.debugWarning("multilanguage: no keyboard language for a typed word", exc_info=True)
+            return None
+
     def _getSpellingSpeech(self, text, locale=None, *args, **kwargs):
         return self.originals["getSpellingSpeech"](text, self.locale_for(text, locale), *args, **kwargs)
 
@@ -103,11 +170,16 @@ class UnitContext:
             return False
 
     def language_for(self, text):
-        """The context language for a string spoken while a context is held: the unit's own text only."""
-        if self.language is None or not isinstance(text, str):
+        """The context language for a string spoken while a context is held: the unit's own text only.
+        While NVDA echoes typing, a word's keyboard language."""
+        if not isinstance(text, str):
             return None
         stripped = text.strip()
         if not stripped:
+            return None
+        if self.language is None:
+            if self.keyboard is not None and self.unit_text is None:
+                return self.typed_word_language(stripped)
             return None
         if self.unit_text is not None and stripped != self.unit_text and stripped not in self.unit_text:
             return None

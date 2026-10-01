@@ -81,6 +81,13 @@ class SequenceTests(unittest.TestCase):
         seq = ["a"]
         self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text: None), seq)
 
+    def test_unit_in_the_default_language_is_not_detected(self):
+        # A word typed on a keyboard of the default language stays with the default voice.
+        seq = ["bonjour"]
+        self.assertIs(filter_sequence(seq, self.det, "en_GB", unit_language=lambda text: "en_US"), seq)
+        seq = [LangChangeCommand("en_US"), "bonjour"]
+        self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text: "en"), seq)
+
     def test_mode_off_passes_through(self):
         self.det.mode = "off"
         seq = ["bonjour"]

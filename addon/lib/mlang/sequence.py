@@ -17,8 +17,9 @@ def filter_sequence(seq, detector, default_language, detect_in_default_tagged=Tr
     """A new sequence with LangChangeCommand items inserted around the runs the detector tags.
 
     unit_language(text) -> a language for a string that is the unit being read at the caret (a character
-    or a word, which cannot be detected alone), from the language its line reads in at that spot; None
-    otherwise. Such a string is tagged whole instead of detected.
+    or a word, which cannot be detected alone), from the language its line reads in at that spot, or a
+    typed word in its keyboard's language; None otherwise. Such a string is tagged whole instead of
+    detected, or left as it is when the language is the default's.
     """
     if detector is None or detector.mode == "off":
         return seq
@@ -43,7 +44,8 @@ def filter_sequence(seq, detector, default_language, detect_in_default_tagged=Tr
         if unit_language is not None and (tag is None or (detect_in_default_tagged and base(tag) == default_base)):
             unit = unit_language(item)
         if unit is not None:
-            runs = [(unit, item)]
+            # The default's own language (a typed word on a keyboard of the default) leaves the text alone.
+            runs = [(tag if base(unit) == default_base else unit, item)]
         elif character_mode or (len(item.strip()) < 2 and not is_text(item)):
             out.append(item)
             continue
