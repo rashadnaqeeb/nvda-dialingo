@@ -41,6 +41,17 @@ def keyboard_language():
         return None
 
 
+def describes(locale, character):
+    """Whether NVDA's character descriptions for `locale` (or its language) describe `character`."""
+    import characterProcessing
+
+    try:
+        data = characterProcessing._charDescLocaleDataMap.fetchLocaleData(locale)
+    except LookupError:
+        return False
+    return bool(data.getCharacterDescription(character.lower()))
+
+
 class UnitContext:
     def __init__(self, engine):
         self.engine = engine
@@ -144,10 +155,30 @@ class UnitContext:
             return None
 
     def _getSpellingSpeech(self, text, locale=None, *args, **kwargs):
-        return self.originals["getSpellingSpeech"](text, self.locale_for(text, locale), *args, **kwargs)
+        locale = self.locale_for(text, locale)
+        if args and args[0] and self.undescribed(locale, text):
+            args = (False,) + args[1:]
+        elif kwargs.get("useCharacterDescriptions") and self.undescribed(locale, text):
+            kwargs["useCharacterDescriptions"] = False
+        return self.originals["getSpellingSpeech"](text, locale, *args, **kwargs)
 
     def _getSingleCharDescription(self, text, locale=None, *args, **kwargs):
-        return self.originals["getSingleCharDescription"](text, self.locale_for(text, locale), *args, **kwargs)
+        locale = self.locale_for(text, locale)
+        if self.undescribed(locale, text):
+            return iter(())
+        return self.originals["getSingleCharDescription"](text, locale, *args, **kwargs)
+
+    def undescribed(self, locale, text):
+        """Whether a character spoken in a language other than the default has no description of its own in
+        that language. NVDA would read the English one, in that language's voice; nothing is read instead,
+        or, where the description was asked for by spelling, the character alone."""
+        if not locale or base(locale) == "en" or not isinstance(text, str) or len(text) != 1:
+            return False
+        try:
+            return base(locale) != base(speech.getCurrentLanguage()) and not describes(locale, text)
+        except Exception:
+            log.debugWarning("multilanguage: character descriptions for %s could not be checked" % locale, exc_info=True)
+            return False
 
     # ------------------------------------------------------------ context
 
