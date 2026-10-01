@@ -152,8 +152,11 @@ def _done_early(synth):
 
 
 # How long a guest held after an early done may go without the report that its audio played before it is
-# freed anyway: longer than the most audio it can still hold when it reports done.
-PLAYED_TIMEOUT = 1.0
+# freed anyway. SAPI 5 reports done once its last feed has returned, and NVDA's player returns from a feed only
+# when what is left fits its 0.4 second buffer, so no more than that is still to play; the margin is for the
+# notification's trip between the processes. A short piece needs this: its end marker is reported once, before
+# its audio has played, since the mark reaches the player ahead of the audio SAPI 5 holds back to start with.
+PLAYED_TIMEOUT = 0.45
 
 
 def _after_playing(synth, func):
