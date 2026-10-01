@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ka\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "გამორთულია"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "მხოლოდ დამწერლობით"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "მხოლოდ დამწერლობით და ჭდეებით"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "მრავალენოვანი"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "ცვლის ენის ამოცნობას: გამორთული, მხოლოდ დამწერლობით, სრული"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "ცვლის ენის ამოცნობას: გამორთული, მხოლოდ დამწერლობით და ჭდეებით, სრული"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "&Windows-ის ხმების გამოყენება ენ
 msgid "Default s&ynthesizer:"
 msgstr "ნაგულისხმევი &სინთეზატორი:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&ენები (ნაგულისხმევ ენას სტრიქონი არ სჭირდება):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&ენები (მონიშნულები ამოიცნობა; ნაგულისხმევ ენას სტრიქონი არ სჭირდება):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "%s ენისთვის სტრიქონი უკვე არ
 msgid "Replace language"
 msgstr "ენის ჩანაცვლება"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "ენის ჩაკეტვა"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
-msgstr "ავტომატურად"
+msgstr "ავტომატური"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "ენის ამოცნობა"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "ენის ამოცნობა (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "ჩართულია"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "გამორთულია"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

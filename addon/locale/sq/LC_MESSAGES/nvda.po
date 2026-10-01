@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sq\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Çaktivizuar"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Vetëm sipas shkrimit"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Vetëm sipas shkrimit dhe etiketave"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Shumëgjuhësi"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Ndërron zbulimin e gjuhës: çaktivizuar, vetëm sipas shkrimit, e plotë"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Ndërron zbulimin e gjuhës: çaktivizuar, vetëm sipas shkrimit dhe etiketave, e plotë"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Përdor zërat e &Windows për gjuhët që sintetizatori nuk i flet"
 msgid "Default s&ynthesizer:"
 msgstr "S&intetizatori i parazgjedhur:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Gjuhët (gjuha e parazgjedhur nuk ka nevojë për rresht):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Gjuhët (zbulohen kur janë të shënuara; gjuha e parazgjedhur nuk ka nevojë për rresht):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -267,6 +267,30 @@ msgstr "Ka tashmë një rresht për %s. Ta zëvendësoj?"
 #. Translators: Title of the message that asks whether to replace a language's row.
 msgid "Replace language"
 msgstr "Zëvendëso gjuhën"
+
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Kyçja e gjuhës"
+
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "Automatike"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Zbulimi i gjuhës"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Zbulimi i gjuhës (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "Aktivizuar"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "çaktivizuar"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

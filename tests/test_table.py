@@ -21,6 +21,21 @@ class SymbolLevelTest(unittest.TestCase):
         self.assertNotIn("symbolLevel", Row("fr", "espeak").to_dict())
 
 
+class DetectTest(unittest.TestCase):
+    def test_off_round_trips_and_on_is_not_written(self):
+        table = Table.from_json(Table([Row("fr_FR", "espeak", detect=False), Row("de_DE", "espeak")]).to_json())
+        self.assertEqual([r.detect for r in table.rows], [False, True])
+        self.assertNotIn("detect", Row("fr", "espeak").to_dict())
+        self.assertEqual(table.detected(), ["de_DE"])
+        self.assertEqual(table.undetected(), ["fr_FR"])
+
+    def test_absent_is_on(self):
+        self.assertTrue(Row.from_dict({"lang": "fr", "synth": "espeak"}).detect)
+
+    def test_stays_out_of_the_synthesizer_settings(self):
+        self.assertEqual(Row("fr", "espeak", detect=False, rate=40).key(), Row("fr", "espeak", rate=40).key())
+
+
 class MalformedTest(unittest.TestCase):
     def test_stored_values_of_the_wrong_shape_are_an_empty_table(self):
         for text in ("not json", "[]", "5", '{"rows": 5}', '{"rows": null}', '{"rows": {"lang": "fr"}}'):

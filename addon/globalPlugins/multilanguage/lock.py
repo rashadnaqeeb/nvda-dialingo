@@ -10,6 +10,9 @@
 # the rest, as the row's synthesizer offers them, and a change is saved to the row and heard at once. On the
 # language table synthesizer that is every setting a row carries; on the synthesizer in use, where a row
 # acts through prosody commands, its rate, pitch, and volume.
+#
+# After the lock comes language detection: the detection mode, or, locked to a row, whether detection may
+# switch to that row's language once the lock is back on Automatic.
 
 import addonHandler
 import config
@@ -25,6 +28,7 @@ from speech import getCurrentLanguage
 
 from mlang import hosts, prosody
 from mlang import table as T
+from mlang.detector import MODE_FULL, MODE_OFF, MODES
 from mlang.hosts import DRIVER_NAME
 from mlang.scripts import code
 
@@ -105,6 +109,80 @@ class LockSetting(synthSettingsRing.SynthSetting):
 
     def _getReportValue(self, val):
         return self._values[val].displayName
+
+
+# ------------------------------------------------------------ detection
+
+
+class DetectionSetting(synthSettingsRing.SynthSetting):
+    """The ring's entry for language detection, after the lock; its value is an index, saved in the add-on's
+    section, not the synthesizer's."""
+
+
+class ModeSetting(DetectionSetting):
+    """The detection mode, as in the settings panel: off, script and tags only, or full."""
+
+    def __init__(self, synth):
+        # Translators: The name of the detection mode in the synth settings ring.
+        setting = DriverSetting("multilanguageDetection", _("Language detection"), availableInSettingsRing=True, useConfig=False)
+        super().__init__(synth, setting, 0, len(MODES) - 1)
+
+    def _get_value(self):
+        mode = config.conf[T.CONFIG_SECTION]["mode"]
+        return MODES.index(mode if mode in MODES else MODE_FULL)
+
+    def _set_value(self, index):
+        mode = MODES[index]
+        config.conf[T.CONFIG_SECTION]["mode"] = mode
+        if mode != MODE_OFF:
+            from . import ensure_language_switching
+
+            ensure_language_switching()
+
+    def _getReportValue(self, val):
+        from . import MODE_LABELS
+
+        return MODE_LABELS[MODES[val]]
+
+
+class RowDetection(DetectionSetting):
+    """Whether detection may switch to the locked row's language."""
+
+    def __init__(self, synth, lang):
+        self.lang = lang
+        # Translators: The name of the entry in the synth settings ring that turns detection of one language on
+        # or off; %s is the language's name.
+        setting = DriverSetting("multilanguageRowDetection", _("%s detection") % language_name(lang), availableInSettingsRing=True, useConfig=False)
+        super().__init__(synth, setting, 0, 1)
+
+    def _get_value(self):
+        row = T.load(config.conf).row_for(self.lang, exact=True)
+        return int(row is None or row.detect)
+
+    def _set_value(self, value):
+        table = T.load(config.conf)
+        row = table.row_for(self.lang, exact=True)
+        if row is None:
+            return
+        row.detect = bool(value)
+        # Not T.save: the language table driver would cancel speech and rebuild its guests, and the row's
+        # synthesizer settings are unchanged.
+        config.conf[T.CONFIG_SECTION]["table"] = table.to_json()
+        synth = synthDriverHandler.getSynth()
+        if synth is not None and synth.name == DRIVER_NAME:
+            synth.update_row(row)
+
+    def _getReportValue(self, val):
+        # Translators: The value of a language's detection entry in the synth settings ring.
+        return _("on") if val else _("off")
+
+
+def detection_entry(synth):
+    """The detection entry for the lock as saved: a row's own switch when locked to a row, else the mode."""
+    value = stored(T.load(config.conf))
+    if value in (AUTOMATIC, DEFAULT):
+        return ModeSetting(synth)
+    return RowDetection(synth, value)
 
 
 # ------------------------------------------------------------ the locked row's settings
@@ -217,14 +295,15 @@ def install():
         settings = getattr(ring, "settings", None) or []
         current = ring._current
         previous = settings[current] if isinstance(current, int) and 0 <= current < len(settings) else None
-        on_lock = isinstance(previous, LockSetting)
+        # The add-on's own entry the ring was on, which the rebuilt ring stays on.
+        kept = next((cls for cls in (LockSetting, DetectionSetting) if isinstance(previous, cls)), None)
         try:
             entries = row_entries(synth)
         except Exception:
             log.error("multilanguage: the locked language's settings could not be put in the ring", exc_info=True)
             entries = None
         if entries is None:
-            if on_lock:
+            if kept is not None:
                 # NVDA keeps the ring's place by finding the setting among the synthesizer's, where the lock is not.
                 ring._current = None
             original(ring, synth)
@@ -236,10 +315,17 @@ def install():
             ring._current = ids.index(wanted) if wanted in ids else ids.index("rate") if "rate" in ids else None
         try:
             ring.settings = entries + [LockSetting(synth)]
-            if on_lock or ring._current is None:
+            if kept is LockSetting or ring._current is None:
                 ring._current = len(ring.settings) - 1
         except Exception:
             log.error("multilanguage: the language lock could not be added to the synth settings ring", exc_info=True)
+            return
+        try:
+            ring.settings.append(detection_entry(synth))
+            if kept is DetectionSetting:
+                ring._current = len(ring.settings) - 1
+        except Exception:
+            log.error("multilanguage: language detection could not be added to the synth settings ring", exc_info=True)
 
     updateSupportedSettings._mlang_original = original
     synthSettingsRing.SynthSettingsRing.updateSupportedSettings = updateSupportedSettings

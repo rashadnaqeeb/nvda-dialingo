@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: is\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Slökkt"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Aðeins eftir ritkerfi"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Aðeins eftir ritkerfi og merkjum"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Fjöltyngi"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Skiptir um tungumálagreiningu: slökkt, aðeins eftir ritkerfi, full"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Skiptir um tungumálagreiningu: slökkt, aðeins eftir ritkerfi og merkjum, full"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Nota &Windows-raddir fyrir tungumál sem talgervillinn talar ekki"
 msgid "Default s&ynthesizer:"
 msgstr "Sjálfgefinn &talgervill:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Tungumál (sjálfgefið tungumál þarf enga röð):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Tungumál (greind þegar hakað er við; sjálfgefið tungumál þarf enga röð):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "Það er þegar til röð fyrir %s. Skipta henni út?"
 msgid "Replace language"
 msgstr "Skipta um tungumál"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Tungumálalás"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
-msgstr "Sjálfkrafa"
+msgstr "Sjálfvirkt"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Tungumálagreining"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Tungumálagreining (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "virkt"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "óvirkt"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

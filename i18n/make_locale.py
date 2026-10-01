@@ -22,10 +22,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 CODES = {
     "S0": "Off",
-    "S1": "By script only",
     "S2": "Full",
     "S3": "Multilanguage",
-    "S4": "Cycles language detection: off, by script only, full",
     "S5": "Toggles strict language detection",
     "S6": "Language detection %s",
     "S7": "Strict detection on",
@@ -40,7 +38,6 @@ CODES = {
     "S16": "%s dictionary installed.",
     "S17": "Language &detection:",
     "S18": "Default s&ynthesizer:",
-    "S19": "&Languages (the default needs no row):",
     "S20": "Each row speaks with its own synthesizer and voice.",
     "S21": "Enter a language.",
     "S24": "Install finished, but Windows does not show the %s dictionary yet. Restart Windows.",
@@ -68,6 +65,15 @@ CODES = {
     "S49": "Could not check the %s dictionary. See the NVDA log.",
     "S50": "There is already a row for %s. Replace it?",
     "S51": "Replace language",
+    "S52": "&Languages (detected when checked; the default needs no row):",
+    "S53": "Language lock",
+    "S54": "Automatic",
+    "S55": "Language detection",
+    "S56": "%s detection",
+    "S57": "on",
+    "S58": "off",
+    "S59": "Script and tags only",
+    "S60": "Cycles language detection: off, script and tags only, full",
     # Terms NVDA usually has; here for the languages where it does not.
     "T1": "&Synthesizer:",
     "T2": "&Voice:",
@@ -92,8 +98,9 @@ CODES = {
 }
 
 # Codes whose translation here wins over NVDA's: NVDA has the same English word in another sense
-# ("unknown window", "undefined"), not as a dictionary state beside "installed" and "missing".
-OURS_FIRST = {"S48"}
+# ("unknown window", "undefined"), not as a dictionary state beside "installed" and "missing"; and
+# "Automatic" as the braille display's detection ("automatic connection"), not as the lock's switching.
+OURS_FIRST = {"S48", "S54"}
 
 
 def load_translations():
@@ -141,7 +148,8 @@ def strip_accelerator(text):
 
 
 def plain(msgid):
-    return strip_accelerator(msgid).rstrip(":：").rstrip(".")
+    # The space French and others put before a colon goes with it; Amharic and Khmer write their own colons.
+    return strip_accelerator(msgid).rstrip().rstrip(":：፦៖").rstrip(".").rstrip()
 
 
 def derived(msgid, entries):

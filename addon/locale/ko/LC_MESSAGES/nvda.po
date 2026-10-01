@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ko\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "끔"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "문자 체계로만"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "문자 체계와 태그로만"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "다국어"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "언어 감지 전환: 끄기, 문자 체계로만, 전체"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "언어 감지 전환: 끄기, 문자 체계와 태그로만, 전체"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "음성 엔진이 말할 수 없는 언어에 Windows 음성 사용(&W)"
 msgid "Default s&ynthesizer:"
 msgstr "기본 음성 엔진(&Y):"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "언어(&L) (기본 언어는 행이 필요 없음):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "언어(&L) (선택하면 감지됨, 기본 언어는 행이 필요 없음):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "%s에 대한 행이 이미 있습니다. 바꾸시겠습니까?"
 msgid "Replace language"
 msgstr "언어 바꾸기"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "언어 잠금"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
-msgstr "자동 연결"
+msgstr "자동"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "언어 감지"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "언어 감지 (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "켬"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "끔"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

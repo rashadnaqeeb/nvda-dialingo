@@ -74,6 +74,17 @@ def filter_sequence(seq, detector, default_language, detect_in_default_tagged=Tr
     return out if changed else seq
 
 
+def untagged_sequence(seq, ignored):
+    """The sequence with each language command whose language `ignored(language)` names replaced by one for the
+    default, so its text is read as untagged and detected as such."""
+    if not any(isinstance(item, LangChangeCommand) and item.lang and ignored(item.lang) for item in seq):
+        return seq
+    return [
+        LangChangeCommand(None) if isinstance(item, LangChangeCommand) and item.lang and ignored(item.lang) else item
+        for item in seq
+    ]
+
+
 def locked_sequence(seq, language):
     """The sequence spoken in one language, for the language lock: every language command dropped, and, for a
     language other than the default (None), one in front. NVDA repeats it before each string."""

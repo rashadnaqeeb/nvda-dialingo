@@ -187,7 +187,8 @@ class UnitContext:
     def locale_for(self, text, locale):
         """The locale a spelling helper should use for `text`: the caller's, unless the context language
         stands in for it (no locale, or the default language's tag when that is detected through). Under the
-        language lock, the locked language, None for the default."""
+        language lock, the locked language, None for the default. A tag for a language with detection off is
+        no locale."""
         try:
             locked = self.engine.language_lock()
         except Exception:
@@ -195,6 +196,11 @@ class UnitContext:
             locked = lock.AUTOMATIC
         if locked:
             return lock.language(locked)
+        try:
+            if locale is not None and self.engine.ignores_tag(locale):
+                locale = None
+        except Exception:
+            log.debugWarning("multilanguage: whether the locale's row detects could not be read", exc_info=True)
         if self.language is None:
             return locale
         if locale is not None and not self.overrides(locale):

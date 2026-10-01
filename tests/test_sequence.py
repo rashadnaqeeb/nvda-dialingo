@@ -4,7 +4,7 @@ import unittest
 import nvda_stub  # noqa: F401
 from speech.commands import CharacterModeCommand, IndexCommand, LangChangeCommand
 
-from mlang.sequence import filter_sequence, locked_sequence
+from mlang.sequence import filter_sequence, locked_sequence, untagged_sequence
 
 
 class FakeDetector:
@@ -107,6 +107,24 @@ class LockedSequenceTests(unittest.TestCase):
 
     def test_a_sequence_without_text_gets_no_tag(self):
         self.assertEqual(locked_sequence([IndexCommand(1)], "es"), [IndexCommand(1)])
+
+
+class UntaggedSequenceTests(unittest.TestCase):
+    def test_an_ignored_tag_becomes_the_default_and_others_stay(self):
+        seq = [LangChangeCommand("fr_FR"), "Bonjour", LangChangeCommand("de"), "Hallo", LangChangeCommand(None)]
+        out = untagged_sequence(seq, lambda lang: lang.startswith("fr"))
+        self.assertEqual(out, [LangChangeCommand(None), "Bonjour", LangChangeCommand("de"), "Hallo", LangChangeCommand(None)])
+
+    def test_a_sequence_with_nothing_ignored_is_returned_as_is(self):
+        seq = [LangChangeCommand("de"), "Hallo"]
+        self.assertIs(untagged_sequence(seq, lambda lang: False), seq)
+
+    def test_the_text_is_then_detected_as_untagged(self):
+        seq = untagged_sequence([LangChangeCommand("fr"), "Say bonjour"], lambda lang: lang == "fr")
+        self.assertEqual(
+            filter_sequence(seq, FakeDetector(), "en_US"),
+            [LangChangeCommand(None), "Say ", LangChangeCommand("fr"), "bonjour", LangChangeCommand(None)],
+        )
 
 
 if __name__ == "__main__":

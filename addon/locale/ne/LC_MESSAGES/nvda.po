@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ne\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "बन्द"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "लिपि अनुसार मात्र"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "लिपि र ट्याग अनुसार मात्र"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "बहुभाषी"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "भाषा पहिचान बदल्छ: बन्द, लिपि अनुसार मात्र, पूर्ण"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "भाषा पहिचान बदल्छ: बन्द, लिपि र ट्याग अनुसार मात्र, पूर्ण"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "सिन्थेसाइजरले बोल्न नसक्न�
 msgid "Default s&ynthesizer:"
 msgstr "पूर्वनिर्धारित &सिन्थेसाइजर:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&भाषाहरू (पूर्वनिर्धारित भाषालाई पङ्क्ति चाहिँदैन):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&भाषाहरू (चिन्ह लगाइएमा पहिचान गरिन्छ; पूर्वनिर्धारित भाषालाई पङ्क्ति चाहिँदैन):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "%s का लागि पहिले नै एउटा पङ्क�
 msgid "Replace language"
 msgstr "भाषा बदल्नुहोस्"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "भाषा लक"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
 msgstr "स्वचालित"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "भाषा पहिचान"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "भाषा पहिचान (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "लाग्यो"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "खुल्यो"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

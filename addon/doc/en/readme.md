@@ -18,6 +18,8 @@ When you add a row for a language with no dictionary, the add-on offers to insta
 
 Your synthesizer, with its voice and settings, speaks your default language. That never changes. In NVDA's settings, under Multilanguage, add a row for each other language: its synthesizer, its voice, and its rate, pitch, and volume. A row can also have its own punctuation/symbol level (none, some, most, or all); "Same as NVDA" uses the level in NVDA's speech settings. The language field fills in from the voice; you can type another language code. The Test button speaks a sample. A new row starts from the synthesizer's own values, so a row saved unchanged speaks as that synthesizer does on its own.
 
+Each row in the languages list has a check box; press space to check or uncheck it. Unchecked, the language is never switched to, even where a voice speaks it or the text is in its writing system. Text an application tags with that language is read as if it had no tag, and detected among the checked languages. The row keeps its settings, and the language lock can still be set to it. A new row is checked.
+
 Each row's voice has a voice dictionary of its own. NVDA applies the voice dictionary of your synthesizer's current voice to everything it speaks; the entries you add for a row's voice apply to the text that voice speaks. The "Voice dictionary" button in the panel opens NVDA's dictionary dialog on the selected row's voice, the same dictionary NVDA uses when that voice is your current voice, so entries made either way are shared.
 
 There are two ways the rows are used.
@@ -42,8 +44,8 @@ Windows spelling dictionaries sharpen detection. The add-on offers to install th
 
 ## Detection modes
 
-- Off: nothing is detected; tags from applications are trusted as NVDA normally does.
-- By script only: text in a writing system the default language does not use is switched; text in the default script is left alone. This mode never guesses.
+- Off: no language switching at all. Everything is read in your default language, including text an application tags with another language. The language lock still works.
+- Script and tags only: text in a writing system the default language does not use is switched, and text an application tags with a language is read in that language; text in the default script is left alone. This mode never guesses.
 - Full: as above, and text in the default script is judged clause by clause among the default language and the configured languages written in that script. This is the default mode.
 
 Strict mode asks Windows' own language detection to agree with the add-on's recognizer before switching. It switches less often and, so far, never wrongly.
@@ -81,6 +83,11 @@ NVDA's synth settings ring has a Language lock entry, after the synthesizer's ow
 While a language in the table is locked, the rest of the ring shows that language's settings instead of your default voice's, and changing one saves it to that language at once. On the Language table synthesizer that is its voice, variant, rate, rate boost, pitch, inflection, and volume, as its synthesizer offers them; a language spoken by your own synthesizer has rate, pitch, and volume, since that synthesizer picks the voice. Choosing a new voice keeps the language's variant; if the new voice does not have it, pick another with the Variant entry.
 
 The choice is saved, and stays until you set it back to Automatic. A language later removed from the table returns the lock to Automatic.
+
+Right after the Language lock comes a language detection entry.
+
+- While the lock is on Automatic or your default language, it is the detection mode: Off, Script and tags only, or Full, the same setting as in the Multilanguage panel.
+- While a language in the table is locked, it is that language's detection, on or off, the same as its check box in the languages list. Nothing is detected while the lock is on, so the change is heard once the lock is back on Automatic.
 
 ## Scripts
 Two scripts, without default gestures, are in the Speech category of NVDA's Input Gestures dialog: one cycles the detection mode, one toggles strict mode.

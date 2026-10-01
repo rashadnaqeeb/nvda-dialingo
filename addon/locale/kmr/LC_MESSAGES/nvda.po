@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: kmr\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Vemiriye (Girtîye)"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Tenê li gorî nivîsê"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Tenê li gorî nivîsê û etîketan"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Pirzimanî"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Tespîtkirina zimên diguherîne: girtî, tenê li gorî nivîsê, tevahî"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Tespîtkirina zimên diguherîne: girtî, tenê li gorî nivîsê û etîketan, tevahî"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Ji bo zimanên ku sentezker nikare biaxive dengên &Windows bi kar bîne
 msgid "Default s&ynthesizer:"
 msgstr "S&entezkera standard:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Ziman (zimanê standard ne hewceyî rêzê ye):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Ziman (dema nîşankirî bin têne tespîtkirin; zimanê standard ne hewceyî rêzê ye):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "Ji bo %s jixwe rêzek heye. Bila were guhertin?"
 msgid "Replace language"
 msgstr "Zimên li şûnê deyne"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Kilîda zimên"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
-msgstr "otomatîk"
+msgstr "Otomatîk"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Tespîtkirina zimên"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Tespîtkirina zimên (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "vekirî"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "girtî"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

@@ -33,7 +33,7 @@ from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME, REFUSED  # noqa: E402
 from mlang.scripts import base  # noqa: E402
-from mlang.sequence import filter_sequence, locked_sequence  # noqa: E402
+from mlang.sequence import filter_sequence, locked_sequence, untagged_sequence  # noqa: E402
 
 from . import context, lock, settings  # noqa: E402
 from .grid import GridLabels  # noqa: E402
@@ -41,10 +41,12 @@ from .grid import GridLabels  # noqa: E402
 addonHandler.initTranslation()
 
 MODE_LABELS = {
-    # Translators: A detection mode: no language detection.
+    # Translators: A detection mode: no language switching at all, not even for text applications tag with
+    # a language.
     "off": _("Off"),
-    # Translators: A detection mode: only text in another writing system is switched.
-    "script": _("By script only"),
+    # Translators: A detection mode: text in another writing system is switched, and text applications tag
+    # with a language is read in it; nothing is guessed.
+    "script": _("Script and tags only"),
     # Translators: A detection mode: text in the default script is detected clause by clause too.
     "full": _("Full"),
 }
@@ -103,7 +105,8 @@ class Engine:
         self.key = None
         self.table_raw = None
         self.table = T.Table()
-        self.table_languages = ()
+        self.detected_languages = ()
+        self.undetected_languages = ()
         self.table_rows = []
         self.offsets = {}
         self.offsets_key = None
@@ -151,7 +154,8 @@ class Engine:
             table = T.Table.from_json(raw)
             self.table_raw = raw
             self.table = table
-            self.table_languages = tuple(table.languages())
+            self.detected_languages = tuple(table.detected())
+            self.undetected_languages = tuple(table.undetected())
             self.table_rows = table.rows
             self.offsets_key = None
 
@@ -187,9 +191,22 @@ class Engine:
         return self.dictionary or None
 
     def language_lock(self):
-        """The language lock in effect: lock.AUTOMATIC, lock.DEFAULT, or a row's language."""
+        """The language lock in effect: lock.AUTOMATIC, lock.DEFAULT, or a row's language. Detection mode off
+        is the default's lock: no language switches at all, not even for text an application tagged."""
         self._sync_table()
-        return lock.stored(self.table)
+        locked = lock.stored(self.table)
+        if locked == lock.AUTOMATIC and config.conf[T.CONFIG_SECTION]["mode"] == MODE_OFF:
+            return lock.DEFAULT
+        return locked
+
+    def ignores_tag(self, lang):
+        """Whether text an application tagged `lang` is read as untagged: the row that would speak it has
+        detection off. The default language has no row."""
+        self._sync_table()
+        if not self.undetected_languages or not lang:
+            return False
+        row = self.table.row_for(lang)
+        return row is not None and not row.detect and base(lang) != base(getCurrentLanguage())
 
     def current(self):
         """The detector for the current configuration, default language, and table; None when off, locked to
@@ -204,10 +221,11 @@ class Engine:
             return None
         default = getCurrentLanguage()
         self._sync_table()
-        configured = self.table_languages
+        configured = self.detected_languages
+        excluded = self.undetected_languages
         strict = bool(section["strict"])
         available = self._available(section)
-        key = (mode, default, configured, strict, available)
+        key = (mode, default, configured, excluded, strict, available)
         if key != self.key:
             try:
                 backend = self._backend(strict)
@@ -215,7 +233,7 @@ class Engine:
                     self.detector = Detector(backend, default, configured, self._dictionary(), mode, self.words)
                 else:
                     self.detector.mode = mode
-                self.detector.configure(default, configured, available)
+                self.detector.configure(default, configured, available, excluded)
                 self.key = key
             except Exception:
                 log.error("multilanguage: language detection could not start", exc_info=True)
@@ -252,6 +270,11 @@ class Engine:
                 sequence = locked_sequence(sequence, lock.language(locked))
             except Exception:
                 log.error("multilanguage: the language lock failed on a sequence", exc_info=True)
+        else:
+            try:
+                sequence = untagged_sequence(sequence, self.ignores_tag)
+            except Exception:
+                log.error("multilanguage: tags for languages with detection off could not be dropped", exc_info=True)
         try:
             detector = self.current()
             if detector is not None:
@@ -455,7 +478,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     @script(
         # Translators: Description of a script.
-        description=_("Cycles language detection: off, by script only, full"),
+        description=_("Cycles language detection: off, script and tags only, full"),
         category=SCRCAT_SPEECH,
     )
     def script_cycleMode(self, gesture):

@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: af_ZA\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Af"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Slegs volgens skrif"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Slegs volgens skrif en etikette"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Veeltalig"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Wissel taalherkenning: af, slegs volgens skrif, volledig"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Wissel taalherkenning: af, slegs volgens skrif en etikette, volledig"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Gebruik &Windows-stemme vir tale wat die sintetiseerder nie praat nie"
 msgid "Default s&ynthesizer:"
 msgstr "Verstek-s&intetiseerder:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Tale (die verstektaal het geen ry nodig nie):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Tale (bespeur wanneer gemerk; die verstektaal het geen ry nodig nie):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -267,6 +267,30 @@ msgstr "Daar is reeds 'n ry vir %s. Vervang dit?"
 #. Translators: Title of the message that asks whether to replace a language's row.
 msgid "Replace language"
 msgstr "Vervang taal"
+
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Taalslot"
+
+#. Translators: The language lock's value when languages switch as configured.
+msgid "Automatic"
+msgstr "Outomaties"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Taalherkenning"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Taalherkenning (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "aan"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "af"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

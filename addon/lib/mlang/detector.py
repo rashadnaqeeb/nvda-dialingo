@@ -199,7 +199,8 @@ class Detector:
     """
     backend: a recognizer (recognizers.py).
     default: the default voice's language, any spelling.
-    configured: the languages with a voice configured, any spelling; the detector answers in these spellings.
+    configured: the languages with a voice configured and detection on, any spelling; the detector answers in
+    these spellings.
     dictionary: a dictionary.Dictionary, or None for no spelling evidence.
     mode: off, script, or full.
     reader_words: lowercased strings that are the reader's own vocabulary, never scored.
@@ -216,9 +217,11 @@ class Detector:
         self.calls = 0
         self.configure(default, configured)
 
-    def configure(self, default, configured, available=()):
-        """default: the default voice's language; configured: the languages with a row; available: the
-        languages the synthesizer's voices speak, the second tier for a script nobody configured."""
+    def configure(self, default, configured, available=(), excluded=()):
+        """default: the default voice's language; configured: the languages with a row and detection on;
+        available: the languages the synthesizer's voices speak, the second tier for a script nobody
+        configured; excluded: the languages of rows with detection off, never switched to, though a voice
+        speaks them or the recognizer guesses them, unless another row of the language detects."""
         self.default_tag = default
         self.default = S.code(default)
         self.default_script = S.primary_script(default)
@@ -226,6 +229,7 @@ class Detector:
         for tag in [default] + list(configured):
             self.spelling.setdefault(S.code(tag), S.normalize(tag))
         self.configured = {S.normalize(tag) for tag in configured}
+        self.excluded = {S.code(tag) for tag in excluded} - set(self.spelling)
         self.spoken = list(self.spelling)
         # Languages of the default script are the clause candidates; the others are reached by script.
         self.script_languages = {}
@@ -242,7 +246,7 @@ class Detector:
             if not tag:
                 continue
             code = S.code(tag)
-            if code in self.spelling or code in self.voice_spelling:
+            if code in self.spelling or code in self.voice_spelling or code in self.excluded:
                 continue
             self.voice_spelling[code] = S.normalize(tag)
             for script in S.scripts_of(tag):
@@ -584,7 +588,7 @@ class Detector:
     def _free_guess(self, piece, scripts_here):
         self.calls += 1
         g = self.backend.free(piece)
-        if not g or g[0] == self.default:
+        if not g or g[0] == self.default or S.code(g[0]) in self.excluded:
             return None
         # By the text's script: many languages share Latin, few share another script. The guess's own
         # script would not do, since Windows knows no script for some of the recognizer's codes (arz, yue).

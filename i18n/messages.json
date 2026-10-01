@@ -2,11 +2,11 @@
  "messages": [
   {
    "msgid": "Off",
-   "comment": "A detection mode: no language detection."
+   "comment": "A detection mode: no language switching at all, not even for text applications tag with"
   },
   {
-   "msgid": "By script only",
-   "comment": "A detection mode: only text in another writing system is switched."
+   "msgid": "Script and tags only",
+   "comment": "A detection mode: text in another writing system is switched, and text applications tag"
   },
   {
    "msgid": "Full",
@@ -17,7 +17,7 @@
    "comment": "The name of the add-on's script category and settings panel."
   },
   {
-   "msgid": "Cycles language detection: off, by script only, full",
+   "msgid": "Cycles language detection: off, script and tags only, full",
    "comment": "Description of a script."
   },
   {
@@ -101,8 +101,8 @@
    "comment": "Label of the combo box that picks the synthesizer for the default language."
   },
   {
-   "msgid": "&Languages (the default needs no row):",
-   "comment": "Label of the languages list; the default language has no row."
+   "msgid": "&Languages (detected when checked; the default needs no row):",
+   "comment": "Label of the languages list. Each row has a check box: a language is detected only"
   },
   {
    "msgid": "Language",
@@ -273,6 +273,22 @@
    "comment": "The language lock's value when languages switch as configured."
   },
   {
+   "msgid": "Language detection",
+   "comment": "The name of the detection mode in the synth settings ring."
+  },
+  {
+   "msgid": "%s detection",
+   "comment": "The name of the entry in the synth settings ring that turns detection of one language on"
+  },
+  {
+   "msgid": "on",
+   "comment": "The value of a language's detection entry in the synth settings ring."
+  },
+  {
+   "msgid": "off",
+   "comment": "The value of a language's detection entry in the synth settings ring."
+  },
+  {
    "msgid": "Language table (multilanguage)",
    "comment": "Name of the synthesizer that speaks each language with its own synthesizer and voice."
   }
@@ -349,7 +365,9 @@
    "&Remove": "v&erwyder",
    "V&oice dictionary...": "&stem woordeboek",
    "Error": "fout",
-   "&Synthesizer:": "&sintetiseerder"
+   "&Synthesizer:": "&sintetiseerder",
+   "on": "aan",
+   "off": "af"
   },
   "am": {
    "unknown": "የማይታወቅ",
@@ -364,7 +382,9 @@
    "&Language:": "&ቃንቃ:",
    "&Rate": "&ፍጥነት",
    "V&olume": "የድምጽ መጠን",
-   "&Inflection": "&ተቀየረ"
+   "&Inflection": "&ተቀየረ",
+   "on": "የበራ",
+   "off": "የጠፋ"
   },
   "an": {
    "Off": "Desenchegau",
@@ -388,7 +408,9 @@
    "&Inflection": "&Entonación",
    "Rate &boost": "Cha&rrar a escape!",
    "Pu&nctuation/symbol level:": "&Libel de puntuación y simbolos:",
-   "Automatic": "Automatico"
+   "Automatic": "Automatico",
+   "on": "enchegau",
+   "off": "desenchegau"
   },
   "ar": {
    "Off": "تعطيل",
@@ -415,7 +437,9 @@
    "&Inflection": "التن&غيم",
    "Rate &boost": "زيادة معدّل السرع&ة",
    "Pu&nctuation/symbol level:": "مس&توى قراءة الرموز وعلامات الترقيم:",
-   "Automatic": "تلقائي"
+   "Automatic": "تلقائي",
+   "on": "تشغيل",
+   "off": "تعطيل"
   },
   "bg": {
    "Off": "Изключено",
@@ -442,7 +466,9 @@
    "&Inflection": "&Модулация",
    "Rate &boost": "&Умножаване на скоростта",
    "Pu&nctuation/symbol level:": "&Ниво на препинателните знаци/символи:",
-   "Automatic": "Автоматично"
+   "Automatic": "Автоматично",
+   "on": "включен",
+   "off": "Изключен"
   },
   "bs": {
    "Off": "Isključeno",
@@ -469,7 +495,9 @@
    "&Inflection": "&Intonacija",
    "Rate &boost": "&Dodatna brzina",
    "Pu&nctuation/symbol level:": "Nivo interpunkcije i simbola:",
-   "Automatic": "Automatski"
+   "Automatic": "Automatski",
+   "on": "uključeno",
+   "off": "isključeno"
   },
   "ca": {
    "Off": "Desactivat",
@@ -496,7 +524,9 @@
    "&Inflection": "&Inflexió",
    "Rate &boost": "Taxa de velocita&t de la veu",
    "Pu&nctuation/symbol level:": "&Nivell de puntuació i símbols:",
-   "Automatic": "Automàtic"
+   "Automatic": "Automàtic",
+   "on": "activat",
+   "off": "desactivat"
   },
   "ckb": {
    "Off": "لەکارکەوتوو",
@@ -522,7 +552,9 @@
    "&Inflection": "&ڕێکخستنی تیژی دەنگ",
    "Rate &boost": "&بەرزکردنەوەی ڕێژە",
    "Pu&nctuation/symbol level:": "ئاستی خاڵبەندی/هێما:",
-   "Automatic": "ئۆتۆماتيكى"
+   "Automatic": "ئۆتۆماتيكى",
+   "on": "چالاك کردن",
+   "off": "ناچالاك کردن"
   },
   "cs": {
    "Off": "Vypnuto",
@@ -549,7 +581,9 @@
    "&Inflection": "&Intonace",
    "Rate &boost": "&Znásobit tempo",
    "Pu&nctuation/symbol level:": "&Úroveň interpunkce:",
-   "Automatic": "Automaticky"
+   "Automatic": "Automaticky",
+   "on": "zapnuto",
+   "off": "vypnuto"
   },
   "da": {
    "Off": "Fra",
@@ -576,7 +610,9 @@
    "&Inflection": "&Udsving",
    "Rate &boost": "Hø&jere hastighed",
    "Pu&nctuation/symbol level:": "&Niveau for sætningstegn og symboler:",
-   "Automatic": "Automatisk"
+   "Automatic": "Automatisk",
+   "on": "til",
+   "off": "fra"
   },
   "de": {
    "Off": "Ausgeschaltet",
@@ -603,7 +639,9 @@
    "&Inflection": "Be&tonung",
    "Rate &boost": "Geschwindigkeit &zusätzlich erhöhen",
    "Pu&nctuation/symbol level:": "&Zeichenausführlichkeit:",
-   "Automatic": "Automatisch"
+   "Automatic": "Automatisch",
+   "on": "eingeschaltet",
+   "off": "ausgeschaltet"
   },
   "de_CH": {
    "Off": "Ausgeschaltet",
@@ -629,7 +667,9 @@
    "&Inflection": "Be&tonung",
    "Rate &boost": "Geschwindigkeit &zusätzlich erhöhen",
    "Pu&nctuation/symbol level:": "&Zeichenausführlichkeit:",
-   "Automatic": "Automatisch"
+   "Automatic": "Automatisch",
+   "on": "eingeschaltet",
+   "off": "ausgeschaltet"
   },
   "el": {
    "Off": "Απενεργοποιημένη",
@@ -656,7 +696,9 @@
    "&Inflection": "&Επιτονισμός",
    "Rate &boost": "&Ώθηση ρυθμού",
    "Pu&nctuation/symbol level:": "&Επίπεδο στίξης/συμβόλων:",
-   "Automatic": "Αυτόματο"
+   "Automatic": "Αυτόματο",
+   "on": "ενεργοποιημένο",
+   "off": "Απενεργοποιημένο"
   },
   "es": {
    "Off": "Desactivado",
@@ -683,7 +725,9 @@
    "&Inflection": "&Entonación",
    "Rate &boost": "Alzado b&rusco",
    "Pu&nctuation/symbol level:": "&Nivel de Puntuación y símbolos:",
-   "Automatic": "Automático"
+   "Automatic": "Automático",
+   "on": "activado",
+   "off": "desactivado"
   },
   "es_CO": {
    "Off": "Desactivado",
@@ -709,7 +753,9 @@
    "&Inflection": "&Entonación",
    "Rate &boost": "Aumento de v&elocidad",
    "Pu&nctuation/symbol level:": "&Nivel de Puntuación y símbolos:",
-   "Automatic": "Automático"
+   "Automatic": "Automático",
+   "on": "activado",
+   "off": "desactivado"
   },
   "fa": {
    "Off": "خاموش",
@@ -736,7 +782,9 @@
    "&Inflection": "انع&طافِ صدا",
    "Rate &boost": "ت&قویتِ سرعت",
    "Pu&nctuation/symbol level:": "سطحِ خوانده شدنِ &علائمِ نقطه‌گذاری و نمادها:",
-   "Automatic": "خودکار"
+   "Automatic": "خودکار",
+   "on": "روشن",
+   "off": "خاموش"
   },
   "fi": {
    "Off": "Ei käytössä",
@@ -763,7 +811,9 @@
    "&Inflection": "Korkeuden va&ihtelu",
    "Rate &boost": "No&peuden tehostus",
    "Pu&nctuation/symbol level:": "Välimerkki- ja symboli&taso:",
-   "Automatic": "Automaattinen"
+   "Automatic": "Automaattinen",
+   "on": "käytössä",
+   "off": "ei käytössä"
   },
   "fr": {
    "Off": "Désactivé",
@@ -790,7 +840,9 @@
    "&Inflection": "&Inflexion",
    "Rate &boost": "Débi&t accéléré",
    "Pu&nctuation/symbol level:": "Niveau de &ponctuations et symboles :",
-   "Automatic": "Automatique"
+   "Automatic": "Automatique",
+   "on": "activé",
+   "off": "désactivé"
   },
   "ga": {
    "Off": "as feidhm",
@@ -817,7 +869,9 @@
    "&Inflection": "&Casadh",
    "Rate &boost": "Méadú rá&ta",
    "Pu&nctuation/symbol level:": "&Leibhéal poncaíochta/siombailí:",
-   "Automatic": "Uathoibríoch"
+   "Automatic": "Uathoibríoch",
+   "on": "ann",
+   "off": "as"
   },
   "gl": {
    "Off": "Desactivado",
@@ -844,7 +898,9 @@
    "&Inflection": "&Entoación",
    "Rate &boost": "Alzado &brusco",
    "Pu&nctuation/symbol level:": "&Nivel de puntoación e símbolos:",
-   "Automatic": "Automático"
+   "Automatic": "Automático",
+   "on": "activado",
+   "off": "desactivado"
   },
   "he": {
    "Off": "ללא כניסה",
@@ -871,7 +927,9 @@
    "&Inflection": "אינטונציה",
    "Rate &boost": "קצב האצה",
    "Pu&nctuation/symbol level:": "&רמת הקראת סימני פיסוק וסמלים:",
-   "Automatic": "אוטומטי"
+   "Automatic": "אוטומטי",
+   "on": "פעיל",
+   "off": "לא פעיל"
   },
   "hi": {
    "Off": "बंद",
@@ -897,7 +955,9 @@
    "&Inflection": "उतार चढ़ाव &Inflection",
    "Rate &boost": "गती में बढावा boos&t",
    "Pu&nctuation/symbol level:": "विराम/चिह्न &level:",
-   "Automatic": "स्वचालित"
+   "Automatic": "स्वचालित",
+   "on": "औन",
+   "off": "औफ"
   },
   "hr": {
    "Off": "Isključeno",
@@ -924,7 +984,9 @@
    "&Inflection": "&Intonacija",
    "Rate &boost": "&Dodatna brzina",
    "Pu&nctuation/symbol level:": "Razina &interpunkcije i simbola:",
-   "Automatic": "Automatski"
+   "Automatic": "Automatski",
+   "on": "uključeno",
+   "off": "isključeno"
   },
   "hu": {
    "Off": "kikapcsolva",
@@ -951,7 +1013,9 @@
    "&Inflection": "&intonáció",
    "Rate &boost": "Sebesség&fokozás",
    "Pu&nctuation/symbol level:": "Írás&jelszint:",
-   "Automatic": "Automatikus"
+   "Automatic": "Automatikus",
+   "on": "bekapcsolva",
+   "off": "kikapcsolva"
   },
   "id": {
    "unknown": "tidak dikenal ",
@@ -996,7 +1060,9 @@
    "&Inflection": "&Áhersla",
    "Rate &boost": "au&ka &hraða",
    "Pu&nctuation/symbol level:": "Greinarmerkja og tákn&lesstig",
-   "Automatic": "Sjálfkrafa"
+   "Automatic": "Sjálfkrafa",
+   "on": "virkt",
+   "off": "óvirkt"
   },
   "it": {
    "Off": "Disattivato",
@@ -1023,7 +1089,9 @@
    "&Inflection": "&Inflessione",
    "Rate &boost": "Aumento veloci&tà",
    "Pu&nctuation/symbol level:": "&Livello di punteggiatura/simboli:",
-   "Automatic": "Automatica"
+   "Automatic": "Automatica",
+   "on": "attivato",
+   "off": "disattivato"
   },
   "ja": {
    "Off": "なし",
@@ -1050,7 +1118,9 @@
    "&Inflection": "抑揚(&I)",
    "Rate &boost": "高速読み上げ(&T)",
    "Pu&nctuation/symbol level:": "句読点/記号レベル(&L)",
-   "Automatic": "自動設定"
+   "Automatic": "自動設定",
+   "on": "オン",
+   "off": "オフ"
   },
   "ka": {
    "Off": "გამორთულია",
@@ -1077,7 +1147,9 @@
    "&Inflection": "&ინტონაცია",
    "Rate &boost": "დამა&ტებითი სიჩქარე",
    "Pu&nctuation/symbol level:": "პუნქტუაციის/სიმბოლოს &დონე:",
-   "Automatic": "ავტომატურად"
+   "Automatic": "ავტომატურად",
+   "on": "ჩართულია",
+   "off": "გამორთულია"
   },
   "km": {
    "Off": "បិទ",
@@ -1104,7 +1176,9 @@
    "&Inflection": "ការលើកដាក់សំឡេង  (&I)",
    "Rate &boost": "ល្បឿនអានលឿនបំផុត (&t)",
    "Pu&nctuation/symbol level:": "កម្រិតសញ្ញាវណ្ណយុត្ត/និមិត្តសញ្ញា (&l):",
-   "Automatic": "ស្វ័យប្រវត្តិ"
+   "Automatic": "ស្វ័យប្រវត្តិ",
+   "on": "បើក",
+   "off": "បិទ"
   },
   "kmr": {
    "Off": "Vemiriye (Girtîye)",
@@ -1130,7 +1204,9 @@
    "V&olume": "&deng",
    "&Inflection": "&xwehrkirin",
    "Rate &boost": "Rêjeya zêdekirinê (nirxandina zêdekirinê)",
-   "Automatic": "otomatîk"
+   "Automatic": "otomatîk",
+   "on": "vekirî",
+   "off": "girtî"
   },
   "kn": {
    "unknown": "ಅಪರಿಚಿತ",
@@ -1155,7 +1231,9 @@
    "&Inflection": "&ಧ್ವನಿತರಂಗ",
    "Rate &boost": "ಗತಿಯನ್ನು &ಹೆಚ್ಚಿಸಿ",
    "Pu&nctuation/symbol level:": "ಲಾಂಚನ/ಚಿನ್ಹೆಯ &ಮಟ್ಟ",
-   "Automatic": "ಸ್ವಯಂಚಾಲಿತ"
+   "Automatic": "ಸ್ವಯಂಚಾಲಿತ",
+   "on": "ತೆರಿಯಿತು",
+   "off": "ಮುಚ್ಚಿತು"
   },
   "ko": {
    "Off": "끔",
@@ -1182,7 +1260,9 @@
    "&Inflection": "억양 (&I)",
    "Rate &boost": "음성 속도 부스트 (&T)",
    "Pu&nctuation/symbol level:": "구두점/기호 출력 수준 (&L):",
-   "Automatic": "자동 연결"
+   "Automatic": "자동 연결",
+   "on": "켬",
+   "off": "끔"
   },
   "ky": {
    "Off": "Өчүрүү",
@@ -1208,7 +1288,9 @@
    "&Inflection": "&Интонация",
    "Rate &boost": "Ылдамдыктын жогорулашы",
    "Pu&nctuation/symbol level:": "Тыныш / белгиси & деңгээл:",
-   "Automatic": "Автоматтык түрдө"
+   "Automatic": "Автоматтык түрдө",
+   "on": "күйгүзүү",
+   "off": "өчүрүү"
   },
   "lt": {
    "Off": "išjungta",
@@ -1234,7 +1316,9 @@
    "&Inflection": "&Intonacija",
    "Rate &boost": "Padidintas grei&tis",
    "Pu&nctuation/symbol level:": "Tariami skyrybos ženklai ir &simboliai:",
-   "Automatic": "Automatinis"
+   "Automatic": "Automatinis",
+   "on": "įjungta",
+   "off": "išjungta"
   },
   "mk": {
    "Off": "исклучено",
@@ -1260,7 +1344,9 @@
    "&Inflection": "&Модулација",
    "Rate &boost": "Зголемувач на бр&зина",
    "Pu&nctuation/symbol level:": "ниво на &интерпункција:",
-   "Automatic": "Автоматски"
+   "Automatic": "Автоматски",
+   "on": "вклучено",
+   "off": "исклучено"
   },
   "mn": {
    "Off": "Хаалттай",
@@ -1287,7 +1373,9 @@
    "&Inflection": "&Ярианы өргөлт тааруулах",
    "Rate &boost": "&Хурдасгах",
    "Pu&nctuation/symbol level:": "Бичиглэлийн &төвшин сонгох:",
-   "Automatic": "Автомат"
+   "Automatic": "Автомат",
+   "on": "аслаа",
+   "off": "унтарлаа"
   },
   "my": {
    "Off": "ပိတ်",
@@ -1313,7 +1401,9 @@
    "&Inflection": "အသံအနိမ့်အမြင့်ပြောင်းလဲခြင်း",
    "Rate &boost": "ပြောနှုန်းမြှင့်ရန်",
    "Pu&nctuation/symbol level:": "ပုဒ်ဖြတ်ပုဒ်ရပ်/သင်္ကေတအဆင့်",
-   "Automatic": "အလိုအလျောက်"
+   "Automatic": "အလိုအလျောက်",
+   "on": "ဖွင့်",
+   "off": "ပိတ်"
   },
   "nb_NO": {
    "Off": "Av",
@@ -1338,7 +1428,9 @@
    "&Inflection": "&Bøyning",
    "Rate &boost": "Hastighet &opp",
    "Pu&nctuation/symbol level:": "&Nivå for tegnsetting/symbol:",
-   "Automatic": "Automatisk"
+   "Automatic": "Automatisk",
+   "on": "på",
+   "off": "av"
   },
   "ne": {
    "unknown": "अज्ञात",
@@ -1363,7 +1455,9 @@
    "&Inflection": "&उतार-चढाव",
    "Rate &boost": "दर &वृद्धि",
    "Pu&nctuation/symbol level:": "चिन्ह/सङ्केत &तह:",
-   "Automatic": "स्वचालित"
+   "Automatic": "स्वचालित",
+   "on": "लाग्यो",
+   "off": "खुल्यो"
   },
   "nl": {
    "Off": "Uit",
@@ -1390,7 +1484,9 @@
    "&Inflection": "&Intonatie",
    "Rate &boost": "Snelheidsboos&t",
    "Pu&nctuation/symbol level:": "Interpunctie-/symbool&niveau:",
-   "Automatic": "Automatisch"
+   "Automatic": "Automatisch",
+   "on": "aan",
+   "off": "uit"
   },
   "nn_NO": {
    "unknown": "ukjent",
@@ -1413,7 +1509,9 @@
    "V&olume": "Lydnivå",
    "&Inflection": "&Bøying",
    "Rate &boost": "Snøggleik &opp",
-   "Pu&nctuation/symbol level:": "Teiknsetjing/&symbolnivå:"
+   "Pu&nctuation/symbol level:": "Teiknsetjing/&symbolnivå:",
+   "on": "på",
+   "off": "av"
   },
   "pa": {
    "unknown": "ਅਣ ਪਛਾਤਾ",
@@ -1437,7 +1535,9 @@
    "&Inflection": "&ਆਵਾਜ਼ ਦੀ ਲਚਕ",
    "Rate &boost": "&ਗਤੀ ਬੂਸਟ",
    "Pu&nctuation/symbol level:": "&ਵਿਸ਼ਰਾਮ ਚਿੰਨ੍ਹ ਉਚਾਰਨ:",
-   "Automatic": "ਸ੍ਵੈਚਲਤ"
+   "Automatic": "ਸ੍ਵੈਚਲਤ",
+   "on": "ਚਾਲੂ",
+   "off": "ਬੰਦ"
   },
   "pl": {
    "Off": "Wyłączone",
@@ -1464,7 +1564,9 @@
    "&Inflection": "&Modulacja",
    "Rate &boost": "Pod&kręć szybkość",
    "Pu&nctuation/symbol level:": "Poziom &interpunkcji/symboli:",
-   "Automatic": "Automatyczne"
+   "Automatic": "Automatyczne",
+   "on": "włączone",
+   "off": "wyłączone"
   },
   "pt_BR": {
    "Off": "Desativado",
@@ -1491,7 +1593,9 @@
    "&Inflection": "&Inflexão",
    "Rate &boost": "A&umento especial de velocidade",
    "Pu&nctuation/symbol level:": "Grau de &pontuação/símbolos:",
-   "Automatic": "Automático"
+   "Automatic": "Automático",
+   "on": "ativado",
+   "off": "desativado"
   },
   "pt_PT": {
    "Off": "Desligado",
@@ -1518,7 +1622,9 @@
    "&Inflection": "&Inflexão",
    "Rate &boost": "Aumen&to de velocidade",
    "Pu&nctuation/symbol level:": "Nível de pontuação/&símbolo:",
-   "Automatic": "Automático"
+   "Automatic": "Automático",
+   "on": "ligado",
+   "off": "desligado"
   },
   "ro": {
    "Off": "Dezactivat",
@@ -1545,7 +1651,9 @@
    "&Inflection": "&Intonație",
    "Rate &boost": "Amplificare &rată vorbire",
    "Pu&nctuation/symbol level:": "&Nivel punctuație/simbol:",
-   "Automatic": "Automat"
+   "Automatic": "Automat",
+   "on": "activat",
+   "off": "dezactivat"
   },
   "ru": {
    "Off": "Выключено",
@@ -1572,7 +1680,9 @@
    "&Inflection": "Ин&тонация",
    "Rate &boost": "Допо&лнительное ускорение",
    "Pu&nctuation/symbol level:": "&Уровень пунктуации:",
-   "Automatic": "Определять автоматически"
+   "Automatic": "Определять автоматически",
+   "on": "включено",
+   "off": "выключено"
   },
   "sk": {
    "Off": "Vypnuté",
@@ -1599,7 +1709,9 @@
    "&Inflection": "&Intonácia",
    "Rate &boost": "Znáso&biť tempo",
    "Pu&nctuation/symbol level:": "Úroveň interpunkcie",
-   "Automatic": "Automatické"
+   "Automatic": "Automatické",
+   "on": "zapnuté",
+   "off": "vypnuté"
   },
   "sl": {
    "Off": "Izključeno",
@@ -1625,7 +1737,9 @@
    "&Inflection": "Glasovna &modulacija",
    "Rate &boost": "&Dvig hitrosti",
    "Pu&nctuation/symbol level:": "&Nivo naglaševanja/simbolov",
-   "Automatic": "Samodejno"
+   "Automatic": "Samodejno",
+   "on": "vključeno",
+   "off": "izključeno"
   },
   "so": {
    "unknown": "lama garanayo",
@@ -1650,7 +1764,9 @@
    "&Pitch": "&lartësi",
    "V&olume": "V&olum",
    "&Inflection": "&infleksion",
-   "Pu&nctuation/symbol level:": "&Niveli i prononcimit të shenjave si pika, presja dhe simbole të tjera"
+   "Pu&nctuation/symbol level:": "&Niveli i prononcimit të shenjave si pika, presja dhe simbole të tjera",
+   "on": "Aktivizuar",
+   "off": "çaktivizuar"
   },
   "sr": {
    "Off": "Isključeno",
@@ -1677,7 +1793,9 @@
    "&Inflection": "Modulac&ija",
    "Rate &boost": "&Povećanje brzine",
    "Pu&nctuation/symbol level:": "&Nivo izgovora znakova interpunkcije/simbola:",
-   "Automatic": "Automatski"
+   "Automatic": "Automatski",
+   "on": "uključeno",
+   "off": "isključeno"
   },
   "sv": {
    "Off": "Av",
@@ -1704,7 +1822,9 @@
    "&Inflection": "Beton&ing",
    "Rate &boost": "Accelerera has&tighet",
    "Pu&nctuation/symbol level:": "Skiljetecken/symbol &nivå:",
-   "Automatic": "Automatisk"
+   "Automatic": "Automatisk",
+   "on": "på",
+   "off": "av"
   },
   "ta": {
    "Off": "அறிவித்திடாது",
@@ -1731,7 +1851,9 @@
    "&Inflection": "குரலேற்ற இறக்கம் (&I)",
    "Rate &boost": "விகித ஊக்கி (&T)",
    "Pu&nctuation/symbol level:": "நிறுத்தற்குறிகள்/குறியெழுத்துகள் நிலை (&L)",
-   "Automatic": "தன்னியக்கம்"
+   "Automatic": "தன்னியக்கம்",
+   "on": "இடப்பட்டது",
+   "off": "நீக்கப்பட்டது"
   },
   "th": {
    "unknown": "ไม่รู้จัก",
@@ -1751,7 +1873,9 @@
    "&Rate": "&ระดับความเร็ว",
    "&Pitch": "&ระดับสูง-ต่ำ",
    "V&olume": "&ระดับความดัง",
-   "&Inflection": "&ระดับเสียงสูง-ต่ำ"
+   "&Inflection": "&ระดับเสียงสูง-ต่ำ",
+   "on": "เปิด",
+   "off": "ปิด"
   },
   "tr": {
    "Off": "Kapalı",
@@ -1778,7 +1902,9 @@
    "&Inflection": "&Tonlama",
    "Rate &boost": "H&ız artırıcı",
    "Pu&nctuation/symbol level:": "Noktalama Ses&lendirme Düzeyi:",
-   "Automatic": "Otomatik"
+   "Automatic": "Otomatik",
+   "on": "açık",
+   "off": "kapalı"
   },
   "uk": {
    "Off": "Вимкнено",
@@ -1805,7 +1931,9 @@
    "&Inflection": "&Інтонація",
    "Rate &boost": "Увімкнути додаткове &прискорення",
    "Pu&nctuation/symbol level:": "&Рівень символів і знаків пунктуації:",
-   "Automatic": "Автоматично"
+   "Automatic": "Автоматично",
+   "on": "увімкнено",
+   "off": "вимкнено"
   },
   "ur": {
    "Voice": "آواز",
@@ -1817,7 +1945,9 @@
    "&Rate": "شرح",
    "&Pitch": "اوج",
    "V&olume": "صوت",
-   "&Inflection": "گردش آواز"
+   "&Inflection": "گردش آواز",
+   "on": "آن",
+   "off": "آف"
   },
   "vi": {
    "Off": "Tắt",
@@ -1844,7 +1974,9 @@
    "&Inflection": "Ngữ điệ&u",
    "Rate &boost": "&Tăng tốc độ",
    "Pu&nctuation/symbol level:": "&Mức độ đọc dấu câu và ký hiệu:",
-   "Automatic": "Tự động"
+   "Automatic": "Tự động",
+   "on": "bật",
+   "off": "tắt"
   },
   "zh_CN": {
    "Off": "关闭",
@@ -1871,7 +2003,9 @@
    "&Inflection": "声调(&I)",
    "Rate &boost": "语速加倍(&T)",
    "Pu&nctuation/symbol level:": "标点符号级别(&L)：",
-   "Automatic": "自动"
+   "Automatic": "自动",
+   "on": "开",
+   "off": "关"
   },
   "zh_HK": {
    "Off": "關",
@@ -1897,7 +2031,9 @@
    "&Inflection": "語調(&I)",
    "Rate &boost": "語速大增(&T)",
    "Pu&nctuation/symbol level:": "報讀標點程度(&L):",
-   "Automatic": "自動"
+   "Automatic": "自動",
+   "on": "開",
+   "off": "關"
   },
   "zh_TW": {
    "Off": "關",
@@ -1924,7 +2060,9 @@
    "&Inflection": "語調(&I)",
    "Rate &boost": "加快語速(&T)",
    "Pu&nctuation/symbol level:": "標點及符號等級(&L):",
-   "Automatic": "自動偵測"
+   "Automatic": "自動偵測",
+   "on": "開",
+   "off": "關"
   }
  }
 }

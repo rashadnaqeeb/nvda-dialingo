@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: lt\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "išjungta"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Tik pagal raštą"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Tik pagal raštą ir žymes"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Daugiakalbystė"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Perjungia kalbos aptikimą: išjungta, tik pagal raštą, visas"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Perjungia kalbos aptikimą: išjungta, tik pagal raštą ir žymes, visas"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Naudoti „&Windows“ balsus kalboms, kuriomis sintezatorius nekalba"
 msgid "Default s&ynthesizer:"
 msgstr "Numatytasis s&intezatorius:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Kalbos (numatytajai kalbai eilutės nereikia):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Kalbos (aptinkamos, kai pažymėtos; numatytajai kalbai eilutės nereikia):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "Kalbai %s eilutė jau yra. Pakeisti ją?"
 msgid "Replace language"
 msgstr "Pakeisti kalbą"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Kalbos užraktas"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
 msgstr "Automatinis"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Kalbos aptikimas"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Kalbos aptikimas (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "įjungta"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "išjungta"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

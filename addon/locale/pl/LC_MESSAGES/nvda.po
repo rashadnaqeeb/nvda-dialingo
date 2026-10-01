@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Wyłączone"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Tylko według pisma"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Tylko według pisma i znaczników"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Wielojęzyczność"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Przełącza wykrywanie języka: wyłączone, tylko według pisma, pełne"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Przełącza wykrywanie języka: wyłączone, tylko według pisma i znaczników, pełne"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Używaj głosów &Windows dla języków, których syntezator nie obsług
 msgid "Default s&ynthesizer:"
 msgstr "Domyślny s&yntezator:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Języki (domyślny nie potrzebuje wiersza):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Języki (wykrywane, gdy zaznaczone; domyślny nie potrzebuje wiersza):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "Wiersz dla języka %s już istnieje. Zastąpić go?"
 msgid "Replace language"
 msgstr "Zastąp język"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Blokada języka"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
-msgstr "Automatyczne"
+msgstr "Automatycznie"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Wykrywanie języka"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Wykrywanie języka (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "włączone"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "wyłączone"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

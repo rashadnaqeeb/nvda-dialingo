@@ -16,9 +16,9 @@ class NoRecognizer:
     free = probability = constrained
 
 
-def detector(default, configured, available=()):
+def detector(default, configured, available=(), excluded=()):
     d = Detector(NoRecognizer(), default, configured)
-    d.configure(default, configured, available)
+    d.configure(default, configured, available, excluded)
     return d
 
 
@@ -201,6 +201,36 @@ class ClauseTests(unittest.TestCase):
         answers = {"Thanks": ("en", 0.9), "Hola amigo": ("es", 1.0), "Hola": ("es", 0.99), "amigo": ("es", 0.99)}
         d = self.detector(["es_ES"], answers)
         self.assertEqual(d.tagged("Thanks. Hola, amigo."), [(None, "Thanks. "), ("es_ES", "Hola, amigo.")])
+
+
+class ExcludedTests(unittest.TestCase):
+    """A row with detection off: its language is never switched to, by any route."""
+
+    def test_a_voice_of_the_language_does_not_stand_in(self):
+        d = detector("en_US", [], available=["en_US", "el_GR"], excluded=["el_GR"])
+        self.assertIsNone(d.character("λ"))
+        self.assertIsNone(d.keyboard("λ", "el_GR"))
+
+    def test_the_free_guess_is_not_taken(self):
+        class Constrained(Recognizer):
+            def constrained(self, text, languages):
+                g = self.answers.get(text)
+                return g if g and g[0] in languages else None
+
+        text = "Привет мир"
+        answers = {text: ("ru", 0.99)}
+        d = Detector(Constrained(answers), "en_US", [])
+        d.configure("en_US", [])
+        self.assertEqual(d.tagged(text), [("ru", text)])
+        d.configure("en_US", [], excluded=["ru_RU"])
+        self.assertEqual(d.tagged(text), [(None, text)])
+
+    def test_another_row_of_the_language_that_detects_keeps_it(self):
+        d = detector("en_US", ["pt_BR"], excluded=["pt_PT"])
+        self.assertEqual(d.keyboard("ã", "pt_PT"), "pt_BR")
+
+    def test_the_default_is_never_excluded(self):
+        self.assertEqual(detector("en_US", ["fr_FR"], excluded=["en_GB"]).keyboard("e", "en_US"), "en_US")
 
 
 if __name__ == "__main__":

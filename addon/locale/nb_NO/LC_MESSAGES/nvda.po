@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nb_NO\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Av"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Bare etter skrift"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Bare etter skrift og merker"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Flerspråklig"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Bytter språkgjenkjenning: av, bare etter skrift, full"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Bytter språkgjenkjenning: av, bare etter skrift og merker, full"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Bruk &Windows-stemmer for språk talesyntesen ikke snakker"
 msgid "Default s&ynthesizer:"
 msgstr "Standard&talesyntese:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Språk (standardspråket trenger ingen rad):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Språk (gjenkjennes når de er avkrysset; standardspråket trenger ingen rad):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -182,7 +182,7 @@ msgstr "Denne raden har ingen egen stemme, så talesyntesens stemmeordbok gjelde
 
 #. Translators: Title of the messages about a row voice's dictionary.
 msgid "Voice dictionary"
-msgstr "Stemmeordliste "
+msgstr "Stemmeordliste"
 
 #. Translators: Title of the dictionary dialog for a row's voice; %s is the voice and its synthesizer.
 msgid "Voice dictionary for %s"
@@ -268,9 +268,29 @@ msgstr "Det finnes allerede en rad for %s. Vil du erstatte den?"
 msgid "Replace language"
 msgstr "Erstatt språk"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Språklås"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
 msgstr "Automatisk"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Språkgjenkjenning"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Språkgjenkjenning (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "på"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "av"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"

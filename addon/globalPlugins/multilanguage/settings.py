@@ -191,13 +191,18 @@ class MultilanguagePanel(SettingsPanel):
         if self.synths:
             self.defaultChoice.SetSelection(self.default_index)
 
-        # Translators: Label of the list of configured languages.
-        # Translators: Label of the languages list; the default language has no row.
-        self.list = helper.addLabeledControl(_("&Languages (the default needs no row):"), nvdaControls.AutoWidthColumnListCtrl, style=wx.LC_REPORT | wx.LC_SINGLE_SEL)
+        self.list = helper.addLabeledControl(
+            # Translators: Label of the languages list. Each row has a check box: a language is detected only
+            # when checked. The default language has no row.
+            _("&Languages (detected when checked; the default needs no row):"),
+            nvdaControls.AutoWidthColumnCheckListCtrl,
+            style=wx.LC_REPORT | wx.LC_SINGLE_SEL,
+        )
         # Translators: Column headers of the languages list.
         for header, width in ((_("Language"), 180), (_("Synthesizer"), 140), (_("Voice"), 160), (_("Rate"), 50), (_("Pitch"), 50), (_("Volume"), 60), (_("Symbols"), 80), (_("Dictionary"), 100)):
             self.list.AppendColumn(header, width=width)
         self.list.Bind(wx.EVT_LIST_ITEM_ACTIVATED, self.onEdit)
+        self.list.Bind(wx.EVT_CHECKLISTBOX, self.onCheck)
         self.list.Bind(wx.EVT_CHAR_HOOK, self.onCharHook)
 
         buttons = guiHelper.ButtonHelper(orientation=wx.HORIZONTAL)
@@ -224,7 +229,7 @@ class MultilanguagePanel(SettingsPanel):
 
     def refresh(self, select=None):
         self.list.DeleteAllItems()
-        for row in self.table.rows:
+        for index, row in enumerate(self.table.rows):
             self.list.Append((
                 language_label(row.lang),
                 synth_label(row.synth),
@@ -235,6 +240,7 @@ class MultilanguagePanel(SettingsPanel):
                 symbol_label(row.symbolLevel),
                 dictionary_label(row.lang),
             ))
+            self.list.CheckItem(index, row.detect)
         if self.table.rows:
             index = 0
             if select:
@@ -259,6 +265,11 @@ class MultilanguagePanel(SettingsPanel):
     def selected(self):
         index = self.list.GetFirstSelected()
         return self.table.rows[index] if 0 <= index < len(self.table.rows) else None
+
+    def onCheck(self, evt):
+        index = evt.GetInt()
+        if 0 <= index < len(self.table.rows):
+            self.table.rows[index].detect = self.list.IsChecked(index)
 
     def onCharHook(self, evt):
         if evt.GetKeyCode() == wx.WXK_DELETE:
@@ -695,7 +706,9 @@ class RowDialog(wx.Dialog):
             settings["rateBoost"] = self.rateBoostCheck.IsChecked()
         i = self.symbolChoice.GetSelection()
         level = self.symbol_levels[i] if 0 <= i < len(self.symbol_levels) else None
-        return T.Row(lang, name, symbolLevel=level, **settings)
+        # Detection is turned on and off in the languages list; an edited row keeps its state.
+        detect = self.row.detect if self.row is not None else True
+        return T.Row(lang, name, symbolLevel=level, detect=detect, **settings)
 
     def onTest(self, evt):
         row = self.build_row()

@@ -28,13 +28,14 @@ CONFSPEC = {
 # changing it resets parameters in some engines.
 ROW_SETTINGS = ("voice", "variant", "rate", "rateBoost", "pitch", "inflection", "volume")
 # What a row carries for NVDA rather than the synthesizer: the symbol level (none, some, most, all) for text
-# in its language, None for NVDA's own setting. Kept out of the settings, so no synthesizer is sent it.
-ROW_OPTIONS = ("symbolLevel",)
+# in its language, None for NVDA's own setting; and whether detection may switch to its language. Kept out
+# of the settings, so no synthesizer is sent them.
+ROW_OPTIONS = ("symbolLevel", "detect")
 ROW_KEYS = ("lang", "synth") + ROW_SETTINGS + ROW_OPTIONS
 
 
 class Row:
-    def __init__(self, lang, synth, symbolLevel=None, **settings):
+    def __init__(self, lang, synth, symbolLevel=None, detect=None, **settings):
         self.lang = normalize(lang) or lang
         self.synth = synth
         self.settings = {k: v for k, v in settings.items() if k in ROW_SETTINGS and v is not None}
@@ -42,6 +43,8 @@ class Row:
             self.symbolLevel = int(symbolLevel) if symbolLevel is not None else None
         except (TypeError, ValueError):
             self.symbolLevel = None
+        # A row with detection off still speaks text tagged with its language, and the lock can still take it.
+        self.detect = detect is None or bool(detect)
 
     @property
     def base(self):
@@ -65,6 +68,8 @@ class Row:
         d.update(self.settings)
         if self.symbolLevel is not None:
             d["symbolLevel"] = self.symbolLevel
+        if not self.detect:
+            d["detect"] = False
         return d
 
     @classmethod
@@ -75,7 +80,8 @@ class Row:
 
     def __repr__(self):
         level = f", symbolLevel={self.symbolLevel!r}" if self.symbolLevel is not None else ""
-        return f"Row({self.lang!r}, {self.synth!r}, {self.settings!r}{level})"
+        detect = "" if self.detect else ", detect=False"
+        return f"Row({self.lang!r}, {self.synth!r}, {self.settings!r}{level}{detect})"
 
 
 class Table:
@@ -87,8 +93,13 @@ class Table:
 
     # ------------------------------------------------------------ queries
 
-    def languages(self):
-        return [r.lang for r in self.rows]
+    def detected(self):
+        """The languages detection may switch to: those of the rows with detection on."""
+        return [r.lang for r in self.rows if r.detect]
+
+    def undetected(self):
+        """The languages of the rows with detection off."""
+        return [r.lang for r in self.rows if not r.detect]
 
     def row_for(self, lang, exact=False):
         """The row for a language: its own spelling first, then a row of the same language (code(): a

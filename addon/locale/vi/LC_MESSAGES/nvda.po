@@ -6,13 +6,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: vi\n"
 
-#. Translators: A detection mode: no language detection.
+#. Translators: A detection mode: no language switching at all, not even for text applications tag with
 msgid "Off"
 msgstr "Tắt"
 
-#. Translators: A detection mode: only text in another writing system is switched.
-msgid "By script only"
-msgstr "Chỉ theo hệ chữ viết"
+#. Translators: A detection mode: text in another writing system is switched, and text applications tag
+msgid "Script and tags only"
+msgstr "Chỉ theo hệ chữ viết và thẻ"
 
 #. Translators: A detection mode: text in the default script is detected clause by clause too.
 msgid "Full"
@@ -23,8 +23,8 @@ msgid "Multilanguage"
 msgstr "Đa ngôn ngữ"
 
 #. Translators: Description of a script.
-msgid "Cycles language detection: off, by script only, full"
-msgstr "Chuyển chế độ phát hiện ngôn ngữ: tắt, chỉ theo hệ chữ viết, đầy đủ"
+msgid "Cycles language detection: off, script and tags only, full"
+msgstr "Chuyển chế độ phát hiện ngôn ngữ: tắt, chỉ theo hệ chữ viết và thẻ, đầy đủ"
 
 #. Translators: Reported when the detection mode changes; %s is the mode's name.
 msgid "Language detection %s"
@@ -106,9 +106,9 @@ msgstr "Dùng giọng &Windows cho các ngôn ngữ bộ đọc không nói đư
 msgid "Default s&ynthesizer:"
 msgstr "Bộ đọc &mặc định:"
 
-#. Translators: Label of the languages list; the default language has no row.
-msgid "&Languages (the default needs no row):"
-msgstr "&Ngôn ngữ (ngôn ngữ mặc định không cần dòng):"
+#. Translators: Label of the languages list. Each row has a check box: a language is detected only
+msgid "&Languages (detected when checked; the default needs no row):"
+msgstr "&Ngôn ngữ (được phát hiện khi đánh dấu; ngôn ngữ mặc định không cần dòng):"
 
 #. Translators: Column headers of the languages list.
 msgid "Language"
@@ -268,9 +268,29 @@ msgstr "Đã có một dòng cho %s. Thay thế dòng đó?"
 msgid "Replace language"
 msgstr "Thay thế ngôn ngữ"
 
+#. Translators: The name of the language lock in the synth settings ring.
+msgid "Language lock"
+msgstr "Khóa ngôn ngữ"
+
 #. Translators: The language lock's value when languages switch as configured.
 msgid "Automatic"
 msgstr "Tự động"
+
+#. Translators: The name of the detection mode in the synth settings ring.
+msgid "Language detection"
+msgstr "Phát hiện ngôn ngữ"
+
+#. Translators: The name of the entry in the synth settings ring that turns detection of one language on
+msgid "%s detection"
+msgstr "Phát hiện ngôn ngữ (%s)"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "on"
+msgstr "bật"
+
+#. Translators: The value of a language's detection entry in the synth settings ring.
+msgid "off"
+msgstr "tắt"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
 msgid "Language table (multilanguage)"
