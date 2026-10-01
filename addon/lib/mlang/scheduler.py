@@ -30,8 +30,6 @@ nothing to this driver.
 import threading
 from collections import deque
 
-from . import trace as tr
-
 MAX_INDEX = 9999
 
 
@@ -149,10 +147,6 @@ class Scheduler:
 
     def speak(self, seq, row_for_lang, default_row):
         pieces = cut(seq, row_for_lang, default_row, self.LangChangeCommand)
-        tr.trace("speak: " + "; ".join(
-            f"{p.row.lang}/{p.row.synth} {tr.text(p.items)}"
-            + "".join(f" [{i.lang}]" for i in p.items if isinstance(i, self.LangChangeCommand))
-            for p in pieces))
         with self.lock:
             self.pending.extend(pieces)
         self.pump()
@@ -173,7 +167,6 @@ class Scheduler:
             self.current_key = None
             self.speaking = False
             self.paused = False
-        tr.trace(f"cancel: {', '.join(tr.name(g) for g in guests) or 'nothing in flight'}")
         for guest in guests:
             try:
                 guest.cancel()
@@ -181,7 +174,6 @@ class Scheduler:
                 self.log(f"cancel on {guest!r} failed: {e}")
 
     def pause(self, switch):
-        tr.trace(f"pause {switch}")
         with self.lock:
             self.paused = switch
             guest = self.busy_guest
@@ -221,10 +213,8 @@ class Scheduler:
         """A guest reached one of its indexes: ours are mapped back, others are not for us."""
         with self.lock:
             if index not in self.index_map:
-                tr.trace(f"index {index} from {tr.name(guest)}: not in flight (late or repeated)")
                 return False
             nvda_index = self.index_map.pop(index)
-            tr.trace(f"index {index} from {tr.name(guest)}: " + ("end marker" if nvda_index is None else f"NVDA's {nvda_index}"))
             passed = []
             if nvda_index is None:
                 piece = self.inflight.get(index)
@@ -264,7 +254,6 @@ class Scheduler:
             if (self.busy_guest is not guest or self.last_marker.get(id(guest)) != marker
                     or any(p.guest is guest for p in self.inflight.values())):
                 return False
-            tr.trace(f"played {marker} on {tr.name(guest)}: freed" + (" (was held)" if id(guest) in self.held else ""))
             self.busy_guest = None
             self.held.pop(id(guest), None)
         self._progress()
@@ -282,7 +271,6 @@ class Scheduler:
             if (self.held.get(id(guest)) is not token or self.busy_guest is not guest
                     or any(p.guest is guest for p in self.inflight.values())):
                 return False
-            tr.trace(f"release {tr.name(guest)}: no report that its audio played; freed by timeout")
             del self.held[id(guest)]
             self.busy_guest = None
         self._progress()
@@ -297,7 +285,6 @@ class Scheduler:
             if markers and self.reached.get(id(guest), 0) > 0 and not self.done_drains(guest):
                 # The done of a call whose marker was reached, with a later call still queued on the guest.
                 self.reached[id(guest)] -= 1
-                tr.trace(f"done from {tr.name(guest)}: of one call, more in flight")
                 return False
             self.reached.pop(id(guest), None)
             # A piece being handed to the guest right now is not finished by a done from before it.
@@ -307,10 +294,6 @@ class Scheduler:
                 self.held[id(guest)] = object()
             elif was_busy:
                 self.busy_guest = None
-            tr.trace(f"done from {tr.name(guest)}: " + (
-                ("held until played" if self.done_early(guest) else "freed") if was_busy
-                else "finishes pieces, guest still busy" if markers else "not for anything in flight"
-            ) + (f", {len(markers)} piece(s) finished without their end marker" if markers else ""))
             unreported = []
             for m in markers:
                 piece = self.inflight.pop(m, None)
@@ -341,7 +324,6 @@ class Scheduler:
                 done = self.speaking
                 self.speaking = False
         if done:
-            tr.trace("done reported to NVDA")
             self.notify_done()
         elif more:
             self.run_on_main(self.pump)
@@ -383,14 +365,10 @@ class Scheduler:
                 else:
                     key = (id(guest), piece.row.key())
                     if self.inflight and key != self.current_key:
-                        tr.trace(f"wait: {piece.row.lang}/{piece.row.synth} for the previous piece's end marker")
                         return
                     if self.serial(guest) and any(p.guest is guest for p in self.inflight.values()):
-                        tr.trace(f"wait: {piece.row.lang}/{piece.row.synth} for {tr.name(guest)}'s piece (one at a time)")
                         return
                     if self.busy_guest is not None and self.busy_guest is not guest:
-                        tr.trace(f"wait: {piece.row.lang}/{piece.row.synth} for {tr.name(self.busy_guest)} to finish"
-                                 + (" playing (held)" if id(self.busy_guest) in self.held else ""))
                         return
                     voice = piece.row.get("voice")
                     if guest is not self.current_guest:
@@ -398,9 +376,6 @@ class Scheduler:
                     changes_voice = voice is not None and self.current_voice is not None and voice != self.current_voice
                     changes_row = key != self.current_key and self.settles(guest)
                     if (changes_voice or changes_row) and self.busy_guest is guest and self.notifies_done(guest):
-                        tr.trace(f"wait: {piece.row.lang}/{piece.row.synth} for {tr.name(guest)} to finish before "
-                                 + ("a change of voice" if changes_voice else "a new row")
-                                 + (" (held)" if id(guest) in self.held else ""))
                         return
                     self.pending.popleft()
                     piece.guest = guest
@@ -432,21 +407,16 @@ class Scheduler:
                 continue
             # Every send: the driver skips it when the guest already carries the row, and anything that
             # touched the guest meanwhile (a preview from the settings dialog) has cleared that mark.
-            start = tr.now()
             try:
                 self.apply_row(guest, piece.row)
             except Exception as e:
                 self.log(f"applying row {piece.row!r} to {guest!r} failed: {e}")
-            applied = tr.ms(start)
-            start = tr.now()
             try:
                 guest.speak(self.adapt(guest, piece.row, items))
                 reports = self.notifies_indexes(guest)
             except Exception as e:
                 self.log(f"speak on {guest!r} failed: {e}")
                 reports = False
-            tr.trace(f"sent {piece.row.lang}/{piece.row.synth} {tr.text(items)} to {tr.name(guest)}, end marker "
-                     f"{marker}: row applied in {applied}, speak returned in {tr.ms(start)}")
             with self.lock:
                 piece.sent = True
             if not reports:

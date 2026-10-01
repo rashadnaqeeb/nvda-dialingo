@@ -43,7 +43,6 @@ from speech.commands import (  # noqa: E402
 from synthDriverHandler import VoiceInfo, synthDoneSpeaking, synthIndexReached  # noqa: E402
 
 from mlang import hosts, policy, winvoices  # noqa: E402
-from mlang import trace as tr  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.scheduler import Scheduler  # noqa: E402
 from mlang.scripts import code  # noqa: E402
@@ -264,9 +263,6 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             self.guest(winvoices.ONECORE)
         synthIndexReached.register(self._on_guest_index)
         synthDoneSpeaking.register(self._on_guest_done)
-        tr.trace(f"table: host {self.host_name}, default {self.default_row().lang}, rows "
-                 + (", ".join(f"{r.lang}/{r.synth}" + ("" if r.synth in self.guests else " (not loaded)")
-                              for r in self.table.rows) or "none"))
         T.listeners.append(self._on_table_saved)
 
     def terminate(self):
@@ -453,8 +449,6 @@ class SynthDriver(synthDriverHandler.SynthDriver):
     def _apply_row(self, guest, row):
         if getattr(guest, "_mlangApplied", None) == row.key():
             return
-        start = tr.now()
-        tr.trace(f"apply {row.lang}/{row.synth} to {tr.name(guest)}")
         hosts.apply_row(guest, row, log)
         default = guest is self.host and row.key() == self.default_row().key()
         if not default:
@@ -474,7 +468,6 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                         setattr(guest, setting, value)
                 except Exception:
                     log.debugWarning(f"multilanguage: could not restore {setting} on {guest.name}", exc_info=True)
-        tr.trace(f"applied {row.lang}/{row.synth} to {tr.name(guest)} in {tr.ms(start)}")
 
     def _adapt_prosody(self, guest, row, items):
         """NVDA resolves a rate, pitch, or volume command against the configured value of the synthesizer in
@@ -701,7 +694,6 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                 log.debugWarning("multilanguage: Eloquence's player could not report the end of a piece", exc_info=True)
 
     def _on_eloquence_played(self, synth, engine, marker):
-        tr.trace(f"Eloquence's player played up to {marker}")
         if self.scheduler.on_played(synth, marker) and not engine.speaking:
             # Its done, from before a piece sent to it next, would end that piece while it still speaks.
             # Its player idles by itself.
@@ -713,18 +705,15 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         if getattr(synth, "_speakRequests", None) or _more_queued(synth):
             # SAPI 5 reports done after each request, with more of them still to speak; eSpeak after each call;
             # Acapela inside each call.
-            tr.trace(f"done from {tr.name(synth)}: ignored, more of its calls queued")
             return
         queued = getattr(synth, "_queuedSpeech", None)
         if queued and any(isinstance(item, str) for item in queued):
             # OneCore's done from before a cancel, arriving after the next piece was queued.
-            tr.trace(f"done from {tr.name(synth)}: ignored, from before a cancel")
             return
         if _reports_before_playing(synth):
             # Reported from its speaking thread, outside its player's callbacks. Changes of guest and voice wait
             # for it, so it is held until the audio has played; its marks need no holding, since a change of row
             # alone waits only until the text before them is synthesized.
-            tr.trace(f"done from {tr.name(synth)}: held until its player has played")
             _after_playing(synth, lambda: self.scheduler.on_done(synth))
             return
         held = self.scheduler.holding(synth)
