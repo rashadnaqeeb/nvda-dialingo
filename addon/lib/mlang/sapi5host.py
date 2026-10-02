@@ -146,7 +146,7 @@ def hosted(cls, log=None):
 
             def __init__(self, *args, **kwargs):
                 try:
-                    super().__init__(*args, **kwargs)
+                    self._mlangPipes = _launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
                 except Exception:
                     if log:
                         log.debugWarning("multilanguage: the 32-bit SAPI 5 of the language table did not load; "
@@ -154,7 +154,13 @@ def hosted(cls, log=None):
                     self.synthDriver32Path = cls.synthDriver32Path
                     self.synthDriver32Name = cls.synthDriver32Name
                     self.speechEndOffset = None
-                    super().__init__(*args, **kwargs)
+                    self._mlangPipes = _launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
+
+            def terminate(self):
+                try:
+                    super().terminate()
+                finally:
+                    _close_pipes(self.__dict__.pop("_mlangPipes", ()), log)
 
             def mlangReturning(self):
                 """The table's `returning`: another voice has spoken since this one's last piece, so the silence
@@ -194,3 +200,93 @@ def _usable32(cls):
             and getattr(cls, "synthDriver32Name", None) == "sapi5" and hasattr(cls, "synthDriver32Path")
             and os.path.isfile(os.path.join(DRIVERS32, DRIVER32 + ".py")))
 
+
+_launching = threading.Lock()
+
+
+def _launch(init, log=None):
+    """Run a 32-bit proxy's init, putting right what NVDA's launcher makes for it on this thread meanwhile. The pipes
+    to the host process it started, as file objects, which the proxy closes when it is terminated.
+
+    - The launcher's stream (rpyc's Win32PipeStream) closes the raw handles of the pipes, which the file objects it
+      was made from still hold, and close again when they are collected: by then the handle may be another's,
+      something else of NVDA's, and NVDA crashes ("Exception ignored in: <_io.BufferedReader>", Bad file
+      descriptor, is the harmless case). The stream is given handles of its own (_own_handles).
+    - The launcher starts the host process and connects to it before the driver is loaded there, and keeps nothing
+      of it when that load fails: the process would run on until NVDA exits. Its connection is closed."""
+    try:
+        from _bridge.clients.synthDriverHost32 import launcher
+
+        real = launcher.Connection
+    except Exception:
+        init()
+        return []
+    thread = threading.get_ident()
+    made = []
+    pipes = []
+
+    def connection(stream, *args, **kwargs):
+        if threading.get_ident() != thread:
+            return real(stream, *args, **kwargs)
+        pipes.extend(_own_handles(stream, log))
+        conn = real(stream, *args, **kwargs)
+        made.append(conn)
+        return conn
+
+    with _launching:
+        launcher.Connection = connection
+        try:
+            init()
+        except Exception:
+            for conn in made:
+                try:
+                    conn.close()
+                except Exception:
+                    if log:
+                        log.debugWarning("multilanguage: a 32-bit synth driver host was not closed", exc_info=True)
+            _close_pipes(pipes, log)
+            raise
+        finally:
+            launcher.Connection = real
+    return pipes
+
+
+def _own_handles(stream, log=None):
+    """Give a Win32PipeStream duplicates of the pipe handles it was made with, which it closes, so that the file
+    objects it was made from close the originals, each handle once. Those file objects, or nothing when the stream
+    is not one, or the handles could not be duplicated."""
+    files = getattr(stream, "_keepalive", None)
+    handles = [getattr(stream, name, None) for name in ("incoming", "outgoing")]
+    if not isinstance(files, tuple) or not all(isinstance(h, int) for h in handles):
+        return []
+    import ctypes
+    from ctypes import wintypes
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+    kernel32.DuplicateHandle.argtypes = (wintypes.HANDLE, wintypes.HANDLE, wintypes.HANDLE,
+                                         ctypes.POINTER(wintypes.HANDLE), wintypes.DWORD, wintypes.BOOL, wintypes.DWORD)
+    kernel32.CloseHandle.argtypes = (wintypes.HANDLE,)
+    process = kernel32.GetCurrentProcess()
+    copies = []
+    for handle in handles:
+        copy = wintypes.HANDLE()
+        if not kernel32.DuplicateHandle(process, handle, process, ctypes.byref(copy), 0, False, 2):  # SAME_ACCESS
+            for made in copies:
+                kernel32.CloseHandle(made)
+            if log:
+                log.debugWarning(f"multilanguage: a pipe to a 32-bit synth driver host was not duplicated: "
+                                 f"{ctypes.WinError(ctypes.get_last_error())}")
+            return []
+        copies.append(copy.value)
+    stream.incoming, stream.outgoing = copies
+    return list(files)
+
+
+def _close_pipes(pipes, log=None):
+    for pipe in pipes:
+        try:
+            pipe.close()
+        except Exception:
+            if log:
+                log.debugWarning("multilanguage: a pipe to a 32-bit synth driver host was not closed", exc_info=True)
