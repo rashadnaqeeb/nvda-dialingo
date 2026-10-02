@@ -38,14 +38,16 @@ LIMIT = 30
 
 
 class _Item:
-    __slots__ = ("gen", "data", "onDone", "idle", "taken")
+    __slots__ = ("gen", "data", "onDone", "idle", "taken", "fed", "ran")
 
     def __init__(self, gen, data=b"", onDone=None, idle=False):
         self.gen = gen
         self.data = data
         self.onDone = onDone
         self.idle = idle
-        self.taken = False
+        self.taken = False  # off the queue
+        self.fed = False  # handed to the player
+        self.ran = False  # its onDone was called, or dropped by a stop
 
 
 class _Probe:
@@ -105,6 +107,8 @@ class QueuedPlayer:
         self.after = []  # the audio fed since that probe: the silence after the speech, when it is the last
         self.tail = []  # the audio fed after the last end of speech, as `after` was when it was marked
         self.holding = False  # nothing is handed to the player, audio or callback, until unhold or stop
+        self.calls = deque()  # the items with a callback, in order, until it has run
+        self.salvaging = None  # while the player is rebuilt (salvage): the callbacks a stop would drop
         self.closing = False
         self.thread = threading.Thread(target=self._run, name="multilanguage SAPI 5 feeder", daemon=True)
         self.thread.start()
@@ -118,7 +122,7 @@ class QueuedPlayer:
         with self.cond:
             gen = self.gen
             if data is None or size == 0:
-                self.queue.append(_Item(gen, onDone=onDone))
+                self._put(_Item(gen, onDone=onDone))
                 self.cond.notify_all()
                 return
         audio = as_bytes(data, size)
@@ -144,15 +148,22 @@ class QueuedPlayer:
                 if cut:
                     self._append(_Item(gen, audio[:cut], None if cut < len(audio) else onDone))
                 probe = _Probe()
-                self.queue.append(_Item(gen, onDone=lambda: self._played(probe)))
+                self._put(_Item(gen, onDone=lambda: self._played(probe)))
                 self.probe = probe
                 self.after = []
                 if cut < len(audio):
                     self._append(_Item(gen, audio[cut:], onDone))
             self.cond.notify_all()
 
-    def _append(self, item):
+    def _put(self, item):
         self.queue.append(item)
+        if item.onDone is not None:
+            while self.calls and self.calls[0].ran:
+                self.calls.popleft()
+            self.calls.append(item)
+
+    def _append(self, item):
+        self._put(item)
         self.queued += len(item.data)
         self.after.append(item)
 
@@ -180,12 +191,43 @@ class QueuedPlayer:
             self.after = []
             self.tail = []
             self.holding = False
+            self._drop_calls(self.calls)
+            self.calls = deque()
             self.cond.notify_all()
         # The first stop ends a feed the thread is blocked in; the second, once that feed has returned, the
         # audio of one that passed its check just before the queue was dropped.
         self.player.stop()
         with self.feeding:
             self.player.stop()
+
+    def salvage(self):
+        """From now until `salvaged`, the callbacks a stop drops are kept: the player is being replaced (SAPI 5
+        makes a new one to change voice), and what it cut short still counts as played, as NVDA's own driver
+        reports a request's bookmarks, and done, when the request ends."""
+        with self.cond:
+            self.salvaging = []
+
+    def salvaged(self):
+        """The callbacks kept since `salvage`, in the order they were fed, none of them called."""
+        with self.cond:
+            calls, self.salvaging = self.salvaging or [], None
+        return calls
+
+    def _drop_calls(self, items):
+        """Under the lock: the callbacks of `items` will not be called by the player (stopped)."""
+        for item in items:
+            if not item.ran:
+                item.ran = True
+                if self.salvaging is not None:
+                    self.salvaging.append(item.onDone)
+
+    def _call(self, item):
+        """The player calls an item's callback through this, so it is called once, and not after a stop."""
+        with self.cond:
+            if item.ran:
+                return
+            item.ran = True
+        item.onDone()
 
     def pause(self, switch):
         self.player.pause(switch)
@@ -220,7 +262,7 @@ class QueuedPlayer:
             self.tail, self.after = self.after, []
             if probe is None:
                 self.tail = []
-                self.queue.append(_Item(self.gen, onDone=callback))
+                self._put(_Item(self.gen, onDone=callback))
                 self.cond.notify_all()
                 return
             if not probe.played:
@@ -262,7 +304,12 @@ class QueuedPlayer:
             # As in stop: the first ends a feed of the silence the thread is blocked in, the second the rest.
             self.player.stop()
             with self.feeding:
+                with self.cond:
+                    # In the player now, and dropped by the stop; the feeding lock keeps any other from going in.
+                    lost = [item for item in self.calls if item.fed]
                 self.player.stop()
+                with self.cond:
+                    self._drop_calls(lost)
         return dropped
 
     # ------------------------------------------------------------ the thread
@@ -282,13 +329,15 @@ class QueuedPlayer:
             with self.feeding:
                 if item.gen != self.gen:
                     continue
+                onDone = None if item.onDone is None else (lambda item=item: self._call(item))
+                item.fed = True
                 try:
                     if item.idle:
                         if not follows:
                             self.player.idle()
                     elif item.data:
-                        self.player.feed(item.data, onDone=item.onDone)
+                        self.player.feed(item.data, onDone=onDone)
                     else:
-                        self.player.feed(None, 0, onDone=item.onDone)
+                        self.player.feed(None, 0, onDone=onDone)
                 except Exception as e:
                     self.log(f"multilanguage: feeding SAPI 5's player failed: {e!r}")

@@ -164,10 +164,18 @@ def _holds(synth):
     return isinstance(getattr(synth, "player", None), QueuedPlayer)
 
 
-def _unhold(synth):
+def _hold(synth, held):
+    """Through the instance (sapi5host), so that a new player, made for a change of voice, keeps the state."""
+    hold = getattr(synth, "mlangHold", None)
+    if hold is not None:
+        hold(held)
+        return
     player = getattr(synth, "player", None)
     if isinstance(player, QueuedPlayer):
-        player.unhold()
+        if held:
+            player.hold()
+        else:
+            player.unhold()
 
 
 def _more_queued(synth):
@@ -307,8 +315,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             returning=_drop_silence,
             cuts_silence=lambda guest: guest.name in CUTS_SILENCE,
             holds=_holds,
-            hold=lambda guest: guest.player.hold(),
-            unhold=_unhold,
+            hold=lambda guest: _hold(guest, True),
+            unhold=lambda guest: _hold(guest, False),
         )
         self._load_host()
         if self.host is None:

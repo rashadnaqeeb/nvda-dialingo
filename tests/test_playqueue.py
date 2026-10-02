@@ -109,7 +109,7 @@ class QueuedPlayerTests(unittest.TestCase):
 
     def play(self, n):
         """Call the callback of the player's nth mark, as the player does once the audio before it has played."""
-        marks = [cb for k, cb in self.fed() if k == "mark"]
+        marks = [call[1] for call in self.fed() if call[0] == "mark"]
         marks[n]()
 
     def test_a_probe_follows_the_last_loud_sound_of_a_chunk(self):
@@ -238,6 +238,47 @@ class QueuedPlayerTests(unittest.TestCase):
         settle(self.q)
         self.assertEqual(self.kinds()[-2:], ["audio", "mark"])
         self.assertEqual(len(self.fed()[-2][1]), 60)
+
+    def test_a_callback_in_the_player_is_not_called_after_a_stop(self):
+        called = []
+        self.q.feed(None, 0, onDone=lambda: called.append(1))
+        settle(self.q)
+        self.q.stop()
+        self.play(0)  # were the stopped player to call it
+        self.assertEqual(called, [])
+
+    def test_callbacks_a_stop_drops_while_salvaging_are_handed_back_once_in_order(self):
+        called = []
+        self.q.feed(audio((2000, 100), (0, 400)))
+        self.q.mark_speech_end(lambda: called.append("end"))
+        self.q.feed(None, 0, onDone=lambda: called.append("reports"))
+        settle(self.q)  # in the player, not played
+        self.q.hold()
+        self.q.feed(None, 0, onDone=lambda: called.append("done"))  # still queued
+        self.q.salvage()
+        self.q.stop()
+        calls = self.q.salvaged()
+        self.assertEqual(called, [])
+        for call in calls:
+            call()
+        self.assertEqual(called, ["end", "reports", "done"])
+        self.play(0)
+        self.play(1)
+        self.assertEqual(called, ["end", "reports", "done"])
+        self.q.feed(None, 0, onDone=lambda: None)
+        self.q.stop()
+        self.assertEqual(self.q.salvaged(), [])  # salvaging ended
+
+    def test_callbacks_drop_silence_stopped_are_not_handed_back_later(self):
+        self.q.feed(audio((2000, 100)))
+        self.q.feed(audio((0, 300)))
+        self.q.mark_speech_end(lambda: None)
+        self.q.feed(None, 0, onDone=lambda: None)
+        settle(self.q)
+        self.q.drop_silence()
+        self.q.salvage()
+        self.q.stop()
+        self.assertEqual(self.q.salvaged(), [])
 
     def test_idle_is_skipped_when_audio_follows(self):
         self.player.open.clear()

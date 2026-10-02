@@ -10,6 +10,7 @@ It relies on how NVDA 2026 builds the driver: its audio goes through `player`, m
 speaking thread appends each request's bookmarks to `_bookmarkLists` as it starts it, and calls `_onEndStream`
 once the request's audio is all written. When any of that is missing, the driver is hosted as it is, with its
 done freeing it as before. NVDA is imported inside the functions, so the module loads under the tests."""
+import threading
 from collections import deque
 
 from .playqueue import QueuedPlayer
@@ -52,14 +53,51 @@ def hosted(cls, log=None):
             onSpeechEnded = None  # set by the language table: called with the end marker of a piece
 
             def __init__(self, *args, **kwargs):
+                # Before NVDA's init, which makes the first player.
+                self._mlangHoldLock = threading.Lock()
+                self._mlangHeld = False
                 super().__init__(*args, **kwargs)
                 if isinstance(self._bookmarkLists, deque) and not self._bookmarkLists:
                     self._bookmarkLists = _Requests()
 
             def _initWasapiAudio(self):
-                super()._initWasapiAudio()
-                if self.player is not None:
-                    self.player = QueuedPlayer(self.player, log.debugWarning if log else None)
+                with self._mlangHoldLock:
+                    super()._initWasapiAudio()
+                    if self.player is not None:
+                        self.player = QueuedPlayer(self.player, log.debugWarning if log else None)
+                        if self._mlangHeld:
+                            # A change of voice while holding a piece sent ahead: the new player holds it too.
+                            self.player.hold()
+
+            def mlangHold(self, held):
+                """Hold what is sent to the player (QueuedPlayer.hold), or let it play: a state of the instance,
+                which a new player made for a change of voice keeps."""
+                with self._mlangHoldLock:
+                    self._mlangHeld = held
+                    player = self.player
+                    if isinstance(player, QueuedPlayer):
+                        if held:
+                            player.hold()
+                        else:
+                            player.unhold()
+
+            def _initTts(self, *args, **kwargs):
+                """A change of voice makes a new engine and player, stopping the old player with the reports of
+                what it was still to play (the end of speech, NVDA's indexes, done), which NVDA's own driver
+                would have made by then. They are made once the new player is in place."""
+                old = getattr(self, "player", None)
+                if not isinstance(old, QueuedPlayer):
+                    return super()._initTts(*args, **kwargs)
+                old.salvage()
+                try:
+                    super()._initTts(*args, **kwargs)
+                finally:
+                    for call in old.salvaged():
+                        try:
+                            call()
+                        except Exception:
+                            if log:
+                                log.debugWarning("multilanguage: a report of SAPI 5's failed", exc_info=True)
 
             def _onEndStream(self):
                 player = self.player
