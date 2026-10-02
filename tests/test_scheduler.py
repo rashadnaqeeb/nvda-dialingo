@@ -469,6 +469,53 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(self.h.indexes, [3])
         self.assertEqual(self.h.done, 1)
 
+    def test_a_piece_that_fails_to_go_ahead_is_sent_in_turn_with_its_indexes_in_order(self):
+        held, unheld = self.holding()
+        b = FakeGuest("B")
+        attempts = []
+        speak = b.speak
+
+        def fail_once(items):
+            attempts.append(texts(items))
+            if len(attempts) == 1:
+                raise RuntimeError("engine busy")
+            speak(items)
+
+        b.speak = fail_once
+        self.h.guests["B"] = b
+        self.h.speak([LangChangeCommand("en"), "one", IndexCommand(5), LangChangeCommand("fr"), "un", IndexCommand(7)])
+        self.assertEqual(self.h.indexes, [])  # not 7 before 5
+        self.assertIsNone(self.h.scheduler.waiting)
+        self.assertEqual(unheld, ["B"])
+        self.h.guests["A"].finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(attempts, [["un"], ["un"]])
+        self.assertEqual(held, ["B"])  # held only the first time: in turn it plays
+        b.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(self.h.indexes, [5, 7])
+        self.assertEqual(self.h.done, 1)
+
+    def test_a_failed_piece_ahead_does_not_cut_the_silence_of_the_guest_still_speaking(self):
+        self.holding(("A", "B"))
+        back = []
+        self.h.scheduler.returning = back.append
+        b = FakeGuest("B")
+
+        def fail(items):
+            raise RuntimeError("engine gone")
+
+        b.speak = fail
+        self.h.guests["B"] = b
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"])
+        a = self.h.guests["A"]
+        marker = [i.index for i in a.queued[0] if isinstance(i, IndexCommand)][-1]
+        # Its engine's mark, before its speech has played (Zira's).
+        self.h.scheduler.on_index(a, marker)
+        self.h.run_main()
+        self.assertNotIn(a, back)
+        self.assertEqual(len(a.spoken), 1)
+
     def test_a_done_from_before_a_cancel_does_not_finish_the_next_piece(self):
         h = self.h
         h.speak([LangChangeCommand("fr"), "un", LangChangeCommand("en"), "one"])

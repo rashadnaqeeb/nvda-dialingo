@@ -41,7 +41,7 @@ MAX_INDEX = 9999
 
 
 class Piece:
-    __slots__ = ("row", "items", "guest", "marker", "indexes", "sent")
+    __slots__ = ("row", "items", "guest", "marker", "indexes", "sent", "in_turn")
 
     def __init__(self, row):
         self.row = row
@@ -50,6 +50,7 @@ class Piece:
         self.marker = None
         self.indexes = []  # ours for NVDA's indexes in the piece, once sent
         self.sent = False  # handed to the guest: in flight from before, but a done can only be for it after
+        self.in_turn = False  # never sent ahead: it failed to go ahead once
 
     def has_text(self):
         return any(isinstance(i, str) and i for i in self.items)
@@ -400,6 +401,28 @@ class Scheduler:
         except Exception as e:
             self.log(f"letting {guest!r} play failed: {e}")
 
+    def _put_back(self, piece, guest, before):
+        """A piece sent ahead that its guest failed to take goes back to the front, to be sent in turn once what
+        is ahead of it is spoken: finished now, NVDA's indexes in it would come before those of the speech still
+        playing. The guest and row the last piece went to are as they were. Whether it was put back; not after
+        a cancel."""
+        with self.lock:
+            if self.waiting is not guest or self.inflight.get(piece.marker) is not piece:
+                return False
+            del self.inflight[piece.marker]
+            self.index_map.pop(piece.marker, None)
+            for ours in piece.indexes:
+                self.index_map.pop(ours, None)
+            piece.guest = None
+            piece.marker = None
+            piece.indexes = []
+            piece.in_turn = True
+            self.pending.appendleft(piece)
+            self.waiting = None
+            self.current_guest, self.current_key, self.current_voice = before
+        self._unhold(guest)
+        return True
+
     # ------------------------------------------------------------ internals
 
     def _next_index(self):
@@ -435,6 +458,7 @@ class Scheduler:
                     if finished:
                         self.speaking = False
                 else:
+                    before = (self.current_guest, self.current_key, self.current_voice)
                     key = (id(guest), piece.row.key())
                     mine = any(p.guest is guest for p in self.inflight.values())
                     other_busy = (self.busy_guest is not None and self.busy_guest is not guest
@@ -443,7 +467,8 @@ class Scheduler:
                     # audio until then, if it is idle and nothing else waits so.
                     ahead = False
                     if (self.inflight and key != self.current_key) or other_busy:
-                        if self.waiting is not None or mine or guest is self.busy_guest or not self.holds(guest):
+                        if (self.waiting is not None or mine or guest is self.busy_guest or not self.holds(guest)
+                                or piece.in_turn):
                             return
                         ahead = True
                     elif self.serial(guest) and mine:
@@ -476,7 +501,9 @@ class Scheduler:
                     piece.marker = marker
                     items.append(self.IndexCommand(marker))
                     self.inflight[marker] = piece
-                    back = self.current_guest is not None and self.current_guest is not guest
+                    # Not while its own speech may still play: what returning drops is the silence after it.
+                    back = (self.current_guest is not None and self.current_guest is not guest
+                            and (self.busy_guest is not guest or self.played is guest))
                     self.current_guest = guest
                     self.current_key = key
                     if ahead:
@@ -520,6 +547,8 @@ class Scheduler:
             except Exception as e:
                 self.log(f"speak on {guest!r} failed: {e}")
                 reports = False
+                if ahead and self._put_back(piece, guest, before):
+                    continue
             with self.lock:
                 piece.sent = True
             if not reports:
