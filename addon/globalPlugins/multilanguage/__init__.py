@@ -30,7 +30,7 @@ from speech.languageHandling import getSpeechSequenceWithLangs  # noqa: E402
 from mlang import policy, prosody, voicedict, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
-from mlang.hosts import DRIVER_NAME, REFUSED  # noqa: E402
+from mlang.hosts import DRIVER_NAME  # noqa: E402
 from mlang.scripts import base  # noqa: E402
 from mlang.sequence import filter_sequence, locked_sequence, untagged_sequence  # noqa: E402
 
@@ -464,11 +464,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         return self.engine.filter(value)
 
     def on_synth_changed(self, synth=None, isFallback=False, **kwargs):
-        # A synthesizer the user picks becomes the one the language table hosts; a fallback after another
-        # failed to load is not a pick.
-        name = getattr(synth, "name", None)
-        if name and not isFallback and name not in (DRIVER_NAME, "silence", "auto", *REFUSED):
-            config.conf[T.CONFIG_SECTION]["defaultSynth"] = name
         if rows_apply_to_current_synth():
             ensure_language_switching()
 
