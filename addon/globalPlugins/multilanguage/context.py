@@ -17,8 +17,19 @@
 # Typing echo follows the keyboard layout: a typed character, one deleted with backspace, and a typed word
 # are read in the keyboard's language where a row or a voice speaks it. A letter of a script the keyboard
 # does not write goes to the language of its script, a word to detection.
+#
+# A line read at the caret is often part of a sentence: wrapped text ends a line on a sentence's first word
+# ("view. A") or puts a paragraph's last word on a line of its own. Detected alone, such an edge stays with
+# the default voice. While a line is spoken its TextInfo is held, and a string of it whose edge the detector
+# cannot decide alone, and which is in the line's own text (not NVDA's "level 2"), is read among the text
+# around the line, two lines either side, fetched once for the line. A line whose edges are decided fetches
+# nothing more. A character or word takes its language from its line read the same way. Say all needs none
+# of this: it does not speak through speakTextInfo, and NVDA holds its text back to the last sentence end
+# (speechWithoutPauses), so the filter gets whole sentences.
 
 import contextlib
+import logging
+import time
 
 import config
 import keyboardHandler
@@ -30,8 +41,39 @@ from logHandler import log
 
 from mlang import table as T
 from mlang.scripts import base
+from mlang.sequence import LineStrings
 
 from . import lock
+
+# Lines of text fetched on each side of a line read alone, for the sentences it cuts.
+LINES_AROUND = 2
+
+
+def line_of(info):
+    """The line's TextInfo: `info` itself, expanded to its line where it is collapsed."""
+    line = info.copy()
+    if line.isCollapsed:
+        line.expand(textInfos.UNIT_LINE)
+    return line
+
+
+def surroundings(info, text=None):
+    """(text around the line, the line's start in it, its end) for a line's TextInfo: two lines on either
+    side, fetched as one range. `text` is the line's, where the caller has it. None where the line is not
+    found in it."""
+    line = line_of(info)
+    if text is None:
+        text = line.text
+    if not text:
+        return None
+    around = line.copy()
+    around.move(textInfos.UNIT_LINE, -LINES_AROUND, endPoint="start")
+    around.move(textInfos.UNIT_LINE, LINES_AROUND, endPoint="end")
+    around_text = around.text
+    start = UnitContext.offset_in(around, around_text, line)
+    if around_text[start:start + len(text)] != text:
+        return None
+    return around_text, start, start + len(text)
 
 
 def keyboard_language():
@@ -60,9 +102,12 @@ class UnitContext:
         self.language = None  # the context language while a wrapped call runs, None otherwise
         self.unit_text = None
         self.keyboard = None  # the keyboard layout's language while NVDA echoes typing
-        self.last_line = None
         self.last_runs = None
-        self.last_key = None  # the engine's configuration key the cached runs were made under
+        self.last_key = None  # (line text, text around it, the engine's configuration key) of last_runs
+        self.line_info = None  # the TextInfo of the line being spoken, while a wrapped call runs
+        self.line_strings = None  # the strings of its sequence so far, a LineStrings
+        self.line_text = None  # its text once fetched, False where it cannot be had
+        self.line_place = None  # surroundings() of it once fetched, False where they cannot be had
         self.originals = {}
 
     # ------------------------------------------------------------ install
@@ -94,6 +139,9 @@ class UnitContext:
         unit = kwargs.get("unit", args[2] if len(args) > 2 else None)
         if unit in (textInfos.UNIT_CHARACTER, textInfos.UNIT_WORD):
             with self.context(info):
+                return self.originals["speakTextInfo"](info, *args, **kwargs)
+        if unit == textInfos.UNIT_LINE:
+            with self.line_context(info):
                 return self.originals["speakTextInfo"](info, *args, **kwargs)
         return self.originals["speakTextInfo"](info, *args, **kwargs)
 
@@ -256,6 +304,107 @@ class UnitContext:
         finally:
             self.language, self.unit_text = None, None
 
+    @contextlib.contextmanager
+    def line_context(self, info):
+        saved = (self.line_info, self.line_strings, self.line_text, self.line_place)
+        self.line_info, self.line_strings, self.line_text, self.line_place = info, LineStrings(), None, None
+        try:
+            yield
+        finally:
+            self.line_info, self.line_strings, self.line_text, self.line_place = saved
+
+    def line_runs(self, detector, text, detected):
+        """For the sequence filter, bound to its detector: the runs of a string of the line being spoken, read
+        among the text around the line where the detector cannot decide an edge of it alone; None otherwise.
+        Called for each string in order, detected or not, so the strings before it place it in the line."""
+        if self.line_info is None:
+            return None
+        self.line_strings.add(text)
+        if not detected or detector.labels:
+            # A grid row read with its column headers is its cells, each read alone.
+            return None
+        try:
+            if not detector.undecided_edge(text):
+                return None
+            # Only the line's own text is worth the text around it: NVDA's "level 2" before a heading is not.
+            line_text = self.text_of_line()
+            if not line_text or text.strip() not in line_text:
+                return None
+            reader_words = detector.reader_words
+            return self.read_in_context(
+                detector, text, self.place_of_line,
+                lambda place: self.line_strings.place_last(place[0], place[1], place[2], reader_words),
+            )
+        except Exception:
+            log.debugWarning("multilanguage: a line could not be read in context", exc_info=True)
+            return None
+
+    def text_of_line(self):
+        """The text of the line being spoken, fetched once for it; None where it cannot be had."""
+        if self.line_text is None:
+            self.line_text = False
+            try:
+                self.line_text = line_of(self.line_info).text or False
+            except Exception:
+                log.debugWarning("multilanguage: no text for the line", exc_info=True)
+        return self.line_text or None
+
+    def place_of_line(self):
+        """surroundings() of the line being spoken, fetched once for it; None where they cannot be had."""
+        if self.line_place is None:
+            self.line_place = False
+            try:
+                self.line_place = surroundings(self.line_info, self.text_of_line()) or False
+            except Exception:
+                log.debugWarning("multilanguage: no text around the line", exc_info=True)
+        return self.line_place or None
+
+    def read_in_context(self, detector, text, fetch, locate):
+        """The runs of `text`, a string of a line with an undecided edge, read among the text around the line:
+        fetch() gives surroundings(), and locate(them) the string's (start, text as found there) in them. None
+        where either has none. The time each part took goes to the log at debug level."""
+        started = time.perf_counter()
+        place = fetch()
+        fetched = time.perf_counter()
+        if place is None:
+            return None
+        found = locate(place)
+        if found is None:
+            return None
+        start, core = found
+        runs = detector.in_context(core, place[0], start, undecided=True)
+        if core != text:
+            # Found stripped: the spaces around it go with the runs beside them.
+            lead = text[:len(text) - len(text.lstrip())]
+            trail = text[len(text.rstrip()):]
+            runs = [(runs[0][0], lead)] + runs + [(runs[-1][0], trail)]
+            runs = [(lang, piece) for lang, piece in runs if piece]
+        if log.isEnabledFor(logging.DEBUG):
+            log.debug("multilanguage: line read in context, fetch %.1f ms, detection %.1f ms"
+                      % ((fetched - started) * 1000, (time.perf_counter() - fetched) * 1000))
+        return runs
+
+    def runs_of_line(self, detector, line, text):
+        """The runs of a unit's line, read in context as a line at the caret is, and kept for the next unit:
+        by the line's text where it is decided alone, and by the text around it too where it is not, since
+        two lines of the same text ("perimeter.") in different paragraphs read differently."""
+        place = None
+        if detector.undecided_edge(text):
+            try:
+                place = surroundings(line, text)
+            except Exception:
+                log.debugWarning("multilanguage: no text around the unit's line", exc_info=True)
+        key = (text, place[0] if place else None, self.engine.key)
+        if key == self.last_key:
+            return self.last_runs
+        runs = None
+        if place is not None:
+            runs = self.read_in_context(detector, text, lambda: place, lambda found: (found[1], text))
+        if runs is None:
+            runs = detector.tagged(text)
+        self.last_key, self.last_runs = key, runs
+        return runs
+
     def language_at(self, info):
         """The language the unit's line reads in at the unit's offset, or None for the default."""
         detector = self.engine.current()
@@ -267,11 +416,7 @@ class UnitContext:
         if not text or not any(c.isalpha() for c in text):
             return None
         offset = self.offset_in(line, text, info)
-        if text == self.last_line and self.last_key == self.engine.key:
-            runs = self.last_runs
-        else:
-            runs = detector.tagged(text)
-            self.last_line, self.last_runs, self.last_key = text, runs, self.engine.key
+        runs = self.runs_of_line(detector, line, text)
         end = 0
         language = None
         for lang, piece in runs:

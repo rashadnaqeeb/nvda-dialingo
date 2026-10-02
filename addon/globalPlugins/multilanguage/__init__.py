@@ -2,6 +2,7 @@
 # panel, and the scripts. Detection inserts standard language commands, so it works with any synthesizer
 # that switches languages by itself, and with the add-on's language table synthesizer for the rest.
 
+import functools
 import os
 import sys
 import threading
@@ -291,6 +292,7 @@ class Engine:
                         detector.default_tag,
                         config.conf[T.CONFIG_SECTION]["detectInDefaultTagged"],
                         unit_language=self.unit_context.language_for if self.unit_context else None,
+                        line_runs=functools.partial(self.unit_context.line_runs, detector) if self.unit_context else None,
                     )
                 finally:
                     detector.labels = ()

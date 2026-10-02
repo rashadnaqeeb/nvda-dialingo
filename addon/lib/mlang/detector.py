@@ -28,11 +28,16 @@ CLAUSE_ENDS = set('"“”«»,;:()!?.—–\n。，¿¡،؛؟।॥։።፣፤�
 SENTENCE_ENDS = set('.!?。\n؟।॥։።！？')
 # Marks that open a clause, read with the clause after them; every other mark goes with the clause before.
 OPENERS = set('¡¿')
+# Marks that end a clause except between two digits, where they belong to a number or a time.
+NUMBER_MARKS = set('.,:')
 DASHES = set('—–')
 JOINERS = set("'’-")
 # Inside a word: the joiners Persian and the Indic scripts write between letters.
 ZERO_WIDTH = set("\u200c\u200d")
 SEPARATOR = "  "
+# A line read alone is widened by at most this many characters on each side, to the sentences it cuts.
+CONTEXT_CHARACTERS = 200
+WINDOWS_KEPT = 32
 
 MODE_OFF, MODE_SCRIPT, MODE_FULL = "off", "script", "full"
 MODES = (MODE_OFF, MODE_SCRIPT, MODE_FULL)
@@ -133,6 +138,9 @@ def clauses(chunk):
         hyphen = ch == "-" and previous is not None and previous.isspace()
         spaced = (i + 1 == n) or chunk[i + 1].isspace()
         separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS)
+        # "about 2.6 nautical miles" is one clause: split at the point, each half is a word too few to score.
+        if separates and ch in NUMBER_MARKS and previous is not None and previous.isdigit() and not spaced and chunk[i + 1].isdigit():
+            separates = False
         if separates:
             close(max(start, i - 1) if dash else i)
             if ch in SENTENCE_ENDS:
@@ -190,6 +198,52 @@ def merge(runs):
             out[-1] = (lang, out[-1][1] + text)
         else:
             out.append((lang, text))
+    return out
+
+
+def sentence_window(text, start, end, limit=CONTEXT_CHARACTERS):
+    """(a, b): the span of `text` holding [start, end), widened to the sentences the span cuts. It stops at a
+    newline, which ends a paragraph, and after `limit` characters on either side, there at a space."""
+    a = start
+    floor = max(0, start - limit)
+    while a > floor:
+        before = text[a - 1]
+        if before == "\n" or (before.isspace() and a >= 2 and text[a - 2] in SENTENCE_ENDS):
+            break
+        a -= 1
+    if a == floor and floor > 0:
+        while a < start and not text[a - 1].isspace():
+            a += 1
+    b = end
+    ceiling = min(len(text), end + limit)
+    # A wrapped line ends in the space it broke at: "…fuselage. Orange. " ends its sentence. A newline is an end.
+    tail = end
+    while tail > start and text[tail - 1].isspace() and text[tail - 1] != "\n":
+        tail -= 1
+    if tail > start and text[tail - 1] not in SENTENCE_ENDS:
+        while b < ceiling:
+            ch = text[b]
+            if ch == "\n":
+                break
+            b += 1
+            if ch in SENTENCE_ENDS and (b == len(text) or text[b].isspace()):
+                break
+        if b == ceiling and ceiling < len(text):
+            while b > end and not text[b].isspace():
+                b -= 1
+    return a, b
+
+
+def slice_runs(runs, start, end):
+    """The runs over [start, end) of the text they cover."""
+    out = []
+    position = 0
+    for lang, piece in runs:
+        s, e = position, position + len(piece)
+        position = e
+        lo, hi = max(s, start), min(e, end)
+        if lo < hi:
+            out.append((lang, piece[lo - s:hi - s]))
     return out
 
 
@@ -257,6 +311,8 @@ class Detector:
         )
         # Detectors for the clauses of a foreign-script piece, by the piece's pick and its script's languages.
         self._within = {}
+        # Runs of the sentence windows lines were read in, by the window's text.
+        self._windows = {}
 
     # ------------------------------------------------------------ recognizer
 
@@ -340,6 +396,13 @@ class Detector:
                     return None
         return guess
 
+    def default_rejects(self, text):
+        """Whether the default language's dictionary rejects a scored word of `text`."""
+        if self.dictionary is None:
+            return False
+        scored = self._scored(" ".join(self.scored_words(text)))
+        return self.dictionary.rejects_a_word(scored, self.default_tag) is True
+
     def dictionaries_decide(self, text, language):
         """Whether the spelling dictionaries alone call `text` foreign: the default language's rejects a
         word of it and the guessed language's accepts every word. Both dictionaries must be installed.
@@ -412,6 +475,48 @@ class Detector:
             else:
                 runs += self.by_clause_against_tag(piece, tag, tag_base)
         return merge(runs)
+
+    def in_context(self, line, text, start, undecided=None):
+        """Untagged `line`, which stands at `start` in `text`, as tagged() gives it, but read among the
+        sentences it cuts where an edge of it cannot be decided alone. A line of wrapped text often ends in
+        the first word of a sentence ("view. A") or holds the last word of a paragraph alone ("perimeter."),
+        which tagged() leaves to the default; the sentence around it decides them as it decides its own
+        words. Only `line` is read when its edges are decided, so a decided line costs nothing more.
+        undecided: undecided_edge(line), where the caller has it already."""
+        end = start + len(line)
+        if undecided is None:
+            undecided = self.undecided_edge(line)
+        if self.mode != MODE_FULL or self.labels or text[start:end] != line or not undecided:
+            return self.tagged(line)
+        a, b = sentence_window(text, start, end)
+        if (a, b) == (start, end):
+            return self.tagged(line)
+        window = text[a:b]
+        runs = self._windows.get(window)
+        if runs is None:
+            runs = self.tagged(window)
+            if len(self._windows) >= WINDOWS_KEPT:
+                self._windows.clear()
+            self._windows[window] = runs
+        return slice_runs(runs, start - a, end - a)
+
+    def undecided_edge(self, line):
+        """Whether `line`, read alone, leaves an edge to the default for want of words: its first or last
+        clause has fewer than two scored words, or none of its clauses has two, or an edge clause's guess was
+        withheld because a language nobody configured outranks the pick ("hazier blue" is Italian to
+        fastText left free). Judged from the line alone, so the text around it is fetched only when needed.
+        Where words are not spaced, a clause counts as one word, so the rule stands down."""
+        if self.mode != MODE_FULL or self.default_script in UNSPACED or not is_text(line):
+            return False
+        if line.strip().lower() in self.reader_words:
+            return False
+        cls = clauses(line)
+        if not cls:
+            return False
+        counts = [len(self.scored_words(line[s:e])) for s, e, _ in cls]
+        if max(counts) < 2 or counts[0] < 2 or counts[-1] < 2:
+            return True
+        return any(self.hypothesis(line[cls[i][0]:cls[i][1]]) is None for i in sorted({0, len(cls) - 1}))
 
     def _by_tag_script(self, text, tag, tag_scripts):
         """(piece, foreign) for tagged text: foreign where the piece holds no script the tag's language writes,
@@ -776,9 +881,12 @@ class Detector:
             # fragment ("Orthodox army" scored 0.89 between "Russian army" at 0.999 and "the army" at 0.98),
             # so every length is tried and the rest is still held to the foreign and embedded floors.
             # Two words at least, counted as words: "mesterei 😂" is one, and a lone word is never judged.
+            # An end the default's dictionary rejects a word of is not the default's: fastText calls "the edge"
+            # Swedish at 0.94 between Swedish and English. Sparing an end the clause's language's dictionary
+            # rejects too ("via npm") was measured, and lost more than it saved (KNOWN_GAPS.md).
             found = None
             for length in range(2, len(ws) - 1):
-                if len(words(end(length))) >= 2 and self.is_default(end(length)):
+                if len(words(end(length))) >= 2 and self.is_default(end(length)) and not self.default_rejects(end(length)):
                     found = length
             return found
 

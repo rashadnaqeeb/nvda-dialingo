@@ -4,7 +4,7 @@ import unittest
 import nvda_stub  # noqa: F401
 from speech.commands import CharacterModeCommand, IndexCommand, LangChangeCommand
 
-from mlang.sequence import filter_sequence, locked_sequence, untagged_sequence
+from mlang.sequence import LineStrings, filter_sequence, locked_sequence, untagged_sequence
 
 
 class FakeDetector:
@@ -93,6 +93,68 @@ class SequenceTests(unittest.TestCase):
         seq = ["bonjour"]
         self.assertIs(filter_sequence(seq, self.det, "en"), seq)
         self.det.mode = "full"
+
+    def test_a_line_string_read_in_context_replaces_its_own_detection(self):
+        calls = []
+
+        def line_runs(text, detected):
+            calls.append((text, detected))
+            return [(None, "the view. "), ("sv", "A")] if text == "the view. A" else None
+
+        seq = [LangChangeCommand("fr"), "Bonjour", LangChangeCommand(None), "link", "the view. A"]
+        out = filter_sequence(seq, self.det, "en", line_runs=line_runs)
+        self.assertEqual(calls, [("Bonjour", False), ("link", True), ("the view. A", True)])
+        self.assertEqual(out[-4:], ["the view. ", LangChangeCommand("sv"), "A", LangChangeCommand(None)])
+
+    def test_a_line_string_declined_is_detected_as_usual(self):
+        out = filter_sequence(["Say bonjour now"], self.det, "en", line_runs=lambda text, detected: None)
+        self.assertEqual(out, ["Say ", LangChangeCommand("fr"), "bonjour", LangChangeCommand(None), " now"])
+
+
+class LineStringsTests(unittest.TestCase):
+    AROUND = "Earlier line.\nA label reading A link, then A\nNext line."
+
+    def place(self, *strings):
+        line_start = self.AROUND.index("A label")
+        line_end = self.AROUND.index("\nNext")
+        placed = LineStrings()
+        for s in strings:
+            placed.add(s)
+        return placed, placed.place_last(self.AROUND, line_start, line_end, {"link"})
+
+    def test_a_string_is_found_after_the_strings_before_it(self):
+        _, found = self.place("A label reading ", "A link", "link", ", then A")
+        self.assertEqual(found, (self.AROUND.index(", then A"), ", then A"))
+        _, found = self.place("A label reading A link, then ", "A")
+        self.assertEqual(found, (self.AROUND.index("then A") + 5, "A"))
+
+    def test_a_string_is_found_stripped(self):
+        _, found = self.place("  A label reading A link, then A\r\n")
+        self.assertEqual(found, (self.AROUND.index("A label"), "A label reading A link, then A"))
+
+    def test_the_reader_s_words_and_strings_not_in_the_line_are_passed_over(self):
+        placed, found = self.place("heading level 2", "link")
+        self.assertIsNone(found)
+        placed.add("A label")
+        self.assertEqual(placed.place_last(self.AROUND, 0, len(self.AROUND), {"link"}), (self.AROUND.index("A label"), "A label"))
+
+    def test_text_outside_the_line_is_not_found(self):
+        _, found = self.place("Next line.")
+        self.assertIsNone(found)
+
+    def test_nvda_s_word_standing_later_in_the_line_is_not_placed_there(self):
+        line = "Chapter level 2 notes"
+        placed = LineStrings()
+        for s in ("level 2", line):
+            placed.add(s)
+        self.assertEqual(placed.place_last(line, 0, len(line)), (0, line))
+
+    def test_nvda_s_word_standing_just_there_gives_its_place_back(self):
+        line = "This is bold text here"
+        placed = LineStrings()
+        for s in ("This is ", "bold", "bold text here"):
+            placed.add(s)
+        self.assertEqual(placed.place_last(line, 0, len(line)), (8, "bold text here"))
 
 
 class LockedSequenceTests(unittest.TestCase):

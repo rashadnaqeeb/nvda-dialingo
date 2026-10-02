@@ -1,10 +1,11 @@
 """Detector rules that need no real recognizer: typing echo by keyboard, a lone character by its script,
-Cantonese beside Mandarin, and the clause rules over a recognizer answering from a table."""
+Cantonese beside Mandarin, the clause rules, and lines read among their sentences, over a recognizer
+answering from a table."""
 import unittest
 
 import nvda_stub  # noqa: F401
 
-from mlang.detector import Detector, clauses, common_words
+from mlang.detector import Detector, clauses, common_words, sentence_window, slice_runs
 
 
 class NoRecognizer:
@@ -160,6 +161,38 @@ class ClauseTests(unittest.TestCase):
         for text in ["e-mail address", "from -5 to 5", "well-known -- maybe"]:
             self.assertEqual(len(clauses(text)), 2 if "--" in text else 1, text)
 
+    def test_a_point_comma_or_colon_between_digits_does_not_split(self):
+        for text in ["about 2.6 nautical miles", "omkring 2,6 sjömil", "at 8:05 tonight", "1,000 people"]:
+            self.assertEqual([text[s:e] for s, e, _ in clauses(text)], [text], text)
+        text = "Lesson 2. Then 3, and 4: done"
+        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["Lesson 2", "Then 3", "and 4", "done"])
+        self.assertEqual([sentence for _, _, sentence in clauses("about 2.6 miles. Next")], [0, 1])
+
+    def test_an_end_the_default_dictionary_rejects_is_not_peeled(self):
+        class Dictionary:
+            def rejects_a_word(self, text, language):
+                return language.startswith("sv")
+
+        answers = {"the forest line forms the edge": ("en", 0.99), "the forest line forms": ("en", 0.99),
+                   "the edge": ("sv", 0.94)}
+        clause = "the forest line forms the edge"
+        d = Detector(Recognizer(answers), "sv_SE", ["en_US"])
+        self.assertEqual(d.tagged(clause), [("en_US", "the forest line forms"), (None, " the edge")])
+        d = Detector(Recognizer(answers), "sv_SE", ["en_US"], Dictionary())
+        self.assertEqual(d.tagged(clause), [("en_US", clause)])
+
+    def test_an_end_both_dictionaries_reject_stays_with_its_clause(self):
+        # The trade-off in KNOWN_GAPS.md: "via npm" is read by the French voice, as no dictionary knows "npm".
+        class Dictionary:
+            def rejects_a_word(self, text, language):
+                return "npm" in text
+
+        answers = {"le paquet est installé via npm": ("fr", 0.99), "le paquet est installé": ("fr", 0.99),
+                   "via npm": ("en", 0.95)}
+        clause = "le paquet est installé via npm"
+        d = Detector(Recognizer(answers), "en_US", ["fr_FR"], Dictionary())
+        self.assertEqual(d.tagged(clause), [("fr_FR", clause)])
+
     def test_a_noun_is_counted_where_a_name_is_not(self):
         self.assertEqual(common_words("private Dateifreigabe"), ["private"])
         self.assertEqual(common_words("private Dateifreigabe", lambda w: w == "Dateifreigabe"), ["private", "Dateifreigabe"])
@@ -201,6 +234,88 @@ class ClauseTests(unittest.TestCase):
         answers = {"Thanks": ("en", 0.9), "Hola amigo": ("es", 1.0), "Hola": ("es", 0.99), "amigo": ("es", 0.99)}
         d = self.detector(["es_ES"], answers)
         self.assertEqual(d.tagged("Thanks. Hola, amigo."), [(None, "Thanks. "), ("es_ES", "Hola, amigo.")])
+
+
+class Asked(Recognizer):
+    """A table recognizer that records what it is asked."""
+
+    def __init__(self, answers):
+        super().__init__(answers)
+        self.asked = []
+
+    def constrained(self, text, languages):
+        self.asked.append(text)
+        return super().constrained(text, languages)
+
+
+class ContextTests(unittest.TestCase):
+    """A line read alone, its undecided edges settled by the sentences it cuts."""
+
+    TEXT = "We stood on the old ramp. A forest line forms the edge of the field."
+    ANSWERS = {"We stood on the old ramp": ("en", 0.99), "forest line forms the edge of the field": ("en", 0.99)}
+
+    def detector(self, answers=None):
+        d = Detector(Asked(answers or self.ANSWERS), "sv_SE", ["en_US"])
+        d.configure("sv_SE", ["en_US"])
+        return d
+
+    def test_a_sentence_s_first_word_ending_a_line_follows_its_sentence(self):
+        line = "We stood on the old ramp. A"
+        d = self.detector()
+        self.assertEqual(d.tagged(line), [("en_US", "We stood on the old ramp. "), (None, "A")])
+        self.assertEqual(d.in_context(line, self.TEXT, 0), [("en_US", line)])
+
+    def test_a_last_word_alone_on_its_line_follows_its_sentence(self):
+        start = self.TEXT.index("field.")
+        self.assertEqual(self.detector().in_context("field.", self.TEXT, start), [("en_US", "field.")])
+
+    def test_a_decided_line_reads_nothing_around_it(self):
+        line = "We stood on the old ramp."
+        d = self.detector()
+        self.assertFalse(d.undecided_edge(line))
+        self.assertEqual(d.in_context(line, self.TEXT, 0), [("en_US", line)])
+        self.assertNotIn("forest line forms the edge of the field", d.backend.asked)
+
+    def test_a_paragraph_s_end_is_not_crossed(self):
+        text = "We stood on the old ramp\nA"
+        self.assertEqual(self.detector().in_context("A", text, len(text) - 1), [(None, "A")])
+
+    def test_a_line_not_where_it_is_said_to_be_is_read_alone(self):
+        self.assertEqual(self.detector().in_context("field.", self.TEXT, 0), [(None, "field.")])
+
+    def test_a_grid_row_with_labels_is_read_alone(self):
+        d = self.detector()
+        d.labels = ("Subject",)
+        self.assertEqual(d.in_context("We stood on the old ramp. A", self.TEXT, 0)[-1], (None, "A"))
+
+    def test_a_withheld_edge_guess_is_undecided(self):
+        # "hazier blue" is English between Swedish and English, Italian left free.
+        class Free(Recognizer):
+            def free(self, text):
+                return ("it", 0.86) if text == "hazier blue" else super().free(text)
+
+        answers = {"fades to a lighter": ("en", 0.99), "hazier blue": ("en", 0.99)}
+        d = Detector(Free(answers), "sv_SE", ["en_US"])
+        self.assertTrue(d.undecided_edge("fades to a lighter, hazier blue"))
+        self.assertFalse(d.undecided_edge("fades to a lighter"))
+
+    def test_sentence_window(self):
+        text = "One two three. Four five six seven. Eight nine"
+        start = text.index("five")
+        end = text.index("seven") + len("seven")
+        self.assertEqual(text[slice(*sentence_window(text, start, end))], "Four five six seven.")
+        start = text.index("Eight")
+        self.assertEqual(text[slice(*sentence_window(text, start, len(text)))], "Eight nine")
+        # A line ending its sentence in the space it wrapped at, or at a newline, is not widened.
+        self.assertEqual(sentence_window(text, 0, len("One two three. ")), (0, len("One two three. ")))
+        self.assertEqual(sentence_window("One two\nThree four", 0, 8), (0, 8))
+        # At most `limit` characters each side, cut back to a space: "five" fits, "seven." does not.
+        start = text.index("six")
+        self.assertEqual(text[slice(*sentence_window(text, start, start + 3, limit=5))], "five six")
+
+    def test_slice_runs(self):
+        runs = [("en", "abc "), (None, "def"), ("en", " gh")]
+        self.assertEqual(slice_runs(runs, 2, 9), [("en", "c "), (None, "def"), ("en", " g")])
 
 
 class ExcludedTests(unittest.TestCase):
