@@ -709,19 +709,46 @@ class SynthDriver(synthDriverHandler.SynthDriver):
     def update_row(self, row):
         """A row's values changed from the synth settings ring: its next piece applies them, since the row's
         key changed. Unlike a saved table, no guest is rebuilt and speech goes on. A new voice on a PER_VOICE
-        synthesizer has its instance loaded now, rather than inside the next utterance and the scheduler's lock;
-        the instance of a voice no row has any more (one stepped past in the ring) is let go after this event,
-        unless it is still speaking."""
+        synthesizer is given to the instance of the row's old voice when nothing else needs it (_follow_voice),
+        else has an instance loaded now, rather than inside the next utterance and the scheduler's lock; the
+        instance of a voice no row has any more is let go after this event, unless it is still speaking."""
+        old = self.table.row_for(row.lang, exact=True)
         self.table.upsert(row)
         if row.synth not in PER_VOICE:
             return
-        self._prime_row(row)
+        if not self._follow_voice(old, row):
+            self._prime_row(row)
 
         def prune():
             if self.__dict__.get("scheduler") is not None:
                 self._prune_voiced(in_use=True)
 
         queueHandler.queueFunction(queueHandler.eventQueue, prune)
+
+    def _follow_voice(self, old, row):
+        """Give the instance kept for a row's old voice its new one, stepped to in the ring, when no other row has
+        the old voice and it is not speaking: a change of voice on one instance, rather than a new instance loaded
+        and the old one terminated for each step. An online voice's first audio comes sooner so (a new instance
+        connects anew), and terminating one slows the next one's first audio. Whether it did."""
+        if old is None or old.synth != row.synth:
+            return False
+        before, after = old.get("voice"), row.get("voice")
+        if not before or not after or before == after:
+            return False
+        shared = self.guests.get(row.synth)
+        own = self._defaults.get("voice") if shared is self.host else self._loaded_voice.get(row.synth)
+        key, new = (row.synth, before), (row.synth, after)
+        guest = self.voiced.get(key)
+        if guest is None or new in self.voiced or after == own:
+            return False
+        if any((r.synth, r.get("voice")) == key for r in self.table.rows) or self.scheduler.uses(guest):
+            return False
+        self.voiced[new] = self.voiced.pop(key)
+        try:
+            self._apply_row(guest, row)
+        except Exception:
+            log.debugWarning(f"multilanguage: could not give {row.synth} the voice of {row.lang}", exc_info=True)
+        return True
 
     def _on_table_saved(self, table):
         section = config.conf[T.CONFIG_SECTION]
