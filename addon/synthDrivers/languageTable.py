@@ -119,6 +119,13 @@ def _reports_before_playing(synth):
     return _is_sapi5(synth) and getattr(synth, "player", None) is not None
 
 
+def _marks_after_playing(synth):
+    """OneCore cuts its audio at each mark's offset and reports the mark once the audio before it has played, and
+    done 0.2 seconds later, once the silence ending the utterance has played too. Not SAPI 5, whose engine
+    places the marks itself: Zira puts the end marker half a second or more before her speech ends."""
+    return getattr(synth, "name", None) == "oneCore"
+
+
 def _more_queued(synth):
     """Whether eSpeak, which reports done after each speak call, and after one a cancel cut short, still holds
     a later call in its queue. Or whether Acapela's own driver is still in a call: it reports done once when
@@ -677,14 +684,18 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         if getattr(synth, "name", None) == "AcaTTS" and isinstance(index, int) and index % 2:
             # Acapela writes each mark one higher than it is given; the scheduler gives only even ones.
             index -= 1
-        engine = _eloquence(synth) if self.scheduler.is_marker(index) else None
+        marker = self.scheduler.is_marker(index)
+        engine = _eloquence(synth) if marker else None
         if not self.scheduler.on_index(synth, index):
             if _done_early(synth):
                 # A mark reported again once the audio before it has played: the end marker of the guest's
                 # last piece frees it.
                 self.scheduler.on_played(synth, index)
             return
-        if engine is not None:
+        if marker and _marks_after_playing(synth):
+            # The piece has played; another guest may start without waiting through the silence after it.
+            self.scheduler.on_played(synth, index, done_follows=True)
+        elif engine is not None:
             # The end of a piece, its audio fed and still playing: the next guest may start when it has played
             # rather than on Eloquence's done, 0.3 seconds later. This runs on the thread that feeds the
             # player, so nothing of the piece is fed after the request.

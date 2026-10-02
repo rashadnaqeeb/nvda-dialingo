@@ -323,6 +323,50 @@ class SchedulerTests(unittest.TestCase):
         self.h.run_main()
         self.assertEqual(self.h.guests.get("B", FakeGuest("B")).spoken, [])
 
+    def test_played_audio_with_done_to_follow_frees_the_guest_for_another(self):
+        """OneCore's audio played out: its done comes after the silence ending the utterance."""
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.h.run_main()
+        self.assertTrue(self.h.scheduler.on_played(a, marker, done_follows=True))
+        self.h.run_main()
+        b = self.h.guests["B"]
+        self.assertEqual(texts(b.spoken[0]), ["un"])
+        self.assertFalse(self.h.scheduler.on_done(a))
+        b.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+
+    def test_late_done_of_a_played_guest_does_not_finish_its_next_piece(self):
+        """A late done can come after the next piece on the guest was sent."""
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.h.scheduler.on_played(a, marker, done_follows=True)
+        self.h.run_main()
+        self.h.guests["B"].finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+        self.assertFalse(self.h.scheduler.on_done(a))
+        self.assertEqual(self.h.done, 0)
+        a.finish(self.h.scheduler)
+        self.assertEqual(self.h.done, 1)
+
+    def test_played_audio_with_done_to_follow_holds_a_change_of_voice(self):
+        table = Table([Row("en", "A", voice="v1"), Row("de", "A", voice="v2")])
+        h = Harness(table)
+        h.speak([LangChangeCommand("en"), "one", LangChangeCommand("de"), "eins"])
+        a = h.guests["A"]
+        marker = [i.index for i in a.queued[0] if isinstance(i, IndexCommand)][-1]
+        h.scheduler.on_index(a, marker)
+        self.assertTrue(h.scheduler.on_played(a, marker, done_follows=True))
+        h.run_main()
+        self.assertEqual(len(a.spoken), 1)
+        h.scheduler.on_done(a)
+        h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["eins"])
+
     def test_done_reported_once_per_stream(self):
         self.h.speak([LangChangeCommand("en"), "one", IndexCommand(1)])
         a = self.h.guests["A"]

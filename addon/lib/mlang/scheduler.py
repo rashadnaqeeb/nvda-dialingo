@@ -15,7 +15,9 @@ done-speaking semantics are. Two waits govern the seams:
   The next guest would otherwise talk over the previous one's tail. So does a change of voice on the same
   guest: some drivers stop their audio, or rebuild their engine, to change voice (Vocalizer, SAPI 5).
   Where the driver can tell when a guest's audio up to its last marker has played, it says so (on_played),
-  and that frees the guest as done would; Eloquence reports done 0.3 seconds later. A guest whose done comes
+  and that frees the guest as done would; Eloquence reports done 0.3 seconds later. A guest whose done is
+  still to come after that (OneCore, after the silence that ends its utterance) is freed for
+  another guest only: a change of voice on it still waits for its done. A guest whose done comes
   before its audio has played (32-bit SAPI 5, whose player is in another process) is held after its done
   until on_played, or until the driver gives up waiting (release).
 
@@ -140,6 +142,7 @@ class Scheduler:
         self.reached = {}  # id(guest) -> markers it reached whose calls have not reported done
         self.last_marker = {}  # id(guest) -> the end marker it reached last
         self.held = {}  # id(guest) -> a token for a guest done early and held until its audio has played
+        self.played = None  # the busy guest, when its audio has played and only its done is still to come
         self.speaking = False  # whether NVDA is owed a done notification
         self.paused = False
 
@@ -161,6 +164,7 @@ class Scheduler:
             self.inflight.clear()
             self.index_map.clear()
             self.busy_guest = None
+            self.played = None
             self.reached.clear()
             self.last_marker.clear()
             self.held.clear()
@@ -198,6 +202,7 @@ class Scheduler:
                 self.current_voice = None
             if self.busy_guest is guest:
                 self.busy_guest = None
+                self.played = None
             self.reached.pop(id(guest), None)
             self.last_marker.pop(id(guest), None)
             self.held.pop(id(guest), None)
@@ -246,16 +251,20 @@ class Scheduler:
             self._progress()
         return True
 
-    def on_played(self, guest, marker):
+    def on_played(self, guest, marker, done_follows=False):
         """A guest's audio up to one of its end markers has played. If that is the last marker it reached and
         nothing of it is in flight, it is free for another guest to follow without waiting for its done.
+        `done_follows`: its done is still to come, and a change of voice on it still waits for that.
         Whether it was freed."""
         with self.lock:
             if (self.busy_guest is not guest or self.last_marker.get(id(guest)) != marker
                     or any(p.guest is guest for p in self.inflight.values())):
                 return False
-            self.busy_guest = None
-            self.held.pop(id(guest), None)
+            if done_follows:
+                self.played = guest
+            else:
+                self.busy_guest = None
+                self.held.pop(id(guest), None)
         self._progress()
         return True
 
@@ -289,6 +298,8 @@ class Scheduler:
             self.reached.pop(id(guest), None)
             # A piece being handed to the guest right now is not finished by a done from before it.
             was_busy = self.busy_guest is guest and len(markers) == len(mine)
+            if was_busy:
+                self.played = None
             if was_busy and self.done_early(guest):
                 # Its audio still plays: no other guest or voice may follow until on_played or release.
                 self.held[id(guest)] = object()
@@ -368,7 +379,7 @@ class Scheduler:
                         return
                     if self.serial(guest) and any(p.guest is guest for p in self.inflight.values()):
                         return
-                    if self.busy_guest is not None and self.busy_guest is not guest:
+                    if self.busy_guest is not None and self.busy_guest is not guest and self.busy_guest is not self.played:
                         return
                     voice = piece.row.get("voice")
                     if guest is not self.current_guest:
@@ -398,6 +409,7 @@ class Scheduler:
                     self.current_guest = guest
                     self.current_key = key
                     self.busy_guest = guest
+                    self.played = None
                     self.speaking = True
             if dropped is not None:
                 for index in dropped:
