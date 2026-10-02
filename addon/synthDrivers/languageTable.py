@@ -85,6 +85,11 @@ DONE_DRAINS = {"oneCore", "ibmeci", "sapi4_32"}
 # and volume at once, under what it is still playing.
 SETTLES = {"AcaTTS"}
 
+# Guests whose audio after the end marker of their last piece is only the silence ending their speech, which the
+# language table may stop: before a change of voice on them, once that piece has played, and before a piece of
+# theirs after another guest's. Their done comes after that silence, and their next piece would wait for it.
+CUTS_SILENCE = {"oneCore"}
+
 
 def _queues_itself(synth):
     """Acapela's own driver (1.9.5) queues calls on a thread of its own and reports done twice, the second
@@ -127,11 +132,17 @@ def _marks_after_playing(synth):
 
 
 def _drop_silence(synth):
-    """SAPI 5, hosted with a queue in front of its player (sapi5host), was freed for another voice at the end of its
-    speech, with the silence ending it still queued: a piece of its own after the other voice's need not wait for it."""
+    """A guest freed at the end of its speech, with the silence ending it still to play: its next piece need not
+    wait for it. SAPI 5, hosted with a queue in front of its player (sapi5host), drops what is left of it; OneCore
+    has its player stopped, which holds nothing else once its last piece's end marker has played (its next piece
+    waits for that player to finish otherwise)."""
     drop = getattr(getattr(synth, "player", None), "drop_silence", None)
     if drop is not None:
         drop()
+    elif getattr(synth, "name", None) in CUTS_SILENCE:
+        player = getattr(synth, "_player", None)
+        if player is not None:
+            player.stop()
 
 
 def _more_queued(synth):
@@ -267,6 +278,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             serial=_serial,
             done_early=_done_early,
             returning=_drop_silence,
+            cuts_silence=lambda guest: guest.name in CUTS_SILENCE,
         )
         self._load_host()
         if self.host is None:

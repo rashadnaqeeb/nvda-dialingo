@@ -368,6 +368,24 @@ class SchedulerTests(unittest.TestCase):
         self.h.speak([LangChangeCommand("en"), "three"])
         self.assertEqual([g.name for g in back], ["B", "A"])
 
+    def test_a_guest_that_cuts_its_silence_changes_voice_once_its_speech_has_played(self):
+        table = Table([Row("en", "A", voice="v1"), Row("de", "A", voice="v2")])
+        h = Harness(table)
+        back = []
+        h.scheduler.cuts_silence = lambda guest: True
+        h.scheduler.returning = back.append
+        h.speak([LangChangeCommand("en"), "one", LangChangeCommand("de"), "eins"])
+        a = h.guests["A"]
+        marker = [i.index for i in a.queued[0] if isinstance(i, IndexCommand)][-1]
+        h.scheduler.on_index(a, marker)
+        h.run_main()
+        self.assertEqual(len(a.spoken), 1)  # reached is not played
+        self.assertTrue(h.scheduler.on_played(a, marker, done_follows=True))
+        h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["eins"])
+        self.assertEqual(back, [a])
+        self.assertFalse(h.scheduler.on_done(a))
+
     def test_played_audio_with_done_to_follow_holds_a_change_of_voice(self):
         table = Table([Row("en", "A", voice="v1"), Row("de", "A", voice="v2")])
         h = Harness(table)

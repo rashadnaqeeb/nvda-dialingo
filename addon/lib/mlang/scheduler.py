@@ -104,7 +104,8 @@ class Scheduler:
     def __init__(self, LangChangeCommand, IndexCommand, guest_for_row, apply_row, notify_index, notify_done,
                  run_on_main, log=None, notifies_indexes=lambda guest: True, notifies_done=lambda guest: True,
                  adapt=None, done_drains=lambda guest: False, settles=lambda guest: False,
-                 serial=lambda guest: False, done_early=lambda guest: False, returning=lambda guest: None):
+                 serial=lambda guest: False, done_early=lambda guest: False, returning=lambda guest: None,
+                 cuts_silence=lambda guest: False):
         self.LangChangeCommand = LangChangeCommand
         self.IndexCommand = IndexCommand
         self.guest_for_row = guest_for_row
@@ -127,9 +128,13 @@ class Scheduler:
         self.serial = serial
         # Whether a guest's done comes before its audio has played, so that it is held until on_played.
         self.done_early = done_early
-        # returning(guest): a piece goes to the guest after another guest's, so what is left of the silence
-        # ending its own last piece may go (SAPI 5's, queued ahead of the new piece).
+        # returning(guest): a piece goes to the guest after another guest's, or with another voice once its speech
+        # has played (cuts_silence), so what is left of the silence ending its own last piece may go (SAPI 5's,
+        # queued ahead of the new piece; OneCore's, which its next piece would wait for).
         self.returning = returning
+        # Whether a change of voice on the guest may follow once its speech has played (on_played with
+        # done_follows), without its done: what is left to play is the silence ending it, which returning cuts.
+        self.cuts_silence = cuts_silence
         # adapt(guest, row, items) -> the items as the guest is to be sent them (prosody rebased on the row).
         self.adapt = adapt or (lambda guest, row, items: items)
         self.log = log or (lambda msg: None)
@@ -389,7 +394,10 @@ class Scheduler:
                         self.current_voice = None
                     changes_voice = voice is not None and self.current_voice is not None and voice != self.current_voice
                     changes_row = key != self.current_key and self.settles(guest)
-                    if (changes_voice or changes_row) and self.busy_guest is guest and self.notifies_done(guest):
+                    # A change of voice on a guest whose speech has played, and whose silence after it may be cut,
+                    # need not wait for its done.
+                    cut = changes_voice and not changes_row and self.played is guest and self.cuts_silence(guest)
+                    if (changes_voice or changes_row) and self.busy_guest is guest and self.notifies_done(guest) and not cut:
                         return
                     self.pending.popleft()
                     piece.guest = guest
@@ -421,7 +429,7 @@ class Scheduler:
                 if finished:
                     self.run_on_main(self.notify_done)
                 continue
-            if back:
+            if back or cut:
                 try:
                     self.returning(guest)
                 except Exception as e:
