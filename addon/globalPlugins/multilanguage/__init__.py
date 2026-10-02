@@ -440,7 +440,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             or lock.language(self.engine.language_lock())
         ):
             ensure_language_switching()
-        settings.follow_table()
         try:
             lock.install()
         except Exception:
