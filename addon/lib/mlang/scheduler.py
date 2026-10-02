@@ -227,6 +227,12 @@ class Scheduler:
         with self.lock:
             return not self.pending and not self.inflight
 
+    def uses(self, guest):
+        """Whether a guest has speech in flight, or is waited on (its done, its audio), or holds a piece."""
+        with self.lock:
+            return (guest is self.busy_guest or guest is self.waiting
+                    or any(p.guest is guest for p in self.inflight.values()))
+
     def forget(self, guest):
         """A guest was terminated: nothing may wait on it or cancel it any more."""
         with self.lock:

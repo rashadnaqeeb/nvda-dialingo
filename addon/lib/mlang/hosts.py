@@ -27,13 +27,14 @@ def create(name, log=None):
         return None
     import synthDriverHandler
 
+    ring = ring_state()
     temp = _temps.pop(name, None)
     if temp is not None:
         try:
             # A row preview may have left its values on it.
             temp.loadSettings()
             temp._mlangApplied = None
-            restore_current()
+            restore_current(ring)
             return temp
         except Exception:
             if log:
@@ -65,9 +66,9 @@ def create(name, log=None):
         if guest is not None:
             # Created but not set up: its engine runs, and creating it pointed the ring and dictionary at it.
             dispose(guest)
-            restore_current()
+            restore_current(ring)
         return None
-    restore_current()
+    restore_current(ring)
     return guest
 
 
@@ -130,8 +131,23 @@ def _quiet_panel_updates(guest):
     module.update_displaied_params_on_voice_change = update
 
 
-def restore_current():
-    """Point the settings ring and voice dictionary back at the current synthesizer."""
+def ring_state():
+    """The settings ring as it is, for restore_current to put back as it was: rebuilt instead, it would start from
+    the setting a guest's loading left it on, which for a ring locked to a row (a bare guest has no voice entry of
+    the row's) is the rate, not the voice the user was stepping through."""
+    import globalVars
+    import synthDriverHandler
+
+    ring = globalVars.settingsRing
+    if ring is None:
+        return None
+    settings = getattr(ring, "settings", None)
+    return ring, None if settings is None else list(settings), getattr(ring, "_current", None), synthDriverHandler.getSynth()
+
+
+def restore_current(state=None):
+    """Point the settings ring and voice dictionary back at the current synthesizer; the ring as it was in `state`
+    (ring_state), when it is still the same ring for the same synthesizer."""
     import globalVars
     import speechDictHandler
     import synthDriverHandler
@@ -140,8 +156,11 @@ def restore_current():
     if current is None:
         return
     try:
-        if globalVars.settingsRing:
-            globalVars.settingsRing.updateSupportedSettings(current)
+        ring = globalVars.settingsRing
+        if ring is not None and state is not None and state[0] is ring and state[3] is current:
+            ring.settings, ring._current = state[1], state[2]
+        elif ring:
+            ring.updateSupportedSettings(current)
         speechDictHandler.loadVoiceDict(current)
     except Exception:
         pass

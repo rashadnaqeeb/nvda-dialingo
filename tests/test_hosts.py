@@ -251,6 +251,43 @@ class HalfBuiltTest(Stubbed):
         self.assertEqual(events, ["cancel", "loadSettings", "terminate", ("dictionary", current)])
 
 
+class RingKeptTest(Stubbed):
+    def test_a_guest_loaded_in_speech_leaves_the_ring_where_it_was(self):
+        class Ring:
+            def __init__(self):
+                self.settings = ["rate", "voice", "lock"]
+                self._current = 1  # stepping through a locked row's voices
+                self.rebuilt = []
+
+            def updateSupportedSettings(self, synth):
+                # A bare guest's entries have no voice of the row's: the ring would land on the rate.
+                self.rebuilt.append(synth)
+                self.settings = ["rate", "pitch", "lock"]
+                self._current = 0
+
+        ring = Ring()
+
+        class Driver:
+            name = "sapi5"
+
+            @classmethod
+            def check(cls):
+                return True
+
+            def initSettings(self):
+                ring.updateSupportedSettings(self)  # NVDA's changeVoice
+
+            def _unregisterConfigSaveAction(self):
+                pass
+
+        table = Synth(DRIVER_NAME)
+        self.stub("synthDriverHandler", getSynth=lambda: table, _getSynthDriver=lambda name: Driver)
+        self.stub("globalVars", settingsRing=ring)
+        self.stub("speechDictHandler", loadVoiceDict=lambda synth: None)
+        self.assertIsInstance(hosts.create("sapi5"), Driver)
+        self.assertEqual((ring.settings, ring._current), (["rate", "voice", "lock"], 1))
+
+
 class AcapelaCancelTest(unittest.TestCase):
     def test_cancel_drops_the_calls_queued_behind_the_one_speaking(self):
         import queue

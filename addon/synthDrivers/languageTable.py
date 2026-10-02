@@ -492,14 +492,32 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         """Load the instances kept per voice for the rows, each carrying its row, so that neither the loading nor
         the change of voice (SAPI 5 rebuilds its engine) falls inside an utterance."""
         for row in self.table.rows:
-            if row.synth not in PER_VOICE or not row.get("voice"):
+            self._prime_row(row)
+
+    def _prime_row(self, row):
+        if row.synth not in PER_VOICE or not row.get("voice"):
+            return
+        guest = self._voiced(row.synth, row.get("voice"))
+        if guest is not None and guest is not self.guests.get(row.synth):
+            try:
+                self._apply_row(guest, row)
+            except Exception:
+                log.debugWarning(f"multilanguage: could not prepare {row.synth} for {row.lang}", exc_info=True)
+
+    def _prune_voiced(self, in_use=False):
+        """Terminate the instances kept for voices no row has any more; with `in_use`, not one the scheduler is
+        still speaking with or waiting on."""
+        voices = {(row.synth, row.get("voice")) for row in self.table.rows}
+        for key in list(self.voiced):
+            if key in voices and key[0] in self.guests:
                 continue
-            guest = self._voiced(row.synth, row.get("voice"))
-            if guest is not None and guest is not self.guests.get(row.synth):
-                try:
-                    self._apply_row(guest, row)
-                except Exception:
-                    log.debugWarning(f"multilanguage: could not prepare {row.synth} for {row.lang}", exc_info=True)
+            guest = self.voiced[key]
+            if in_use and self.scheduler.uses(guest):
+                continue
+            del self.voiced[key]
+            self.scheduler.forget(guest)
+            self._detach(guest)
+            hosts.dispose(guest)
 
     def _attach(self, guest):
         if hasattr(guest, "onSpeechEnded"):
@@ -677,17 +695,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                 self.scheduler.forget(guest)
                 self._detach(guest)
                 hosts.dispose(guest)
-        # Kept per voice: those of the rows, and those of the Windows voices while they are in use (implicit rows,
-        # made in speech as their languages come up).
-        voices = {(row.synth, row.get("voice")) for row in self.table.rows}
-        if policy.windows_voices_wanted(config.conf):
-            voices |= {key for key in self.voiced if key[0] == winvoices.ONECORE}
-        for key in list(self.voiced):
-            if key not in voices or key[0] not in self.guests:
-                guest = self.voiced.pop(key)
-                self.scheduler.forget(guest)
-                self._detach(guest)
-                hosts.dispose(guest)
+        self._prune_voiced()
 
     def _rebuild_later(self):
         """Rebuild this driver around another default synthesizer, if it is still the one in use by then."""
@@ -700,8 +708,20 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
     def update_row(self, row):
         """A row's values changed from the synth settings ring: its next piece applies them, since the row's
-        key changed. Unlike a saved table, no guest is rebuilt and speech goes on."""
+        key changed. Unlike a saved table, no guest is rebuilt and speech goes on. A new voice on a PER_VOICE
+        synthesizer has its instance loaded now, rather than inside the next utterance and the scheduler's lock;
+        the instance of a voice no row has any more (one stepped past in the ring) is let go after this event,
+        unless it is still speaking."""
         self.table.upsert(row)
+        if row.synth not in PER_VOICE:
+            return
+        self._prime_row(row)
+
+        def prune():
+            if self.__dict__.get("scheduler") is not None:
+                self._prune_voiced(in_use=True)
+
+        queueHandler.queueFunction(queueHandler.eventQueue, prune)
 
     def _on_table_saved(self, table):
         section = config.conf[T.CONFIG_SECTION]
