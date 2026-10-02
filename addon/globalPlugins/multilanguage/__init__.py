@@ -27,7 +27,7 @@ from speech.commands import LangChangeCommand  # noqa: E402
 from speech.extensions import filter_speechSequence  # noqa: E402
 from speech.languageHandling import getSpeechSequenceWithLangs  # noqa: E402
 
-from mlang import policy, prosody, voicedict, winvoices  # noqa: E402
+from mlang import pipes, policy, prosody, voicedict, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME  # noqa: E402
@@ -456,6 +456,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     def __init__(self):
         super().__init__()
+        try:
+            # First: the synthesizer NVDA started with may be a 32-bit one.
+            pipes.install(log)
+        except Exception:
+            log.error("multilanguage: could not make 32-bit synthesizers close their pipes once", exc_info=True)
         T.ensure_spec(config.conf)
         self.engine = Engine()
         settings.engine = self.engine
@@ -494,6 +499,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             gui.settingsDialogs.NVDASettingsDialog.categoryClasses.remove(settings.MultilanguagePanel)
         except ValueError:
             pass
+        pipes.uninstall()
         super().terminate()
 
     def filter(self, value):

@@ -45,7 +45,12 @@ def create(name, log=None):
         cls = synthDriverHandler._getSynthDriver(name)
         if not cls.check():
             return None
+        from . import pipes
         from .sapi5host import hosted
+
+        # Before any 32-bit guest connects to its host: at NVDA's start the table makes its guests before the
+        # add-on's global plugin installs it.
+        pipes.install(log)
 
         # SAPI 5 with a queue in front of its player, so the end of its speech is known; see sapi5host.
         guest = hosted(cls, log)()
