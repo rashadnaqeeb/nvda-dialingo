@@ -99,6 +99,7 @@ class QueuedPlayer:
         self.margin_left = 0  # bytes of the margin after that probe's speech still to come from the next chunk
         self.after = []  # the audio fed since that probe: the silence after the speech, when it is the last
         self.tail = []  # the audio fed after the last end of speech, as `after` was when it was marked
+        self.holding = False  # nothing is handed to the player, audio or callback, until unhold or stop
         self.closing = False
         self.thread = threading.Thread(target=self._run, name="multilanguage SAPI 5 feeder", daemon=True)
         self.thread.start()
@@ -173,6 +174,7 @@ class QueuedPlayer:
             self.margin_left = 0
             self.after = []
             self.tail = []
+            self.holding = False
             self.cond.notify_all()
         # The first stop ends a feed the thread is blocked in; the second, once that feed has returned, the
         # audio of one that passed its check just before the queue was dropped.
@@ -182,6 +184,17 @@ class QueuedPlayer:
 
     def pause(self, switch):
         self.player.pause(switch)
+
+    def hold(self):
+        """Hand nothing to the player until unhold (or a stop): a piece sent ahead, while another voice still
+        speaks, is synthesized and queued meanwhile. Its reports are callbacks in the queue, so they wait too."""
+        with self.cond:
+            self.holding = True
+
+    def unhold(self):
+        with self.cond:
+            self.holding = False
+            self.cond.notify_all()
 
     def close(self):
         self.stop()
@@ -252,7 +265,7 @@ class QueuedPlayer:
     def _run(self):
         while True:
             with self.cond:
-                while not self.queue and not self.closing:
+                while (not self.queue or self.holding) and not self.closing:
                     self.cond.wait()
                 if self.closing:
                     return

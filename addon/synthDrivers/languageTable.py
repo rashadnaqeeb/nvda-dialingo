@@ -44,6 +44,7 @@ from synthDriverHandler import VoiceInfo, synthDoneSpeaking, synthIndexReached  
 
 from mlang import hosts, policy, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
+from mlang.playqueue import QueuedPlayer  # noqa: E402
 from mlang.scheduler import Scheduler  # noqa: E402
 from mlang.scripts import code  # noqa: E402
 
@@ -155,6 +156,18 @@ def _drop_silence(synth):
         player = getattr(synth, "_player", None)
         if player is not None:
             player.stop()
+
+
+def _holds(synth):
+    """SAPI 5 hosted with a queue in front of its player (sapi5host) can hold a piece back until the voice ahead of
+    it has spoken: it is sent its piece early, and an online voice's trip to its server is over by then."""
+    return isinstance(getattr(synth, "player", None), QueuedPlayer)
+
+
+def _unhold(synth):
+    player = getattr(synth, "player", None)
+    if isinstance(player, QueuedPlayer):
+        player.unhold()
 
 
 def _more_queued(synth):
@@ -293,6 +306,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             done_early=_done_early,
             returning=_drop_silence,
             cuts_silence=lambda guest: guest.name in CUTS_SILENCE,
+            holds=_holds,
+            hold=lambda guest: guest.player.hold(),
+            unhold=_unhold,
         )
         self._load_host()
         if self.host is None:

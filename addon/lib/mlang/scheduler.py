@@ -28,6 +28,11 @@ One that arrives with none of its markers reached is a failed synthesis and fini
 
 Consecutive pieces on the same guest and row are sent without waiting, so a single-language stream loses
 nothing to this driver.
+
+While a guest speaks, the next piece may go ahead to another guest that can hold its audio back (holds): it
+is held (hold) and synthesizes meanwhile, and is let play (unhold) once nothing is ahead of it and the busy guest
+is free, so its synthesis (an online voice's trip to its server) is not heard as a pause. One piece at a time; a
+cancel, and a send in turn, always let a guest play.
 """
 import threading
 from collections import deque
@@ -105,7 +110,8 @@ class Scheduler:
                  run_on_main, log=None, notifies_indexes=lambda guest: True, notifies_done=lambda guest: True,
                  adapt=None, done_drains=lambda guest: False, settles=lambda guest: False,
                  serial=lambda guest: False, done_early=lambda guest: False, returning=lambda guest: None,
-                 cuts_silence=lambda guest: False):
+                 cuts_silence=lambda guest: False, holds=lambda guest: False, hold=lambda guest: None,
+                 unhold=lambda guest: None):
         self.LangChangeCommand = LangChangeCommand
         self.IndexCommand = IndexCommand
         self.guest_for_row = guest_for_row
@@ -135,6 +141,12 @@ class Scheduler:
         # Whether a change of voice on the guest may follow once its speech has played (on_played with
         # done_follows), without its done: what is left to play is the silence ending it, which returning cuts.
         self.cuts_silence = cuts_silence
+        # Whether a guest can hold its audio back (hold) until told to play it (unhold): the next piece goes to
+        # it while another guest still speaks, so that its synthesis (an online voice's trip to its server) is
+        # done by the time the other's speech ends. See _progress.
+        self.holds = holds
+        self.hold = hold
+        self.unhold = unhold
         # adapt(guest, row, items) -> the items as the guest is to be sent them (prosody rebased on the row).
         self.adapt = adapt or (lambda guest, row, items: items)
         self.log = log or (lambda msg: None)
@@ -151,6 +163,7 @@ class Scheduler:
         self.last_marker = {}  # id(guest) -> the end marker it reached last
         self.held = {}  # id(guest) -> a token for a guest done early and held until its audio has played
         self.played = None  # the busy guest, when its audio has played and only its done is still to come
+        self.waiting = None  # a guest sent the next piece ahead, its audio held until the busy guest is free
         self.speaking = False  # whether NVDA is owed a done notification
         self.paused = False
 
@@ -168,11 +181,13 @@ class Scheduler:
             for guest in (self.current_guest, self.busy_guest):
                 if guest is not None:
                     guests.add(guest)
+            waiting = self.waiting
             self.pending.clear()
             self.inflight.clear()
             self.index_map.clear()
             self.busy_guest = None
             self.played = None
+            self.waiting = None
             self.reached.clear()
             self.last_marker.clear()
             self.held.clear()
@@ -184,6 +199,9 @@ class Scheduler:
                 guest.cancel()
             except Exception as e:
                 self.log(f"cancel on {guest!r} failed: {e}")
+        if waiting is not None:
+            # Its cancel dropped what it held; it must play what it is sent next.
+            self._unhold(waiting)
 
     def pause(self, switch):
         with self.lock:
@@ -195,6 +213,8 @@ class Scheduler:
             except Exception as e:
                 self.log(f"pause on {guest!r} failed: {e}")
         if not switch:
+            # A guest sent a piece ahead is not let play while paused.
+            self._progress()
             self.pump()
 
     def is_idle(self):
@@ -211,6 +231,8 @@ class Scheduler:
             if self.busy_guest is guest:
                 self.busy_guest = None
                 self.played = None
+            if self.waiting is guest:
+                self.waiting = None
             self.reached.pop(id(guest), None)
             self.last_marker.pop(id(guest), None)
             self.held.pop(id(guest), None)
@@ -330,22 +352,45 @@ class Scheduler:
         return True
 
     def _progress(self):
-        """After a piece finished or a guest went quiet: report done to NVDA when everything is spoken,
-        or continue on the main thread when more is waiting."""
+        """After a piece finished or a guest went quiet: let a guest sent the next piece ahead play once nothing
+        is ahead of it, report done to NVDA when everything is spoken, or continue on the main thread when more
+        is waiting."""
+        unheld = None
         with self.lock:
+            waiting = self.waiting
+            if waiting is not None:
+                ahead = any(p.guest is not waiting for p in self.inflight.values())
+                busy = self.busy_guest is not None and self.busy_guest is not self.played
+                if not any(p.guest is waiting for p in self.inflight.values()):
+                    # Its piece is finished without playing (it failed to take it): nothing to wait for.
+                    unheld = waiting
+                    self.waiting = None
+                elif not ahead and not busy and not self.paused:
+                    self.waiting = None
+                    self.busy_guest = unheld = waiting
+                    self.played = None
             if self.inflight:
-                return
-            if self.pending:
+                more = unheld is not None and bool(self.pending)
+                done = False
+            elif self.pending:
                 more = True
                 done = False
             else:
                 more = False
                 done = self.speaking
                 self.speaking = False
+        if unheld is not None:
+            self._unhold(unheld)
         if done:
             self.notify_done()
         elif more:
             self.run_on_main(self.pump)
+
+    def _unhold(self, guest):
+        try:
+            self.unhold(guest)
+        except Exception as e:
+            self.log(f"letting {guest!r} play failed: {e}")
 
     # ------------------------------------------------------------ internals
 
@@ -383,11 +428,17 @@ class Scheduler:
                         self.speaking = False
                 else:
                     key = (id(guest), piece.row.key())
-                    if self.inflight and key != self.current_key:
-                        return
-                    if self.serial(guest) and any(p.guest is guest for p in self.inflight.values()):
-                        return
-                    if self.busy_guest is not None and self.busy_guest is not guest and self.busy_guest is not self.played:
+                    mine = any(p.guest is guest for p in self.inflight.values())
+                    other_busy = (self.busy_guest is not None and self.busy_guest is not guest
+                                  and self.busy_guest is not self.played)
+                    # Sent ahead: while another guest speaks, the next piece goes to a guest that can hold its
+                    # audio until then, if it is idle and nothing else waits so.
+                    ahead = False
+                    if (self.inflight and key != self.current_key) or other_busy:
+                        if self.waiting is not None or mine or guest is self.busy_guest or not self.holds(guest):
+                            return
+                        ahead = True
+                    elif self.serial(guest) and mine:
                         return
                     voice = piece.row.get("voice")
                     if guest is not self.current_guest:
@@ -420,8 +471,11 @@ class Scheduler:
                     back = self.current_guest is not None and self.current_guest is not guest
                     self.current_guest = guest
                     self.current_key = key
-                    self.busy_guest = guest
-                    self.played = None
+                    if ahead:
+                        self.waiting = guest
+                    else:
+                        self.busy_guest = guest
+                        self.played = None
                     self.speaking = True
             if dropped is not None:
                 for index in dropped:
@@ -429,7 +483,7 @@ class Scheduler:
                 if finished:
                     self.run_on_main(self.notify_done)
                 continue
-            if back or cut:
+            if back or (cut and not ahead):
                 try:
                     self.returning(guest)
                 except Exception as e:
@@ -440,6 +494,18 @@ class Scheduler:
                 self.apply_row(guest, piece.row)
             except Exception as e:
                 self.log(f"applying row {piece.row!r} to {guest!r} failed: {e}")
+            # After the row, which may rebuild the guest's player (a voice on SAPI 5). Under the lock, so that
+            # the guest is not held after _progress has let it play.
+            with self.lock:
+                hold = ahead and self.waiting is guest
+                if hold:
+                    try:
+                        self.hold(guest)
+                    except Exception as e:
+                        self.log(f"holding {guest!r} failed: {e}")
+            if not hold and self.holds(guest):
+                # Never held when sent its piece to play: what it is sent would go unheard.
+                self._unhold(guest)
             try:
                 guest.speak(self.adapt(guest, piece.row, items))
                 reports = self.notifies_indexes(guest)

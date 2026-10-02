@@ -386,6 +386,94 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(back, [a])
         self.assertFalse(h.scheduler.on_done(a))
 
+    def holding(self, names=("B",)):
+        held, unheld = [], []
+        self.h.scheduler.holds = lambda guest: guest.name in names
+        self.h.scheduler.hold = lambda guest: held.append(guest.name)
+        self.h.scheduler.unhold = lambda guest: unheld.append(guest.name)
+        return held, unheld
+
+    def test_the_next_piece_goes_ahead_to_a_guest_that_holds_its_audio(self):
+        held, unheld = self.holding()
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", IndexCommand(7)])
+        b = self.h.guests["B"]
+        self.assertEqual(texts(b.spoken[0]), ["un"])
+        self.assertEqual((held, unheld), (["B"], []))
+        a = self.h.guests["A"]
+        a.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(unheld, ["B"])
+        self.assertIs(self.h.scheduler.busy_guest, b)
+        self.assertEqual(self.h.done, 0)
+        b.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(self.h.indexes, [7])
+        self.assertEqual(self.h.done, 1)
+
+    def test_a_guest_sent_ahead_plays_once_the_one_before_has_played(self):
+        held, unheld = self.holding()
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+        a = self.h.guests["A"]
+        marker = self.reach_markers(a)
+        self.assertEqual(unheld, [])  # reached is not played: A's audio may still be playing
+        self.h.scheduler.on_played(a, marker, done_follows=True)
+        self.assertEqual(unheld, ["B"])
+
+    def test_a_guest_sent_ahead_does_not_play_while_paused(self):
+        held, unheld = self.holding()
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+        self.h.scheduler.pause(True)
+        self.h.guests["A"].finish(self.h.scheduler)
+        self.assertEqual(unheld, [])
+        self.h.scheduler.pause(False)
+        self.assertEqual(unheld, ["B"])
+
+    def test_cancel_lets_a_guest_sent_ahead_play_again(self):
+        held, unheld = self.holding()
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+        self.h.scheduler.cancel()
+        self.assertEqual(self.h.guests["B"].cancelled, 1)
+        self.assertEqual(unheld, ["B"])
+        self.assertIsNone(self.h.scheduler.waiting)
+
+    def test_only_one_piece_goes_ahead(self):
+        held, unheld = self.holding(("A", "B"))
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"])
+        a, b = self.h.guests["A"], self.h.guests["B"]
+        self.assertEqual(len(a.spoken), 1)
+        self.assertEqual(held, ["B"])
+        a.finish(self.h.scheduler)
+        self.h.run_main()
+        # Now B plays, and the third piece goes ahead to A.
+        self.assertEqual(unheld, ["A", "B"])  # A unheld as it was sent its first piece to play
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+        self.assertEqual(held, ["B", "A"])
+        b.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(unheld, ["A", "B", "A"])
+
+    def test_a_guest_sent_ahead_that_fails_is_let_go(self):
+        held, unheld = self.holding()
+        b = FakeGuest("B")
+
+        def fail(items):
+            raise RuntimeError("engine gone")
+
+        b.speak = fail
+        self.h.guests["B"] = b
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", IndexCommand(3)])
+        self.assertEqual(unheld, ["B"])
+        self.assertIsNone(self.h.scheduler.waiting)
+        self.h.guests["A"].finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(self.h.indexes, [3])
+        self.assertEqual(self.h.done, 1)
+
+    def test_a_guest_that_holds_is_let_play_when_sent_a_piece_in_turn(self):
+        held, unheld = self.holding(("A",))
+        self.h.speak([LangChangeCommand("en"), "one"])
+        self.assertEqual((held, unheld), ([], ["A"]))
+
     def test_played_audio_with_done_to_follow_holds_a_change_of_voice(self):
         table = Table([Row("en", "A", voice="v1"), Row("de", "A", voice="v2")])
         h = Harness(table)

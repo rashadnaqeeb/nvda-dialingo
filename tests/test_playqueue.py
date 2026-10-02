@@ -202,6 +202,25 @@ class QueuedPlayerTests(unittest.TestCase):
         settle(self.q)
         self.assertNotIn("stop", self.kinds())
 
+    def test_nothing_reaches_the_player_while_held(self):
+        self.q.hold()
+        self.q.feed(audio((2000, 100), (0, 400)))
+        self.q.feed(None, 0, onDone=lambda: None)
+        time.sleep(0.05)
+        self.assertEqual(self.fed(), [])
+        self.q.unhold()
+        settle(self.q)
+        self.assertEqual(self.kinds(), ["audio", "mark", "audio", "mark"])
+
+    def test_a_stop_ends_a_hold(self):
+        self.q.hold()
+        self.q.feed(audio((2000, 50)))
+        self.q.stop()
+        self.q.feed(audio((2000, 30)))
+        settle(self.q)
+        self.assertEqual(self.kinds(), ["stop", "stop", "audio", "mark"])
+        self.assertEqual(len(self.fed()[2][1]), 60)
+
     def test_stop_drops_what_is_queued(self):
         self.player.open.clear()
         self.q.feed(audio((2000, 10)))
