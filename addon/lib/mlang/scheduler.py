@@ -16,8 +16,9 @@ done-speaking semantics are. Two waits govern the seams:
   guest: some drivers stop their audio, or rebuild their engine, to change voice (Vocalizer, SAPI 5).
   Where the driver can tell when a guest's audio up to its last marker has played, it says so (on_played),
   and that frees the guest as done would; Eloquence reports done 0.3 seconds later. A guest whose done is
-  still to come after that (OneCore, after the silence that ends its utterance) is freed for
-  another guest only: a change of voice on it still waits for its done. A guest whose done comes
+  still to come after that (OneCore, SAPI 5, after the silence that ends their utterance) is freed for
+  another guest only: a change of voice on it still waits for its done, unless what is left to play is only
+  that silence and the driver may cut it (cuts_silence: OneCore). A guest whose done comes
   before its audio has played (32-bit SAPI 5, whose player is in another process) is held after its done
   until on_played, or until the driver gives up waiting (release).
 
@@ -296,7 +297,8 @@ class Scheduler:
     def on_played(self, guest, marker, done_follows=False):
         """A guest's audio up to one of its end markers has played. If that is the last marker it reached and
         nothing of it is in flight, it is free for another guest to follow without waiting for its done.
-        `done_follows`: its done is still to come, and a change of voice on it still waits for that.
+        `done_follows`: its done is still to come, and a change of voice on it waits for that, unless
+        cuts_silence(guest).
         Whether it was freed."""
         with self.lock:
             if (self.busy_guest is not guest or self.last_marker.get(id(guest)) != marker
