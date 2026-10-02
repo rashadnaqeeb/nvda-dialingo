@@ -85,6 +85,18 @@ DONE_DRAINS = {"oneCore", "ibmeci", "sapi4_32"}
 # and volume at once, under what it is still playing.
 SETTLES = {"AcaTTS"}
 
+# Synthesizers whose instances are independent of each other, each with an engine, a player, and a thread of its
+# own: one is kept per voice the rows give them, loaded with its voice up front, so a change of voice between two
+# rows is a change of guest, which is freed at the end of the speech, rather than a change of voice on one
+# instance, which waits for its done (SAPI 5 rebuilds its engine to change voice, and its done comes a second after
+# its speech). Not 32-bit SAPI 5 through NVDA's bridge: an instance per voice is a process per voice, and it gains
+# nothing there, since what the next voice waits for is the late reports of the other process (measured the same,
+# about a second, either way). Not OneCore: NVDA's helper for it runs one engine per process, and a second instance
+# fails to start (its change of voice is quick, see CUTS_SILENCE). Not eSpeak or Vocalizer, which keep their engine
+# in module globals; not Eloquence, nor Acapela, which reports for its newest instance; not Sonata, whose helper
+# holds one model at a time and reloads it for each utterance on whichever instance asks.
+PER_VOICE = {"sapi5", "mssp"}
+
 # Guests whose audio after the end marker of their last piece is only the silence ending their speech, which the
 # language table may stop: before a change of voice on them, once that piece has played, and before a piece of
 # theirs after another guest's. Their done comes after that silence, and their next piece would wait for it.
@@ -259,7 +271,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         T.ensure_spec(config.conf)
         self.table = T.load(config.conf)
         self.guests = {}
-        self._failed = set()
+        self.voiced = {}  # (synthesizer name, voice) -> an instance of a PER_VOICE synthesizer kept for that voice
+        self._loaded_voice = {}  # synthesizer name -> the voice its instance in `guests` was loaded with
+        self._failed = set()  # names, and (name, voice) pairs, that could not be loaded
         self._windows_rows = {}  # language code -> implicit row on a Windows voice, or None
         self.scheduler = Scheduler(
             LangChangeCommand,
@@ -289,6 +303,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             self.guest(name)
         if self._windows_voices_needed():
             self.guest(winvoices.ONECORE)
+        self._prime()
         synthIndexReached.register(self._on_guest_index)
         synthDoneSpeaking.register(self._on_guest_done)
         T.listeners.append(self._on_table_saved)
@@ -307,10 +322,13 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         self.__dict__.pop("scheduler", None)
         # Not super().terminate(): that would save this driver's settings under its own name.
         self._unregisterConfigSaveAction()
+        for guest in list(self.voiced.values()):
+            self._detach(guest)
+            hosts.dispose(guest)
+        self.voiced.clear()
         host = self.__dict__.get("host")
         for name, guest in list(self.guests.items()):
-            if hasattr(guest, "onSpeechEnded"):
-                guest.onSpeechEnded = None
+            self._detach(guest)
             if guest is host:
                 # The default synthesizer keeps what the user set while it was hosted: its own values,
                 # not a row's, go into its own section, so switching back to it changes nothing heard.
@@ -414,11 +432,59 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         guest = hosts.create(name, log)
         if guest is not None:
             self.guests[name] = guest
-            if hasattr(guest, "onSpeechEnded"):
-                guest.onSpeechEnded = lambda marker: self._on_speech_ended(guest, marker)
+            self._attach(guest)
+            try:
+                self._loaded_voice[name] = hosts.read(guest, "voice") if guest.isSupported("voice") else None
+            except Exception:
+                self._loaded_voice[name] = None
         else:
             self._failed.add(name)
         return guest
+
+    def _voiced(self, name, voice):
+        """The instance of a PER_VOICE synthesizer for a voice: the shared one in `guests` when the voice is its own
+        (the host's own voice, or the one it was loaded with), else one kept for that voice, loaded on first use.
+        None when it cannot load."""
+        shared = self.guest(name)
+        if shared is None:
+            return None
+        own = self._defaults.get("voice") if shared is self.host else self._loaded_voice.get(name)
+        if voice == own:
+            return shared
+        key = (name, voice)
+        if key in self.voiced:
+            return self.voiced[key]
+        if key in self._failed:
+            return None
+        guest = hosts.create(name, log)
+        if guest is None:
+            self._failed.add(key)
+            return None
+        self._attach(guest)
+        self.voiced[key] = guest
+        return guest
+
+    def _prime(self):
+        """Load the instances kept per voice for the rows, each carrying its row, so that neither the loading nor
+        the change of voice (SAPI 5 rebuilds its engine) falls inside an utterance."""
+        for row in self.table.rows:
+            if row.synth not in PER_VOICE or not row.get("voice"):
+                continue
+            guest = self._voiced(row.synth, row.get("voice"))
+            if guest is not None and guest is not self.guests.get(row.synth):
+                try:
+                    self._apply_row(guest, row)
+                except Exception:
+                    log.debugWarning(f"multilanguage: could not prepare {row.synth} for {row.lang}", exc_info=True)
+
+    def _attach(self, guest):
+        if hasattr(guest, "onSpeechEnded"):
+            guest.onSpeechEnded = lambda marker: self._on_speech_ended(guest, marker)
+
+    @staticmethod
+    def _detach(guest):
+        if hasattr(guest, "onSpeechEnded"):
+            guest.onSpeechEnded = None
 
     def default_row(self):
         row = self.__dict__.get("_default_row")
@@ -476,6 +542,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         return row
 
     def _guest_for_row(self, row):
+        voice = row.get("voice")
+        if voice and row.synth in PER_VOICE:
+            guest = self._voiced(row.synth, voice)
+            if guest is not None:
+                return guest
         return self.guest(row.synth) or self.host
 
     def _apply_row(self, guest, row):
@@ -580,6 +651,18 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             if name not in wanted:
                 guest = self.guests.pop(name)
                 self.scheduler.forget(guest)
+                self._detach(guest)
+                hosts.dispose(guest)
+        # Kept per voice: those of the rows, and those of the Windows voices while they are in use (implicit rows,
+        # made in speech as their languages come up).
+        voices = {(row.synth, row.get("voice")) for row in self.table.rows}
+        if policy.windows_voices_wanted(config.conf):
+            voices |= {key for key in self.voiced if key[0] == winvoices.ONECORE}
+        for key in list(self.voiced):
+            if key not in voices or key[0] not in self.guests:
+                guest = self.voiced.pop(key)
+                self.scheduler.forget(guest)
+                self._detach(guest)
                 hosts.dispose(guest)
 
     def _rebuild_later(self):
@@ -614,12 +697,13 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         self._failed.clear()
         self._windows_rows.clear()
         winvoices.refresh()
-        for guest in self.guests.values():
+        for guest in list(self.guests.values()) + list(self.voiced.values()):
             guest._mlangApplied = None
             # NVDA caches a driver's voice list for the life of the instance; a Windows voice installed since
             # is in the registry the implicit rows are read from, and OneCore would refuse it as unknown.
             guest.__dict__.pop("_availableVoices", None)
         self.prune_guests()
+        self._prime()
         hosts.restore_current()
 
     # ------------------------------------------------------------ settings storage: the host's section
