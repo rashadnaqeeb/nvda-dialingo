@@ -103,6 +103,7 @@ class QueuedPlayer:
         self.queued = 0  # bytes of audio in the queue
         self.gen = 0  # raised by every stop; items of an older one are dropped
         self.probe = None  # the last probe since the end of speech was last marked
+        self.ended = None  # the probe of the end of speech marked last: whether that speech has played
         self.margin_left = 0  # bytes of the margin after that probe's speech still to come from the next chunk
         self.after = []  # the audio fed since that probe: the silence after the speech, when it is the last
         self.tail = []  # the audio fed after the last end of speech, as `after` was when it was marked
@@ -187,6 +188,7 @@ class QueuedPlayer:
             self.queue.clear()
             self.queued = 0
             self.probe = None
+            self.ended = None
             self.margin_left = 0
             self.after = []
             self.tail = []
@@ -258,6 +260,7 @@ class QueuedPlayer:
         has played already, or after everything queued when none of it was loud."""
         with self.cond:
             probe, self.probe = self.probe, None
+            self.ended = probe
             self.margin_left = 0
             self.tail, self.after = self.after, []
             if probe is None:
@@ -277,14 +280,17 @@ class QueuedPlayer:
         if callback is not None:
             callback()
 
-    def drop_silence(self):
+    def drop_silence(self, played_only=False):
         """Drop the silence after the last end of speech, so the next piece does not wait for it: another voice
         has spoken since. Everything after the end of speech is quiet, or the end would be later. What of it is
         still queued is dropped, and callbacks there stay. What the player has been fed already is stopped: no
         audio of a later piece has been fed by then, so the player holds only that silence, and the callbacks
         fed after it, which are SAPI 5's late reports for the piece, all of them reported by its end of speech.
-        The bytes dropped from the queue."""
+        `played_only`: only once that speech has played, not while it still plays, when the silence after it is
+        the pause before the next piece of the same voice. The bytes dropped from the queue."""
         with self.cond:
+            if played_only and (self.ended is None or not self.ended.played):
+                return 0
             items, self.tail = self.tail, []  # held, so no other item can take one of their ids
             tail = set(map(id, items))
             if not tail:

@@ -10,6 +10,7 @@ It relies on how NVDA 2026 builds the driver: its audio goes through `player`, m
 speaking thread appends each request's bookmarks to `_bookmarkLists` as it starts it, and calls `_onEndStream`
 once the request's audio is all written. When any of that is missing, the driver is hosted as it is, with its
 done freeing it as before. NVDA is imported inside the functions, so the module loads under the tests."""
+import os
 import threading
 from collections import deque
 
@@ -129,5 +130,47 @@ def hosted(cls, log=None):
 
         Hosted.__name__ = Hosted.__qualname__ = cls.__name__
         result = Hosted
+    elif _usable32(cls):
+
+        class Hosted32(cls):
+            """NVDA's 32-bit SAPI 5 runs in a process of its own, NVDA's 32-bit synth driver host, which reports
+            only indexes and done back. This proxy has the host load the add-on's driver (DRIVER32) instead of
+            NVDA's: NVDA's, hosted there as above, which reports the end of each piece's speech as its end marker
+            plus SPEECH_END, and its done once the request's audio has played. When it cannot load, NVDA's own
+            driver is loaded, as without the add-on."""
+
+            synthDriver32Path = DRIVERS32
+            synthDriver32Name = DRIVER32
+            speechEndOffset = SPEECH_END
+
+            def __init__(self, *args, **kwargs):
+                try:
+                    super().__init__(*args, **kwargs)
+                except Exception:
+                    if log:
+                        log.debugWarning("multilanguage: the 32-bit SAPI 5 of the language table did not load; "
+                                         "NVDA's is used", exc_info=True)
+                    self.synthDriver32Path = cls.synthDriver32Path
+                    self.synthDriver32Name = cls.synthDriver32Name
+                    self.speechEndOffset = None
+                    super().__init__(*args, **kwargs)
+
+        Hosted32.__name__ = Hosted32.__qualname__ = cls.__name__
+        result = Hosted32
     _classes[cls] = result
     return result
+
+
+# The end of a piece's speech, from the language table's 32-bit SAPI 5: its end marker plus this. The scheduler's
+# markers stay far below it.
+SPEECH_END = 1_000_000
+# The folder of the add-on's 32-bit drivers, and the one NVDA's 32-bit synth driver host loads for the table.
+DRIVERS32 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "synthDrivers32")
+DRIVER32 = "mlang_sapi5"
+
+
+def _usable32(cls):
+    """NVDA's 32-bit SAPI 5 proxy, with the add-on's driver for the host in place."""
+    return (isinstance(cls, type) and getattr(cls, "name", None) == "sapi5_32"
+            and getattr(cls, "synthDriver32Name", None) == "sapi5" and hasattr(cls, "synthDriver32Path")
+            and os.path.isfile(os.path.join(DRIVERS32, DRIVER32 + ".py")))

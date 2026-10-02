@@ -90,13 +90,15 @@ SETTLES = {"AcaTTS"}
 # own: one is kept per voice the rows give them, loaded with its voice up front, so a change of voice between two
 # rows is a change of guest, which is freed at the end of the speech, rather than a change of voice on one
 # instance, which waits for its done (SAPI 5 rebuilds its engine to change voice, and its done comes a second after
-# its speech). Not 32-bit SAPI 5 through NVDA's bridge: an instance per voice is a process per voice, and it gains
-# nothing there, since what the next voice waits for is the late reports of the other process (measured the same,
-# about a second, either way). Not OneCore: NVDA's helper for it runs one engine per process, and a second instance
+# its speech). 32-bit SAPI 5 through NVDA's bridge too (PER_VOICE_32), with the table's own driver in its host,
+# which reports the end of its speech: an instance there is a process; with NVDA's driver, whose late reports the
+# next voice waits for, it gains nothing (measured the same, about a second, either way), so it shares one
+# instance. Not OneCore: NVDA's helper for it runs one engine per process, and a second instance
 # fails to start (its change of voice is quick, see CUTS_SILENCE). Not eSpeak or Vocalizer, which keep their engine
 # in module globals; not Eloquence, nor Acapela, which reports for its newest instance; not Sonata, whose helper
 # holds one model at a time and reloads it for each utterance on whichever instance asks.
 PER_VOICE = {"sapi5", "mssp"}
+PER_VOICE_32 = "sapi5_32"
 
 # Guests whose audio after the end marker of their last piece is only the silence ending their speech, which the
 # language table may stop: before a change of voice on them, once that piece has played, and before a piece of
@@ -205,8 +207,9 @@ def _done_early(synth):
     """NVDA's 32-bit SAPI 5, in another process: with its audio on WASAPI, which NVDA's bridge cannot turn off, it
     reports every mark not yet played and then done when its synthesis ends, while up to its player's buffer
     (0.4 seconds) is still to play, and reports each mark again once the audio before it has played. That second
-    report of a piece's end marker frees it (on_played); its done does not."""
-    return getattr(synth, "name", None) == "sapi5_32"
+    report of a piece's end marker frees it (on_played); its done does not. Not the table's own 32-bit SAPI 5
+    (sapi5host.Hosted32), which reports the end of each piece's speech, and done once its audio has played."""
+    return getattr(synth, "name", None) == "sapi5_32" and not getattr(synth, "speechEndOffset", None)
 
 
 # How long a guest held after an early done may go without the report that its audio played before it is
@@ -494,8 +497,18 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         for row in self.table.rows:
             self._prime_row(row)
 
+    def _per_voice(self, name):
+        """Whether a synthesizer is kept an instance per voice: PER_VOICE, and 32-bit SAPI 5 when the table's own
+        driver runs in its host (sapi5host.Hosted32)."""
+        if name in PER_VOICE:
+            return True
+        if name != PER_VOICE_32:
+            return False
+        shared = self.guest(name)
+        return shared is not None and bool(getattr(shared, "speechEndOffset", None))
+
     def _prime_row(self, row):
-        if row.synth not in PER_VOICE or not row.get("voice"):
+        if not row.get("voice") or not self._per_voice(row.synth):
             return
         guest = self._voiced(row.synth, row.get("voice"))
         if guest is not None and guest is not self.guests.get(row.synth):
@@ -585,7 +598,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
     def _guest_for_row(self, row):
         voice = row.get("voice")
-        if voice and row.synth in PER_VOICE:
+        if voice and self._per_voice(row.synth):
             guest = self._voiced(row.synth, voice)
             if guest is not None:
                 return guest
@@ -714,7 +727,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         instance of a voice no row has any more is let go after this event, unless it is still speaking."""
         old = self.table.row_for(row.lang, exact=True)
         self.table.upsert(row)
-        if row.synth not in PER_VOICE:
+        if not self._per_voice(row.synth):
             return
         if not self._follow_voice(old, row):
             self._prime_row(row)
@@ -860,6 +873,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
     def _on_guest_index(self, synth=None, index=None):
         if synth is None or synth is self:
+            return
+        offset = getattr(synth, "speechEndOffset", None)
+        if offset and isinstance(index, int) and index >= offset:
+            # The end of a piece's speech, from the table's 32-bit SAPI 5 in its own process (sapi5host.Hosted32).
+            self._on_speech_ended(synth, index - offset)
             return
         if getattr(synth, "name", None) == "AcaTTS" and isinstance(index, int) and index % 2:
             # Acapela writes each mark one higher than it is given; the scheduler gives only even ones.

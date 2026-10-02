@@ -195,6 +195,19 @@ class QueuedPlayerTests(unittest.TestCase):
         self.q.drop_silence()  # once only
         self.assertEqual(self.kinds().count("stop"), 2)
 
+    def test_drop_silence_played_only_keeps_the_pause_while_the_speech_plays(self):
+        self.q.feed(audio((2000, 100)))
+        self.q.feed(audio((0, 300)))
+        self.q.mark_speech_end(lambda: None)
+        settle(self.q)
+        self.assertEqual(self.q.drop_silence(played_only=True), 0)
+        self.assertNotIn("stop", self.kinds())
+        self.play(0)
+        self.assertEqual(self.q.drop_silence(played_only=True), 0)  # the margin, carried into the quiet chunk
+        self.play(1)  # the end of speech: it has played
+        self.q.drop_silence(played_only=True)
+        self.assertEqual(self.kinds()[-2:], ["stop", "stop"])
+
     def test_drop_silence_leaves_the_player_alone_when_none_was_fed(self):
         self.player.open.clear()
         self.q.feed(audio((2000, 10)))
