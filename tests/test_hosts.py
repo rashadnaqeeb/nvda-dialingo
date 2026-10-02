@@ -286,6 +286,12 @@ class RingKeptTest(Stubbed):
         self.stub("speechDictHandler", loadVoiceDict=lambda synth: None)
         self.assertIsInstance(hosts.create("sapi5"), Driver)
         self.assertEqual((ring.settings, ring._current), (["rate", "voice", "lock"], 1))
+        # Disposed of when a step leaves its voice behind: reloading its settings rebuilds the ring too.
+        guest = Driver()
+        guest.cancel = guest.terminate = lambda: None
+        guest.loadSettings = guest.initSettings
+        hosts.dispose(guest)
+        self.assertEqual((ring.settings, ring._current), (["rate", "voice", "lock"], 1))
 
 
 class AcapelaCancelTest(unittest.TestCase):

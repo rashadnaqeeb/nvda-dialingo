@@ -65,8 +65,7 @@ def create(name, log=None):
             log.error(f"multilanguage: could not load synthesizer {name}", exc_info=True)
         if guest is not None:
             # Created but not set up: its engine runs, and creating it pointed the ring and dictionary at it.
-            dispose(guest)
-            restore_current(ring)
+            dispose(guest, ring)
         return None
     restore_current(ring)
     return guest
@@ -206,8 +205,12 @@ class _HostVoice:
         return getattr(self.__dict__["_host"], name)
 
 
-def dispose(guest):
-    """Terminate a guest without persisting the parameters a row applied to it."""
+def dispose(guest, ring=None):
+    """Terminate a guest without persisting the parameters a row applied to it. Reloading its settings for that
+    points the settings ring and voice dictionary at it, as loading it did, so they are put back after: the ring
+    as it was before (`ring`, from ring_state, or now), or it would leave a ring locked to a row on the rate."""
+    if ring is None:
+        ring = ring_state()
     try:
         guest.cancel()
     except Exception:
@@ -222,6 +225,7 @@ def dispose(guest):
         guest.terminate()
     except Exception:
         pass
+    restore_current(ring)
 
 
 def own_values(settings, defaults, live):
