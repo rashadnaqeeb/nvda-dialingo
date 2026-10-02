@@ -931,8 +931,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         if _reports_before_playing(synth):
             # Reported from its speaking thread, outside its player's callbacks. Changes of guest and voice wait
             # for it, so it is held until the audio has played; its marks need no holding, since a change of row
-            # alone waits only until the text before them is synthesized. Not after a cancel: a guest freed at the
-            # end of its speech is not cancelled, and this done would finish its next piece (Scheduler.epoch).
+            # alone waits only until the text before them is synthesized. Not after a cancel, should it outlive
+            # one: this done would finish the guest's next piece (Scheduler.epoch).
             scheduler = self.scheduler
             epoch = scheduler.epoch
             _after_playing(synth, lambda: scheduler.on_done(synth, epoch))

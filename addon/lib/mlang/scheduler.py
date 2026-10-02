@@ -165,12 +165,15 @@ class Scheduler:
         self.last_marker = {}  # id(guest) -> the end marker it reached last
         self.held = {}  # id(guest) -> a token for a guest done early and held until its audio has played
         self.played = None  # the busy guest, when its audio has played and only its done is still to come
+        # id(guest) -> a guest freed at the end of its speech whose done is still to come: a cancel stops it too,
+        # which drops that done with the silence ahead of it (SAPI 5's, deferred until its audio has played).
+        self.owed = {}
         self.waiting = None  # a guest sent the next piece ahead, its audio held until the busy guest is free
         self.speaking = False  # whether NVDA is owed a done notification
         self.paused = False
-        # Raised by every cancel. A done the driver defers until a guest's audio has played (SAPI 5's) carries the
-        # one it was reported in: a guest freed at the end of its speech is not cancelled with the others, and its
-        # done from before the cancel, still queued behind its silence, would finish its next piece.
+        # Raised by every cancel. A done the driver defers until a guest's audio has played (64-bit SAPI 5's)
+        # carries the one it was reported in: should it outlive the cancel of its guest (see owed), it would finish
+        # the guest's next piece.
         self.epoch = 0
 
     # ------------------------------------------------------------ NVDA side
@@ -184,10 +187,11 @@ class Scheduler:
     def cancel(self):
         with self.lock:
             guests = {p.guest for p in self.inflight.values() if p.guest is not None}
-            for guest in (self.current_guest, self.busy_guest):
+            for guest in (self.current_guest, self.busy_guest, *self.owed.values()):
                 if guest is not None:
                     guests.add(guest)
             waiting = self.waiting
+            self.owed.clear()
             self.epoch += 1
             self.pending.clear()
             self.inflight.clear()
@@ -249,6 +253,7 @@ class Scheduler:
             self.reached.pop(id(guest), None)
             self.last_marker.pop(id(guest), None)
             self.held.pop(id(guest), None)
+            self.owed.pop(id(guest), None)
 
     # ------------------------------------------------------------ guest side
 
@@ -306,6 +311,7 @@ class Scheduler:
                 return False
             if done_follows:
                 self.played = guest
+                self.owed[id(guest)] = guest
             else:
                 self.busy_guest = None
                 self.held.pop(id(guest), None)
@@ -343,6 +349,7 @@ class Scheduler:
                 self.reached[id(guest)] -= 1
                 return False
             self.reached.pop(id(guest), None)
+            self.owed.pop(id(guest), None)
             # A piece being handed to the guest right now is not finished by a done from before it.
             was_busy = self.busy_guest is guest and len(markers) == len(mine)
             if was_busy:

@@ -525,10 +525,11 @@ class SchedulerTests(unittest.TestCase):
         self.assertTrue(h.scheduler.on_played(b, marker, done_follows=True))
         h.run_main()
         self.assertEqual(texts(a.spoken[0]), ["one"])
-        # B's done is still queued behind its silence, reported before the cancel.
+        # B's done is still queued behind its silence, reported before the cancel. The cancel stops B too, which
+        # drops it; should it come all the same, it is ignored.
         epoch = h.scheduler.epoch
         h.scheduler.cancel()
-        self.assertEqual(b.cancelled, 0)
+        self.assertEqual(b.cancelled, 1)
         h.speak([LangChangeCommand("fr"), "deux", IndexCommand(5), LangChangeCommand("en"), "two"])
         self.assertEqual(texts(b.spoken[1]), ["deux"])
         self.assertFalse(h.scheduler.on_done(b, epoch))
@@ -540,6 +541,35 @@ class SchedulerTests(unittest.TestCase):
         h.run_main()
         self.assertEqual(h.indexes, [5])
         self.assertEqual(texts(a.spoken[1]), ["two"])
+
+    def test_a_cancel_stops_a_guest_whose_done_is_owed_until_that_done_comes(self):
+        """32-bit SAPI 5 holds its done back in its own process, where the table cannot give it an epoch: the cancel
+        must drop it there, or it would finish the guest's next piece."""
+        h = self.h
+        h.speak([LangChangeCommand("fr"), "un", LangChangeCommand("en"), "one"])
+        a, b = h.guests["A"], h.guests["B"]
+        marker = [i.index for i in b.queued[0] if isinstance(i, IndexCommand)][-1]
+        h.scheduler.on_index(b, marker)
+        self.assertTrue(h.scheduler.on_played(b, marker, done_follows=True))
+        h.run_main()
+        self.assertEqual(texts(a.spoken[0]), ["one"])
+        h.scheduler.cancel()
+        self.assertEqual((a.cancelled, b.cancelled), (1, 1))
+        # Once that cancel is past, B owes nothing: a later cancel leaves it alone.
+        h.scheduler.cancel()
+        self.assertEqual((a.cancelled, b.cancelled), (2, 1))
+
+    def test_a_guest_whose_owed_done_came_is_not_cancelled_with_the_others(self):
+        h = self.h
+        h.speak([LangChangeCommand("fr"), "un", LangChangeCommand("en"), "one"])
+        a, b = h.guests["A"], h.guests["B"]
+        marker = [i.index for i in b.queued[0] if isinstance(i, IndexCommand)][-1]
+        h.scheduler.on_index(b, marker)
+        h.scheduler.on_played(b, marker, done_follows=True)
+        h.run_main()
+        h.scheduler.on_done(b)
+        h.scheduler.cancel()
+        self.assertEqual((a.cancelled, b.cancelled), (1, 0))
 
     def test_a_guest_that_holds_is_let_play_when_sent_a_piece_in_turn(self):
         held, unheld = self.holding(("A",))
