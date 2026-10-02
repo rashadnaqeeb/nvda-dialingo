@@ -44,7 +44,10 @@ def create(name, log=None):
         cls = synthDriverHandler._getSynthDriver(name)
         if not cls.check():
             return None
-        guest = cls()
+        from .sapi5host import hosted
+
+        # SAPI 5 with a queue in front of its player, so the end of its speech is known; see sapi5host.
+        guest = hosted(cls, log)()
         guest.initSettings()
         guest._unregisterConfigSaveAction()
         if hasattr(guest, "MAX_CONSECUTIVE_SPEECH_FAILURES"):

@@ -104,7 +104,7 @@ class Scheduler:
     def __init__(self, LangChangeCommand, IndexCommand, guest_for_row, apply_row, notify_index, notify_done,
                  run_on_main, log=None, notifies_indexes=lambda guest: True, notifies_done=lambda guest: True,
                  adapt=None, done_drains=lambda guest: False, settles=lambda guest: False,
-                 serial=lambda guest: False, done_early=lambda guest: False):
+                 serial=lambda guest: False, done_early=lambda guest: False, returning=lambda guest: None):
         self.LangChangeCommand = LangChangeCommand
         self.IndexCommand = IndexCommand
         self.guest_for_row = guest_for_row
@@ -127,6 +127,9 @@ class Scheduler:
         self.serial = serial
         # Whether a guest's done comes before its audio has played, so that it is held until on_played.
         self.done_early = done_early
+        # returning(guest): a piece goes to the guest after another guest's, so what is left of the silence
+        # ending its own last piece may go (SAPI 5's, queued ahead of the new piece).
+        self.returning = returning
         # adapt(guest, row, items) -> the items as the guest is to be sent them (prosody rebased on the row).
         self.adapt = adapt or (lambda guest, row, items: items)
         self.log = log or (lambda msg: None)
@@ -406,6 +409,7 @@ class Scheduler:
                     piece.marker = marker
                     items.append(self.IndexCommand(marker))
                     self.inflight[marker] = piece
+                    back = self.current_guest is not None and self.current_guest is not guest
                     self.current_guest = guest
                     self.current_key = key
                     self.busy_guest = guest
@@ -417,6 +421,11 @@ class Scheduler:
                 if finished:
                     self.run_on_main(self.notify_done)
                 continue
+            if back:
+                try:
+                    self.returning(guest)
+                except Exception as e:
+                    self.log(f"returning to {guest!r} failed: {e}")
             # Every send: the driver skips it when the guest already carries the row, and anything that
             # touched the guest meanwhile (a preview from the settings dialog) has cleared that mark.
             try:

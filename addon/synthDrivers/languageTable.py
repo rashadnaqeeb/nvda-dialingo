@@ -126,6 +126,14 @@ def _marks_after_playing(synth):
     return getattr(synth, "name", None) == "oneCore"
 
 
+def _drop_silence(synth):
+    """SAPI 5, hosted with a queue in front of its player (sapi5host), was freed for another voice at the end of its
+    speech, with the silence ending it still queued: a piece of its own after the other voice's need not wait for it."""
+    drop = getattr(getattr(synth, "player", None), "drop_silence", None)
+    if drop is not None:
+        drop()
+
+
 def _more_queued(synth):
     """Whether eSpeak, which reports done after each speak call, and after one a cancel cut short, still holds
     a later call in its queue. Or whether Acapela's own driver is still in a call: it reports done once when
@@ -258,6 +266,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             settles=lambda guest: guest.name in SETTLES,
             serial=_serial,
             done_early=_done_early,
+            returning=_drop_silence,
         )
         self._load_host()
         if self.host is None:
@@ -288,6 +297,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         self._unregisterConfigSaveAction()
         host = self.__dict__.get("host")
         for name, guest in list(self.guests.items()):
+            if hasattr(guest, "onSpeechEnded"):
+                guest.onSpeechEnded = None
             if guest is host:
                 # The default synthesizer keeps what the user set while it was hosted: its own values,
                 # not a row's, go into its own section, so switching back to it changes nothing heard.
@@ -391,6 +402,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         guest = hosts.create(name, log)
         if guest is not None:
             self.guests[name] = guest
+            if hasattr(guest, "onSpeechEnded"):
+                guest.onSpeechEnded = lambda marker: self._on_speech_ended(guest, marker)
         else:
             self._failed.add(name)
         return guest
@@ -703,6 +716,15 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                 engine.player.feed(None, 0, onDone=lambda: self._on_eloquence_played(synth, engine, index))
             except Exception:
                 log.debugWarning("multilanguage: Eloquence's player could not report the end of a piece", exc_info=True)
+
+    def _on_speech_ended(self, synth, marker):
+        """SAPI 5's speech in the piece ending in `marker` has played (sapi5host), from its player's callback.
+        Its engine may report that marker earlier than this (Zira), or later, after the silence it ends with
+        (David after a full stop): the piece is spoken either way, so the marker is taken as reached now."""
+        scheduler = self.__dict__.get("scheduler")
+        if scheduler is not None:
+            scheduler.on_index(synth, marker)
+            scheduler.on_played(synth, marker, done_follows=True)
 
     def _on_eloquence_played(self, synth, engine, marker):
         if self.scheduler.on_played(synth, marker) and not engine.speaking:

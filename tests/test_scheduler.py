@@ -353,6 +353,21 @@ class SchedulerTests(unittest.TestCase):
         a.finish(self.h.scheduler)
         self.assertEqual(self.h.done, 1)
 
+    def test_returning_is_called_for_a_guest_spoken_after_another(self):
+        back = []
+        self.h.scheduler.returning = back.append
+        self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"])
+        a = self.h.guests["A"]
+        a.finish(self.h.scheduler, 1)
+        self.h.run_main()
+        b = self.h.guests["B"]
+        b.finish(self.h.scheduler)
+        self.h.run_main()
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+        self.assertEqual([g.name for g in back], ["B", "A"])
+        self.h.speak([LangChangeCommand("en"), "three"])
+        self.assertEqual([g.name for g in back], ["B", "A"])
+
     def test_played_audio_with_done_to_follow_holds_a_change_of_voice(self):
         table = Table([Row("en", "A", voice="v1"), Row("de", "A", voice="v2")])
         h = Harness(table)
