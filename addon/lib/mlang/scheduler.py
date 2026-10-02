@@ -166,6 +166,10 @@ class Scheduler:
         self.waiting = None  # a guest sent the next piece ahead, its audio held until the busy guest is free
         self.speaking = False  # whether NVDA is owed a done notification
         self.paused = False
+        # Raised by every cancel. A done the driver defers until a guest's audio has played (SAPI 5's) carries the
+        # one it was reported in: a guest freed at the end of its speech is not cancelled with the others, and its
+        # done from before the cancel, still queued behind its silence, would finish its next piece.
+        self.epoch = 0
 
     # ------------------------------------------------------------ NVDA side
 
@@ -182,6 +186,7 @@ class Scheduler:
                 if guest is not None:
                     guests.add(guest)
             waiting = self.waiting
+            self.epoch += 1
             self.pending.clear()
             self.inflight.clear()
             self.index_map.clear()
@@ -315,10 +320,13 @@ class Scheduler:
         self._progress()
         return True
 
-    def on_done(self, guest):
+    def on_done(self, guest, epoch=None):
         """A guest drained its queue: it is free for another guest to follow, and any of its pieces still
-        counted in flight are finished. Unless it is only the done of one call (see the module's notes)."""
+        counted in flight are finished. Unless it is only the done of one call (see the module's notes), or
+        `epoch` is given and a cancel came since."""
         with self.lock:
+            if epoch is not None and epoch != self.epoch:
+                return False
             mine = [m for m, p in self.inflight.items() if p.guest is guest]
             markers = [m for m in mine if self.inflight[m].sent]
             if markers and self.reached.get(id(guest), 0) > 0 and not self.done_drains(guest):

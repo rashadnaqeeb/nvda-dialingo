@@ -469,6 +469,31 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(self.h.indexes, [3])
         self.assertEqual(self.h.done, 1)
 
+    def test_a_done_from_before_a_cancel_does_not_finish_the_next_piece(self):
+        h = self.h
+        h.speak([LangChangeCommand("fr"), "un", LangChangeCommand("en"), "one"])
+        a, b = h.guests["A"], h.guests["B"]
+        marker = [i.index for i in b.queued[0] if isinstance(i, IndexCommand)][-1]
+        h.scheduler.on_index(b, marker)
+        self.assertTrue(h.scheduler.on_played(b, marker, done_follows=True))
+        h.run_main()
+        self.assertEqual(texts(a.spoken[0]), ["one"])
+        # B's done is still queued behind its silence, reported before the cancel.
+        epoch = h.scheduler.epoch
+        h.scheduler.cancel()
+        self.assertEqual(b.cancelled, 0)
+        h.speak([LangChangeCommand("fr"), "deux", IndexCommand(5), LangChangeCommand("en"), "two"])
+        self.assertEqual(texts(b.spoken[1]), ["deux"])
+        self.assertFalse(h.scheduler.on_done(b, epoch))
+        h.run_main()
+        self.assertEqual(h.indexes, [])
+        self.assertEqual(len(a.spoken), 1)
+        b.queued = [b.queued[-1]]
+        b.finish(h.scheduler)
+        h.run_main()
+        self.assertEqual(h.indexes, [5])
+        self.assertEqual(texts(a.spoken[1]), ["two"])
+
     def test_a_guest_that_holds_is_let_play_when_sent_a_piece_in_turn(self):
         held, unheld = self.holding(("A",))
         self.h.speak([LangChangeCommand("en"), "one"])
