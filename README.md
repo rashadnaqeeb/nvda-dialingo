@@ -9,7 +9,7 @@ This file is the technical account: how the add-on works, how it was measured, a
 
 `KNOWN_GAPS.md` lists the problems found and deliberately left alone, with the reason for each.
 
-The project is in beta, version 0.16, targeting NVDA 2026.1 and later (tested on 2026.2), which runs 64-bit Python 3.13. The add-on depends on nothing but NVDA and the voices the user installs: the recognizer, its model, and the synthesizer hosting are all in the package.
+The project is in beta, version 0.17, targeting NVDA 2026.1 and later (tested on 2026.2), which runs 64-bit Python 3.13. The add-on depends on nothing but NVDA and the voices the user installs: the recognizer, its model, and the synthesizer hosting are all in the package.
 
 ## Design goals
 
