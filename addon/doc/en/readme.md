@@ -24,7 +24,7 @@ Each row's voice has a voice dictionary of its own. NVDA applies the voice dicti
 
 There are two ways the rows are used.
 
-- With your usual synthesizer, rows for that synthesizer apply their rate, pitch, and volume: French on Eloquence at a slower rate needs nothing else. The synthesizer picks its own voice for the language, as it does for tagged web content. Rows for other synthesizers are not used in this mode.
+- With your usual synthesizer, rows for that synthesizer apply their rate, pitch, and volume: French on Eloquence at a slower rate needs nothing else. The synthesizer picks its own voice for the language, as it does for tagged web content. Rows for other synthesizers are not used in this mode. This needs NVDA's "Automatic language switching" on; with it off, the add-on leaves that synthesizer's speech alone.
 - A row for a different synthesizer, say a particular Arabic voice from OneCore while Eloquence is your synthesizer, is spoken through the add-on's own "Language table (multilanguage)" synthesizer, which hosts your usual synthesizer as the default, with its voice settings and options shown in NVDA's voice settings as before, its settings kept in its own configuration, and its voice dictionary in use, and adds the rows. You do not select it yourself: saving such a row switches to it, and removing the last such row switches back to your synthesizer, keeping any settings you changed in between. It only appears in NVDA's synthesizer dialog while it is needed. The default synthesizer is changed only in the Multilanguage panel. Picking another synthesizer in NVDA's synthesizer dialog uses that synthesizer on its own, including after NVDA restarts, and leaves the default as it was for when you return to the language table.
 
 Languages without a row are handled this way.
@@ -32,7 +32,7 @@ Languages without a row are handled this way.
 - A language with no row that your synthesizer cannot speak goes to the Windows voice installed for it, if there is one: with Eloquence, Arabic text is read by Windows' Arabic voice as soon as that voice is installed (the "Text-to-speech" feature of the Arabic language pack), with nothing to configure. A check box in the panel turns this off.
 - Text in a script that no voice you have can speak is still tagged with its language, so NVDA announces it, "Arabic, not supported" by default, before the voice attempts it. NVDA's speech setting "Report when switching to language is not supported by synthesizer" chooses speech, a beep, or nothing.
 
-The add-on turns on NVDA's "Automatic language switching" setting when needed; NVDA discards language commands while it is off. "Report language changes while reading" in NVDA's speech settings announces the detected language by name.
+The language table switches languages whether or not NVDA's "Automatic language switching" setting is on. The add-on never changes that setting, so it applies to your other synthesizers as you set it. "Report language changes while reading" in NVDA's speech settings announces the detected language by name.
 
 Several rows may use the same synthesizer. Changing rows on one synthesizer waits for the previous piece to be synthesized; changing synthesizers waits for the previous one to finish playing, so with Eloquence in the mix a switch to another synthesizer carries Eloquence's own short pause after speech.
 

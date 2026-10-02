@@ -165,7 +165,7 @@ class Engine:
         if not locale:
             return level
         try:
-            if level != config.conf["speech"]["symbolLevel"]:
+            if level != config.conf["speech"]["symbolLevel"] or not language_switching():
                 return level
             self._sync_table()
             row = self.table.row_for(locale)
@@ -209,8 +209,8 @@ class Engine:
 
     def current(self):
         """The detector for the current configuration, default language, and table; None when off, locked to
-        one language, or broken."""
-        if self.failed or not self.ready.is_set():
+        one language, broken, or without language switching."""
+        if self.failed or not self.ready.is_set() or not language_switching():
             return None
         section = config.conf[T.CONFIG_SECTION]
         mode = section["mode"]
@@ -259,6 +259,9 @@ class Engine:
         return self.available
 
     def filter(self, sequence):
+        if not language_switching():
+            # NVDA drops the language commands, so a row's prosody and dictionary would apply to the default voice.
+            return sequence
         try:
             locked = self.language_lock()
         except Exception:
@@ -369,20 +372,57 @@ class Engine:
         return prosody.apply_offsets(sequence, lambda lang: prosody.offsets_for(offsets, lang))
 
 
-def ensure_language_switching():
-    """NVDA drops every language command unless automatic language switching is on."""
-    if not config.conf["speech"]["autoLanguageSwitching"]:
-        config.conf["speech"]["autoLanguageSwitching"] = True
-        log.info("multilanguage: turned on automatic language switching")
-
-
-def rows_apply_to_current_synth():
+def table_in_use():
     synth = synthDriverHandler.getSynth()
-    if synth is None:
-        return False
-    if synth.name == DRIVER_NAME:
-        return True
-    return bool(T.load(config.conf).rows_for_synth(synth.name))
+    return synth is not None and synth.name == DRIVER_NAME
+
+
+def language_switching():
+    """Whether language commands reach the synthesizer: always on the language table, else as NVDA's
+    "Automatic language switching" is set. While they do not, the add-on leaves speech alone."""
+    return table_in_use() or bool(config.conf["speech"]["autoLanguageSwitching"])
+
+
+# NVDA's checks of its "Automatic language switching" setting: whether to make language commands, and whether to
+# pass them to the synthesizer. The speech manager holds a reference of its own to the second.
+SWITCHING_CHECKS = (
+    ("speech.languageHandling", "shouldMakeLangChangeCommand"),
+    ("speech.languageHandling", "shouldSwitchVoice"),
+    ("speech.manager", "shouldSwitchVoice"),
+)
+
+
+def install_language_switching():
+    """The language table gets language commands whatever "Automatic language switching" is set to, so the add-on
+    never changes that setting, and it applies to every other synthesizer as the user set it."""
+    import importlib
+
+    for module_name, name in SWITCHING_CHECKS:
+        module = importlib.import_module(module_name)
+        original = getattr(module, name)
+        if getattr(original, "_mlang_original", None) is not None:
+            continue
+
+        def check(original=original):
+            try:
+                if table_in_use():
+                    return True
+            except Exception:
+                pass
+            return original()
+
+        check._mlang_original = original
+        setattr(module, name, check)
+
+
+def uninstall_language_switching():
+    import importlib
+
+    for module_name, name in SWITCHING_CHECKS:
+        module = importlib.import_module(module_name)
+        original = getattr(getattr(module, name), "_mlang_original", None)
+        if original is not None:
+            setattr(module, name, original)
 
 
 def install_symbol_levels(engine):
@@ -429,17 +469,14 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             install_symbol_levels(self.engine)
         except Exception:
             log.error("multilanguage: could not wrap symbol processing; every language uses NVDA's symbol level", exc_info=True)
+        try:
+            install_language_switching()
+        except Exception:
+            log.error("multilanguage: could not pass language commands to the language table; it switches only with NVDA's automatic language switching on", exc_info=True)
         filter_speechSequence.register(self.filter)
         # NVDA's language reporter must see the commands this filter inserts, so it runs after it.
         filter_speechSequence.moveToEnd(getSpeechSequenceWithLangs, last=True)
-        synthDriverHandler.synthChanged.register(self.on_synth_changed)
         gui.settingsDialogs.NVDASettingsDialog.categoryClasses.append(settings.MultilanguagePanel)
-        if (
-            config.conf[T.CONFIG_SECTION]["mode"] != MODE_OFF
-            or rows_apply_to_current_synth()
-            or lock.language(self.engine.language_lock())
-        ):
-            ensure_language_switching()
         try:
             lock.install()
         except Exception:
@@ -452,7 +489,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         self.unit_context.uninstall()
         uninstall_symbol_levels()
         filter_speechSequence.unregister(self.filter)
-        synthDriverHandler.synthChanged.unregister(self.on_synth_changed)
+        uninstall_language_switching()
         try:
             gui.settingsDialogs.NVDASettingsDialog.categoryClasses.remove(settings.MultilanguagePanel)
         except ValueError:
@@ -461,10 +498,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     def filter(self, value):
         return self.engine.filter(value)
-
-    def on_synth_changed(self, synth=None, isFallback=False, **kwargs):
-        if rows_apply_to_current_synth():
-            ensure_language_switching()
 
     @script(
         # Translators: Description of a script.
@@ -477,8 +510,6 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         current = section["mode"] if section["mode"] in modes else "full"
         mode = modes[(modes.index(current) + 1) % len(modes)]
         section["mode"] = mode
-        if mode != MODE_OFF:
-            ensure_language_switching()
         # Translators: Reported when the detection mode changes; %s is the mode's name.
         ui.message(_("Language detection %s") % MODE_LABELS[mode])
 

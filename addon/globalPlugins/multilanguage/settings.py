@@ -16,7 +16,7 @@ from logHandler import log
 from mlang import hosts, langpack, policy, voicedict
 from mlang import scripts as S
 from mlang import table as T
-from mlang.detector import MODES, MODE_OFF
+from mlang.detector import MODES
 from mlang.hosts import DRIVER_NAME
 
 addonHandler.initTranslation()
@@ -382,10 +382,6 @@ class MultilanguagePanel(SettingsPanel):
             changed = True
         if changed:
             T.save(config.conf, self.table)
-        from . import ensure_language_switching, rows_apply_to_current_synth
-
-        if mode != MODE_OFF or rows_apply_to_current_synth():
-            ensure_language_switching()
         hosts.release()
         if changed:
             # After the save, when it is known whether OK is closing the dialog. The panels are gathered now,

@@ -176,6 +176,10 @@ class UnitContext:
         or, where the description was asked for by spelling, the character alone."""
         if not locale or base(locale) == "en" or not isinstance(text, str) or len(text) != 1:
             return False
+        from . import language_switching
+
+        if not language_switching():
+            return False
         try:
             return base(locale) != base(speech.getCurrentLanguage()) and not describes(locale, text)
         except Exception:
@@ -188,7 +192,11 @@ class UnitContext:
         """The locale a spelling helper should use for `text`: the caller's, unless the context language
         stands in for it (no locale, or the default language's tag when that is detected through). Under the
         language lock, the locked language, None for the default. A tag for a language with detection off is
-        no locale."""
+        no locale. Without language switching, the caller's."""
+        from . import language_switching
+
+        if not language_switching():
+            return locale
         try:
             locked = self.engine.language_lock()
         except Exception:

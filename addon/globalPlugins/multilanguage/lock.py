@@ -36,7 +36,7 @@ from speech import getCurrentLanguage
 from mlang import hosts, prosody
 from mlang import table as T
 from mlang.catalogs import Catalog, Words, catalog
-from mlang.detector import MODE_FULL, MODE_OFF, MODES
+from mlang.detector import MODE_FULL, MODES
 from mlang.hosts import DRIVER_NAME
 from mlang.scripts import base, code, normalize
 
@@ -113,10 +113,6 @@ class LockSetting(synthSettingsRing.SynthSetting):
     def _set_value(self, index):
         value = self._values[index].id
         config.conf[T.CONFIG_SECTION]["lock"] = value
-        if value not in (AUTOMATIC, DEFAULT):
-            from . import ensure_language_switching
-
-            ensure_language_switching()
         # The other entries become the locked row's, or the synthesizer's again.
         refresh_later()
 
@@ -145,12 +141,7 @@ class ModeSetting(DetectionSetting):
         return MODES.index(mode if mode in MODES else MODE_FULL)
 
     def _set_value(self, index):
-        mode = MODES[index]
-        config.conf[T.CONFIG_SECTION]["mode"] = mode
-        if mode != MODE_OFF:
-            from . import ensure_language_switching
-
-            ensure_language_switching()
+        config.conf[T.CONFIG_SECTION]["mode"] = MODES[index]
 
     def _getReportValue(self, val):
         from . import MODE_LABELS

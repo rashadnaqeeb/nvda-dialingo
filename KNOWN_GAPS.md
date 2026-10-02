@@ -40,6 +40,7 @@ Things found and deliberately left alone, with the reason. When one is fixed, de
 - Vocalizer: voices added while it is hosted are not seen until the table is rebuilt, and removing its licence does not switch away from it while hosted.
 - eSpeak pitch and inflection 50 read back as 51, so the value is set again at each row switch. Harmless.
 - With several Windows voices for one language, the implicit Windows row uses the first in registry order. A row picks another.
+- With NVDA's "Automatic language switching" off, the language table still switches, but two things NVDA reads that setting for directly stay off: the language marks of Word documents read through Word's object model, which are not fetched (detection still judges the text), and the report of a language the synthesizer cannot speak. There is no check of NVDA's to wrap there.
 
 ## Not supported
 
