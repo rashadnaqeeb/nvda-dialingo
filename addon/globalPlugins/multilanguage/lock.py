@@ -117,7 +117,11 @@ class LockSetting(synthSettingsRing.SynthSetting):
         refresh_later()
 
     def _getReportValue(self, val):
-        return self._values[val].displayName
+        # NVDA reports the value just set, before the ring is rebuilt: in the language the lock now speaks,
+        # not the one the ring was put in.
+        name = self._values[val].displayName
+        lang = locked_row_language()
+        return words_for(lang)(name) if lang else name
 
 
 # ------------------------------------------------------------ detection
@@ -329,6 +333,9 @@ def localize(entries, lang):
             else:
                 name = words(entry.setting.displayName, RING_CONTEXT)
             entry.setting = Renamed(entry.setting, name)
+            if isinstance(entry, LockSetting):
+                # Reports its values in the lock's language itself.
+                continue
             entry._getReportValue = functools.partial(lambda report, val: words(report(val)), entry._getReportValue)
         except Exception:
             log.debugWarning(f"multilanguage: a ring entry could not be put in {lang}", exc_info=True)
