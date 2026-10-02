@@ -22,12 +22,17 @@ import threading
 from array import array
 from collections import deque
 
-# A sample louder than this (of 32767) is speech; the silence SAPI 5 ends a stream with is below it.
-LOUD = 400
+# A sample louder than this (of 32767) is speech; the silence SAPI 5 ends a stream with is below it. It is close
+# to that silence, not to speech: a final consonant (the "th" of "fifth", an "s" at a low volume) peaks at 100 to
+# 300 for over 100 ms, and taken as silence it would be talked over and cut (drop_silence). Measured: David's and
+# Zira's silence is 0, Aria's at most 16; at 32, nothing above 40 is left after the end of speech at volumes 25 to
+# 100. A voice whose silence is louder is found to end only with its audio, as without the queue.
+LOUD = 32
 # Speech is looked for in windows of this many seconds, from the end of each chunk.
 WINDOW = 0.005
-# The end of speech is put this long after the last loud window, for the fading end of the last sound.
-MARGIN = 0.05
+# The end of speech is put this long after the last loud window, for the fading end of the last sound. With the
+# bar near the silence, the cut lands 25 to 60 ms after the last sample above 100 in the recordings measured.
+MARGIN = 0.02
 # Audio held in the queue at most, in seconds, before a feed waits; SAPI 5 writes far faster than this plays.
 LIMIT = 30
 

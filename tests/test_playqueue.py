@@ -71,7 +71,11 @@ def settle(q):
 
 class LastLoudTests(unittest.TestCase):
     def test_silence_has_none(self):
-        self.assertIsNone(last_loud(audio((0, 100), (300, 50)), 2, 10))
+        self.assertIsNone(last_loud(audio((0, 100), (20, 50), (-20, 50)), 2, 10))
+
+    def test_a_quiet_final_consonant_is_speech(self):
+        # A vowel, then a "th" peaking at 250 for 100 ms: the end of speech is after it.
+        self.assertEqual(last_loud(audio((8000, 100), (250, 100), (0, 200)), 2, 10), 400)
 
     def test_offset_is_after_the_last_loud_window(self):
         self.assertEqual(last_loud(audio((2000, 40), (0, 60)), 2, 10), 80)
@@ -129,13 +133,13 @@ class QueuedPlayerTests(unittest.TestCase):
         self.assertEqual(self.ended, [1])
 
     def test_the_margin_is_carried_into_the_next_quiet_chunk(self):
-        self.q.feed(audio((2000, 100), (0, 10)))  # 220 bytes: the margin runs 80 past it
+        self.q.feed(audio((2000, 100), (0, 10)))  # 220 bytes: the margin runs 20 past it
         self.q.feed(audio((0, 500)))
         self.q.mark_speech_end(lambda: self.ended.append(1))
         settle(self.q)
         fed = self.fed()
         self.assertEqual(self.kinds(), ["audio", "mark", "audio", "mark", "audio"])
-        self.assertEqual([len(fed[i][1]) for i in (0, 2, 4)], [220, 80, 920])
+        self.assertEqual([len(fed[i][1]) for i in (0, 2, 4)], [220, 20, 980])
         self.play(0)
         self.assertEqual(self.ended, [])
         self.play(1)
@@ -143,7 +147,7 @@ class QueuedPlayerTests(unittest.TestCase):
 
     def test_no_speech_ends_after_everything(self):
         self.q.feed(audio((0, 10)))
-        self.q.feed(audio((100, 300)))
+        self.q.feed(audio((20, 300)))
         self.q.mark_speech_end(lambda: self.ended.append(1))
         settle(self.q)
         self.assertEqual(self.kinds(), ["audio", "audio", "mark"])
