@@ -150,9 +150,12 @@ def _drop_silence(synth):
     """A guest freed at the end of its speech, with the silence ending it still to play: its next piece need not
     wait for it. SAPI 5, hosted with a queue in front of its player (sapi5host), drops what is left of it; OneCore
     has its player stopped, which holds nothing else once its last piece's end marker has played (its next piece
-    waits for that player to finish otherwise)."""
+    waits for that player to finish otherwise). The table's 32-bit SAPI 5 is told to with its next piece."""
+    returning = getattr(synth, "mlangReturning", None)
     drop = getattr(getattr(synth, "player", None), "drop_silence", None)
-    if drop is not None:
+    if returning is not None:
+        returning()
+    elif drop is not None:
         drop()
     elif getattr(synth, "name", None) in CUTS_SILENCE:
         player = getattr(synth, "_player", None)

@@ -142,6 +142,7 @@ def hosted(cls, log=None):
             synthDriver32Path = DRIVERS32
             synthDriver32Name = DRIVER32
             speechEndOffset = SPEECH_END
+            _mlangReturning = False
 
             def __init__(self, *args, **kwargs):
                 try:
@@ -155,6 +156,21 @@ def hosted(cls, log=None):
                     self.speechEndOffset = None
                     super().__init__(*args, **kwargs)
 
+            def mlangReturning(self):
+                """The table's `returning`: another voice has spoken since this one's last piece, so the silence
+                left of that piece may go. The table cannot reach the player in the other process; the next piece
+                tells the add-on's driver there, which drops it (DROP_SILENCE)."""
+                if self.speechEndOffset:
+                    self._mlangReturning = True
+
+            def speak(self, speechSequence):
+                if self._mlangReturning:
+                    from speech.commands import IndexCommand
+
+                    self._mlangReturning = False
+                    speechSequence = [IndexCommand(DROP_SILENCE), *speechSequence]
+                super().speak(speechSequence)
+
         Hosted32.__name__ = Hosted32.__qualname__ = cls.__name__
         result = Hosted32
     _classes[cls] = result
@@ -164,6 +180,9 @@ def hosted(cls, log=None):
 # The end of a piece's speech, from the language table's 32-bit SAPI 5: its end marker plus this. The scheduler's
 # markers stay far below it.
 SPEECH_END = 1_000_000
+# At the head of a piece sent to it, the language table's word to its 32-bit SAPI 5 that another voice has spoken
+# since its last piece: the silence left of that piece goes. Never spoken or reported.
+DROP_SILENCE = 2 * SPEECH_END
 # The folder of the add-on's 32-bit drivers, and the one NVDA's 32-bit synth driver host loads for the table.
 DRIVERS32 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "synthDrivers32")
 DRIVER32 = "mlang_sapi5"
@@ -174,3 +193,4 @@ def _usable32(cls):
     return (isinstance(cls, type) and getattr(cls, "name", None) == "sapi5_32"
             and getattr(cls, "synthDriver32Name", None) == "sapi5" and hasattr(cls, "synthDriver32Path")
             and os.path.isfile(os.path.join(DRIVERS32, DRIVER32 + ".py")))
+

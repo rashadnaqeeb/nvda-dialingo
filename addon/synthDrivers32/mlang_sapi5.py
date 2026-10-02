@@ -8,9 +8,9 @@ directly goes back as those:
 - Done, once the request's audio has played, rather than when its synthesis ends, long before that.
 
 The table cannot reach the player in this process to drop the silence left of a piece when the voice comes back
-to it after another; the driver does it itself when it is sent speech after its last speech has played, which the
-table waits for before sending it a piece after another voice's. A piece sent while the last still plays keeps the
-silence after it: that is the pause between two pieces of the same voice.
+to it after another; it puts DROP_SILENCE at the head of the piece it sends then, and the driver drops it, once its
+last speech has played. Any other piece keeps the silence ahead of it: that is the pause between two pieces of the
+same voice.
 
 NVDA's own 32-bit drivers are added to the package's path, and the add-on's lib to the module path, for mlang."""
 import os
@@ -19,6 +19,7 @@ import sys
 import globalVars
 import synthDrivers
 from logHandler import log
+from speech.commands import IndexCommand
 from synthDriverHandler import synthDoneSpeaking, synthIndexReached
 
 _nvda = os.path.join(globalVars.appDir, "_synthDrivers32")
@@ -33,7 +34,7 @@ from synthDrivers import sapi5  # noqa: E402  isort: skip
 from synthDrivers import _sapi5  # noqa: E402  isort: skip
 
 from mlang.playqueue import QueuedPlayer  # noqa: E402
-from mlang.sapi5host import SPEECH_END, hosted  # noqa: E402
+from mlang.sapi5host import DROP_SILENCE, SPEECH_END, hosted  # noqa: E402
 
 
 class _DoneOncePlayed:
@@ -66,10 +67,13 @@ class SynthDriver(hosted(sapi5.SynthDriver, log)):
         self.onSpeechEnded = lambda marker: synthIndexReached.notify(synth=self, index=marker + SPEECH_END)
 
     def speak(self, speechSequence):
-        player = self.player
-        if isinstance(player, QueuedPlayer):
-            try:
-                player.drop_silence(played_only=True)
-            except Exception:
-                log.debugWarning("multilanguage: the silence after SAPI 5's last speech was not dropped", exc_info=True)
+        if speechSequence and isinstance(speechSequence[0], IndexCommand) and speechSequence[0].index == DROP_SILENCE:
+            speechSequence = speechSequence[1:]
+            player = self.player
+            if isinstance(player, QueuedPlayer):
+                try:
+                    player.drop_silence(played_only=True)
+                except Exception:
+                    log.debugWarning("multilanguage: the silence after SAPI 5's last speech was not dropped",
+                                     exc_info=True)
         super().speak(speechSequence)

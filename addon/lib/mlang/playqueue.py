@@ -286,10 +286,12 @@ class QueuedPlayer:
         still queued is dropped, and callbacks there stay. What the player has been fed already is stopped: no
         audio of a later piece has been fed by then, so the player holds only that silence, and the callbacks
         fed after it, which are SAPI 5's late reports for the piece, all of them reported by its end of speech.
-        `played_only`: only once that speech has played, not while it still plays, when the silence after it is
-        the pause before the next piece of the same voice. The bytes dropped from the queue."""
+        `played_only`: only once that speech has played, not while it still plays; the silence after it is then
+        the pause before the piece now sent, and kept for good, since that piece's audio follows it. The bytes
+        dropped from the queue."""
         with self.cond:
             if played_only and (self.ended is None or not self.ended.played):
+                self.tail = []
                 return 0
             items, self.tail = self.tail, []  # held, so no other item can take one of their ids
             tail = set(map(id, items))
