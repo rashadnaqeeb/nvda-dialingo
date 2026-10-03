@@ -1,12 +1,12 @@
 backend fasttext, default en, configured ['fr', 'es']
-=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 583 ms
-=== sentences/es.txt: 1000 lines, switched 99.0%, own language tagged 99.0%, letters in own language 95.0%, 5053 ms
-=== sentences/fr.txt: 1000 lines, switched 98.5%, own language tagged 98.5%, letters in own language 96.5%, 3740 ms
-=== single-words/en.txt: 1000 lines, switched 0.2%, own language tagged 0.0%, letters in own language 0.0%, 303 ms
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 610 ms
+=== sentences/es.txt: 1000 lines, switched 99.0%, own language tagged 99.0%, letters in own language 95.3%, 5163 ms
+=== sentences/fr.txt: 1000 lines, switched 98.5%, own language tagged 98.5%, letters in own language 96.5%, 3700 ms
+=== single-words/en.txt: 1000 lines, switched 0.2%, own language tagged 0.0%, letters in own language 0.0%, 324 ms
   false switch: [fr]plongeon
   false switch: [fr]javascript
-=== single-words/es.txt: 1000 lines, switched 56.3%, own language tagged 56.1%, letters in own language 60.2%, 1649 ms
-=== single-words/fr.txt: 1000 lines, switched 59.9%, own language tagged 59.9%, letters in own language 62.6%, 1398 ms
-=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 171 ms
-=== word-pairs/es.txt: 1000 lines, switched 71.9%, own language tagged 71.8%, letters in own language 71.4%, 411 ms
-=== word-pairs/fr.txt: 1000 lines, switched 80.7%, own language tagged 80.6%, letters in own language 81.0%, 409 ms
+=== single-words/es.txt: 1000 lines, switched 56.3%, own language tagged 56.1%, letters in own language 60.2%, 1733 ms
+=== single-words/fr.txt: 1000 lines, switched 59.9%, own language tagged 59.9%, letters in own language 62.6%, 1337 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 172 ms
+=== word-pairs/es.txt: 1000 lines, switched 71.9%, own language tagged 71.8%, letters in own language 71.4%, 430 ms
+=== word-pairs/fr.txt: 1000 lines, switched 80.7%, own language tagged 80.6%, letters in own language 81.0%, 444 ms

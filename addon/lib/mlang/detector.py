@@ -819,6 +819,24 @@ class Detector:
                 for i in members:
                     if guess(i) and guess(i)[0] == g[0]:
                         langs[i] = g[0]
+        # A scored clause whose guess was withheld, because a language no row speaks outranked the pick, is judged
+        # with its whole sentence, which must pass the same check: "non tu" is Interlingua to fastText left free,
+        # and "No, non tu, lei." is Italian whole, left free too. The sentence's guess must be confident, as only a
+        # confident guess is checked against the free one, and a headline's near certain: the dictionaries alone
+        # never overrule the check.
+        for sentence in sorted({c[2] for c in cls}):
+            members = [i for i in range(len(cls)) if cls[i][2] == sentence and i not in held]
+            withheld = [i for i in members if i in scored and langs[i] is None and guess(i) is None]
+            if not withheld:
+                continue
+            joined = " ".join(w for i in members for w in self.scored_words(chunk[cls[i][0]:cls[i][1]]))
+            g = self.hypothesis(joined)
+            floor = EMBEDDED_FLOOR if headline(chunk[cls[members[0]][0]:cls[members[-1]][1]]) else FLOOR
+            if g and g[1] >= floor and self.switches(joined, g):
+                leanings.add(g[0])
+                switched.add(g[0])
+                for i in withheld:
+                    langs[i] = g[0]
         agreed = None
         if len(leanings) == 1:
             leaning = next(iter(leanings))

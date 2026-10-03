@@ -260,6 +260,51 @@ class ClauseTests(unittest.TestCase):
         d = self.detector(["es_ES"], {"Hola Pedro": ("es", 1.0), "Hola": ("es", 0.99), "Pedro": ("es", 0.99)})
         self.assertEqual(d.tagged("Hola, Pedro."), [(None, "Hola, Pedro.")])
 
+    def test_a_withheld_clause_is_judged_with_its_sentence(self):
+        # Left free, fastText calls "non tu" Interlingua, and the whole sentence Italian.
+        class Free(Recognizer):
+            def __init__(self, answers, free):
+                super().__init__(answers)
+                self.frees = free
+
+            def free(self, text):
+                return self.frees.get(text)
+
+        answers = {"non tu": ("it", 0.9999), "No non tu lei": ("it", 0.999), "lei": ("it", 0.6)}
+        d = Detector(Free(answers, {"non tu": ("ia", 0.71), "No non tu lei": ("it", 0.95)}), "en_US", ["it_IT"])
+        self.assertEqual(d.tagged("No, non tu, lei."), [(None, "No, "), ("it_IT", "non tu, lei.")])
+        # A sentence that a language nobody configured outranks whole stays with the default.
+        d = Detector(Free(answers, {"non tu": ("ia", 0.71), "No non tu lei": ("ia", 0.9)}), "en_US", ["it_IT"])
+        self.assertEqual(d.tagged("No, non tu, lei."), [(None, "No, non tu, lei.")])
+
+    def test_a_withheld_clause_s_sentence_is_not_switched_by_the_dictionaries_alone(self):
+        # A guess short of the floor is never checked against the free one, so it may not switch the sentence.
+        class Free(Recognizer):
+            def free(self, text):
+                return ("cbk", 0.9)
+
+        class Dictionary:
+            # English knows "gracias", so it does not switch alone as a one-word clause.
+            known = {"en_US": {"gracias"}, "es_ES": {"amigo", "mío", "gracias"}}
+
+            def rejects_a_word(self, text, language):
+                return any(w not in self.known[language] for w in text.split())
+
+            rejects_everywhere = rejects_a_word
+
+        answers = {"amigo mío": ("es", 0.95), "amigo mío gracias": ("es", 0.7)}
+        d = Detector(Free(answers), "en_US", ["es_ES"], Dictionary())
+        self.assertEqual(d.tagged("amigo mío, gracias."), [(None, "amigo mío, gracias.")])
+
+    def test_a_withheld_headline_s_sentence_needs_the_headline_bar(self):
+        class Free(Recognizer):
+            def free(self, text):
+                return ("ia", 0.9) if text == "la casa rossa" else ("it", 0.95)
+
+        answers = {"la casa rossa": ("it", 0.95), "la casa rossa bella": ("it", 0.95)}
+        d = Detector(Free(answers), "en_US", ["it_IT"])
+        self.assertEqual(d.tagged("LA CASA ROSSA, BELLA."), [(None, "LA CASA ROSSA, BELLA.")])
+
     def test_a_one_word_sentence_needs_the_line_to_agree(self):
         answers = {"Thanks": ("en", 0.9), "Hola amigo": ("es", 1.0), "Hola": ("es", 0.99), "amigo": ("es", 0.99)}
         d = self.detector(["es_ES"], answers)
