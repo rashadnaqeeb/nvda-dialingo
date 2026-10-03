@@ -88,6 +88,7 @@ class LockSetting(synthSettingsRing.SynthSetting):
         # Translators: The name of the language lock in the synth settings ring.
         setting = DriverSetting("multilanguageLock", _("Language lock"), availableInSettingsRing=True, useConfig=False)
         super().__init__(synth, setting)
+        self.setting = Renamed(setting, LockName(setting.displayName))
 
     def _get__values(self):
         # Translators: The language lock's value when languages switch as configured.
@@ -122,6 +123,23 @@ class LockSetting(synthSettingsRing.SynthSetting):
         name = self._values[val].displayName
         lang = locked_row_language()
         return words_for(lang)(name) if lang else name
+
+
+class LockName(str):
+    """The lock's name, put in the lock's language as it is spoken rather than as the ring is built: NVDA
+    takes the name before setting the new value, then speaks the two together, after it is set."""
+
+    def __str__(self):
+        name = str.__str__(self)
+        try:
+            lang = locked_row_language()
+            return words_for(lang)(name, RING_CONTEXT) if lang else name
+        except Exception:
+            log.debugWarning("multilanguage: the language lock's name could not be put in its language", exc_info=True)
+            return name
+
+    def __format__(self, spec):
+        return format(str(self), spec)
 
 
 # ------------------------------------------------------------ detection
@@ -327,15 +345,15 @@ def localize(entries, lang):
     such as a voice's, stays as it is."""
     words = words_for(lang)
     for entry in entries:
+        if isinstance(entry, LockSetting):
+            # Names itself and reports its values in the lock's language.
+            continue
         try:
             if isinstance(entry, RowDetection):
                 name = words("%s detection") % language_name(entry.lang)
             else:
                 name = words(entry.setting.displayName, RING_CONTEXT)
             entry.setting = Renamed(entry.setting, name)
-            if isinstance(entry, LockSetting):
-                # Reports its values in the lock's language itself.
-                continue
             entry._getReportValue = functools.partial(lambda report, val: words(report(val)), entry._getReportValue)
         except Exception:
             log.debugWarning(f"multilanguage: a ring entry could not be put in {lang}", exc_info=True)
