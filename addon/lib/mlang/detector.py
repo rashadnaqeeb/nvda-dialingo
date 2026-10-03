@@ -24,12 +24,12 @@ NOUN_CAPITALIZING = {"de", "lb"}
 # Scripts written with no space between words, where a clause counts as one word.
 UNSPACED = frozenset(("Hani", "Hira", "Kana", "Thai", "Laoo", "Khmr", "Mymr"))
 # Arabic, Devanagari, Armenian, Ethiopic, and full-width marks as well as the Latin ones.
-CLAUSE_ENDS = set('"“”«»,;:()!?.—–\n。，¿¡،؛؟।॥։።፣፤！？；：、')
+CLAUSE_ENDS = set('"“”«»,;:()!?./—–\n。，¿¡،؛؟।॥։።፣፤！？；：、')
 SENTENCE_ENDS = set('.!?。\n؟।॥։።！？')
 # Marks that open a clause, read with the clause after them; every other mark goes with the clause before.
 OPENERS = set('¡¿')
-# Marks that end a clause except between two digits, where they belong to a number or a time.
-NUMBER_MARKS = set('.,:')
+# Marks that end a clause except between two digits, where they belong to a number, a time, or a date.
+NUMBER_MARKS = set('.,:/')
 DASHES = set('—–')
 JOINERS = set("'’-")
 # Inside a word: the joiners Persian and the Indic scripts write between letters.
@@ -113,6 +113,18 @@ def is_text(piece):
     return sum(1 for c in piece if c.isalpha()) >= 2
 
 
+def _token(chunk, i, step):
+    """The characters beside position i, before it (step -1) or after it (step 1), up to a space or a slash."""
+    j = i + step
+    while 0 <= j < len(chunk) and not chunk[j].isspace() and chunk[j] != "/":
+        j += step
+    return chunk[j + 1:i] if step < 0 else chunk[i + 1:j]
+
+
+def _letters(text):
+    return sum(1 for c in text if c.isalpha())
+
+
 def clauses(chunk):
     out = []
     sentence = 0
@@ -141,6 +153,13 @@ def clauses(chunk):
         # "about 2.6 nautical miles" is one clause: split at the point, each half is a word too few to score.
         if separates and ch in NUMBER_MARKS and previous is not None and previous.isdigit() and not spaced and chunk[i + 1].isdigit():
             separates = False
+        # A slash against a word in capitals joins abbreviations ("UNCTAD/WTO", "R/3"), and one between two
+        # pieces of a letter or two joins a unit ("km/h", "g/l"); splitting there leaves a heading or a name
+        # too short to score, and gains nothing, since such pieces never switch alone. A spaced slash splits.
+        if separates and ch == "/" and not spaced and previous is not None and not previous.isspace():
+            before, after = _token(chunk, i, -1), _token(chunk, i, 1)
+            if shouted(before) or shouted(after) or (_letters(before) <= 2 and _letters(after) <= 2):
+                separates = False
         if separates:
             close(max(start, i - 1) if dash else i)
             if ch in SENTENCE_ENDS:
@@ -846,6 +865,11 @@ class Detector:
                 if joins:
                     langs[i] = g[0]
                     settled = False
+        # A clause of one word that nothing above settled is judged as a word alone is, by the dictionaries:
+        # "Chiedi" between a speaker's label and an English quote.
+        for i, (s, e, _) in enumerate(cls):
+            if langs[i] is None and i not in scored and i not in held and len(words(chunk[s:e])) == 1:
+                langs[i] = self.lone_word(chunk[s:e])
         runs = []
         cursor = 0
         for i, (s, e, _) in enumerate(cls):

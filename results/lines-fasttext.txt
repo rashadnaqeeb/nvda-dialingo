@@ -1,79 +1,79 @@
 backend fasttext, default sv, configured en, 40 paragraphs of each kind, widths (40, 60, 80, 100)
-=== alone: 1.45% of letters wrong, 449 of 5743 lines with a wrong letter, 5339 ms, slowest line 18.2 ms
-  sv: 0.22% of letters wrong, 7 of 1327 lines
-  en: 1.88% of letters wrong, 157 of 1493 lines
-  sv with en: 1.12% of letters wrong, 79 of 1400 lines
-  en with sv: 2.39% of letters wrong, 206 of 1523 lines
-=== context: 0.60% of letters wrong, 220 of 5743 lines with a wrong letter, 6646 ms, slowest line 26.9 ms
-  sv: 0.11% of letters wrong, 3 of 1327 lines
-  en: 0.91% of letters wrong, 98 of 1493 lines
-  sv with en: 0.40% of letters wrong, 16 of 1400 lines
+=== alone: 1.29% of letters wrong, 410 of 5743 lines with a wrong letter, 5530 ms, slowest line 18.1 ms
+  sv: 0.28% of letters wrong, 12 of 1327 lines
+  en: 1.61% of letters wrong, 140 of 1493 lines
+  sv with en: 1.01% of letters wrong, 72 of 1400 lines
+  en with sv: 2.09% of letters wrong, 186 of 1523 lines
+=== context: 0.61% of letters wrong, 224 of 5743 lines with a wrong letter, 6485 ms, slowest line 24.7 ms
+  sv: 0.16% of letters wrong, 7 of 1327 lines
+  en: 0.81% of letters wrong, 90 of 1493 lines
+  sv with en: 0.50% of letters wrong, 24 of 1400 lines
   en with sv: 0.89% of letters wrong, 103 of 1523 lines
-=== paragraph: 0.61% of letters wrong, 234 of 5743 lines with a wrong letter, 38205 ms, slowest line 40.2 ms
-  sv: 0.00% of letters wrong, 0 of 1327 lines
-  en: 0.91% of letters wrong, 98 of 1493 lines
-  sv with en: 0.44% of letters wrong, 15 of 1400 lines
+=== paragraph: 0.61% of letters wrong, 238 of 5743 lines with a wrong letter, 37393 ms, slowest line 55.2 ms
+  sv: 0.05% of letters wrong, 4 of 1327 lines
+  en: 0.81% of letters wrong, 90 of 1493 lines
+  sv with en: 0.50% of letters wrong, 23 of 1400 lines
   en with sv: 1.00% of letters wrong, 121 of 1523 lines
 backend fasttext, default en, configured fr, 40 paragraphs of each kind, widths (40, 60, 80, 100)
-=== alone: 3.19% of letters wrong, 763 of 6267 lines with a wrong letter, 4618 ms, slowest line 15.6 ms
+=== alone: 2.69% of letters wrong, 676 of 6267 lines with a wrong letter, 4759 ms, slowest line 15.3 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  fr: 5.01% of letters wrong, 278 of 1582 lines
-  en with fr: 2.13% of letters wrong, 129 of 1528 lines
-  fr with en: 5.58% of letters wrong, 356 of 1590 lines
-=== context: 2.10% of letters wrong, 485 of 6267 lines with a wrong letter, 5898 ms, slowest line 16.3 ms
+  fr: 4.38% of letters wrong, 254 of 1582 lines
+  en with fr: 1.50% of letters wrong, 96 of 1528 lines
+  fr with en: 4.87% of letters wrong, 326 of 1590 lines
+=== context: 1.96% of letters wrong, 466 of 6267 lines with a wrong letter, 5943 ms, slowest line 17.1 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  fr: 3.41% of letters wrong, 194 of 1582 lines
+  fr: 3.08% of letters wrong, 183 of 1582 lines
   en with fr: 1.25% of letters wrong, 55 of 1528 lines
-  fr with en: 3.72% of letters wrong, 236 of 1590 lines
-=== paragraph: 2.04% of letters wrong, 493 of 6267 lines with a wrong letter, 35857 ms, slowest line 29.8 ms
+  fr with en: 3.49% of letters wrong, 228 of 1590 lines
+=== paragraph: 1.87% of letters wrong, 471 of 6267 lines with a wrong letter, 35548 ms, slowest line 34.2 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  fr: 2.70% of letters wrong, 170 of 1582 lines
+  fr: 2.38% of letters wrong, 160 of 1582 lines
   en with fr: 1.26% of letters wrong, 53 of 1528 lines
-  fr with en: 4.19% of letters wrong, 270 of 1590 lines
+  fr with en: 3.82% of letters wrong, 258 of 1590 lines
 backend fasttext, default en, configured es, 40 paragraphs of each kind, widths (40, 60, 80, 100)
-=== alone: 4.95% of letters wrong, 992 of 6737 lines with a wrong letter, 5817 ms, slowest line 16.0 ms
+=== alone: 4.33% of letters wrong, 871 of 6737 lines with a wrong letter, 5974 ms, slowest line 14.4 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  es: 9.26% of letters wrong, 484 of 1771 lines
-  en with es: 2.41% of letters wrong, 121 of 1569 lines
-  es with en: 7.15% of letters wrong, 387 of 1830 lines
-=== context: 3.58% of letters wrong, 649 of 6737 lines with a wrong letter, 7516 ms, slowest line 37.3 ms
+  es: 8.23% of letters wrong, 445 of 1771 lines
+  en with es: 1.75% of letters wrong, 80 of 1569 lines
+  es with en: 6.42% of letters wrong, 346 of 1830 lines
+=== context: 3.35% of letters wrong, 601 of 6737 lines with a wrong letter, 7458 ms, slowest line 35.9 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  es: 6.32% of letters wrong, 333 of 1771 lines
-  en with es: 1.80% of letters wrong, 59 of 1569 lines
-  es with en: 5.47% of letters wrong, 257 of 1830 lines
-=== paragraph: 3.92% of letters wrong, 663 of 6737 lines with a wrong letter, 53125 ms, slowest line 73.4 ms
+  es: 5.83% of letters wrong, 312 of 1771 lines
+  en with es: 1.59% of letters wrong, 47 of 1569 lines
+  es with en: 5.27% of letters wrong, 242 of 1830 lines
+=== paragraph: 3.61% of letters wrong, 615 of 6737 lines with a wrong letter, 52110 ms, slowest line 49.7 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  es: 6.31% of letters wrong, 311 of 1771 lines
-  en with es: 1.97% of letters wrong, 63 of 1569 lines
-  es with en: 6.57% of letters wrong, 289 of 1830 lines
+  es: 5.52% of letters wrong, 290 of 1771 lines
+  en with es: 1.78% of letters wrong, 51 of 1569 lines
+  es with en: 6.38% of letters wrong, 274 of 1830 lines
 backend fasttext, default en, configured de, 40 paragraphs of each kind, widths (40, 60, 80, 100)
-=== alone: 2.63% of letters wrong, 606 of 6312 lines with a wrong letter, 4446 ms, slowest line 15.9 ms
+=== alone: 2.21% of letters wrong, 525 of 6312 lines with a wrong letter, 4700 ms, slowest line 15.7 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  de: 4.71% of letters wrong, 257 of 1609 lines
-  en with de: 1.10% of letters wrong, 79 of 1561 lines
-  de with en: 4.60% of letters wrong, 270 of 1575 lines
-=== context: 1.76% of letters wrong, 387 of 6312 lines with a wrong letter, 4957 ms, slowest line 17.0 ms
+  de: 4.08% of letters wrong, 245 of 1609 lines
+  en with de: 0.70% of letters wrong, 53 of 1561 lines
+  de with en: 3.94% of letters wrong, 227 of 1575 lines
+=== context: 1.58% of letters wrong, 367 of 6312 lines with a wrong letter, 5128 ms, slowest line 18.6 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  de: 3.61% of letters wrong, 201 of 1609 lines
-  en with de: 0.46% of letters wrong, 24 of 1561 lines
-  de with en: 2.87% of letters wrong, 162 of 1575 lines
-=== paragraph: 1.74% of letters wrong, 392 of 6312 lines with a wrong letter, 30416 ms, slowest line 22.5 ms
+  de: 3.23% of letters wrong, 193 of 1609 lines
+  en with de: 0.32% of letters wrong, 20 of 1561 lines
+  de with en: 2.71% of letters wrong, 154 of 1575 lines
+=== paragraph: 1.56% of letters wrong, 367 of 6312 lines with a wrong letter, 32441 ms, slowest line 35.0 ms
   en: 0.00% of letters wrong, 0 of 1567 lines
-  de: 3.16% of letters wrong, 192 of 1609 lines
-  en with de: 0.38% of letters wrong, 22 of 1561 lines
-  de with en: 3.36% of letters wrong, 178 of 1575 lines
+  de: 2.76% of letters wrong, 183 of 1609 lines
+  en with de: 0.24% of letters wrong, 18 of 1561 lines
+  de with en: 3.16% of letters wrong, 166 of 1575 lines
 backend fasttext, default ru, configured uk, 40 paragraphs of each kind, widths (40, 60, 80, 100)
-=== alone: 5.85% of letters wrong, 1181 of 5145 lines with a wrong letter, 2279 ms, slowest line 12.2 ms
+=== alone: 5.85% of letters wrong, 1181 of 5145 lines with a wrong letter, 2435 ms, slowest line 11.9 ms
   ru: 0.00% of letters wrong, 0 of 979 lines
   uk: 8.04% of letters wrong, 536 of 1572 lines
   ru with uk: 2.76% of letters wrong, 157 of 1158 lines
   uk with ru: 9.78% of letters wrong, 488 of 1436 lines
-=== context: 4.30% of letters wrong, 806 of 5145 lines with a wrong letter, 3686 ms, slowest line 11.3 ms
+=== context: 4.30% of letters wrong, 806 of 5145 lines with a wrong letter, 3857 ms, slowest line 12.5 ms
   ru: 0.00% of letters wrong, 0 of 979 lines
   uk: 6.12% of letters wrong, 394 of 1572 lines
   ru with uk: 1.59% of letters wrong, 78 of 1158 lines
   uk with ru: 7.32% of letters wrong, 334 of 1436 lines
-=== paragraph: 4.42% of letters wrong, 801 of 5145 lines with a wrong letter, 21701 ms, slowest line 20.5 ms
+=== paragraph: 4.42% of letters wrong, 801 of 5145 lines with a wrong letter, 22255 ms, slowest line 19.7 ms
   ru: 0.00% of letters wrong, 0 of 979 lines
   uk: 6.13% of letters wrong, 380 of 1572 lines
   ru with uk: 1.13% of letters wrong, 67 of 1158 lines

@@ -168,6 +168,36 @@ class ClauseTests(unittest.TestCase):
         self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["Lesson 2", "Then 3", "and 4", "done"])
         self.assertEqual([sentence for _, _, sentence in clauses("about 2.6 miles. Next")], [0, 1])
 
+    def test_a_slash_splits_clauses_but_not_between_digits(self):
+        text = "fantastico/a fantastic"
+        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["fantastico", "a fantastic"])
+        text = "vorrebbe / he would like"
+        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["vorrebbe", "he would like"])
+        for text in ["on 10/03/2026", "half is 1/2"]:
+            self.assertEqual([text[s:e] for s, e, _ in clauses(text)], [text], text)
+
+    def test_a_slash_in_an_abbreviation_or_a_unit_does_not_split(self):
+        for text in ["International Trade Centre UNCTAD/WTO", "SAP R/3 system", "at 100 km/h", "2,29 g/l"]:
+            self.assertEqual([text[s:e] for s, e, _ in clauses(text)], [text], text)
+        text = "vorrebbe / he/she"
+        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["vorrebbe", "he", "she"])
+
+    def test_a_one_word_clause_goes_by_the_dictionaries(self):
+        class Dictionary:
+            known = {"en_US": {"Marco"}, "it_IT": {"Chiedi", "Marco"}}
+
+            def rejects_a_word(self, text, language):
+                return text not in self.known[language]
+
+            rejects_everywhere = rejects_a_word
+
+        answers = {"Where is it": ("en", 0.99), "see you": ("en", 0.99)}
+        d = Detector(Recognizer(answers), "en_US", ["it_IT"], Dictionary())
+        self.assertEqual(d.tagged("INSTRUCTOR: Chiedi “Where is it?”"),
+                         [(None, "INSTRUCTOR: "), ("it_IT", "Chiedi “"), (None, "Where is it?”")])
+        # A name the default's dictionary knows stays with its sentence.
+        self.assertEqual(d.tagged("Marco, see you."), [(None, "Marco, see you.")])
+
     def test_an_end_the_default_dictionary_rejects_is_not_peeled(self):
         class Dictionary:
             def rejects_a_word(self, text, language):
