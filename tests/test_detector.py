@@ -63,6 +63,49 @@ class CharacterTests(unittest.TestCase):
         self.assertIsNone(d.character("ж"))
 
 
+def by_script(default, configured, available=(), named=None):
+    d = Detector(NoRecognizer(), default, configured, mode="script")
+    d.configure(default, configured, available, (), named)
+    return d
+
+
+class LoneLetterTests(unittest.TestCase):
+    """A letter standing alone in a script the default does not write: read by its script's voice where
+    there is one, unless the default language's symbol table names it."""
+
+    def test_letter_in_a_line_takes_its_scripts_voice(self):
+        d = by_script("en_US", [], available=["en_US", "ar_SA"])
+        self.assertEqual(d.tagged("Is it س?"), [(None, "Is it "), ("ar_SA", "س"), (None, "?")])
+        self.assertEqual(d.tagged("س"), [("ar_SA", "س")])
+
+    def test_only_the_letter_and_its_marks_switch(self):
+        d = by_script("en_US", ["ar_SA"])
+        self.assertEqual(d.tagged("(ب) 5"), [(None, "("), ("ar_SA", "ب"), (None, ") 5")])
+        self.assertEqual(d.tagged("سَ."), [("ar_SA", "سَ"), (None, ".")])
+
+    def test_letter_without_a_voice_stays_with_the_default(self):
+        self.assertEqual(by_script("en_US", ["fr_FR"]).tagged("Is it س?"), [(None, "Is it س?")])
+
+    def test_letter_the_default_table_names_stays_with_the_default(self):
+        d = by_script("en_US", [], available=["en_US", "el_GR"], named=lambda c: c == "π")
+        self.assertEqual(d.tagged("π = 3.14"), [(None, "π = 3.14")])
+        self.assertEqual(d.tagged("ε 0"), [("el_GR", "ε"), (None, " 0")])
+        self.assertIsNone(d.character("π"))
+        self.assertEqual(d.character("ε"), "el_GR")
+
+    def test_modifier_letter_alone_stays_with_the_default(self):
+        d = by_script("en_US", ["ja_JP"])
+        for mark in ("々", "ヽ", "ー"):
+            self.assertIsNone(d.character(mark), mark)
+            self.assertEqual(d.tagged(f"A {mark} B"), [(None, f"A {mark} B")], mark)
+        self.assertEqual(d.character("あ"), "ja_JP")
+
+    def test_letter_in_tagged_text_takes_its_scripts_voice(self):
+        d = by_script("en_US", ["ar_SA"])
+        self.assertEqual(d.verified("Is it س?", "en_US"), [("en_US", "Is it "), ("ar_SA", "س"), ("en_US", "?")])
+        self.assertEqual(by_script("en_US", ["fr_FR"]).verified("Is it س?", "en_US"), [("en_US", "Is it س?")])
+
+
 class KeyboardTests(unittest.TestCase):
     def test_echo_follows_a_keyboard_a_row_speaks(self):
         d = detector("en_US", ["fr_FR"])

@@ -1,7 +1,8 @@
 """The language detector: clause and script rules over a pluggable recognizer.
 
 Script first: a run in a script the default language does not write goes to the configured language of
-that script with no recognizer involved. Then, in full mode, the text left in the default script is
+that script with no recognizer involved, and so does a letter of it standing alone, unless the default
+language's symbol table names it. Then, in full mode, the text left in the default script is
 guessed clause by clause among the default language and the configured ones written in its script, and a
 run in a script several configured languages write is guessed clause by clause among those.
 A tag an application supplied is distrusted when the text contradicts it, in both directions.
@@ -290,11 +291,14 @@ class Detector:
         self.calls = 0
         self.configure(default, configured)
 
-    def configure(self, default, configured, available=(), excluded=()):
+    def configure(self, default, configured, available=(), excluded=(), named=None):
         """default: the default voice's language; configured: the languages with a row and detection on;
         available: the languages the synthesizer's voices speak, the second tier for a script nobody
         configured; excluded: the languages of rows with detection off, never switched to, though a voice
-        speaks them or the recognizer guesses them, unless another row of the language detects."""
+        speaks them or the recognizer guesses them, unless another row of the language detects; named:
+        whether the default language's symbol table names a character at every symbol level, so the default
+        voice reads it by name (None names nothing)."""
+        self.named = named or (lambda character: False)
         self.default_tag = default
         self.default = S.code(default)
         self.default_script = S.primary_script(default)
@@ -539,7 +543,8 @@ class Detector:
 
     def _by_tag_script(self, text, tag, tag_scripts):
         """(piece, foreign) for tagged text: foreign where the piece holds no script the tag's language writes,
-        or a script of the CJK family it does not (kana under a Chinese tag). A lone borrowed letter is not."""
+        or a script of the CJK family it does not (kana under a Chinese tag). A letter standing alone is
+        foreign only where lone_letter() gives it a voice."""
         if "Latn" in tag_scripts and not S.may_leave_latin(text):
             return [(text, False)]
         known = self.foreign_scripts | set(tag_scripts) | {self.default_script}
@@ -548,7 +553,7 @@ class Detector:
             piece = text[start:end]
             foreign = (
                 scripts_here is not None
-                and S.is_text(piece)
+                and (S.is_text(piece) or self.lone_letter(scripts_here, piece) is not None)
                 and (not (scripts_here & tag_scripts) or bool((scripts_here & S.CJK) - tag_scripts))
             )
             if out and out[-1][1] == foreign:
@@ -573,8 +578,16 @@ class Detector:
         known = self.foreign_scripts | {self.default_script}
         for scripts_here, start, end in S.segments(text, self.default_script, known, S.scripts_of(self.default_tag)):
             piece = text[start:end]
-            if scripts_here is None or not S.is_text(piece):
+            if scripts_here is None:
                 runs.append((None, piece))
+                continue
+            if not S.is_text(piece):
+                lone = self.lone_letter(scripts_here, piece)
+                if lone is None:
+                    runs.append((None, piece))
+                else:
+                    lang, first, last = lone
+                    runs += [(None, piece[:first]), (lang, piece[first:last]), (None, piece[last:])]
                 continue
             lang = self.language_for(scripts_here, piece)
             if lang is None:
@@ -689,9 +702,8 @@ class Detector:
 
     def character(self, text):
         """The language to spell a lone character in when no line places it, as one typed or deleted: by its
-        script alone, in the configured spelling, or None for the default's scripts. One letter is too little
-        for the recognizer, so where several languages write the script the first of script_options is taken,
-        and a script no configured language or voice writes is left to the default."""
+        script alone, as letter_language() reads a letter standing alone in a line, in the configured
+        spelling, or None for the default's scripts."""
         if self.mode == MODE_OFF or not any(c.isalpha() for c in text):
             return None
         if self.default_script == "Latn" and not S.may_leave_latin(text):
@@ -699,12 +711,38 @@ class Detector:
         known = self.foreign_scripts | {self.default_script}
         segs = S.segments(text, self.default_script, known, S.scripts_of(self.default_tag))
         foreign = [s for s, _, _ in segs if s is not None]
-        if len(foreign) != 1 or "other" in foreign[0]:
+        if len(foreign) != 1:
             return None
-        options = self.script_options(foreign[0])
+        lang = self.letter_language(foreign[0], next(c for c in text if c.isalpha()))
+        return self.tag_of(lang) if lang else None
+
+    def lone_letter(self, scripts_here, piece):
+        """(base language, start, end) for a piece in a script the default does not write that holds one
+        letter: the letter with the marks after it, read in letter_language(), and the digits and punctuation
+        around it left to the default voice. None where the whole piece stays with the default voice."""
+        first = next((i for i, c in enumerate(piece) if c.isalpha()), None)
+        if first is None:
+            return None
+        lang = self.letter_language(scripts_here, piece[first])
+        if lang is None:
+            return None
+        last = first + 1
+        while last < len(piece) and is_mark(piece[last]):
+            last += 1
+        return lang, first, last
+
+    def letter_language(self, scripts_here, letter):
+        """The base language a letter standing alone in a script the default does not write is read in, or
+        None for the default voice. A letter the default language's symbol table names at every level stays,
+        read by its name. So does a modifier letter, a mark when it stands alone (the iteration marks 々 and
+        ヽ). Otherwise the first of script_options, since one letter is too little for the recognizer, and a
+        script no configured language or voice writes is left to the default, as there is no voice to take it."""
+        if "other" in scripts_here or unicodedata.category(letter) == "Lm" or self.named(letter):
+            return None
+        options = self.script_options(scripts_here)
         if not options or self.default in options:
             return None
-        return self.tag_of(options[0])
+        return options[0]
 
     def tag_of(self, code):
         return self.spelling.get(code) or self.voice_spelling.get(code) or code

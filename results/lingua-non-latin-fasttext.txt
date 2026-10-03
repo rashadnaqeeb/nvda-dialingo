@@ -52,7 +52,7 @@ backend fasttext, default en, configured ['zh', 'ja', 'ko']
 === sentences/ko.txt: 1000 lines, switched 99.9%, own language tagged 99.9%, letters in own language 98.6%, 91 ms
 === sentences/zh.txt: 729 lines, switched 100.0%, own language tagged 99.5%, letters in own language 99.7%, 133 ms
 === single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 661 ms
-=== single-words/ja.txt: 157 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 5 ms
+=== single-words/ja.txt: 157 lines, switched 100.0%, own language tagged 100.0%, letters in own language 100.0%, 1 ms
 === single-words/ko.txt: 1000 lines, switched 100.0%, own language tagged 100.0%, letters in own language 100.0%, 9 ms
 === single-words/zh.txt: 1000 lines, switched 100.0%, own language tagged 68.4%, letters in own language 68.4%, 131 ms
 === word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 379 ms

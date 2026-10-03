@@ -90,6 +90,29 @@ def synth_languages():
     return tuple(sorted(langs))
 
 
+def symbol_names(locale):
+    """Whether NVDA's symbol table for `locale` names a character at every symbol level, so a voice of that
+    language reads it by name: the English table names ∑ but no Greek, Arabic, or Cyrillic letter. Read at
+    each call, so an edit in NVDA's punctuation dialog counts at once. A locale with no table falls back to
+    English, as NVDA's symbol processing does."""
+
+    def named(character):
+        try:
+            import characterProcessing
+
+            processors = characterProcessing._localeSpeechSymbolProcessors
+            try:
+                processor = processors.fetchLocaleData(locale)
+            except LookupError:
+                processor = processors.fetchLocaleData("en")
+            symbol = processor.computedSymbols.get(character)
+            return symbol is not None and bool(symbol.replacement) and symbol.level == characterProcessing.SymbolLevel.NONE
+        except Exception:
+            log.debugWarning("multilanguage: the symbol table for %s could not be read" % locale, exc_info=True)
+            return False
+
+    return named
+
 
 class Engine:
     """Owns the recognizer, the dictionary, and a detector kept in step with the configuration.
@@ -233,7 +256,7 @@ class Engine:
                     self.detector = Detector(backend, default, configured, self._dictionary(), mode, self.words)
                 else:
                     self.detector.mode = mode
-                self.detector.configure(default, configured, available, excluded)
+                self.detector.configure(default, configured, available, excluded, symbol_names(default))
                 self.key = key
             except Exception:
                 log.error("multilanguage: language detection could not start", exc_info=True)

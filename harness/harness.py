@@ -110,10 +110,11 @@ def acceptance(backend):
         case(E, t, [None])
     for t in ["y", "o", "e", "a", "I", "ñ", "Y", "7", "?"]:
         case(D, t, [None])
-    # Script mode: other scripts go by script alone, a lone borrowed letter stays.
+    # Script mode: other scripts go by script alone, and so does a letter standing alone, without the digits
+    # and punctuation around it.
     case(R, "Hello, мир и Привет всем!", [None, "ru"])
     case(R, "Say مرحبا بالعالم now", [None, "ar", None])
-    case(R, "Ref.: U-0055 • Cat.: ε 0", [None])
+    case(R, "Ref.: U-0055 • Cat.: ε 0", [None, "el"])
     case(R, "日本語のテキストです", ["ja"])
     case(R, "你好世界", ["zh"])
     case(R, "안녕하세요 world", ["ko", None])

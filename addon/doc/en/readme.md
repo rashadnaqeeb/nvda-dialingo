@@ -45,7 +45,7 @@ Windows spelling dictionaries sharpen detection. The add-on offers to install th
 ## Detection modes
 
 - Off: no language switching at all. Everything is read in your default language, including text an application tags with another language. The language lock still works.
-- Script and tags only: text in a writing system the default language does not use is switched, and text an application tags with a language is read in that language; text in the default script is left alone. This mode never guesses.
+- Script and tags only: text in a writing system the default language does not use is switched, and text an application tags with a language is read in that language; text in the default script is left alone. This mode never guesses. A single letter of another writing system, such as "س" in "Is it س?", goes to a voice for its writing system where you have one, unless your default language's symbol list names it, as NVDA's lists for some languages name the Greek letters.
 - Full: as above, and text in the default script is judged clause by clause among the default language and the configured languages written in that script. This is the default mode.
 
 Strict mode asks Windows' own language detection to agree with the add-on's recognizer before switching. It switches less often and, so far, never wrongly.
