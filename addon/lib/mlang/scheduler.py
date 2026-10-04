@@ -6,7 +6,10 @@ progress through their own index and done notifications, which the driver forwar
 
 Every piece ends in a private index marker, as NVDA's speech manager ends each utterance, and every NVDA
 index inside a piece is remapped to a private one, so progress is known per piece whatever a guest's
-done-speaking semantics are. Two waits govern the seams:
+done-speaking semantics are. A piece that ends in one of NVDA's indexes has the marker in its place, reporting
+it: two marks at the same place in the text are two index reports with no audio between them, and Eloquence64RS
+waits for its audio to play out on the second, with the rest of the word still to come. Two waits govern the
+seams:
 
 - A change of row on the same guest waits for the previous piece's marker: an engine reports a mark once
   the text before it is synthesized, so parameters set afterwards cannot land on that text.
@@ -42,14 +45,15 @@ MAX_INDEX = 9999
 
 
 class Piece:
-    __slots__ = ("row", "items", "guest", "marker", "indexes", "sent", "in_turn")
+    __slots__ = ("row", "items", "guest", "marker", "carried", "indexes", "sent", "in_turn")
 
     def __init__(self, row):
         self.row = row
         self.items = []
         self.guest = None
         self.marker = None
-        self.indexes = []  # ours for NVDA's indexes in the piece, once sent
+        self.carried = None  # NVDA's index the marker stands in for, when the piece ended in one
+        self.indexes = []  # ours for NVDA's other indexes in the piece, once sent
         self.sent = False  # handed to the guest: in flight from before, but a done can only be for it after
         self.in_turn = False  # never sent ahead: it failed to go ahead once
 
@@ -284,6 +288,8 @@ class Scheduler:
                         self.index_map.pop(marker, None)
                         self.reached[id(guest)] = self.reached.get(id(guest), 0) + 1
                         passed += [self.index_map.pop(ours) for ours in earlier.indexes if ours in self.index_map]
+                        if earlier.carried is not None:
+                            passed.append(earlier.carried)
                         if earlier is piece:
                             break
                 # A guest that never reports done is free once its last marker is reached; waiting for
@@ -368,6 +374,8 @@ class Scheduler:
                 for ours in piece.indexes if piece is not None else ():
                     if ours in self.index_map:
                         unreported.append(self.index_map.pop(ours))
+                if piece is not None and piece.carried is not None:
+                    unreported.append(piece.carried)
         if not was_busy and not markers:
             return False
         for index in unreported:
@@ -430,6 +438,7 @@ class Scheduler:
                 self.index_map.pop(ours, None)
             piece.guest = None
             piece.marker = None
+            piece.carried = None
             piece.indexes = []
             piece.in_turn = True
             self.pending.appendleft(piece)
@@ -503,7 +512,11 @@ class Scheduler:
                     if voice is not None:
                         self.current_voice = voice
                     items = []
-                    for item in piece.items:
+                    body = piece.items
+                    if body and isinstance(body[-1], self.IndexCommand):
+                        piece.carried = body[-1].index
+                        body = body[:-1]
+                    for item in body:
                         if isinstance(item, self.IndexCommand):
                             ours = self._next_index()
                             self.index_map[ours] = item.index

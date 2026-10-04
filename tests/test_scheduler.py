@@ -134,10 +134,44 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(len(a.spoken), 1)
         self.assertEqual(texts(a.spoken[0]), ["Hello"])
         ours = [i.index for i in a.spoken[0] if isinstance(i, IndexCommand)]
-        self.assertEqual(len(ours), 2)  # NVDA's 7 remapped, plus the marker
+        self.assertEqual(len(ours), 1)  # the marker, in the place of NVDA's 7 at the end
         a.finish(self.h.scheduler)
         self.assertEqual(self.h.indexes, [7])
         self.assertEqual(self.h.done, 1)
+
+    def test_an_index_inside_the_piece_is_remapped_beside_the_marker(self):
+        self.h.speak([LangChangeCommand("en"), "Hello", IndexCommand(7), "world"])
+        a = self.h.guests["A"]
+        ours = [i.index for i in a.spoken[0] if isinstance(i, IndexCommand)]
+        self.assertEqual(len(ours), 2)
+        self.assertIsInstance(a.spoken[0][-1], IndexCommand)
+        a.finish(self.h.scheduler)
+        self.assertEqual(self.h.indexes, [7])
+        self.assertEqual(self.h.done, 1)
+
+    def test_never_two_marks_in_a_row_at_the_end(self):
+        """Eloquence64RS waits for its audio to play out on the second of two marks with no audio between them."""
+        self.h.speak([LangChangeCommand("en"), "Hello", IndexCommand(7)])
+        items = self.h.guests["A"].spoken[0]
+        self.assertFalse(any(isinstance(x, IndexCommand) and isinstance(y, IndexCommand) for x, y in zip(items, items[1:])))
+
+    def test_an_index_carried_by_a_marker_is_reported_when_the_guest_fails(self):
+        self.h.speak([LangChangeCommand("en"), "Hello", IndexCommand(7)])
+        a = self.h.guests["A"]
+        a.queued.clear()
+        self.h.scheduler.on_done(a)
+        self.assertEqual(self.h.indexes, [7])
+        self.assertEqual(self.h.done, 1)
+
+    def test_an_index_carried_by_an_earlier_lost_marker_is_reported_in_order(self):
+        """Acapela reports only the last mark of each block: the earlier pieces' markers, and NVDA's indexes they
+        carry, are passed with the later marker."""
+        self.h.speak([LangChangeCommand("en"), "one", IndexCommand(1)])
+        self.h.speak([LangChangeCommand("en"), "two", IndexCommand(2)])
+        a = self.h.guests["A"]
+        self.h.scheduler.on_index(a, a.spoken[1][-1].index)
+        self.assertEqual(self.h.indexes, [1, 2])
+        self.assertTrue(self.h.scheduler.is_idle())
 
     def test_second_guest_waits_for_first(self):
         self.h.speak([LangChangeCommand("en"), "Hello ", LangChangeCommand("fr"), "bonjour", LangChangeCommand("en"), "bye", IndexCommand(1)])
@@ -630,7 +664,7 @@ class SchedulerTests(unittest.TestCase):
         self.assertEqual(seen, [("A", "en"), ("B", "fr")])
 
     def test_markers_are_told_from_nvdas_indexes(self):
-        self.h.speak([LangChangeCommand("en"), "Hello", IndexCommand(7)])
+        self.h.speak([LangChangeCommand("en"), "Hello", IndexCommand(7), "world"])
         ours = [i.index for i in self.h.guests["A"].spoken[0] if isinstance(i, IndexCommand)]
         nvdas, marker = ours
         self.assertFalse(self.h.scheduler.is_marker(nvdas))
@@ -776,7 +810,7 @@ class SchedulerTests(unittest.TestCase):
 
     def test_indexes_sent_are_even(self):
         # So Acapela's mark, written one higher, maps back down whichever number its engine returns.
-        self.h.speak([LangChangeCommand("en"), "one", IndexCommand(1), "two", IndexCommand(2)])
+        self.h.speak([LangChangeCommand("en"), "one", IndexCommand(1), "two", IndexCommand(2), "three"])
         ours = [i.index for i in self.h.guests["A"].spoken[0] if isinstance(i, IndexCommand)]
         self.assertEqual(len(ours), 3)
         self.assertTrue(all(i % 2 == 0 for i in ours))
