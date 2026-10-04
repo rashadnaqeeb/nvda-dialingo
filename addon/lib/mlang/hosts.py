@@ -293,8 +293,9 @@ def prosody_mode(guest):
     """How a synthesizer reads NVDA's rate, pitch, and volume commands: "absolute" (newValue, from the
     configured value of the synthesizer in use, as Eloquence does), "relative" (the multiplier, on its own
     current value, as OneCore, SAPI 5, and eSpeak do), "offset" (the offset alone, added to its own current
-    value, as Vocalizer does), or "native" (a 32-bit synthesizer in another process, which receives the
-    command as NVDA made it and resolves it against its own values there)."""
+    value, as Vocalizer does, or the offset and multiplier as NVDA was given them, on its own current value, as
+    Eloquence64RS does), or "native" (a 32-bit synthesizer in another process, which receives the command as
+    NVDA made it and resolves it against its own values there)."""
     cls = type(guest)
     mode = _modes.get(cls)
     if mode is None:
@@ -319,6 +320,9 @@ def _prosody_mode(cls):
             ssml = ssml or _converts_with_speech_xml(vars(module).values(), module.__name__)
     if "newValue" in names:
         return "absolute"
+    if names & RAW_PROSODY:
+        # The values as NVDA was given them, which no configured value has touched.
+        return "offset"
     if "multiplier" in names or ssml:
         # NVDA's SSML converter, which RHVoice builds on, writes the multiplier as a percentage.
         return "relative"
@@ -336,8 +340,13 @@ def _converts_with_speech_xml(values, module_name):
     )
 
 
+# The attributes behind a prosody command's offset and multiplier, which a driver may read by name with getattr.
+RAW_PROSODY = frozenset(("_offset", "_multiplier"))
+
+
 def _names_in(values, module_name):
-    """Every global and attribute name the functions and classes of a module use, nested code included."""
+    """Every global and attribute name the functions and classes of a module use, nested code included, and
+    RAW_PROSODY where it is spelled as a string."""
     import types
 
     stack = []
@@ -352,6 +361,7 @@ def _names_in(values, module_name):
     while stack:
         code = stack.pop()
         names.update(code.co_names)
+        names.update(k for k in code.co_consts if isinstance(k, str) and k in RAW_PROSODY)
         stack += [k for k in code.co_consts if isinstance(k, types.CodeType)]
     return names
 

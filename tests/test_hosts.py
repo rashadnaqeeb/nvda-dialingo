@@ -423,6 +423,15 @@ class SynthDriver:
 """
         self.assertEqual(hosts.prosody_mode(self.driver("synthDrivers.fakeVe", source)), "offset")
 
+    def test_readers_of_the_raw_values_apply_them_to_their_own_value(self):
+        # Eloquence64RS: base * _multiplier + _offset, read with getattr, so no attribute name shows.
+        source = """
+class SynthDriver:
+    def speak(self, seq):
+        return [self.pitch * getattr(i, "_multiplier", 1) + getattr(i, "_offset", 0) for i in seq]
+"""
+        self.assertEqual(hosts.prosody_mode(self.driver("synthDrivers.fakeElo", source)), "offset")
+
     def test_drivers_in_another_process_are_native(self):
         module = types.ModuleType("_bridge.fakeProxy")
         exec("class SynthDriverProxy:\n    pass\n", module.__dict__)
