@@ -211,9 +211,9 @@ class _HostVoice:
 
 
 def dispose(guest, ring=None):
-    """Terminate a guest without persisting the parameters a row applied to it. Reloading its settings for that
-    points the settings ring and voice dictionary at it, as loading it did, so they are put back after: the ring
-    as it was before (`ring`, from ring_state, or now), or it would leave a ring locked to a row on the rate."""
+    """Terminate a guest without persisting the parameters a row applied to it. Creating it pointed the settings
+    ring and voice dictionary at it, so they are put back after: the ring as it was before (`ring`, from
+    ring_state, or now), or it would leave a ring locked to a row on the rate."""
     if ring is None:
         ring = ring_state()
     try:
@@ -221,16 +221,19 @@ def dispose(guest, ring=None):
     except Exception:
         pass
     try:
-        # terminate() saves the instance's settings to its own config section; reload them first
-        # so what it saves is what the user had.
-        guest.loadSettings()
-    except Exception:
-        pass
-    try:
-        guest.terminate()
+        terminate_unsaved(guest)
     except Exception:
         pass
     restore_current(ring)
+
+
+def terminate_unsaved(guest):
+    """Terminate an instance without the save NVDA's terminate makes of its settings into its own section. Its
+    values are a row's, or not even that: OneCore reports its engine's rate, pitch, and volume, which take what
+    was set only with its next utterance, so an instance that never spoke would store the engine's defaults over
+    the user's (issue 5). Reloading the user's values first does not help, since that only queues them too."""
+    guest.saveSettings = lambda: None
+    guest.terminate()
 
 
 def own_values(settings, defaults, live):

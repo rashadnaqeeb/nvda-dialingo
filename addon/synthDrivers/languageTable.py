@@ -362,14 +362,14 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             if guest is host:
                 # The default synthesizer keeps what the user set while it was hosted: its own values,
                 # not a row's, go into its own section, so switching back to it changes nothing heard.
-                # Its own terminate may save too; it then finds the same values on the instance.
+                # Its own terminate must not save over them: OneCore would store what it last spoke.
                 try:
                     # The whole default, the settings no row carries too, which a row's variant may have reset.
                     guest._mlangApplied = None
                     self._apply_row(guest, self.default_row())
                     guest.cancel()
                     self.saveSettings()
-                    guest.terminate()
+                    hosts.terminate_unsaved(guest)
                 except Exception:
                     log.debugWarning("multilanguage: could not hand the host its settings back", exc_info=True)
                     hosts.dispose(guest)
@@ -841,7 +841,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         if host is None:
             return
         section = config.conf["speech"][host.name]
-        for setting, value in hosts.own_values(host.supportedSettings, self._defaults, lambda name: getattr(host, name)):
+        for setting, value in hosts.own_values(host.supportedSettings, self._defaults, lambda name: hosts.read(host, name)):
             try:
                 section[setting] = value
             except Exception:

@@ -237,9 +237,6 @@ class HalfBuiltTest(Stubbed):
             def cancel(self):
                 events.append("cancel")
 
-            def loadSettings(self):
-                events.append("loadSettings")
-
             def terminate(self):
                 events.append("terminate")
 
@@ -248,7 +245,33 @@ class HalfBuiltTest(Stubbed):
         self.stub("globalVars", settingsRing=None)
         self.stub("speechDictHandler", loadVoiceDict=lambda synth: events.append(("dictionary", synth)))
         self.assertIsNone(hosts.create("broken"))
-        self.assertEqual(events, ["cancel", "loadSettings", "terminate", ("dictionary", current)])
+        self.assertEqual(events, ["cancel", "terminate", ("dictionary", current)])
+
+
+class DisposeTest(Stubbed):
+    def test_a_guest_that_never_spoke_leaves_the_users_settings_alone(self):
+        # OneCore reports its engine's values until it next speaks: its terminate would store the engine's
+        # defaults over the user's rate and volume (issue 5).
+        stored = {"rate": 73, "volume": 61}
+
+        class OneCore:
+            name = "oneCore"
+            rate, volume = 50, 100
+
+            def cancel(self):
+                pass
+
+            def saveSettings(self):
+                stored.update(rate=self.rate, volume=self.volume)
+
+            def terminate(self):
+                self.saveSettings()
+
+        self.stub("synthDriverHandler", getSynth=lambda: None)
+        self.stub("globalVars", settingsRing=None)
+        self.stub("speechDictHandler", loadVoiceDict=lambda synth: None)
+        hosts.dispose(OneCore())
+        self.assertEqual(stored, {"rate": 73, "volume": 61})
 
 
 class RingKeptTest(Stubbed):
@@ -286,10 +309,9 @@ class RingKeptTest(Stubbed):
         self.stub("speechDictHandler", loadVoiceDict=lambda synth: None)
         self.assertIsInstance(hosts.create("sapi5"), Driver)
         self.assertEqual((ring.settings, ring._current), (["rate", "voice", "lock"], 1))
-        # Disposed of when a step leaves its voice behind: reloading its settings rebuilds the ring too.
+        # Disposed of when a step leaves its voice behind: the ring stays as it was.
         guest = Driver()
         guest.cancel = guest.terminate = lambda: None
-        guest.loadSettings = guest.initSettings
         hosts.dispose(guest)
         self.assertEqual((ring.settings, ring._current), (["rate", "voice", "lock"], 1))
 
