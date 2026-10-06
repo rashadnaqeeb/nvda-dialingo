@@ -20,4 +20,7 @@ env/
 .DS_Store
 Thumbs.db
 desktop.ini
-.claude/
+# Claude Code: local settings stay out; the shared rules are committed
+.claude/*
+!.claude/rules/
+CLAUDE.local.md
