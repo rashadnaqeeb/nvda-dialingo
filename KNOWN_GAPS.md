@@ -6,6 +6,7 @@ Things found and deliberately left alone, with the reason. When one is fixed, de
 
 - One configured Latin-script language takes all Latin text it is detected in. Left as designed.
 - Latin names inside non-Latin text (a French name in Russian) often go to the English row. Part of the item above.
+- A foreign name inside a default-language clause (an institution, a book title) is read by the default voice: words capitalized inside a clause are taken for names and not scored, and a clause switches only as a whole. "The adaptation was done with Universidad de Guadalajara and Tecnológico de Monterrey staff" is English at 0.87 even with the names counted. The names alone fall short too, between English and Spanish: "Universidad de Guadalajara" is Spanish at 0.89, "Tecnológico de Monterrey" at 0.97 (short of the embedded floor), and "Prisma Latinoamericano" English at 0.61; the English dictionary knows "Universidad", "Guadalajara", and "Monterrey".
 - Close neighbours in a non-Latin script without a Windows spelling dictionary (Serbian and Russian, Hindi and Marathi) are sometimes confused. Measured; there is no dictionary to check against.
 - A single Japanese word is often a single kana and is not switched. By design: one character is too little to tell.
 - A single word switches on the dictionaries alone, so a configured language with no dictionary installed loses its shared words to one that has one: with Spanish installed and Portuguese not, "inválida" and "títulos" as buttons go to Spanish. Installing the dictionary fixes it; the panel offers to.
