@@ -19,10 +19,7 @@ import globalPluginHandler  # noqa: E402
 import globalVars  # noqa: E402
 import gui  # noqa: E402
 import synthDriverHandler  # noqa: E402
-import ui  # noqa: E402
-from globalCommands import SCRCAT_SPEECH  # noqa: E402
 from logHandler import log  # noqa: E402
-from scriptHandler import script  # noqa: E402
 from speech import getCurrentLanguage  # noqa: E402
 from speech.commands import LangChangeCommand  # noqa: E402
 from speech.extensions import filter_speechSequence  # noqa: E402
@@ -476,9 +473,6 @@ def uninstall_symbol_levels():
 
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
-    # Translators: The name of the add-on's script category and settings panel.
-    scriptCategory = _("Multilanguage")
-
     def __init__(self):
         super().__init__()
         try:
@@ -529,28 +523,3 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 
     def filter(self, value):
         return self.engine.filter(value)
-
-    @script(
-        # Translators: Description of a script.
-        description=_("Cycles language detection: off, script and tags only, full"),
-        category=SCRCAT_SPEECH,
-    )
-    def script_cycleMode(self, gesture):
-        section = config.conf[T.CONFIG_SECTION]
-        modes = list(MODES)
-        current = section["mode"] if section["mode"] in modes else "full"
-        mode = modes[(modes.index(current) + 1) % len(modes)]
-        section["mode"] = mode
-        # Translators: Reported when the detection mode changes; %s is the mode's name.
-        ui.message(_("Language detection %s") % MODE_LABELS[mode])
-
-    @script(
-        # Translators: Description of a script.
-        description=_("Toggles strict language detection"),
-        category=SCRCAT_SPEECH,
-    )
-    def script_toggleStrict(self, gesture):
-        section = config.conf[T.CONFIG_SECTION]
-        section["strict"] = not section["strict"]
-        # Translators: Reported when strict mode is turned on or off.
-        ui.message(_("Strict detection on") if section["strict"] else _("Strict detection off"))

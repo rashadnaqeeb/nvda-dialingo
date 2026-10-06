@@ -18,30 +18,6 @@ msgstr "எழுத்துமுறை மற்றும் குறிச�
 msgid "Full"
 msgstr "முழுமை"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "பன்மொழி"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "மொழி கண்டறிதலை மாற்றுகிறது: அணை, எழுத்துமுறை மற்றும் குறிச்சொற்கள் அடிப்படையில் மட்டும், முழுமை"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "மொழி கண்டறிதல்: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "கண்டிப்பான மொழி கண்டறிதலை இயக்குகிறது அல்லது அணைக்கிறது"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "கண்டிப்பான கண்டறிதல் இயக்கம்"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "கண்டிப்பான கண்டறிதல் அணைப்பு"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "நிறுவப்படுகிறது"
@@ -85,6 +61,10 @@ msgstr "நிறுவல் முடிந்தது, ஆனால் Windo
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%s அகராதி நிறுவப்படவில்லை. Windows Update அல்லது NVDA பதிவைச் சரிபார்க்கவும்."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "பன்மொழி"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

@@ -18,30 +18,6 @@ msgstr "Μόνο κατά γραφή και ετικέτες"
 msgid "Full"
 msgstr "Πλήρης"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Πολυγλωσσία"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Εναλλάσσει την ανίχνευση γλώσσας: απενεργοποιημένη, μόνο κατά γραφή και ετικέτες, πλήρης"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Ανίχνευση γλώσσας: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Ενεργοποιεί ή απενεργοποιεί την αυστηρή ανίχνευση γλώσσας"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Αυστηρή ανίχνευση ενεργή"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Αυστηρή ανίχνευση ανενεργή"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "εγκαθίσταται"
@@ -85,6 +61,10 @@ msgstr "Η εγκατάσταση ολοκληρώθηκε, αλλά τα Window
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Το λεξικό για τη γλώσσα %s δεν εγκαταστάθηκε. Ελέγξτε το Windows Update ή το αρχείο καταγραφής του NVDA."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Πολυγλωσσία"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

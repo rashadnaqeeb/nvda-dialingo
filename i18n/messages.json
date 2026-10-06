@@ -13,30 +13,6 @@
    "comment": "A detection mode: text in the default script is detected clause by clause too."
   },
   {
-   "msgid": "Multilanguage",
-   "comment": "The name of the add-on's script category and settings panel."
-  },
-  {
-   "msgid": "Cycles language detection: off, script and tags only, full",
-   "comment": "Description of a script."
-  },
-  {
-   "msgid": "Language detection %s",
-   "comment": "Reported when the detection mode changes; %s is the mode's name."
-  },
-  {
-   "msgid": "Toggles strict language detection",
-   "comment": "Description of a script."
-  },
-  {
-   "msgid": "Strict detection on",
-   "comment": "Reported when strict mode is turned on or off."
-  },
-  {
-   "msgid": "Strict detection off",
-   "comment": "Reported when strict mode is turned on or off."
-  },
-  {
    "msgid": "installing",
    "comment": "Shown in the languages list while the Windows dictionary is being installed."
   },
@@ -79,6 +55,10 @@
   {
    "msgid": "%s dictionary did not install. Check Windows Update, or see the NVDA log.",
    "comment": "Message when the install failed; %s is a language name."
+  },
+  {
+   "msgid": "Multilanguage",
+   "comment": "The title of the add-on's settings panel."
   },
   {
    "msgid": "Language &detection:",

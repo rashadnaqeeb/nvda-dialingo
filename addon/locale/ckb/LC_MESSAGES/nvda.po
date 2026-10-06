@@ -18,30 +18,6 @@ msgstr "تەنیا بەپێی نووسین و تاگەکان"
 msgid "Full"
 msgstr "تەواو"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "فرەزمانی"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "دۆزینەوەی زمان دەگۆڕێت: ناچالاک، تەنیا بەپێی نووسین و تاگەکان، تەواو"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "دۆزینەوەی زمان: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "دۆزینەوەی توندی زمان چالاک یان ناچالاک دەکات"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "دۆزینەوەی توند چالاکە"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "دۆزینەوەی توند ناچالاکە"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "دادەمەزرێت"
@@ -85,6 +61,10 @@ msgstr "دامەزراندن تەواو بوو، بەڵام Windows هێشتا �
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "فەرهەنگی %s دانەمەزرا. Windows Update یان لۆگی NVDA بپشکنە."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "فرەزمانی"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

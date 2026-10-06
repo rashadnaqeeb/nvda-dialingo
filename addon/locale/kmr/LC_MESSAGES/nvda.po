@@ -18,30 +18,6 @@ msgstr "Tenê li gorî nivîsê û etîketan"
 msgid "Full"
 msgstr "Tevahî"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Pirzimanî"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Tespîtkirina zimên diguherîne: girtî, tenê li gorî nivîsê û etîketan, tevahî"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Tespîtkirina zimên: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Tespîtkirina hişk a zimên vedike an digire"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Tespîtkirina hişk vekirî ye"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Tespîtkirina hişk girtî ye"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "tê sazkirin"
@@ -85,6 +61,10 @@ msgstr "Sazkirin qediya, lê Windows hîn ferhenga %s nîşan nade. Windows ji n
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Ferhenga %s nehat sazkirin. Windows Update an têketina NVDA kontrol bike."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Pirzimanî"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

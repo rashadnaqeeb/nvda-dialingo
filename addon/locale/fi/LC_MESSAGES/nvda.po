@@ -18,30 +18,6 @@ msgstr "Vain kirjoitusjärjestelmän ja tunnisteiden mukaan"
 msgid "Full"
 msgstr "Täysi"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Monikielisyys"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Vaihtaa kielentunnistusta: ei käytössä, vain kirjoitusjärjestelmän ja tunnisteiden mukaan, täysi"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Kielentunnistus %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Ottaa tiukan kielentunnistuksen käyttöön tai poistaa sen käytöstä"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Tiukka tunnistus käytössä"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Tiukka tunnistus ei käytössä"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "asennetaan"
@@ -85,6 +61,10 @@ msgstr "Asennus valmis, mutta Windows ei vielä näytä kielen %s sanastoa. Käy
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Kielen %s sanastoa ei asennettu. Tarkista Windows Update tai NVDA:n loki."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Monikielisyys"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

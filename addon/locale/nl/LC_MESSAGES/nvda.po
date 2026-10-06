@@ -18,30 +18,6 @@ msgstr "Alleen op schrift en tags"
 msgid "Full"
 msgstr "Volledig"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Meertalig"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Wisselt de taaldetectie: uit, alleen op schrift en tags, volledig"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Taaldetectie %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Schakelt strikte taaldetectie in of uit"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Strikte detectie aan"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Strikte detectie uit"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "wordt geïnstalleerd"
@@ -85,6 +61,10 @@ msgstr "Installatie voltooid, maar Windows toont het woordenboek voor %s nog nie
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Het woordenboek voor %s is niet geïnstalleerd. Controleer Windows Update of het NVDA-logboek."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Meertalig"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

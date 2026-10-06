@@ -18,30 +18,6 @@ msgstr "Chỉ theo hệ chữ viết và thẻ"
 msgid "Full"
 msgstr "Đầy đủ"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Đa ngôn ngữ"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Chuyển chế độ phát hiện ngôn ngữ: tắt, chỉ theo hệ chữ viết và thẻ, đầy đủ"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Phát hiện ngôn ngữ: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Bật hoặc tắt phát hiện ngôn ngữ nghiêm ngặt"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Phát hiện nghiêm ngặt đã bật"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Phát hiện nghiêm ngặt đã tắt"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "đang cài"
@@ -85,6 +61,10 @@ msgstr "Đã cài xong, nhưng Windows chưa hiển thị từ điển %s. Hãy 
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Không cài được từ điển %s. Hãy kiểm tra Windows Update hoặc xem nhật ký NVDA."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Đa ngôn ngữ"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

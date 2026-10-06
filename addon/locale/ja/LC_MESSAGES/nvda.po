@@ -18,30 +18,6 @@ msgstr "文字体系とタグのみ"
 msgid "Full"
 msgstr "完全"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "多言語"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "言語検出を切り替え: オフ、文字体系とタグのみ、完全"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "言語検出 %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "厳密な言語検出のオンとオフを切り替え"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "厳密な検出オン"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "厳密な検出オフ"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "インストール中"
@@ -85,6 +61,10 @@ msgstr "インストールは完了しましたが、Windowsに%sの辞書がま
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%sの辞書をインストールできませんでした。Windows UpdateまたはNVDAのログを確認してください。"
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "多言語"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

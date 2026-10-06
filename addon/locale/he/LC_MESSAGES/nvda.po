@@ -18,30 +18,6 @@ msgstr "לפי כתב ותגיות בלבד"
 msgid "Full"
 msgstr "מלא"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "רב-לשוניות"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "מחליף את זיהוי השפה: כבוי, לפי כתב ותגיות בלבד, מלא"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "זיהוי שפה: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "מפעיל או מכבה זיהוי שפה קפדני"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "זיהוי קפדני פועל"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "זיהוי קפדני כבוי"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "בהתקנה"
@@ -85,6 +61,10 @@ msgstr "ההתקנה הסתיימה, אך Windows עדיין אינו מציג �
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "המילון עבור %s לא הותקן. בדוק את Windows Update או את יומן NVDA."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "רב-לשוניות"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

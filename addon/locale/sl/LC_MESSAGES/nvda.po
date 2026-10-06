@@ -18,30 +18,6 @@ msgstr "Samo po pisavi in oznakah"
 msgid "Full"
 msgstr "Polno"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Večjezičnost"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Preklaplja zaznavanje jezika: izklopljeno, samo po pisavi in oznakah, polno"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Zaznavanje jezika: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Preklopi strogo zaznavanje jezika"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Strogo zaznavanje vklopljeno"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Strogo zaznavanje izklopljeno"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "nameščanje"
@@ -85,6 +61,10 @@ msgstr "Namestitev je končana, a Windows slovarja za jezik %s še ne prikazuje.
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Slovar za jezik %s ni bil nameščen. Preverite Windows Update ali dnevnik NVDA."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Večjezičnost"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

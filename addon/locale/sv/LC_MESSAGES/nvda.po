@@ -18,30 +18,6 @@ msgstr "Endast efter skrift och taggar"
 msgid "Full"
 msgstr "Fullständig"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Flerspråkig"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Växlar språkigenkänning: av, endast efter skrift och taggar, fullständig"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Språkigenkänning %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Slår på eller av strikt språkigenkänning"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Strikt igenkänning på"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Strikt igenkänning av"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "installeras"
@@ -85,6 +61,10 @@ msgstr "Installationen är klar, men Windows visar inte ordboken för %s ännu. 
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Ordboken för %s installerades inte. Kontrollera Windows Update eller NVDA-loggen."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Flerspråkig"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

@@ -18,30 +18,6 @@ msgstr "Solo per scrittura e tag"
 msgid "Full"
 msgstr "Completo"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Multilingue"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Cambia il rilevamento della lingua: disattivato, solo per scrittura e tag, completo"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Rilevamento lingua %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Attiva o disattiva il rilevamento rigoroso della lingua"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Rilevamento rigoroso attivato"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Rilevamento rigoroso disattivato"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "installazione in corso"
@@ -85,6 +61,10 @@ msgstr "Installazione completata, ma Windows non mostra ancora il dizionario %s.
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Il dizionario %s non è stato installato. Controllare Windows Update o il log di NVDA."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Multilingue"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

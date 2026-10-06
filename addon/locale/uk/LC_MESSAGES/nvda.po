@@ -18,30 +18,6 @@ msgstr "Лише за писемністю та мітками"
 msgid "Full"
 msgstr "Повне"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Багатомовність"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Перемикає визначення мови: вимкнено, лише за писемністю та мітками, повне"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Визначення мови: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Перемикає суворе визначення мови"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Суворе визначення увімкнено"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Суворе визначення вимкнено"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "встановлюється"
@@ -85,6 +61,10 @@ msgstr "Встановлення завершено, але Windows ще не п
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "Словник для мови %s не встановлено. Перевірте Windows Update або журнал NVDA."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Багатомовність"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"

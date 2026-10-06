@@ -18,30 +18,6 @@ msgstr "Жазуу жана тегдер боюнча гана"
 msgid "Full"
 msgstr "Толук"
 
-#. Translators: The name of the add-on's script category and settings panel.
-msgid "Multilanguage"
-msgstr "Көп тилдүүлүк"
-
-#. Translators: Description of a script.
-msgid "Cycles language detection: off, script and tags only, full"
-msgstr "Тил аныктоону которот: өчүк, жазуу жана тегдер боюнча гана, толук"
-
-#. Translators: Reported when the detection mode changes; %s is the mode's name.
-msgid "Language detection %s"
-msgstr "Тил аныктоо: %s"
-
-#. Translators: Description of a script.
-msgid "Toggles strict language detection"
-msgstr "Катуу тил аныктоону күйгүзөт же өчүрөт"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection on"
-msgstr "Катуу аныктоо күйүк"
-
-#. Translators: Reported when strict mode is turned on or off.
-msgid "Strict detection off"
-msgstr "Катуу аныктоо өчүк"
-
 #. Translators: Shown in the languages list while the Windows dictionary is being installed.
 msgid "installing"
 msgstr "орнотулууда"
@@ -85,6 +61,10 @@ msgstr "Орнотуу бүттү, бирок Windows %s сөздүгүн азы
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%s сөздүгү орнотулган жок. Windows Update же NVDA журналын текшериңиз."
+
+#. Translators: The title of the add-on's settings panel.
+msgid "Multilanguage"
+msgstr "Көп тилдүүлүк"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"
