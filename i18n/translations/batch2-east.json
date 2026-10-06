@@ -35,7 +35,7 @@
   "S40": "&Проверить языковой пакет...",
   "S42": "Таблица языков (многоязычность)",
   "summary": "Многоязычная речь",
-  "description": "Читает непомеченный текст на том языке, на котором он написан, и озвучивает каждый язык выбранными для него синтезатором и голосом.",
+  "description": "Дополнение, которое позволяет настроить каждый язык, на котором вы говорите, с собственными параметрами синтезатора, голоса, скорости, пунктуации и словаря. Оно переключается между ними, даже когда текст не помечен своим языком и даже когда язык меняется посреди предложения.",
   "S43": "Голосовой словарь для %s",
   "S44": "У этой строки нет собственного голоса, поэтому к ней применяется голосовой словарь синтезатора."
  },
@@ -75,7 +75,7 @@
   "S40": "&Перевірити мовний пакет...",
   "S42": "Таблиця мов (багатомовність)",
   "summary": "Багатомовне мовлення",
-  "description": "Читає непозначений текст тією мовою, якою він написаний, і озвучує кожну мову вибраними для неї синтезатором і голосом.",
+  "description": "Додаток, який дає змогу налаштувати кожну мову, якою ви розмовляєте, з власними параметрами синтезатора, голосу, швидкості, пунктуації та словника. Він перемикається між ними, навіть коли текст не позначено його мовою, і навіть коли мова змінюється посеред речення.",
   "S43": "Голосовий словник для %s",
   "S44": "Цей рядок не має власного голосу, тому до нього застосовується голосовий словник синтезатора."
  },
@@ -115,7 +115,7 @@
   "S40": "&Sprawdź pakiet językowy...",
   "S42": "Tabela języków (wielojęzyczność)",
   "summary": "Mowa wielojęzyczna",
-  "description": "Czyta nieoznaczony tekst w języku, w którym jest napisany, i mówi każdym językiem wybranym dla niego syntezatorem i głosem.",
+  "description": "Dodatek, który pozwala skonfigurować każdy używany język z własnymi ustawieniami syntezatora, głosu, szybkości, interpunkcji i słownika. Przełącza się między nimi nawet wtedy, gdy tekst nie jest oznaczony swoim językiem, i nawet wtedy, gdy język zmienia się w środku zdania.",
   "S43": "Słownik głosu dla %s",
   "S44": "Ten wiersz nie ma własnego głosu, więc stosuje się do niego słownik głosu syntezatora."
  },
@@ -155,7 +155,7 @@
   "S40": "&Ověřit jazykový balíček...",
   "S42": "Tabulka jazyků (vícejazyčnost)",
   "summary": "Vícejazyčná řeč",
-  "description": "Čte neoznačený text v jazyce, ve kterém je napsán, a každým jazykem mluví hlasovým výstupem a hlasem, které pro něj zvolíte.",
+  "description": "Doplněk, který vám umožní nastavit každý jazyk, kterým mluvíte, s vlastním nastavením hlasového výstupu, hlasu, rychlosti, interpunkce a slovníku. Přepíná mezi nimi, i když text není označen svým jazykem, a i když se jazyk změní uprostřed věty.",
   "S43": "Slovník hlasu pro %s",
   "S44": "Tento řádek nemá vlastní hlas, platí pro něj tedy slovník hlasu hlasového výstupu."
  },
@@ -195,7 +195,7 @@
   "S40": "&Overiť jazykový balík...",
   "S42": "Tabuľka jazykov (viacjazyčnosť)",
   "summary": "Viacjazyčná reč",
-  "description": "Číta neoznačený text v jazyku, v ktorom je napísaný, a každým jazykom hovorí hlasovým výstupom a hlasom, ktoré preň zvolíte.",
+  "description": "Doplnok, ktorý vám umožní nastaviť každý jazyk, ktorým hovoríte, s vlastným nastavením hlasového výstupu, hlasu, rýchlosti, interpunkcie a slovníka. Prepína medzi nimi, aj keď text nie je označený svojím jazykom, a aj keď sa jazyk zmení uprostred vety.",
   "S43": "Slovník hlasu pre %s",
   "S44": "Tento riadok nemá vlastný hlas, platí preň teda slovník hlasu hlasového výstupu."
  },
@@ -235,7 +235,7 @@
   "S40": "&Preveri jezikovni paket...",
   "S42": "Tabela jezikov (večjezičnost)",
   "summary": "Večjezični govor",
-  "description": "Bere neoznačeno besedilo v jeziku, v katerem je napisano, in vsak jezik govori s sintetizatorjem in glasom, ki ju izberete zanj.",
+  "description": "Dodatek, ki vam omogoča, da za vsak jezik, ki ga govorite, nastavite lastne nastavitve sintetizatorja, glasu, hitrosti, ločil in slovarja. Med njimi preklaplja, tudi ko besedilo ni označeno s svojim jezikom, in tudi ko se jezik spremeni sredi stavka.",
   "S43": "Glasovni slovar za %s",
   "S44": "Ta vrstica nima lastnega glasu, zato zanjo velja glasovni slovar sintetizatorja."
  },
@@ -275,7 +275,7 @@
   "S40": "&Provjeri jezični paket...",
   "S42": "Tablica jezika (višejezičnost)",
   "summary": "Višejezični govor",
-  "description": "Čita neoznačeni tekst na jeziku na kojem je napisan i svaki jezik govori sintetizatorom i glasom koje za njega odaberete.",
+  "description": "Dodatak koji vam omogućuje da svaki jezik kojim govorite postavite s vlastitim postavkama sintetizatora, glasa, brzine, interpunkcije i rječnika. Prebacuje se između njih čak i kada tekst nije označen svojim jezikom, i čak i kada se jezik promijeni usred rečenice.",
   "S43": "Rječnik glasa za %s",
   "S44": "Ovaj redak nema vlastiti glas, pa se na njega primjenjuje rječnik glasa sintetizatora."
  },
@@ -315,7 +315,7 @@
   "S40": "&Provjeri jezički paket...",
   "S42": "Tabela jezika (višejezičnost)",
   "summary": "Višejezični govor",
-  "description": "Čita neoznačeni tekst na jeziku na kojem je napisan i svaki jezik govori sintetizatorom i glasom koje za njega odaberete.",
+  "description": "Dodatak koji vam omogućava da svaki jezik kojim govorite podesite s vlastitim postavkama sintetizatora, glasa, brzine, interpunkcije i rječnika. Prebacuje se između njih čak i kada tekst nije označen svojim jezikom, i čak i kada se jezik promijeni usred rečenice.",
   "S43": "Rječnik glasa za %s",
   "S44": "Ovaj red nema vlastiti glas, pa se na njega primjenjuje rječnik glasa sintetizatora."
  },
@@ -355,7 +355,7 @@
   "S40": "&Proveri jezički paket...",
   "S42": "Tabela jezika (višejezičnost)",
   "summary": "Višejezični govor",
-  "description": "Čita neoznačeni tekst na jeziku na kojem je napisan i svaki jezik govori sintetizatorom i glasom koje za njega izaberete.",
+  "description": "Dodatak koji vam omogućava da svaki jezik kojim govorite podesite sa sopstvenim podešavanjima sintetizatora, glasa, brzine, interpunkcije i rečnika. Prebacuje se između njih čak i kada tekst nije označen svojim jezikom, i čak i kada se jezik promeni usred rečenice.",
   "S43": "Rečnik glasa za %s",
   "S44": "Ovaj red nema sopstveni glas, pa se na njega primenjuje rečnik glasa sintetizatora."
  },
@@ -395,7 +395,7 @@
   "S40": "&Проверка на езиковия пакет...",
   "S42": "Таблица на езиците (многоезичност)",
   "summary": "Многоезична реч",
-  "description": "Чете немаркиран текст на езика, на който е написан, и изговаря всеки език с избраните за него синтезатор и глас.",
+  "description": "Добавка, която ви позволява да настроите всеки език, който говорите, със собствени настройки за синтезатор, глас, скорост, пунктуация и речник. Превключва между тях дори когато текстът не е маркиран с езика си и дори когато езикът се смени по средата на изречението.",
   "S43": "Гласов речник за %s",
   "S44": "Този ред няма собствен глас, затова за него важи гласовият речник на синтезатора."
  },
@@ -435,7 +435,7 @@
   "S40": "&Провери јазичен пакет...",
   "S42": "Табела на јазици (повеќејазичност)",
   "summary": "Повеќејазичен говор",
-  "description": "Чита неозначен текст на јазикот на кој е напишан и секој јазик го зборува со синтетизаторот и гласот што ќе ги изберете за него.",
+  "description": "Додаток што ви овозможува да го поставите секој јазик што го зборувате со сопствени поставки за синтетизатор, глас, брзина, интерпункција и речник. Префрла меѓу нив дури и кога текстот не е означен со својот јазик, и дури и кога јазикот се менува среде реченица.",
   "S43": "Гласовен речник за %s",
   "S44": "Овој ред нема сопствен глас, па за него важи гласовниот речник на синтетизаторот."
  },
@@ -475,7 +475,7 @@
   "S40": "&Verifiko paketën gjuhësore...",
   "S42": "Tabela e gjuhëve (shumëgjuhësi)",
   "summary": "Të folur shumëgjuhësh",
-  "description": "Lexon tekstin e paetiketuar në gjuhën në të cilën është shkruar dhe flet çdo gjuhë me sintetizatorin dhe zërin që zgjidhni për të.",
+  "description": "Një shtesë që ju lejon të konfiguroni çdo gjuhë që flisni me cilësimet e veta për sintetizatorin, zërin, shpejtësinë, pikësimin dhe fjalorin. Kalon nga njëra te tjetra edhe kur teksti nuk është etiketuar me gjuhën e vet, dhe edhe kur gjuha ndryshon në mes të fjalisë.",
   "S43": "Fjalor zëri për %s",
   "S44": "Ky rresht nuk ka zë të vetin, prandaj për të vlen fjalori i zërit të sintetizatorit."
  },
@@ -515,7 +515,7 @@
   "S40": "&Verifică pachetul lingvistic...",
   "S42": "Tabel de limbi (multilingv)",
   "summary": "Vorbire multilingvă",
-  "description": "Citește textul neetichetat în limba în care este scris și vorbește fiecare limbă cu sintetizatorul și vocea pe care le alegeți pentru ea.",
+  "description": "Un supliment care vă permite să configurați fiecare limbă pe care o vorbiți cu propriile setări de sintetizator, voce, viteză, punctuație și dicționar. Comută între ele chiar și atunci când textul nu este etichetat cu limba sa și chiar și atunci când limba se schimbă la mijlocul propoziției.",
   "S43": "Dicționar de voce pentru %s",
   "S44": "Acest rând nu are o voce proprie, așa că i se aplică dicționarul de voce al sintetizatorului."
  },
@@ -555,7 +555,7 @@
   "S40": "Nyelvi csomag &ellenőrzése...",
   "S42": "Nyelvtáblázat (többnyelvűség)",
   "summary": "Többnyelvű beszéd",
-  "description": "A címkézetlen szöveget azon a nyelven olvassa fel, amelyen íródott, és minden nyelvet a hozzá választott beszédszintetizátorral és hanggal mond ki.",
+  "description": "Kiegészítő, amellyel minden beszélt nyelvét saját beszédszintetizátor-, hang-, sebesség-, írásjel- és szótárbeállításokkal állíthatja be. Akkor is vált közöttük, ha a szöveg nincs megjelölve a nyelvével, és akkor is, ha a nyelv mondat közben változik.",
   "S43": "Hangszótár ehhez: %s",
   "S44": "Ennek a sornak nincs saját hangja, ezért a beszédszintetizátor hangszótára vonatkozik rá."
  }
