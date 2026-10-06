@@ -1,6 +1,6 @@
 # The column headers of the focused grid row, as labels for the detector. NVDA's Outlook module reads a
-# message list row as one string that joins each header to its cell ("From Erik Holm, Subject
-# specialpedagog på skolan"), and judged whole, the English header pulls the Swedish subject toward English.
+# message list row as one string that joins each header to its cell ("From Anna Berg, Subject
+# Välkommen till kursen"), and judged whole, the English header takes "Välkommen" along with it, as a name.
 # The detector reads each header as its own clause in the default language and each cell alone.
 
 import api

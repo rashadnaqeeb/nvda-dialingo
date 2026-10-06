@@ -99,12 +99,12 @@ class SequenceTests(unittest.TestCase):
 
         def line_runs(text, detected):
             calls.append((text, detected))
-            return [(None, "the view. "), ("sv", "A")] if text == "the view. A" else None
+            return [(None, "the lake. "), ("sv", "A")] if text == "the lake. A" else None
 
-        seq = [LangChangeCommand("fr"), "Bonjour", LangChangeCommand(None), "link", "the view. A"]
+        seq = [LangChangeCommand("fr"), "Bonjour", LangChangeCommand(None), "link", "the lake. A"]
         out = filter_sequence(seq, self.det, "en", line_runs=line_runs)
-        self.assertEqual(calls, [("Bonjour", False), ("link", True), ("the view. A", True)])
-        self.assertEqual(out[-4:], ["the view. ", LangChangeCommand("sv"), "A", LangChangeCommand(None)])
+        self.assertEqual(calls, [("Bonjour", False), ("link", True), ("the lake. A", True)])
+        self.assertEqual(out[-4:], ["the lake. ", LangChangeCommand("sv"), "A", LangChangeCommand(None)])
 
     def test_a_line_string_declined_is_detected_as_usual(self):
         out = filter_sequence(["Say bonjour now"], self.det, "en", line_runs=lambda text, detected: None)

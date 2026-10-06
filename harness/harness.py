@@ -73,7 +73,7 @@ def acceptance(backend):
     case(C, italian, ["fr", None])
     case(C3, italian, ["fr", None, "it"])
     for t in ["No", "OK", "Cancel", "Documents", "Send message", "Lesson 11 (32 points)", "Pierre looked at Lorrain.",
-              "Spotify", "paris", "numLock", "Nessaj"]:
+              "Google", "paris", "numLock", "Zsófi"]:
         case(D, t, [None])
     for t in ["Guardar", "Cancelar", "60 sesenta"]:
         case(D, t, ["es"])
@@ -86,17 +86,17 @@ def acceptance(backend):
     case(E, "Hola, buenos días", ["es"])
     # Headlines: every word capitalized or in capitals, where case marks no names or abbreviations.
     H = Detector(backend, "en", ["en", "hu"])
-    case(H, "Az Európai Autóipar Halála", ["hu"])
-    case(H, "MOST VAGY SOHA! 🤩 | X-MEN ORIGINS: WOLVERINE", ["hu", None])
-    case(H, "Pisti és Nessaj a harc mesterei 😂", ["hu"])
+    case(H, "Régi Házak Új Élete", ["hu"])
+    case(H, "MINDEN VAGY SEMMI! 🤩 | SUMMER PLAYLIST 2026", ["hu", None])
+    case(H, "Gábor és Zsófi a hegyek csillagai 😂", ["hu"])
     # Some words in capitals, not a headline: they are scored lowercased.
-    case(H, "Nem várt KIHÍVÁSOK a STÚDIÓN KÍVÜL 🧑", ["hu"])
+    case(H, "Váratlan VENDÉGEK a KONYHÁBAN 🧑", ["hu"])
     for t in ["Send Us Your Feedback Today", "READ THE FULL STORY HERE", "Read the FULL STORY here"]:
         case(E, t, [None])
     # A name is still not a headline; the line's Spanish word is read in Spanish by the sentence rule.
     case(E, "Mario Moreno, muerte", [None, "es"])
     # A sentence of short clauses is scored whole; a one-word sentence follows the line's agreed language.
-    for t in ["¡Hola! Soy Alberto, encantado.", "¡Hola amigos! Soy Alberto, encantado.", "Hola, soy Alberto, encantado."]:
+    for t in ["¡Hola! Soy Marcos, encantado.", "¡Hola amigos! Soy Marcos, encantado.", "Hola, soy Marcos, encantado."]:
         case(D, t, ["es"])
     case(D, "Thanks, Pedro. Hola, amigo.", [None, "es"])
     for t in ["Yes, sure, fine.", "Done. Saved, closed."]:
@@ -105,7 +105,7 @@ def acceptance(backend):
     case(D, "He said hello to everyone. ¿Cómo estás hoy, amigo?", ("es", "¿Cómo estás hoy, amigo?"), "last run")
     case(D, "He said hello to everyone. ¡Qué bonito día hace hoy!", ("es", "¡Qué bonito día hace hoy!"), "last run")
     # German nouns are not names, and a spaced hyphen splits a title; names that read German stay names.
-    case(E, "Wormhole - Einfache, private Dateifreigabe — Mozilla Firefox", [None, "de", None])
+    case(E, "Filebox - Einfache, private Dateifreigabe — Mozilla Firefox", [None, "de", None])
     for t in ["I met Hans Müller in Berlin yesterday.", "We took the train from Hamburg to the Bahnhof."]:
         case(E, t, [None])
     for t in ["y", "o", "e", "a", "I", "ñ", "Y", "7", "?"]:
@@ -138,7 +138,7 @@ def acceptance(backend):
     # A grid row joins each column header to its cell; the headers are labels, and each cell is read alone.
     headers = ("From", "Subject", "Received", "Size")
     for langs, text, expect in [
-        (["en", "sv"], "has attachment From Erik Holm, Subject specialpedagog på skolan, Received Wed 2026-09-30 14:17, Size 50 KB,  row 3  2 of 5000  level 1", [None, "sv", None]),
+        (["en", "sv"], "has attachment From Lars Lund, Subject protokoll från mötet, Received Wed 2026-09-30 14:17, Size 50 KB,  row 3  2 of 5000  level 1", [None, "sv", None]),
         (["en", "sv"], "unread From Anna Berg, Subject Välkommen till kursen, Received Wed 2026-09-30 14:17, Size 21 KB,", [None, "sv", None]),
         (["en", "fr"], "From Jean Dupont, Subject Réunion de demain matin, Received Wed 2026-09-30 14:17, Size 31 KB,", [None, "fr", None]),
         # A name in capitals after a label is a name, not a headline.

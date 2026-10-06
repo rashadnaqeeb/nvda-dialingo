@@ -197,15 +197,15 @@ class ClauseTests(unittest.TestCase):
         return d
 
     def test_a_spaced_hyphen_splits_clauses(self):
-        text = "Wormhole - Einfache"
-        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["Wormhole", "Einfache"])
+        text = "Filebox - Einfache"
+        self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["Filebox", "Einfache"])
 
     def test_a_hyphen_inside_or_against_a_word_does_not(self):
         for text in ["e-mail address", "from -5 to 5", "well-known -- maybe"]:
             self.assertEqual(len(clauses(text)), 2 if "--" in text else 1, text)
 
     def test_a_point_comma_or_colon_between_digits_does_not_split(self):
-        for text in ["about 2.6 nautical miles", "omkring 2,6 sjömil", "at 8:05 tonight", "1,000 people"]:
+        for text in ["about 2.6 metres", "omkring 2,6 meter", "at 8:05 tonight", "1,000 people"]:
             self.assertEqual([text[s:e] for s, e, _ in clauses(text)], [text], text)
         text = "Lesson 2. Then 3, and 4: done"
         self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["Lesson 2", "Then 3", "and 4", "done"])
@@ -246,11 +246,11 @@ class ClauseTests(unittest.TestCase):
             def rejects_a_word(self, text, language):
                 return language.startswith("sv")
 
-        answers = {"the forest line forms the edge": ("en", 0.99), "the forest line forms": ("en", 0.99),
+        answers = {"the row of trees marks the edge": ("en", 0.99), "the row of trees marks": ("en", 0.99),
                    "the edge": ("sv", 0.94)}
-        clause = "the forest line forms the edge"
+        clause = "the row of trees marks the edge"
         d = Detector(Recognizer(answers), "sv_SE", ["en_US"])
-        self.assertEqual(d.tagged(clause), [("en_US", "the forest line forms"), (None, " the edge")])
+        self.assertEqual(d.tagged(clause), [("en_US", "the row of trees marks"), (None, " the edge")])
         d = Detector(Recognizer(answers), "sv_SE", ["en_US"], Dictionary())
         self.assertEqual(d.tagged(clause), [("en_US", clause)])
 
@@ -297,7 +297,7 @@ class ClauseTests(unittest.TestCase):
     def test_a_sentence_of_short_clauses_is_scored_whole(self):
         answers = {"Soy encantado": ("es", 1.0), "Hola": ("es", 0.99), "Soy": ("es", 1.0), "encantado": ("es", 1.0)}
         d = self.detector(["es_ES"], answers)
-        self.assertEqual(d.tagged("¡Hola! Soy Alberto, encantado."), [("es_ES", "¡Hola! Soy Alberto, encantado.")])
+        self.assertEqual(d.tagged("¡Hola! Soy Marcos, encantado."), [("es_ES", "¡Hola! Soy Marcos, encantado.")])
 
     def test_a_name_opening_a_later_clause_does_not_count(self):
         d = self.detector(["es_ES"], {"Hola Pedro": ("es", 1.0), "Hola": ("es", 0.99), "Pedro": ("es", 0.99)})
@@ -369,8 +369,8 @@ class Asked(Recognizer):
 class ContextTests(unittest.TestCase):
     """A line read alone, its undecided edges settled by the sentences it cuts."""
 
-    TEXT = "We stood on the old ramp. A forest line forms the edge of the field."
-    ANSWERS = {"We stood on the old ramp": ("en", 0.99), "forest line forms the edge of the field": ("en", 0.99)}
+    TEXT = "We walked along the path. A row of trees marks the edge of the field."
+    ANSWERS = {"We walked along the path": ("en", 0.99), "row of trees marks the edge of the field": ("en", 0.99)}
 
     def detector(self, answers=None):
         d = Detector(Asked(answers or self.ANSWERS), "sv_SE", ["en_US"])
@@ -378,9 +378,9 @@ class ContextTests(unittest.TestCase):
         return d
 
     def test_a_sentence_s_first_word_ending_a_line_follows_its_sentence(self):
-        line = "We stood on the old ramp. A"
+        line = "We walked along the path. A"
         d = self.detector()
-        self.assertEqual(d.tagged(line), [("en_US", "We stood on the old ramp. "), (None, "A")])
+        self.assertEqual(d.tagged(line), [("en_US", "We walked along the path. "), (None, "A")])
         self.assertEqual(d.in_context(line, self.TEXT, 0), [("en_US", line)])
 
     def test_a_last_word_alone_on_its_line_follows_its_sentence(self):
@@ -388,14 +388,14 @@ class ContextTests(unittest.TestCase):
         self.assertEqual(self.detector().in_context("field.", self.TEXT, start), [("en_US", "field.")])
 
     def test_a_decided_line_reads_nothing_around_it(self):
-        line = "We stood on the old ramp."
+        line = "We walked along the path."
         d = self.detector()
         self.assertFalse(d.undecided_edge(line))
         self.assertEqual(d.in_context(line, self.TEXT, 0), [("en_US", line)])
-        self.assertNotIn("forest line forms the edge of the field", d.backend.asked)
+        self.assertNotIn("row of trees marks the edge of the field", d.backend.asked)
 
     def test_a_paragraph_s_end_is_not_crossed(self):
-        text = "We stood on the old ramp\nA"
+        text = "We walked along the path\nA"
         self.assertEqual(self.detector().in_context("A", text, len(text) - 1), [(None, "A")])
 
     def test_a_line_not_where_it_is_said_to_be_is_read_alone(self):
@@ -404,7 +404,7 @@ class ContextTests(unittest.TestCase):
     def test_a_grid_row_with_labels_is_read_alone(self):
         d = self.detector()
         d.labels = ("Subject",)
-        self.assertEqual(d.in_context("We stood on the old ramp. A", self.TEXT, 0)[-1], (None, "A"))
+        self.assertEqual(d.in_context("We walked along the path. A", self.TEXT, 0)[-1], (None, "A"))
 
     def test_a_withheld_edge_guess_is_undecided(self):
         # "hazier blue" is English between Swedish and English, Italian left free.

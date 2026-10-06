@@ -26,7 +26,7 @@ def capitalized(line):
 
 
 def mixed(line):
-    # Every other word in capitals, from the second, as titles shout a few words: "Nem várt KIHÍVÁSOK a STÚDIÓN".
+    # Every other word in capitals, from the second, as titles shout a few words: "Váratlan VENDÉGEK a KONYHÁBAN".
     return " ".join(t.upper() if i % 2 else t for i, t in enumerate(line.split(" ")))
 
 

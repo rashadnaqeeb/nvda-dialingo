@@ -93,7 +93,7 @@ def common_words(text, noun=None):
 
 def headline(text):
     """Whether a clause is a headline, where case says nothing of names or abbreviations: two or more words
-    in capitals ("MOST VAGY SOHA"), or three or more that all start with one ("Az Európai Autóipar Halála").
+    in capitals ("MINDEN VAGY SEMMI"), or three or more that all start with one ("Régi Házak Új Élete").
     Two capitalized words alone are as often a name ("Mario Moreno")."""
     ws = [w for w in words(text) if any(c.isupper() or c.islower() for c in w)]
     if len(ws) < 2 or not all(w[0].isupper() for w in ws):
@@ -103,8 +103,8 @@ def headline(text):
 
 def scored_words(text, noun=None):
     """The words a clause is judged by: in a headline all of them, lowercased, since the recognizer reads
-    capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "KIHÍVÁSOK a
-    STÚDIÓN KÍVÜL" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
+    capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "VENDÉGEK a
+    KONYHÁBAN" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
     if headline(text):
         return [w.lower() for w in words(text)]
     return [w.lower() if shouted(w) else w for w in common_words(text, noun)]
@@ -147,11 +147,11 @@ def clauses(chunk):
     while i < n:
         ch = chunk[i]
         dash = ch == "-" and previous == "-"
-        # A hyphen with a space on both sides is a dash, as in a title: "Wormhole - Einfache, private Dateifreigabe".
+        # A hyphen with a space on both sides is a dash, as in a title: "Filebox - Einfache, private Dateifreigabe".
         hyphen = ch == "-" and previous is not None and previous.isspace()
         spaced = (i + 1 == n) or chunk[i + 1].isspace()
         separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS)
-        # "about 2.6 nautical miles" is one clause: split at the point, each half is a word too few to score.
+        # "about 2.6 metres" is one clause: split at the point, each half is a word too few to score.
         if separates and ch in NUMBER_MARKS and previous is not None and previous.isdigit() and not spaced and chunk[i + 1].isdigit():
             separates = False
         # A slash against a word in capitals joins abbreviations ("UNCTAD/WTO", "R/3"), and one between two
@@ -174,8 +174,8 @@ def clauses(chunk):
 
 def labelled(chunk, cls, labels):
     """The clauses split where a field label starts, as (clauses, label indexes). A label is a whole word or
-    words, matched in its case: a grid row reads "From Erik Holm, Subject specialpedagog på skolan", and
-    judged whole, "Subject" pulls the Swedish subject toward English, and makes "specialpedagog" a name."""
+    words, matched in its case: a grid row reads "From Anna Berg, Subject Välkommen till kursen", and
+    judged whole, "Subject" opens the clause, so "Välkommen" is taken for a name and read with it in English."""
     if not labels:
         return cls, set()
     ordered = sorted(labels, key=len, reverse=True)
@@ -236,7 +236,7 @@ def sentence_window(text, start, end, limit=CONTEXT_CHARACTERS):
             a += 1
     b = end
     ceiling = min(len(text), end + limit)
-    # A wrapped line ends in the space it broke at: "…fuselage. Orange. " ends its sentence. A newline is an end.
+    # A wrapped line ends in the space it broke at: "…kitchen. Orange. " ends its sentence. A newline is an end.
     tail = end
     while tail > start and text[tail - 1].isspace() and text[tail - 1] != "\n":
         tail -= 1
@@ -502,7 +502,7 @@ class Detector:
     def in_context(self, line, text, start, undecided=None):
         """Untagged `line`, which stands at `start` in `text`, as tagged() gives it, but read among the
         sentences it cuts where an edge of it cannot be decided alone. A line of wrapped text often ends in
-        the first word of a sentence ("view. A") or holds the last word of a paragraph alone ("perimeter."),
+        the first word of a sentence ("lake. A") or holds the last word of a paragraph alone ("garden."),
         which tagged() leaves to the default; the sentence around it decides them as it decides its own
         words. Only `line` is read when its edges are decided, so a decided line costs nothing more.
         undecided: undecided_edge(line), where the caller has it already."""
@@ -781,7 +781,7 @@ class Detector:
         cannot tell one word, so the dictionaries do: the default's rejects it in every installed region and
         exactly one configured language's accepts it. Against a configured language with no dictionary the
         recognizer arbitrates, but never against the default, whose dictionary has spoken: it calls "Cancelar"
-        English at 0.89 and "fraser" at 0.60. "Keresés" beside an English default is Hungarian; "Spotify",
+        English at 0.89 and "fraser" at 0.60. "Beállítások" beside an English default is Hungarian; "Google",
         which the English dictionary knows, is not, nor "paris", which it knows capitalized, nor "numLock"."""
         if self.dictionary is None:
             return None
@@ -836,7 +836,7 @@ class Detector:
         leanings = {guess(i)[0] for i in scored if guess(i)}
         switched = {langs[i] for i in scored if langs[i]}
         # A sentence none of whose clauses has two scored words is scored whole, and its clauses that lean
-        # the same way follow it: "Soy Alberto, encantado." is "Soy encantado", Spanish at 0.9996. A sentence
+        # the same way follow it: "Soy Marcos, encantado." is "Soy encantado", Spanish at 0.9996. A sentence
         # with fewer than two scored words in all ("¡Hola!") is kept for the line's agreed language below.
         # Where words are not spaced, two clauses would pass for two words, so the rule stands down.
         lone = []
@@ -960,7 +960,7 @@ class Detector:
             # suits a recognizer whose confidence grows with the text; fastText dips on a two-word
             # fragment ("Orthodox army" scored 0.89 between "Russian army" at 0.999 and "the army" at 0.98),
             # so every length is tried and the rest is still held to the foreign and embedded floors.
-            # Two words at least, counted as words: "mesterei 😂" is one, and a lone word is never judged.
+            # Two words at least, counted as words: "csillagai 😂" is one, and a lone word is never judged.
             # An end the default's dictionary rejects a word of is not the default's: fastText calls "the edge"
             # Swedish at 0.94 between Swedish and English. Sparing an end the clause's language's dictionary
             # rejects too ("via npm") was measured, and lost more than it saved (KNOWN_GAPS.md).

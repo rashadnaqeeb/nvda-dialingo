@@ -143,12 +143,12 @@ class Engine:
         return self.detector
 
 
-TEXT = "A label reading this. We stood on the old ramp by the side of the view. A forest line forms the edge."
+TEXT = "A label reading this. We walked along the path by the side of the lake. A row of trees marks the edge."
 
 
 def story():
     lines, start = [], 0
-    for line in ("A label reading this. ", "We stood on the old ramp ", "by the side of the view. A ", "forest line forms the edge."):
+    for line in ("A label reading this. ", "We walked along the path ", "by the side of the lake. A ", "row of trees marks the edge."):
         lines.append((start, start + len(line)))
         start += len(line)
     return Story(TEXT, lines)
@@ -176,7 +176,7 @@ class LineContextTests(unittest.TestCase):
         s = story()
         self.unit._speakTextInfo(self.line(s, 2), unit=UNIT_LINE)
         ((line, around, start),) = self.detector.asked
-        self.assertEqual(line, "by the side of the view. A ")
+        self.assertEqual(line, "by the side of the lake. A ")
         self.assertEqual(around, TEXT)  # two lines either side reach the whole story
         self.assertEqual(around[start:start + len(line)], line)
         self.assertEqual(self.spoken[0], [LangChangeCommand("en_US"), line, LangChangeCommand(None)])
@@ -194,7 +194,7 @@ class LineContextTests(unittest.TestCase):
 
     def test_nvda_s_own_string_not_in_the_line_fetches_nothing_around_it(self):
         s = story()
-        self.unit._speakTextInfo(self.line(s, 1), unit=UNIT_LINE, pieces=["level A", "We stood on the old ramp "])
+        self.unit._speakTextInfo(self.line(s, 1), unit=UNIT_LINE, pieces=["level A", "We walked along the path "])
         self.assertEqual(self.detector.asked, [])
         self.assertEqual(s.moves, 0)
 
@@ -219,14 +219,14 @@ class LineContextTests(unittest.TestCase):
         # Browse mode splits a line at its fields: the "A" spoken last is the line's last, not the first in TEXT.
         s = story()
         info = self.line(s, 2)
-        self.unit._speakTextInfo(info, unit=UNIT_LINE, pieces=["by the side of the view. ", "link", "A "])
+        self.unit._speakTextInfo(info, unit=UNIT_LINE, pieces=["by the side of the lake. ", "link", "A "])
         ((line, around, start),) = self.detector.asked
         self.assertEqual(line, "A ")
-        self.assertEqual(start, TEXT.index("view. A") + len("view. "))
+        self.assertEqual(start, TEXT.index("lake. A") + len("lake. "))
 
     def test_the_text_around_is_fetched_once_for_the_line(self):
         s = story()
-        self.unit._speakTextInfo(self.line(s, 2), unit=UNIT_LINE, pieces=["by the side of the view. A", "A"])
+        self.unit._speakTextInfo(self.line(s, 2), unit=UNIT_LINE, pieces=["by the side of the lake. A", "A"])
         moves = s.moves
         self.assertEqual(moves, 2)
         self.assertEqual(len(self.detector.asked), 1)  # the second "A" is not in the line after the first
@@ -238,9 +238,9 @@ class LineContextTests(unittest.TestCase):
 
     def test_a_character_takes_its_language_from_its_line_read_in_context(self):
         s = story()
-        offset = TEXT.index("view. A") + len("view. ")
+        offset = TEXT.index("lake. A") + len("lake. ")
         self.assertEqual(self.unit.language_at(Info(s, offset, offset + 1)), "en_US")
-        self.assertEqual(self.detector.asked[0][0], "by the side of the view. A ")
+        self.assertEqual(self.detector.asked[0][0], "by the side of the lake. A ")
 
 
 if __name__ == "__main__":

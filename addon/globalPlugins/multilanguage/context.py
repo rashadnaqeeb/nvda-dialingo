@@ -19,7 +19,7 @@
 # does not write goes to the language of its script, a word to detection.
 #
 # A line read at the caret is often part of a sentence: wrapped text ends a line on a sentence's first word
-# ("view. A") or puts a paragraph's last word on a line of its own. Detected alone, such an edge stays with
+# ("lake. A") or puts a paragraph's last word on a line of its own. Detected alone, such an edge stays with
 # the default voice. While a line is spoken its TextInfo is held, and a string of it whose edge the detector
 # cannot decide alone, and which is in the line's own text (not NVDA's "level 2"), is read among the text
 # around the line, two lines either side, fetched once for the line. A line whose edges are decided fetches
@@ -387,7 +387,7 @@ class UnitContext:
     def runs_of_line(self, detector, line, text):
         """The runs of a unit's line, read in context as a line at the caret is, and kept for the next unit:
         by the line's text where it is decided alone, and by the text around it too where it is not, since
-        two lines of the same text ("perimeter.") in different paragraphs read differently."""
+        two lines of the same text ("garden.") in different paragraphs read differently."""
         place = None
         if detector.undecided_edge(text):
             try:
