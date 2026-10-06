@@ -1,0 +1,132 @@
+##### datasets/lingua, fr configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['fr']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 597 ms
+=== sentences/fr.txt: 1000 lines, switched 98.8%, own language tagged 98.8%, letters in own language 96.8%, 3691 ms
+=== single-words/en.txt: 1000 lines, switched 0.2%, own language tagged 0.0%, letters in own language 0.0%, 276 ms
+  false switch: [fr]plongeon
+  false switch: [fr]javascript
+=== single-words/fr.txt: 1000 lines, switched 64.1%, own language tagged 64.1%, letters in own language 66.5%, 1127 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 158 ms
+=== word-pairs/fr.txt: 1000 lines, switched 81.5%, own language tagged 81.5%, letters in own language 81.9%, 416 ms
+
+##### datasets/ui-strings, fr configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['fr']
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 815 ms
+=== fr.txt: 3161 lines, switched 84.3%, own language tagged 84.3%, letters in own language 93.3%, 3096 ms
+
+##### datasets/lingua, fr configured, HARNESS_NODICT=fr
+backend fasttext, default en, configured ['fr']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 619 ms
+=== sentences/fr.txt: 1000 lines, switched 98.1%, own language tagged 98.1%, letters in own language 96.3%, 3671 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 283 ms
+=== single-words/fr.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 1111 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 156 ms
+=== word-pairs/fr.txt: 1000 lines, switched 66.8%, own language tagged 66.8%, letters in own language 65.8%, 375 ms
+
+##### datasets/ui-strings, fr configured, HARNESS_NODICT=fr
+backend fasttext, default en, configured ['fr']
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 824 ms
+  false switch: [fr]numpad plus
+=== fr.txt: 3161 lines, switched 69.5%, own language tagged 69.5%, letters in own language 86.4%, 2953 ms
+
+##### datasets/lingua, es configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['es']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 584 ms
+=== sentences/es.txt: 1000 lines, switched 99.5%, own language tagged 99.5%, letters in own language 95.7%, 5274 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 288 ms
+=== single-words/es.txt: 1000 lines, switched 59.9%, own language tagged 59.9%, letters in own language 63.6%, 1497 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 153 ms
+=== word-pairs/es.txt: 1000 lines, switched 74.0%, own language tagged 74.0%, letters in own language 73.8%, 450 ms
+
+##### datasets/ui-strings, es configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['es']
+=== en.txt: 3283 lines, switched 0.3%, own language tagged 0.0%, letters in own language 0.0%, 809 ms
+  false switch: [es]numLock numpad 0
+  false switch: [es]numLock numpad 1
+  false switch: [es]numLock numpad 2
+  false switch: [es]numLock numpad 3
+  false switch: [es]numLock numpad 4
+=== es.txt: 3203 lines, switched 87.7%, own language tagged 87.7%, letters in own language 94.4%, 3292 ms
+
+##### datasets/lingua, es configured, HARNESS_NODICT=es
+backend fasttext, default en, configured ['es']
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 567 ms
+=== sentences/es.txt: 1000 lines, switched 99.2%, own language tagged 99.2%, letters in own language 95.0%, 4895 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 277 ms
+=== single-words/es.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 1335 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 209 ms
+=== word-pairs/es.txt: 1000 lines, switched 64.9%, own language tagged 64.9%, letters in own language 64.5%, 379 ms
+
+##### datasets/ui-strings, es configured, HARNESS_NODICT=es
+backend fasttext, default en, configured ['es']
+=== en.txt: 3283 lines, switched 0.3%, own language tagged 0.0%, letters in own language 0.0%, 838 ms
+  false switch: [es]numLock numpad 0
+  false switch: [es]numLock numpad 1
+  false switch: [es]numLock numpad 2
+  false switch: [es]numLock numpad 3
+  false switch: [es]numLock numpad 4
+=== es.txt: 3203 lines, switched 69.1%, own language tagged 69.1%, letters in own language 86.8%, 3185 ms
+
+##### datasets/lingua, de configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['de']
+=== sentences/de.txt: 1000 lines, switched 99.7%, own language tagged 99.7%, letters in own language 97.8%, 4221 ms
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 693 ms
+=== single-words/de.txt: 1000 lines, switched 48.3%, own language tagged 48.3%, letters in own language 46.5%, 1743 ms
+=== single-words/en.txt: 1000 lines, switched 0.1%, own language tagged 0.0%, letters in own language 0.0%, 322 ms
+  false switch: [de]interwest
+=== word-pairs/de.txt: 1000 lines, switched 88.3%, own language tagged 88.3%, letters in own language 89.3%, 488 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 173 ms
+
+##### datasets/ui-strings, de configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['de']
+=== de.txt: 3109 lines, switched 86.7%, own language tagged 86.7%, letters in own language 92.8%, 3412 ms
+=== en.txt: 3283 lines, switched 0.1%, own language tagged 0.0%, letters in own language 0.0%, 804 ms
+  false switch: [de]Aragonese
+  false switch: [de]drft cmnt
+
+##### datasets/lingua, de configured, HARNESS_NODICT=de
+backend fasttext, default en, configured ['de']
+=== sentences/de.txt: 1000 lines, switched 99.6%, own language tagged 99.6%, letters in own language 97.6%, 3896 ms
+=== sentences/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 680 ms
+=== single-words/de.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 1389 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 300 ms
+=== word-pairs/de.txt: 1000 lines, switched 87.7%, own language tagged 87.7%, letters in own language 88.6%, 409 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 202 ms
+
+##### datasets/ui-strings, de configured, HARNESS_NODICT=de
+backend fasttext, default en, configured ['de']
+=== de.txt: 3109 lines, switched 62.1%, own language tagged 62.1%, letters in own language 82.7%, 3401 ms
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 915 ms
+  false switch: [de]drft cmnt
+
+##### datasets/lingua, it configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['it']
+=== sentences/en.txt: 1000 lines, switched 0.1%, own language tagged 0.0%, letters in own language 0.0%, 595 ms
+  false switch: Emotional problems ([it]1.7 per cent)
+=== sentences/it.txt: 1000 lines, switched 99.8%, own language tagged 99.8%, letters in own language 97.1%, 4059 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 300 ms
+=== single-words/it.txt: 1000 lines, switched 75.5%, own language tagged 75.5%, letters in own language 78.2%, 1494 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 156 ms
+=== word-pairs/it.txt: 1000 lines, switched 91.6%, own language tagged 91.6%, letters in own language 91.7%, 436 ms
+
+##### datasets/ui-strings, it configured, HARNESS_NODICT=(unset)
+backend fasttext, default en, configured ['it']
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 824 ms
+  false switch: [it]Aragonese
+=== it.txt: 3119 lines, switched 89.3%, own language tagged 89.3%, letters in own language 94.7%, 3176 ms
+
+##### datasets/lingua, it configured, HARNESS_NODICT=it
+backend fasttext, default en, configured ['it']
+=== sentences/en.txt: 1000 lines, switched 0.1%, own language tagged 0.0%, letters in own language 0.0%, 566 ms
+  false switch: Emotional problems ([it]1.7 per cent)
+=== sentences/it.txt: 1000 lines, switched 99.4%, own language tagged 99.4%, letters in own language 96.9%, 4053 ms
+=== single-words/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 289 ms
+=== single-words/it.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 1369 ms
+=== word-pairs/en.txt: 1000 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 152 ms
+=== word-pairs/it.txt: 1000 lines, switched 80.4%, own language tagged 80.4%, letters in own language 80.3%, 400 ms
+
+##### datasets/ui-strings, it configured, HARNESS_NODICT=it
+backend fasttext, default en, configured ['it']
+=== en.txt: 3283 lines, switched 0.0%, own language tagged 0.0%, letters in own language 0.0%, 801 ms
+=== it.txt: 3119 lines, switched 71.7%, own language tagged 71.7%, letters in own language 88.0%, 3047 ms
+

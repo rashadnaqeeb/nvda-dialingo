@@ -3,7 +3,7 @@
 Usage: python harness.py <backend> [plain text file] [--strip]
 Runs the acceptance cases, then the text paragraph by paragraph, listing every foreign run.
 backend: els | fasttext | ensemble
-HARNESS_NODICT=1 turns the spelling dictionary gate off.
+HARNESS_NODICT=1 turns the spelling dictionary gate off; HARNESS_NODICT=de,it hides only those languages' dictionaries.
 """
 import os
 import re
@@ -23,11 +23,18 @@ _shared = {}
 
 
 def dictionary():
-    if os.environ.get("HARNESS_NODICT"):
+    hidden = os.environ.get("HARNESS_NODICT", "")
+    if hidden == "1":
         return None
     if "dict" not in _shared:
-        from mlang.dictionary import Dictionary
-        _shared["dict"] = Dictionary()
+        from mlang.dictionary import Dictionary, base
+
+        class Hiding(Dictionary):
+            # Languages named in HARNESS_NODICT behave as if their dictionary were not installed.
+            def checker(self, language):
+                return None if base(language) in hidden.split(",") else super().checker(language)
+
+        _shared["dict"] = Hiding()
     return _shared["dict"]
 
 
