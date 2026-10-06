@@ -28,7 +28,7 @@ Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x6
 
 - Code in `addon/lib/mlang/` imports NVDA modules only inside functions, so tests and the harness run outside NVDA. The one exception is `speech.commands`, which `tests/nvda_stub.py` stands in for.
 - Every hook into NVDA is wrapped so a failure logs and lets speech through unchanged. Keep it that way. Log lines start with `multilanguage: `.
-- Never change the user's NVDA settings on their behalf: not "Automatic language switching", not a synthesizer's own saved settings. Guest synthesizers never save their settings.
+- Never change the user's NVDA settings on their behalf: not "Automatic language switching", not a synthesizer's own saved settings. Guest synthesizers never save their settings. The one setting the add-on does change is NVDA's synthesizer: to the language table and back when the panel is saved, and back to the table's host when the add-on is removed or disabled (`mlang/leaving.py`).
 - A wrong switch costs more than a missed one. A detection change must be measured with the harness before and after, and must not add false switches on English or NVDA's interface strings.
 - `KNOWN_GAPS.md` records problems left alone and alternatives already measured and rejected. Check it before trying a fix. When a gap is fixed, delete its entry.
 - Every user-visible string goes through `_()` with a `# Translators:` comment above it.

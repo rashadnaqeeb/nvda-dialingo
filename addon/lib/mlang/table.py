@@ -22,6 +22,9 @@ CONFSPEC = {
     # The language lock, set from NVDA's synth settings ring: empty for automatic switching, "default" for
     # all speech in the default language, or a row's language for all speech in that row's.
     "lock": "string(default='')",
+    # Set when the add-on, removed or disabled, put the host back as NVDA's synthesizer (leaving.py), so the
+    # plugin selects the language table again once it is back.
+    "leftTable": "boolean(default=False)",
 }
 
 # Settings a row can carry, in the order they are applied to a synthesizer: the voice first, because

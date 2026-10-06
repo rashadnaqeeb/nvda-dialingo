@@ -1,6 +1,8 @@
 ---
 paths:
   - "addon/globalPlugins/**"
+  - "addon/installTasks.py"
+  - "tests/test_install_tasks.py"
   - "addon/lib/mlang/table.py"
   - "addon/lib/mlang/catalogs.py"
   - "addon/lib/mlang/voicedict.py"
@@ -45,3 +47,11 @@ paths:
 ## Dictionary install (`langpack.py`)
 
 - `ShellExecuteEx` with `runas` on `powershell.exe`, waited on a thread, then the dictionary list is refreshed and the result reported.
+
+## Leaving (`mlang/leaving.py`, `installTasks.py`)
+
+- With the add-on gone, NVDA can't load the saved `languageTable` and falls back at every start without saving. So when the add-on is removed or disabled, every configuration file naming `languageTable` (base and each profile) gets its own `defaultSynth`, else the base's, else `auto`. Only that key changes on disk; the base in memory is updated too, since NVDA saves it on exit. The base is marked `leftTable`.
+- Removal: `installTasks.onUninstall`, which NVDA runs at the start of the next session before any synthesizer loads, and also for the old copy on every update. Updates are skipped (the name is in `PENDING_INSTALL`). It imports `mlang` from its own `lib` and drops those modules again, so a later copy imports its own.
+- Disable: the plugin's `terminate`, when the name is in `PENDING_DISABLE`. NVDA has already saved its configuration by then.
+- Coming back (re-enabled or reinstalled): `return_to_table` clears `leftTable` and, if NVDA is still on the host, runs `settings.follow_table` after startup to select the table again if needed.
+- Not handled: an update whose new copy then fails to install leaves the saved `languageTable`.

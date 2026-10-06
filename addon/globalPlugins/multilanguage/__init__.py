@@ -9,7 +9,8 @@ import threading
 
 import addonHandler
 
-_lib = os.path.join(addonHandler.getCodeAddon().path, "lib")
+_addon = addonHandler.getCodeAddon()
+_lib = os.path.join(_addon.path, "lib")
 if _lib not in sys.path:
     sys.path.insert(0, _lib)
 
@@ -25,7 +26,7 @@ from speech.commands import LangChangeCommand  # noqa: E402
 from speech.extensions import filter_speechSequence  # noqa: E402
 from speech.languageHandling import getSpeechSequenceWithLangs  # noqa: E402
 
-from mlang import pipes, policy, prosody, voicedict, winvoices  # noqa: E402
+from mlang import leaving, pipes, policy, prosody, voicedict, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME  # noqa: E402
@@ -472,6 +473,28 @@ def uninstall_symbol_levels():
         speech_impl.processText = original
 
 
+def return_to_table():
+    """Once the add-on is back after being disabled or removed (mlang.leaving), the language table is selected
+    again if it is still needed and NVDA is on its host, the synthesizer put back when the add-on left. A
+    synthesizer the user picked meanwhile stays."""
+    section = config.conf[T.CONFIG_SECTION]
+    if not section["leftTable"]:
+        return
+    section["leftTable"] = False
+    synth = synthDriverHandler.getSynth()
+    if synth is not None and synth.name == section["defaultSynth"]:
+        import wx
+
+        # After NVDA's start, not inside it.
+        wx.CallAfter(settings.follow_table)
+
+
+def disabled_on_restart():
+    from addonHandler import AddonStateCategory, state
+
+    return _addon.name in state[AddonStateCategory.PENDING_DISABLE]
+
+
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
     def __init__(self):
         super().__init__()
@@ -505,8 +528,18 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             lock.install()
         except Exception:
             log.error("multilanguage: could not add the language lock to the synth settings ring", exc_info=True)
+        try:
+            return_to_table()
+        except Exception:
+            log.error("multilanguage: could not select the language table again", exc_info=True)
 
     def terminate(self):
+        try:
+            # NVDA has saved its configuration by now; a removal is handled by installTasks instead.
+            if disabled_on_restart():
+                leaving.leave_nvda(log)
+        except Exception:
+            log.error("multilanguage: could not put the host back as NVDA's synthesizer", exc_info=True)
         lock.uninstall()
         settings.engine = None
         self.engine.unit_context = None
