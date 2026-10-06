@@ -26,6 +26,7 @@ def version():
 def inline(text):
     text = html.escape(text, quote=False)
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = re.sub(r"https://[^\s<]*[^\s<.,;:)]", r'<a href="\g<0>">\g<0></a>', text)
     return text
 
 
