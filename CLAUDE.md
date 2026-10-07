@@ -1,6 +1,6 @@
 # Dialingo
 
-An NVDA add-on (ID `dialingo`, called multilanguage before 1.0) that detects the language of untagged text and speaks each language with its own synthesizer and voice. Public repository. In beta, targeting NVDA 2026.1 and later, which runs 64-bit Python 3.13. `README.md` explains the design; read it before changing behaviour.
+An NVDA add-on (ID `dialingo`, called multilanguage before 1.0) that detects the language of untagged text and speaks each language with its own synthesizer and voice. Public repository, distributed through the NVDA Add-on Store. Targets NVDA 2026.1 and later, which runs 64-bit Python 3.13. `README.md` explains the design; read it before changing behaviour.
 
 Detailed notes load from `.claude/rules/` when you work on the matching files: `detection.md` (detector, context, harness), `synthesizers.md` (the Language table driver and its guests), `nvda-integration.md` (the plugin's hooks into NVDA, the lock, settings).
 
@@ -44,5 +44,5 @@ Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x6
 ## Commits and releases
 
 - Commit subjects state the change as a fact, prefixed with the area when there is one: "Scheduler: a piece's marker takes the place of NVDA's index at its end", "Known gaps: ...".
-- A release bumps `version` in `addon/manifest.ini` in a commit titled "Version X.Y", tagged `vX.Y`, with a GitHub release titled "X.Y (beta)". Release notes are a short list of changes in user terms. The release asset is the `.nvda-addon` file itself; the add-on store needs a direct link to it.
+- A release bumps `version` in `addon/manifest.ini` in a commit titled "Version X.Y", tagged `vX.Y`, with a GitHub release titled "X.Y". Release notes are a short list of changes in user terms. The release asset is the `.nvda-addon` file itself; the add-on store needs a direct link to it. Each release is then submitted to the store through the "Add-on registration" issue form on nvaccess/addon-datastore (stable channel, GPL 2).
 - `dist/` is not committed.
