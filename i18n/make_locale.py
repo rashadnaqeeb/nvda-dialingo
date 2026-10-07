@@ -215,6 +215,8 @@ def main():
         for m in unknown:
             print("  ", repr(m))
     ours = load_translations()
+    with open(os.path.join(ROOT, "addon", "manifest.ini"), encoding="utf-8") as f:
+        english_summary = re.search(r'^summary\s*=\s*"([^"]*)"', f.read(), re.M).group(1)
     problems = []
     accelerators = []
     gaps = {}
@@ -250,7 +252,8 @@ def main():
         os.makedirs(folder, exist_ok=True)
         write_po(os.path.join(folder, "nvda.po"), lang, entries, comments)
         write_mo(os.path.join(folder, "nvda.mo"), lang, dict(entries))
-        summary = mine.get("summary")
+        # The add-on store requires a summary in every translated manifest; the name is not translated.
+        summary = mine.get("summary") or english_summary
         description = mine.get("description")
         if summary or description:
             with open(os.path.join(ROOT, "addon", "locale", lang, "manifest.ini"), "w", encoding="utf-8", newline="\n") as f:
