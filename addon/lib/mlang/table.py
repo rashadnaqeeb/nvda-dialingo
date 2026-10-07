@@ -7,7 +7,7 @@ import json
 
 from .scripts import base, code, normalize
 
-CONFIG_SECTION = "multilanguage"
+CONFIG_SECTION = "dialingo"
 CONFSPEC = {
     "mode": "string(default=full)",
     "strict": "boolean(default=False)",

@@ -91,5 +91,5 @@ def install(names, on_done):
             kernel32.CloseHandle(handle)
         on_done(code)
 
-    threading.Thread(target=wait, name="multilanguage-langpack", daemon=True).start()
+    threading.Thread(target=wait, name="dialingo-langpack", daemon=True).start()
     return True

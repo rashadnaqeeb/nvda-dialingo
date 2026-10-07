@@ -6,7 +6,7 @@ paths:
   - "addon/lib/mlang/recognizers.py"
   - "addon/lib/mlang/dictionary.py"
   - "addon/lib/mlang/els.py"
-  - "addon/globalPlugins/multilanguage/context.py"
+  - "addon/globalPlugins/dialingo/context.py"
   - "harness/**"
   - "datasets/**"
   - "results/**"

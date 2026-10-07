@@ -42,13 +42,13 @@ def _stub_nvda():
            UNIT_READINGCHUNK=UNIT_READINGCHUNK)
     module("logHandler", log=Log())
     here = os.path.dirname(os.path.abspath(__file__))
-    package_dir = os.path.join(here, "..", "addon", "globalPlugins", "multilanguage")
-    package = module("multilanguage")
+    package_dir = os.path.join(here, "..", "addon", "globalPlugins", "dialingo")
+    package = module("dialingo")
     package.__path__ = [package_dir]
-    package.lock = module("multilanguage.lock", AUTOMATIC="")
-    spec = importlib.util.spec_from_file_location("multilanguage.context", os.path.join(package_dir, "context.py"))
+    package.lock = module("dialingo.lock", AUTOMATIC="")
+    spec = importlib.util.spec_from_file_location("dialingo.context", os.path.join(package_dir, "context.py"))
     context = importlib.util.module_from_spec(spec)
-    sys.modules["multilanguage.context"] = context
+    sys.modules["dialingo.context"] = context
     spec.loader.exec_module(context)
     return context
 

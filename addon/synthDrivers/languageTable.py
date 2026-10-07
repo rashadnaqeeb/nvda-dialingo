@@ -1,4 +1,4 @@
-# The language table synthesizer of the multilanguage add-on.
+# The language table synthesizer of Dialingo.
 #
 # Hosts NVDA's real synthesizer drivers. The default synthesizer, adopted from the one in use when this
 # driver is first selected, speaks the default language and everything the table has no row for, and its
@@ -55,7 +55,7 @@ addonHandler.initTranslation()
 try:
     hosts.redirect_voice_dict()
 except Exception:
-    log.error("multilanguage: the voice dictionary could not be redirected to the default synthesizer", exc_info=True)
+    log.error("dialingo: the voice dictionary could not be redirected to the default synthesizer", exc_info=True)
 
 # Settings whose values are the host's, read and written through this driver. The standard ones have
 # properties on the base class and are forwarded explicitly below; any other setting a host declares
@@ -262,7 +262,7 @@ def _settings_dialog_open():
 class SynthDriver(synthDriverHandler.SynthDriver):
     name = hosts.DRIVER_NAME
     # Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
-    description = _("Language table (multilanguage)")
+    description = _("Language table (Dialingo)")
 
     supportedCommands = {
         IndexCommand,
@@ -287,7 +287,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                 return True
             return policy.needs_table(config.conf)
         except Exception:
-            log.debugWarning("multilanguage: language table availability check failed", exc_info=True)
+            log.debugWarning("dialingo: language table availability check failed", exc_info=True)
             return True
 
     def __init__(self):
@@ -371,7 +371,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                     self.saveSettings()
                     hosts.terminate_unsaved(guest)
                 except Exception:
-                    log.debugWarning("multilanguage: could not hand the host its settings back", exc_info=True)
+                    log.debugWarning("dialingo: could not hand the host its settings back", exc_info=True)
                     hosts.dispose(guest)
             else:
                 hosts.dispose(guest)
@@ -398,9 +398,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             self.__dict__["host_name"] = name
             if not configured or configured in (self.name, "auto", "silence"):
                 section["defaultSynth"] = name
-                log.info(f"multilanguage: language table hosts {name} as the default synthesizer")
+                log.info(f"dialingo: language table hosts {name} as the default synthesizer")
             elif name != configured:
-                log.warning(f"multilanguage: {configured} could not be loaded; {name} stands in as the default synthesizer")
+                log.warning(f"dialingo: {configured} could not be loaded; {name} stands in as the default synthesizer")
             self._snapshot_defaults()
             return
 
@@ -518,7 +518,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             try:
                 self._apply_row(guest, row)
             except Exception:
-                log.debugWarning(f"multilanguage: could not prepare {row.synth} for {row.lang}", exc_info=True)
+                log.debugWarning(f"dialingo: could not prepare {row.synth} for {row.lang}", exc_info=True)
 
     def _prune_voiced(self, in_use=False):
         """Terminate the instances kept for voices no row has any more; with `in_use`, not one the scheduler is
@@ -569,7 +569,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         try:
             return any(not hosts.supports(self.host, lang) for lang in winvoices.languages())
         except Exception:
-            log.debugWarning("multilanguage: Windows voices could not be checked against the host", exc_info=True)
+            log.debugWarning("dialingo: Windows voices could not be checked against the host", exc_info=True)
             return False
 
     def _windows_row(self, lang):
@@ -593,9 +593,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                         except Exception:
                             pass
                     row = T.Row(voice[2], winvoices.ONECORE, voice=voice[0], **own)
-                    log.info(f"multilanguage: {lang} goes to the Windows voice {voice[1]}")
+                    log.info(f"dialingo: {lang} goes to the Windows voice {voice[1]}")
         except Exception:
-            log.debugWarning(f"multilanguage: no Windows voice for {lang}", exc_info=True)
+            log.debugWarning(f"dialingo: no Windows voice for {lang}", exc_info=True)
         self._windows_rows[key] = row
         return row
 
@@ -618,7 +618,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                     if guest.isSupported(setting) and getattr(guest, setting):
                         setattr(guest, setting, False)
                 except Exception:
-                    log.debugWarning(f"multilanguage: could not turn off {setting} on {guest.name}", exc_info=True)
+                    log.debugWarning(f"dialingo: could not turn off {setting} on {guest.name}", exc_info=True)
         if default:
             # Settings no row carries, which a row's variant may have reset on the shared instance.
             for setting, value in self._defaults.items():
@@ -628,7 +628,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                     if hosts.read(guest, setting) != value:
                         setattr(guest, setting, value)
                 except Exception:
-                    log.debugWarning(f"multilanguage: could not restore {setting} on {guest.name}", exc_info=True)
+                    log.debugWarning(f"dialingo: could not restore {setting} on {guest.name}", exc_info=True)
 
     def _adapt_prosody(self, guest, row, items):
         """NVDA resolves a rate, pitch, or volume command against the configured value of the synthesizer in
@@ -763,7 +763,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         try:
             self._apply_row(guest, row)
         except Exception:
-            log.debugWarning(f"multilanguage: could not give {row.synth} the voice of {row.lang}", exc_info=True)
+            log.debugWarning(f"dialingo: could not give {row.synth} the voice of {row.lang}", exc_info=True)
         return True
 
     def _on_table_saved(self, table):
@@ -816,7 +816,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
         try:
             host.loadSettings(onlyChanged=onlyChanged)
         except Exception:
-            log.debugWarning(f"multilanguage: {self.host_name} could not reload its settings", exc_info=True)
+            log.debugWarning(f"dialingo: {self.host_name} could not reload its settings", exc_info=True)
         host._mlangApplied = None
         self._snapshot_defaults(configured=True)
         # The host's reload pointed NVDA's settings ring and voice dictionary at it; back to this driver.
@@ -845,7 +845,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             try:
                 section[setting] = value
             except Exception:
-                log.debugWarning(f"multilanguage: could not save {setting} for {host.name}", exc_info=True)
+                log.debugWarning(f"dialingo: could not save {setting} for {host.name}", exc_info=True)
         self._share_per_synth(to_host=True)
 
     def _share_per_synth(self, to_host):
@@ -861,7 +861,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             try:
                 dest[setting] = source[setting]
             except Exception:
-                log.debugWarning(f"multilanguage: could not share {setting} with {self.host_name}", exc_info=True)
+                log.debugWarning(f"dialingo: could not share {setting} with {self.host_name}", exc_info=True)
 
     # ------------------------------------------------------------ speech
 
@@ -903,7 +903,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             try:
                 engine.player.feed(None, 0, onDone=lambda: self._on_eloquence_played(synth, engine, index))
             except Exception:
-                log.debugWarning("multilanguage: Eloquence's player could not report the end of a piece", exc_info=True)
+                log.debugWarning("dialingo: Eloquence's player could not report the end of a piece", exc_info=True)
 
     def _on_speech_ended(self, synth, marker):
         """SAPI 5's speech in the piece ending in `marker` has played (sapi5host), from its player's callback.
@@ -995,7 +995,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
             try:
                 self._apply_row(host, self.default_row())
             except Exception:
-                log.debugWarning("multilanguage: could not put the default back before a voice change", exc_info=True)
+                log.debugWarning("dialingo: could not put the default back before a voice change", exc_info=True)
         setattr(host, setting, value)
         if setting in T.ROW_SETTINGS or setting in self._defaults:
             self._defaults[setting] = value
@@ -1030,7 +1030,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
                 try:
                     config.conf["speech"][host.name][setting] = value
                 except Exception:
-                    log.debugWarning(f"multilanguage: could not store {setting} for {host.name}", exc_info=True)
+                    log.debugWarning(f"dialingo: could not store {setting} for {host.name}", exc_info=True)
             return
 
     def __getattr__(self, name):

@@ -30,13 +30,13 @@ def install(log=None):
             from rpyc.core.stream import Win32PipeStream
         except Exception:
             if log:
-                log.debugWarning("multilanguage: NVDA's 32-bit synth driver host was not found; its pipes are left "
+                log.debugWarning("dialingo: NVDA's 32-bit synth driver host was not found; its pipes are left "
                                  "as they are", exc_info=True)
             return False
         real = launcher.Connection
         if not isinstance(real, type):
             if log:
-                log.debugWarning(f"multilanguage: NVDA's 32-bit launcher makes connections with {real!r}, not a "
+                log.debugWarning(f"dialingo: NVDA's 32-bit launcher makes connections with {real!r}, not a "
                                  "class; its pipes are left as they are")
             return False
 
@@ -89,7 +89,7 @@ def _fix_current(Connection, Win32PipeStream, log=None):
                 conn._mlangPipes = pipes
         except Exception:
             if log:
-                log.debugWarning("multilanguage: the pipes of the current 32-bit synthesizer were left as they are",
+                log.debugWarning("dialingo: the pipes of the current 32-bit synthesizer were left as they are",
                                  exc_info=True)
 
 
@@ -125,7 +125,7 @@ def own_handles(stream, Win32PipeStream, log=None):
             for made in copies:
                 kernel32.CloseHandle(made)
             if log:
-                log.debugWarning(f"multilanguage: a pipe to a 32-bit synth driver host was not duplicated: "
+                log.debugWarning(f"dialingo: a pipe to a 32-bit synth driver host was not duplicated: "
                                  f"{ctypes.WinError(ctypes.get_last_error())}")
             return []
         copies.append(copy.value)
@@ -139,4 +139,4 @@ def close_pipes(pipes, log=None):
             pipe.close()
         except Exception:
             if log:
-                log.debugWarning("multilanguage: a pipe to a 32-bit synth driver host was not closed", exc_info=True)
+                log.debugWarning("dialingo: a pipe to a 32-bit synth driver host was not closed", exc_info=True)

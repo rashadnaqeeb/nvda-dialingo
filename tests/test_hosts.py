@@ -185,7 +185,7 @@ class NewDefaultTest(Stubbed):
             setattr(hosts, name, value)
         self.addCleanup(setattr, winvoices, "languages", winvoices.languages)
         winvoices.languages = lambda: ["ar_SA", "en_US"]
-        conf = {"speech": {"synth": DRIVER_NAME}, "multilanguage": {"defaultSynth": "ibmeci", "useWindowsVoices": True}}
+        conf = {"speech": {"synth": DRIVER_NAME}, "dialingo": {"defaultSynth": "ibmeci", "useWindowsVoices": True}}
         self.assertEqual(policy.windows_languages_beyond_engine(conf), ["ar_SA"])
         self.assertEqual((created, disposed), (["ibmeci"], [new]))
 
@@ -204,7 +204,7 @@ class FailedDefaultTest(Stubbed):
             setattr(hosts, name, value)
         self.addCleanup(setattr, winvoices, "languages", winvoices.languages)
         winvoices.languages = lambda: ["ar_SA", "en_US", "fr_FR"]
-        self.conf = {"speech": {"synth": DRIVER_NAME}, "multilanguage": {"defaultSynth": "sapi4_32", "useWindowsVoices": True}}
+        self.conf = {"speech": {"synth": DRIVER_NAME}, "dialingo": {"defaultSynth": "sapi4_32", "useWindowsVoices": True}}
 
     def test_a_stand_in_for_a_default_that_failed_answers_without_loading_it_again(self):
         from mlang import policy

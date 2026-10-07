@@ -99,7 +99,7 @@ def hosted(cls, log=None):
                             call()
                         except Exception:
                             if log:
-                                log.debugWarning("multilanguage: a report of SAPI 5's failed", exc_info=True)
+                                log.debugWarning("dialingo: a report of SAPI 5's failed", exc_info=True)
 
             def _onEndStream(self):
                 player = self.player
@@ -118,7 +118,7 @@ def hosted(cls, log=None):
                         player.feed(None, 0, onDone=lambda: self._reportPlayed(bookmarks))
                 except Exception:
                     if log:
-                        log.debugWarning("multilanguage: could not mark the end of SAPI 5's speech", exc_info=True)
+                        log.debugWarning("dialingo: could not mark the end of SAPI 5's speech", exc_info=True)
                 super()._onEndStream()
 
             def _reportPlayed(self, bookmarks):
@@ -150,7 +150,7 @@ def hosted(cls, log=None):
                     _launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
                 except Exception:
                     if log:
-                        log.debugWarning("multilanguage: the 32-bit SAPI 5 of the language table did not load; "
+                        log.debugWarning("dialingo: the 32-bit SAPI 5 of the language table did not load; "
                                          "NVDA's is used", exc_info=True)
                     self.synthDriver32Path = cls.synthDriver32Path
                     self.synthDriver32Name = cls.synthDriver32Name
@@ -227,7 +227,7 @@ def _launch(init, log=None):
                     conn.close()
                 except Exception:
                     if log:
-                        log.debugWarning("multilanguage: a 32-bit synth driver host was not closed", exc_info=True)
+                        log.debugWarning("dialingo: a 32-bit synth driver host was not closed", exc_info=True)
             raise
         finally:
             launcher.Connection = real

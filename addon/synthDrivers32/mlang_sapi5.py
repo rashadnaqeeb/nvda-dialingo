@@ -74,6 +74,6 @@ class SynthDriver(hosted(sapi5.SynthDriver, log)):
                 try:
                     player.drop_silence(played_only=True)
                 except Exception:
-                    log.debugWarning("multilanguage: the silence after SAPI 5's last speech was not dropped",
+                    log.debugWarning("dialingo: the silence after SAPI 5's last speech was not dropped",
                                      exc_info=True)
         super().speak(speechSequence)

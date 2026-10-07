@@ -75,6 +75,6 @@ class GridLabels:
             try:
                 self.labels = headers(element)
             except Exception:
-                log.debugWarning("multilanguage: no column headers for the focused row", exc_info=True)
+                log.debugWarning("dialingo: no column headers for the focused row", exc_info=True)
                 self.labels = ()
         return self.labels

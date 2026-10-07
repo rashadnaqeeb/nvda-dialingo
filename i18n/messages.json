@@ -57,10 +57,6 @@
    "comment": "Message when the install failed; %s is a language name."
   },
   {
-   "msgid": "Multilanguage",
-   "comment": "The title of the add-on's settings panel."
-  },
-  {
    "msgid": "Language &detection:",
    "comment": "Label of the detection mode combo box."
   },
@@ -269,7 +265,7 @@
    "comment": "The value of a language's detection entry in the synth settings ring."
   },
   {
-   "msgid": "Language table (multilanguage)",
+   "msgid": "Language table (Dialingo)",
    "comment": "Name of the synthesizer that speaks each language with its own synthesizer and voice."
   }
  ],

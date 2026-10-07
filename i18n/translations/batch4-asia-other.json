@@ -2,7 +2,6 @@
  "ja": {
   "S0": "オフ",
   "S2": "完全",
-  "S3": "多言語",
   "S5": "厳密な言語検出のオンとオフを切り替え",
   "S6": "言語検出 %s",
   "S7": "厳密な検出オン",
@@ -33,8 +32,7 @@
   "S37": "言語の追加",
   "S39": "テスト(&T)",
   "S40": "言語パックを確認(&V)...",
-  "S42": "言語テーブル(多言語)",
-  "summary": "多言語読み上げ",
+  "S42": "言語テーブル(Dialingo)",
   "description": "話す言語ごとに、音声エンジン、声、速さ、句読点、辞書の設定をそれぞれ設定できるアドオンです。テキストに言語のタグがなくても、文の途中で言語が変わっても、それらを切り替えます。",
   "S43": "%s の音声辞書",
   "S44": "この行には固有の音声がないため、音声エンジンの音声辞書が適用されます。"
@@ -42,7 +40,6 @@
  "zh_CN": {
   "S0": "关闭",
   "S2": "完整",
-  "S3": "多语言",
   "S5": "开启或关闭严格语言检测",
   "S6": "语言检测 %s",
   "S7": "严格检测已开启",
@@ -73,8 +70,7 @@
   "S37": "添加语言",
   "S39": "测试(&T)",
   "S40": "验证语言包(&V)...",
-  "S42": "语言表（多语言）",
-  "summary": "多语言语音",
+  "S42": "语言表（Dialingo）",
   "description": "一个插件，让您为自己所说的每种语言分别设置合成器、语音、语速、标点和词典。即使文本没有标记语言，即使语言在句子中途改变，它也会在它们之间切换。",
   "S43": "%s 的语音词典",
   "S44": "此行没有自己的语音，因此使用合成器的语音词典。"
@@ -82,7 +78,6 @@
  "zh_TW": {
   "S0": "關閉",
   "S2": "完整",
-  "S3": "多語言",
   "S5": "開啟或關閉嚴格語言偵測",
   "S6": "語言偵測 %s",
   "S7": "嚴格偵測已開啟",
@@ -113,8 +108,7 @@
   "S37": "新增語言",
   "S39": "測試(&T)",
   "S40": "驗證語言套件(&V)...",
-  "S42": "語言表（多語言）",
-  "summary": "多語言語音",
+  "S42": "語言表（Dialingo）",
   "description": "一個附加元件，讓您為自己所說的每種語言分別設定語音合成器、語音、語速、標點和字典。即使文字沒有標記語言，即使語言在句子中途改變，它也會在它們之間切換。",
   "S43": "%s 的語音字典",
   "S44": "此列沒有自己的語音，因此套用語音合成器的語音字典。"
@@ -123,7 +117,6 @@
  "ko": {
   "S0": "끄기",
   "S2": "전체",
-  "S3": "다국어",
   "S5": "엄격한 언어 감지 켜기/끄기",
   "S6": "언어 감지 %s",
   "S7": "엄격한 감지 켬",
@@ -154,8 +147,7 @@
   "S37": "언어 추가",
   "S39": "테스트(&T)",
   "S40": "언어 팩 확인(&V)...",
-  "S42": "언어 표 (다국어)",
-  "summary": "다국어 음성",
+  "S42": "언어 표 (Dialingo)",
   "description": "사용하는 각 언어에 음성 엔진, 음성, 속도, 문장 부호, 사전 설정을 따로 지정할 수 있는 추가 기능입니다. 텍스트에 언어 태그가 없거나 문장 중간에 언어가 바뀌어도 그 사이를 전환합니다.",
   "S43": "%s 음성 사전",
   "S44": "이 행에는 고유 음성이 없으므로 음성 엔진의 음성 사전이 적용됩니다."
@@ -163,7 +155,6 @@
  "vi": {
   "S0": "Tắt",
   "S2": "Đầy đủ",
-  "S3": "Đa ngôn ngữ",
   "S5": "Bật hoặc tắt phát hiện ngôn ngữ nghiêm ngặt",
   "S6": "Phát hiện ngôn ngữ: %s",
   "S7": "Phát hiện nghiêm ngặt đã bật",
@@ -194,8 +185,7 @@
   "S37": "Thêm ngôn ngữ",
   "S39": "&Thử",
   "S40": "&Kiểm tra gói ngôn ngữ...",
-  "S42": "Bảng ngôn ngữ (đa ngôn ngữ)",
-  "summary": "Giọng nói đa ngôn ngữ",
+  "S42": "Bảng ngôn ngữ (Dialingo)",
   "description": "Một tiện ích cho phép bạn thiết lập mỗi ngôn ngữ bạn nói với cài đặt bộ đọc, giọng, tốc độ, dấu câu và từ điển riêng. Nó chuyển đổi giữa chúng ngay cả khi văn bản không được gắn thẻ ngôn ngữ, và ngay cả khi ngôn ngữ thay đổi giữa câu.",
   "S43": "Từ điển giọng đọc cho %s",
   "S44": "Hàng này không có giọng đọc riêng, nên áp dụng từ điển giọng đọc của bộ đọc."
@@ -203,7 +193,6 @@
  "id": {
   "S0": "Mati",
   "S2": "Penuh",
-  "S3": "Multibahasa",
   "S5": "Menyalakan atau mematikan deteksi bahasa ketat",
   "S6": "Deteksi bahasa %s",
   "S7": "Deteksi ketat nyala",
@@ -234,8 +223,7 @@
   "S37": "Tambah bahasa",
   "S39": "&Uji",
   "S40": "&Verifikasi paket bahasa...",
-  "S42": "Tabel bahasa (multibahasa)",
-  "summary": "Ucapan multibahasa",
+  "S42": "Tabel bahasa (Dialingo)",
   "description": "Add-on yang memungkinkan Anda mengatur setiap bahasa yang Anda gunakan dengan pengaturan sintesis, suara, kecepatan, tanda baca, dan kamusnya sendiri. Add-on ini beralih di antaranya bahkan ketika teks tidak ditandai dengan bahasanya, dan bahkan ketika bahasa berganti di tengah kalimat.",
   "S43": "Kamus suara untuk %s",
   "S44": "Baris ini tidak memiliki suara sendiri, jadi kamus suara sintesis berlaku untuknya."
@@ -243,7 +231,6 @@
  "ka": {
   "S0": "გამორთული",
   "S2": "სრული",
-  "S3": "მრავალენოვანი",
   "S5": "რთავს ან თიშავს ენის მკაცრ ამოცნობას",
   "S6": "ენის ამოცნობა: %s",
   "S7": "მკაცრი ამოცნობა ჩართულია",
@@ -274,8 +261,7 @@
   "S37": "ენის დამატება",
   "S39": "&შემოწმება",
   "S40": "&ენის პაკეტის შემოწმება...",
-  "S42": "ენების ცხრილი (მრავალენოვანი)",
-  "summary": "მრავალენოვანი მეტყველება",
+  "S42": "ენების ცხრილი (Dialingo)",
   "description": "დამატება, რომელიც საშუალებას გაძლევთ, ყოველი ენა, რომელზეც საუბრობთ, საკუთარი სინთეზატორის, ხმის, სიჩქარის, პუნქტუაციისა და ლექსიკონის პარამეტრებით მოაწყოთ. ის მათ შორის გადაერთვება მაშინაც, როცა ტექსტი მისი ენით არ არის მონიშნული, და მაშინაც, როცა ენა წინადადების შუაში იცვლება.",
   "S43": "ხმის ლექსიკონი %s-სთვის",
   "S44": "ამ სტრიქონს საკუთარი ხმა არ აქვს, ამიტომ მასზე სინთეზატორის ხმის ლექსიკონი ვრცელდება."
@@ -283,7 +269,6 @@
  "mn": {
   "S0": "Унтраах",
   "S2": "Бүрэн",
-  "S3": "Олон хэл",
   "S5": "Хатуу хэл танихыг асааж, унтраана",
   "S6": "Хэл таних: %s",
   "S7": "Хатуу таних асаалттай",
@@ -314,8 +299,7 @@
   "S37": "Хэл нэмэх",
   "S39": "&Турших",
   "S40": "&Хэлний багц шалгах...",
-  "S42": "Хэлний хүснэгт (олон хэл)",
-  "summary": "Олон хэлний яриа",
+  "S42": "Хэлний хүснэгт (Dialingo)",
   "description": "Таны ярьдаг хэл бүрийг өөрийн синтезатор, хоолой, хурд, цэг таслал, толь бичгийн тохиргоотойгоор тохируулах боломж олгодог нэмэлт. Текст хэлээрээ тэмдэглэгдээгүй байсан ч, хэл өгүүлбэрийн дундуур солигдсон ч тэдгээрийн хооронд шилждэг.",
   "S43": "%s-д зориулсан хоолойн толь бичиг",
   "S44": "Энэ мөрөнд өөрийн хоолой байхгүй тул синтезаторын хоолойн толь бичиг үйлчилнэ."
@@ -323,7 +307,6 @@
  "ky": {
   "S0": "Өчүк",
   "S2": "Толук",
-  "S3": "Көп тилдүүлүк",
   "S5": "Катуу тил аныктоону күйгүзөт же өчүрөт",
   "S6": "Тил аныктоо: %s",
   "S7": "Катуу аныктоо күйүк",
@@ -354,8 +337,7 @@
   "S37": "Тил кошуу",
   "S39": "&Сыноо",
   "S40": "&Тил пакетин текшерүү...",
-  "S42": "Тилдер таблицасы (көп тилдүүлүк)",
-  "summary": "Көп тилдүү сүйлөө",
+  "S42": "Тилдер таблицасы (Dialingo)",
   "description": "Сиз сүйлөгөн ар бир тилди өзүнүн синтезатор, үн, ылдамдык, тыныш белгилер жана сөздүк жөндөөлөрү менен орнотууга мүмкүндүк берген кошумча. Текст өз тили менен белгиленбесе да, тил сүйлөмдүн ортосунда өзгөрсө да, алардын ортосунда которулат.",
   "S43": "%s үчүн үн сөздүгү",
   "S44": "Бул саптын өз үнү жок, ошондуктан ага синтезатордун үн сөздүгү колдонулат."
@@ -363,7 +345,6 @@
  "lt": {
   "S0": "Išjungta",
   "S2": "Visas",
-  "S3": "Daugiakalbystė",
   "S5": "Įjungia arba išjungia griežtą kalbos aptikimą",
   "S6": "Kalbos aptikimas: %s",
   "S7": "Griežtas aptikimas įjungtas",
@@ -394,8 +375,7 @@
   "S37": "Pridėti kalbą",
   "S39": "&Išbandyti",
   "S40": "&Patikrinti kalbos paketą...",
-  "S42": "Kalbų lentelė (daugiakalbystė)",
-  "summary": "Daugiakalbė kalba",
+  "S42": "Kalbų lentelė (Dialingo)",
   "description": "Priedas, leidžiantis kiekvienai kalbai, kuria kalbate, nustatyti atskirus sintezatoriaus, balso, greičio, skyrybos ir žodyno nustatymus. Jis perjungia jas net tada, kai tekstas nepažymėtas savo kalba, ir net tada, kai kalba pasikeičia sakinio viduryje.",
   "S43": "%s balso žodynas",
   "S44": "Ši eilutė neturi savo balso, todėl jai taikomas sintezatoriaus balso žodynas."
@@ -403,7 +383,6 @@
  "ga": {
   "S0": "As",
   "S2": "Iomlán",
-  "S3": "Ilteangach",
   "S5": "Cuireann brath dian teanga ann nó as",
   "S6": "Brath teanga: %s",
   "S7": "Brath dian ann",
@@ -434,8 +413,7 @@
   "S37": "Cuir teanga leis",
   "S39": "&Tástáil",
   "S40": "&Fíoraigh pacáiste teanga...",
-  "S42": "Tábla teangacha (ilteangach)",
-  "summary": "Caint ilteangach",
+  "S42": "Tábla teangacha (Dialingo)",
   "description": "Breiseán a ligeann duit gach teanga a labhraíonn tú a shocrú lena socruithe féin don sintéiseoir, don ghuth, don ráta, don phoncaíocht agus don fhoclóir. Aistríonn sé eatarthu fiú nuair nach bhfuil a teanga clibeáilte ar an téacs, agus fiú nuair a athraíonn an teanga i lár abairte.",
   "S43": "Foclóir gutha do %s",
   "S44": "Níl guth dá cuid féin ag an ró seo, mar sin baineann foclóir gutha an tsintéiseora leis."
@@ -443,7 +421,6 @@
  "gl": {
   "S0": "Desactivada",
   "S2": "Completa",
-  "S3": "Multilingüe",
   "S5": "Activa ou desactiva a detección estrita de idioma",
   "S6": "Detección de idioma %s",
   "S7": "Detección estrita activada",
@@ -474,8 +451,7 @@
   "S37": "Engadir idioma",
   "S39": "&Probar",
   "S40": "&Verificar paquete de idioma...",
-  "S42": "Táboa de idiomas (multilingüe)",
-  "summary": "Voz multilingüe",
+  "S42": "Táboa de idiomas (Dialingo)",
   "description": "Un complemento que lle permite configurar cada idioma que fala cos seus propios axustes de sintetizador, voz, velocidade, puntuación e dicionario. Cambia entre eles mesmo cando o texto non está etiquetado co seu idioma, e mesmo cando o idioma cambia a metade dunha frase.",
   "S43": "Dicionario de voz para %s",
   "S44": "Esta fila non ten voz propia, así que aplícaselle o dicionario de voz do sintetizador."
@@ -483,7 +459,6 @@
  "ca": {
   "S0": "Desactivada",
   "S2": "Completa",
-  "S3": "Multilingüe",
   "S5": "Activa o desactiva la detecció estricta d'idioma",
   "S6": "Detecció d'idioma %s",
   "S7": "Detecció estricta activada",
@@ -514,8 +489,7 @@
   "S37": "Afegeix un idioma",
   "S39": "&Prova",
   "S40": "&Verifica el paquet d'idioma...",
-  "S42": "Taula d'idiomes (multilingüe)",
-  "summary": "Veu multilingüe",
+  "S42": "Taula d'idiomes (Dialingo)",
   "description": "Un complement que us permet configurar cada idioma que parleu amb els seus propis paràmetres de sintetitzador, veu, velocitat, puntuació i diccionari. Canvia entre ells fins i tot quan el text no està etiquetat amb el seu idioma, i fins i tot quan l'idioma canvia a mitja frase.",
   "S43": "Diccionari de veu per a %s",
   "S44": "Aquesta fila no té veu pròpia, així que s'hi aplica el diccionari de veu del sintetitzador."
@@ -523,7 +497,6 @@
  "af_ZA": {
   "S0": "Af",
   "S2": "Volledig",
-  "S3": "Veeltalig",
   "S5": "Skakel streng taalherkenning aan of af",
   "S6": "Taalherkenning %s",
   "S7": "Streng herkenning aan",
@@ -554,8 +527,7 @@
   "S37": "Voeg taal by",
   "S39": "&Toets",
   "S40": "&Verifieer taalpakket...",
-  "S42": "Taaltabel (veeltalig)",
-  "summary": "Veeltalige spraak",
+  "S42": "Taaltabel (Dialingo)",
   "description": "'n Byvoeging waarmee u elke taal wat u praat met sy eie sintetiseerder-, stem-, spoed-, leestekens- en woordeboekinstellings kan opstel. Dit wissel tussen hulle selfs wanneer teks nie met sy taal gemerk is nie, en selfs wanneer die taal in die middel van 'n sin verander.",
   "S43": "Stemwoordeboek vir %s",
   "S44": "Hierdie ry het nie 'n eie stem nie, dus geld die sintetiseerder se stemwoordeboek daarvoor."
@@ -563,7 +535,6 @@
  "am": {
   "S0": "ጠፍቷል",
   "S2": "ሙሉ",
-  "S3": "ባለብዙ ቋንቋ",
   "S5": "ጥብቅ የቋንቋ ማወቂያን ያበራል ወይም ያጠፋል",
   "S6": "የቋንቋ ማወቂያ፦ %s",
   "S7": "ጥብቅ ማወቂያ በርቷል",
@@ -594,8 +565,7 @@
   "S37": "ቋንቋ አክል",
   "S39": "&ሞክር",
   "S40": "&የቋንቋ ጥቅል ያረጋግጡ...",
-  "S42": "የቋንቋ ሰንጠረዥ (ባለብዙ ቋንቋ)",
-  "summary": "ባለብዙ ቋንቋ ንግግር",
+  "S42": "የቋንቋ ሰንጠረዥ (Dialingo)",
   "description": "የሚናገሩትን እያንዳንዱን ቋንቋ በራሱ የሲንተሳይዘር፣ የድምፅ፣ የፍጥነት፣ የሥርዓተ ነጥብ እና የመዝገበ ቃላት ቅንብሮች እንዲያዘጋጁ የሚያስችል ተጨማሪ። ጽሑፉ በቋንቋው ባይሰየምም፣ ቋንቋውም በዓረፍተ ነገር መካከል ቢቀየርም በመካከላቸው ይቀያየራል።",
   "S43": "የድምፅ መዝገበ ቃላት ለ%s",
   "S44": "ይህ ረድፍ የራሱ ድምፅ የለውም፣ ስለዚህ የሲንተሳይዘሩ የድምፅ መዝገበ ቃላት ይተገበራል።"
@@ -603,7 +573,6 @@
  "an": {
   "S0": "Desactivada",
   "S2": "Completa",
-  "S3": "Multilingüe",
   "S5": "Activa u desactiva la detección estricta d'idioma",
   "S6": "Detección d'idioma %s",
   "S7": "Detección estricta activada",
@@ -634,8 +603,7 @@
   "S37": "Adhibir idioma",
   "S39": "&Prebar",
   "S40": "&Verificar paquete d'idioma...",
-  "S42": "Tabla d'idiomas (multilingüe)",
-  "summary": "Voz multilingüe",
+  "S42": "Tabla d'idiomas (Dialingo)",
   "description": "Un complemento que le permite configurar cada idioma que charra con os suyos propios achustes de sintetizador, voz, velocidat, puntuación y diccionario. Cambea entre ells mesmo quan o texto no ye etiquetau con o suyo idioma, y mesmo quan l'idioma cambea en meyo d'una frase.",
   "S43": "Diccionario de voz ta %s",
   "S44": "Ista ringlera no tien voz propia, asinas que se le aplica lo diccionario de voz d'o sintetizador."
@@ -643,7 +611,6 @@
  "ckb": {
   "S0": "ناچالاک",
   "S2": "تەواو",
-  "S3": "فرەزمانی",
   "S5": "دۆزینەوەی توندی زمان چالاک یان ناچالاک دەکات",
   "S6": "دۆزینەوەی زمان: %s",
   "S7": "دۆزینەوەی توند چالاکە",
@@ -674,8 +641,7 @@
   "S37": "زیادکردنی زمان",
   "S39": "&تاقیکردنەوە",
   "S40": "&پشتڕاستکردنەوەی پاکێجی زمان...",
-  "S42": "خشتەی زمانەکان (فرەزمانی)",
-  "summary": "قسەکردنی فرەزمانی",
+  "S42": "خشتەی زمانەکان (Dialingo)",
   "description": "پێوەکراوێک کە ڕێگەت پێدەدات هەر زمانێک کە قسەی پێدەکەیت بە ڕێکخستنی تایبەتی خۆی بۆ سینسایزەر، دەنگ، خێرایی، خاڵبەندی و فەرهەنگ ڕێکبخەیت. لە نێوانیاندا دەگۆڕێت تەنانەت کاتێک دەقەکە بە زمانەکەی نیشانە نەکرابێت، و تەنانەت کاتێک زمانەکە لە ناوەڕاستی ڕستەدا دەگۆڕێت.",
   "S43": "فەرهەنگی دەنگ بۆ %s",
   "S44": "ئەم ڕیزە دەنگی تایبەت بە خۆی نییە، بۆیە فەرهەنگی دەنگی سینسایزەرەکە بۆی جێبەجێ دەکرێت."
@@ -683,7 +649,6 @@
  "is": {
   "S0": "Slökkt",
   "S2": "Full",
-  "S3": "Fjöltyngi",
   "S5": "Kveikir eða slekkur á strangri tungumálagreiningu",
   "S6": "Tungumálagreining: %s",
   "S7": "Ströng greining á",
@@ -714,8 +679,7 @@
   "S37": "Bæta við tungumáli",
   "S39": "&Prófa",
   "S40": "&Staðfesta tungumálapakka...",
-  "S42": "Tungumálatafla (fjöltyngi)",
-  "summary": "Fjöltyngt tal",
+  "S42": "Tungumálatafla (Dialingo)",
   "description": "Viðbót sem gerir þér kleift að stilla hvert tungumál sem þú talar með eigin stillingum fyrir talgervil, rödd, hraða, greinarmerki og orðabók. Hún skiptir á milli þeirra jafnvel þegar texti er ekki merktur með tungumáli sínu, og jafnvel þegar tungumálið breytist í miðri setningu.",
   "S43": "Raddorðabók fyrir %s",
   "S44": "Þessi lína hefur enga eigin rödd, svo raddorðabók talgervilsins gildir um hana."
@@ -723,7 +687,6 @@
  "kmr": {
   "S0": "Girtî",
   "S2": "Tevahî",
-  "S3": "Pirzimanî",
   "S5": "Tespîtkirina hişk a zimên vedike an digire",
   "S6": "Tespîtkirina zimên: %s",
   "S7": "Tespîtkirina hişk vekirî ye",
@@ -754,8 +717,7 @@
   "S37": "Zimên lê zêde bike",
   "S39": "&Biceribîne",
   "S40": "Pakêta zimên &kontrol bike...",
-  "S42": "Tabloya zimanan (pirzimanî)",
-  "summary": "Axaftina pirzimanî",
+  "S42": "Tabloya zimanan (Dialingo)",
   "description": "Pêvekek ku dihêle tu her zimanê ku tu diaxivî bi mîhengên xwe yên sentezker, deng, lez, xalbendî û ferhengê saz bikî. Ew di navbera wan de diguhere, heta dema ku nivîs bi zimanê xwe nehatibe nîşankirin, û heta dema ku ziman di nîvê hevokê de diguhere.",
   "S43": "Ferhenga dengî ji bo %s",
   "S44": "Ev rêz dengê xwe yê taybet tune ye, ji ber vê ferhenga dengî ya sentezker li ser tê sepandin."
@@ -763,7 +725,6 @@
  "so": {
   "S0": "Damsan",
   "S2": "Buuxa",
-  "S3": "Luqado badan",
   "S5": "Wuxuu shidaa ama damiyaa ogaanshaha luqadda ee adag",
   "S6": "Ogaanshaha luqadda: %s",
   "S7": "Ogaanshaha adag waa shidan yahay",
@@ -794,8 +755,7 @@
   "S37": "Ku dar luqad",
   "S39": "&Tijaabi",
   "S40": "&Xaqiiji xirmada luqadda...",
-  "S42": "Shaxda luqadaha (luqado badan)",
-  "summary": "Hadal luqado badan",
+  "S42": "Shaxda luqadaha (Dialingo)",
   "description": "Kordhis kuu oggolaanaya inaad luqad kasta oo aad ku hadasho u dejiso habayn u gaar ah oo codbixiyaha, codka, xawaaraha, calaamadaha joogsiga iyo qaamuuska ah. Wuu kala beddelaa xitaa marka qoraalka aan lagu calaamadin luqaddiisa, iyo xitaa marka luqaddu ay isbeddesho bartamaha jumladda.",
   "S43": "Qaamuuska codka ee %s",
   "S44": "Safkan ma laha cod u gaar ah, sidaas darteed waxaa lagu dabaqayaa qaamuuska codka ee codbixiyaha."

@@ -23,7 +23,7 @@ def create(name, log=None):
         return None
     if name in REFUSED:
         if log:
-            log.warning(f"multilanguage: {name} cannot be hosted by the language table")
+            log.warning(f"dialingo: {name} cannot be hosted by the language table")
         return None
     import synthDriverHandler
 
@@ -38,7 +38,7 @@ def create(name, log=None):
             return temp
         except Exception:
             if log:
-                log.debugWarning(f"multilanguage: could not take over the settings dialog's {name}", exc_info=True)
+                log.debugWarning(f"dialingo: could not take over the settings dialog's {name}", exc_info=True)
             dispose(temp)
     guest = None
     try:
@@ -67,7 +67,7 @@ def create(name, log=None):
             _cancel_queued(guest)
     except Exception:
         if log:
-            log.error(f"multilanguage: could not load synthesizer {name}", exc_info=True)
+            log.error(f"dialingo: could not load synthesizer {name}", exc_info=True)
         if guest is not None:
             # Created but not set up: its engine runs, and creating it pointed the ring and dictionary at it.
             dispose(guest, ring)
@@ -388,14 +388,14 @@ def apply_row(guest, row, log=None):
             setattr(guest, setting, value)
             if setting == "voice" and log and getattr(guest, "voice", value) != value:
                 # SAPI 5 ignores a voice it does not have; the row then speaks in the voice last used.
-                log.debugWarning(f"multilanguage: {guest.name} has no voice {value!r}")
+                log.debugWarning(f"dialingo: {guest.name} has no voice {value!r}")
             if setting == "voice" and isinstance(getattr(guest, "speakingLanguage", None), str):
                 # Eloquence remembers the language its last language command switched to and skips a command
                 # for that language again; a new voice is a new language, so the next command must be sent.
                 guest.speakingLanguage = ""
         except Exception:
             if log:
-                log.debugWarning(f"multilanguage: setting {setting}={value!r} on {guest.name} failed", exc_info=True)
+                log.debugWarning(f"dialingo: setting {setting}={value!r} on {guest.name} failed", exc_info=True)
     guest._mlangApplied = row.key()
 
 

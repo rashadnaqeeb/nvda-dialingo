@@ -13,13 +13,13 @@ from mlang.leaving import leave, leave_nvda
 
 class Leave(unittest.TestCase):
     def test_base_gets_its_host_and_the_mark(self):
-        base = {"speech": {"synth": "languageTable"}, "multilanguage": {"defaultSynth": "ibmeci"}}
+        base = {"speech": {"synth": "languageTable"}, "dialingo": {"defaultSynth": "ibmeci"}}
         self.assertEqual(leave(base, []), [base])
         self.assertEqual(base["speech"]["synth"], "ibmeci")
-        self.assertIs(base["multilanguage"]["leftTable"], True)
+        self.assertIs(base["dialingo"]["leftTable"], True)
 
     def test_no_host_gives_nvda_default(self):
-        base = {"speech": {"synth": "languageTable"}, "multilanguage": {"table": "[]"}}
+        base = {"speech": {"synth": "languageTable"}, "dialingo": {"table": "[]"}}
         leave(base, [])
         self.assertEqual(base["speech"]["synth"], "auto")
 
@@ -27,26 +27,26 @@ class Leave(unittest.TestCase):
         base = {"speech": {"synth": "languageTable"}}
         leave(base, [])
         self.assertEqual(base["speech"]["synth"], "auto")
-        self.assertIs(base["multilanguage"]["leftTable"], True)
+        self.assertIs(base["dialingo"]["leftTable"], True)
 
     def test_other_synthesizer_left_alone(self):
-        base = {"speech": {"synth": "espeak"}, "multilanguage": {"defaultSynth": "ibmeci"}}
+        base = {"speech": {"synth": "espeak"}, "dialingo": {"defaultSynth": "ibmeci"}}
         self.assertEqual(leave(base, []), [])
-        self.assertEqual(base, {"speech": {"synth": "espeak"}, "multilanguage": {"defaultSynth": "ibmeci"}})
+        self.assertEqual(base, {"speech": {"synth": "espeak"}, "dialingo": {"defaultSynth": "ibmeci"}})
 
     def test_profile_with_its_own_host(self):
-        base = {"speech": {"synth": "espeak"}, "multilanguage": {"defaultSynth": "ibmeci"}}
-        profile = {"speech": {"synth": "languageTable"}, "multilanguage": {"defaultSynth": "oneCore"}}
+        base = {"speech": {"synth": "espeak"}, "dialingo": {"defaultSynth": "ibmeci"}}
+        profile = {"speech": {"synth": "languageTable"}, "dialingo": {"defaultSynth": "oneCore"}}
         self.assertEqual(leave(base, [profile]), [profile])
         self.assertEqual(profile["speech"]["synth"], "oneCore")
-        self.assertNotIn("leftTable", base["multilanguage"])
+        self.assertNotIn("leftTable", base["dialingo"])
 
     def test_profile_takes_the_base_host(self):
-        base = {"speech": {"synth": "languageTable"}, "multilanguage": {"defaultSynth": "ibmeci"}}
+        base = {"speech": {"synth": "languageTable"}, "dialingo": {"defaultSynth": "ibmeci"}}
         profile = {"speech": {"synth": "languageTable"}}
         self.assertEqual(leave(base, [profile]), [base, profile])
         self.assertEqual(profile["speech"]["synth"], "ibmeci")
-        self.assertNotIn("multilanguage", profile)
+        self.assertNotIn("dialingo", profile)
 
     def test_profile_without_speech_left_alone(self):
         base = {"speech": {"synth": "ibmeci"}}
@@ -94,7 +94,7 @@ class LeaveNvda(unittest.TestCase):
 
     def test_files_and_memory(self):
         files = {
-            "nvda.ini": {"speech": {"synth": "languageTable"}, "multilanguage": {"defaultSynth": "ibmeci"}},
+            "nvda.ini": {"speech": {"synth": "languageTable"}, "dialingo": {"defaultSynth": "ibmeci"}},
             "profiles/Word.ini": {"speech": {"synth": "languageTable"}},
             "profiles/Excel.ini": {"speech": {"synth": "espeak"}},
         }
@@ -102,10 +102,10 @@ class LeaveNvda(unittest.TestCase):
         written = self.run_leave(files, memory, profiles=["Word", "Excel"])
         self.assertEqual(sorted(written), ["nvda.ini", "profiles/Word.ini"])
         self.assertEqual(written["nvda.ini"]["speech"]["synth"], "ibmeci")
-        self.assertIs(written["nvda.ini"]["multilanguage"]["leftTable"], True)
+        self.assertIs(written["nvda.ini"]["dialingo"]["leftTable"], True)
         self.assertEqual(written["profiles/Word.ini"]["speech"]["synth"], "ibmeci")
         self.assertEqual(memory["speech"]["synth"], "ibmeci")
-        self.assertIs(memory["multilanguage"]["leftTable"], True)
+        self.assertIs(memory["dialingo"]["leftTable"], True)
 
     def test_only_a_profile_leaves_memory_alone(self):
         files = {

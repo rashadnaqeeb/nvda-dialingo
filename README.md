@@ -1,10 +1,10 @@
-# NVDA multilanguage add-on
+# Dialingo
 
 An NVDA add-on that reads text in the language it's written in, even when nothing marks what language that is, and lets you give each language its own synthesizer, voice, and settings.
 
 This readme explains how it works and how to build it. If you just want to use the add-on, read the user guide, `addon/doc/en/readme.md`, which is also the help page inside the add-on. `KNOWN_GAPS.md` lists the problems that are known and have been left alone on purpose, with the reason for each.
 
-The add-on is in beta. It needs NVDA 2026.1 or later and has been tested on 2026.2.
+It needs NVDA 2026.1 or later and has been tested on 2026.2. During its beta it was called multilanguage.
 
 ## The problem
 
@@ -22,7 +22,7 @@ The other constraint is speed. Detection runs inside NVDA's speech path, before 
 
 The add-on has two parts, and each works without the other.
 
-- A global plugin, in `addon/globalPlugins/multilanguage/`. It detects languages, applies each language's settings, and provides the settings panel.
+- A global plugin, in `addon/globalPlugins/dialingo/`. It detects languages, applies each language's settings, and provides the settings panel.
 - A synthesizer driver called Language table, in `addon/synthDrivers/languageTable.py`. It loads your other synthesizers inside itself and sends each language to the one you chose for it.
 
 Most of the logic is in `addon/lib/mlang/`. Apart from NVDA's speech command classes, which the tests stand in for, that library only imports NVDA inside functions, so the tests and the measurement scripts run the same code outside NVDA.
@@ -122,7 +122,7 @@ Strict mode asks a second recognizer before switching. That recognizer is Window
 
 A guess is only as good as the text it gets, and NVDA often hands over less than a sentence.
 
-**Lines.** When you arrow through wrapped text, NVDA reads one line at a time, and a line can start or end partway through a sentence. A line ending in "…side of the lake. A" has a one-word sentence at its end that can't be scored. When a line's edges can't be decided, the add-on fetches the text around the line and judges the cut sentences as wholes (`globalPlugins/multilanguage/context.py`). Say all doesn't need this, because NVDA already gives it whole sentences.
+**Lines.** When you arrow through wrapped text, NVDA reads one line at a time, and a line can start or end partway through a sentence. A line ending in "…side of the lake. A" has a one-word sentence at its end that can't be scored. When a line's edges can't be decided, the add-on fetches the text around the line and judges the cut sentences as wholes (`globalPlugins/dialingo/context.py`). Say all doesn't need this, because NVDA already gives it whole sentences.
 
 **Characters and words.** A single letter or word can't be detected on its own. When you move by character or word, the add-on detects the whole line and uses the language at the cursor's position. That means stepping through "Bonjour" in a French sentence reads each letter, and its character description, with the French voice.
 
@@ -171,13 +171,13 @@ NVDA only loads the voice dictionary of the current voice. The add-on also appli
 
 ## The language lock
 
-The language lock is an entry the add-on adds to NVDA's synth settings ring (`globalPlugins/multilanguage/lock.py`). Set it to a language and everything is read in that language, with no detection. While a row's language is locked, the rest of the ring shows that row's settings instead of the synthesizer's, so you can adjust them on the fly. The ring's labels are also spoken in the locked language, using NVDA's and the add-on's translations, so the French voice isn't left reading English words.
+The language lock is an entry the add-on adds to NVDA's synth settings ring (`globalPlugins/dialingo/lock.py`). Set it to a language and everything is read in that language, with no detection. While a row's language is locked, the rest of the ring shows that row's settings instead of the synthesizer's, so you can adjust them on the fly. The ring's labels are also spoken in the locked language, using NVDA's and the add-on's translations, so the French voice isn't left reading English words.
 
 Right after the lock is a detection entry. Normally it's the detection mode. While a row is locked, it turns detection on or off for that row's language only.
 
 ## Settings
 
-Settings are stored in NVDA's configuration under `[multilanguage]`, so configuration profiles work with them (`mlang/table.py`).
+Settings are stored in NVDA's configuration under `[dialingo]`, so configuration profiles work with them (`mlang/table.py`). Installing Dialingo removes the old multilanguage add-on and moves its settings across, profiles included (`mlang/rename.py`).
 
 - `mode`: `off`, `script` (script and tags only), or `full`, the default
 - `strict`: also require Windows' language detection to agree
@@ -228,7 +228,7 @@ PY="$(cd "$UV_PROJECT_ENVIRONMENT" && pwd)/Scripts/python.exe"
 "$PY" build.py
 ```
 
-`build.py` writes `dist/multilanguage-<version>.nvda-addon`. Open it with NVDA running to install it. NVDA's log at debug level shows a `multilanguage:` line for anything that goes wrong.
+`build.py` writes `dist/dialingo-<version>.nvda-addon`. Open it with NVDA running to install it. NVDA's log at debug level shows a `dialingo:` line for anything that goes wrong.
 
 ### Measuring detection
 
@@ -257,7 +257,7 @@ The translations were machine-written and haven't been checked by native speaker
 ## Repository layout
 
 - `addon/`: the add-on as installed
-  - `globalPlugins/multilanguage/`: the plugin: the speech filter, settings panel, language lock, and line context
+  - `globalPlugins/dialingo/`: the plugin: the speech filter, settings panel, language lock, and line context
   - `synthDrivers/languageTable.py`: the Language table driver
   - `synthDrivers32/mlang_sapi5.py`: 32-bit SAPI 5 for the Language table, run in NVDA's 32-bit synthesizer host
   - `lib/mlang/`: the shared library, with detection, the scheduler, and synthesizer hosting

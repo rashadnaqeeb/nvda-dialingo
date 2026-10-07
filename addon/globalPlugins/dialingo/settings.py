@@ -1,4 +1,4 @@
-# The multilanguage settings panel and the language row dialog.
+# The Dialingo settings panel and the language row dialog.
 
 import wx
 
@@ -33,7 +33,7 @@ def dictionary_missing(language):
         dictionary = engine._dictionary() if engine is not None else None
         return dictionary.has(language) is False if dictionary is not None else None
     except Exception:
-        log.debugWarning("multilanguage: dictionary check failed", exc_info=True)
+        log.debugWarning("dialingo: dictionary check failed", exc_info=True)
         return None
 
 
@@ -76,14 +76,14 @@ def start_install(parent, language):
     try:
         started = langpack.install([name], done)
     except Exception:
-        log.error("multilanguage: could not start the dictionary install", exc_info=True)
+        log.error("dialingo: could not start the dictionary install", exc_info=True)
         started = False
     if not started:
         # Translators: Message when the elevated install did not start.
         gui.messageBox(_("Not started: administrator permission was not given."), _("Windows dictionary"), wx.OK | wx.ICON_ERROR, parent)
         return False
     installing.add(key)
-    log.info(f"multilanguage: installing {name}")
+    log.info(f"dialingo: installing {name}")
     # Translators: Announced when the dictionary install starts; %s is a language name.
     ui.message(_("Installing the %s dictionary. NVDA will report when done.") % language_label(language))
     return True
@@ -95,7 +95,7 @@ def finish_install(language, code):
         if engine is not None and engine.dictionary:
             engine.dictionary.refresh()
     except Exception:
-        log.debugWarning("multilanguage: dictionary refresh after install failed", exc_info=True)
+        log.debugWarning("dialingo: dictionary refresh after install failed", exc_info=True)
     name = language_label(language)
     if code == 0 and not dictionary_missing(language):
         # Translators: Message when the Windows dictionary finished installing; %s is a language name.
@@ -106,7 +106,7 @@ def finish_install(language, code):
     else:
         # Translators: Message when the install failed; %s is a language name.
         text = _("%s dictionary did not install. Check Windows Update, or see the NVDA log.") % name
-    log.info(f"multilanguage: dictionary install for {language} ended with code {code}")
+    log.info(f"dialingo: dictionary install for {language} ended with code {code}")
     gui.messageBox(text, _("Windows dictionary"), wx.OK | (wx.ICON_INFORMATION if code == 0 else wx.ICON_ERROR))
 
 def language_label(code):
@@ -142,9 +142,9 @@ def synth_label(name):
     return _synth_labels.get(name, name)
 
 
-class MultilanguagePanel(SettingsPanel):
-    # Translators: The title of the add-on's settings panel.
-    title = _("Multilanguage")
+class DialingoPanel(SettingsPanel):
+    # The add-on's name, which is not translated.
+    title = "Dialingo"
 
     def makeSettings(self, settingsSizer):
         section = config.conf[T.CONFIG_SECTION]
@@ -339,7 +339,7 @@ class MultilanguagePanel(SettingsPanel):
                 guest = hosts.instance(row.synth)
                 info = guest.availableVoices.get(voice) if guest is not None else None
             except Exception:
-                log.debugWarning("multilanguage: the row's voice could not be named", exc_info=True)
+                log.debugWarning("dialingo: the row's voice could not be named", exc_info=True)
         if info is None:
             gui.messageBox(
                 # Translators: Message when the selected row has no voice whose dictionary could be edited.
@@ -430,7 +430,7 @@ def follow_table_after_save(dialog, panels=()):
     try:
         closing = not dialog or dialog.IsBeingDeleted() or wx.GetApp().IsScheduledForDestruction(dialog)
     except Exception:
-        log.debugWarning("multilanguage: could not tell whether the settings dialog is closing", exc_info=True)
+        log.debugWarning("dialingo: could not tell whether the settings dialog is closing", exc_info=True)
     if closing:
         _drop_refresh_callbacks(panels)
     if not follow_table():
@@ -475,7 +475,7 @@ def switch_to(name):
 
     tones.terminate()
     tones.initialize()
-    log.info(f"multilanguage: synthesizer set to {name} to follow the language table")
+    log.info(f"dialingo: synthesizer set to {name} to follow the language table")
     return True
 
 
@@ -585,7 +585,7 @@ class RowDialog(wx.Dialog):
         try:
             self.voices = list(guest.availableVoices.values()) if guest.isSupported("voice") else []
         except Exception:
-            log.debugWarning("multilanguage: voices unavailable", exc_info=True)
+            log.debugWarning("dialingo: voices unavailable", exc_info=True)
             self.voices = []
         self.voiceChoice.Clear()
         for info in self.voices:
@@ -729,7 +729,7 @@ class RowDialog(wx.Dialog):
                 # A guest of the language table: its next piece must put its own row back.
                 self.guest._mlangApplied = None
         except Exception:
-            log.error("multilanguage: test speech failed", exc_info=True)
+            log.error("dialingo: test speech failed", exc_info=True)
 
     def onOk(self, evt):
         if self.guest is None:
@@ -768,7 +768,7 @@ class RowDialog(wx.Dialog):
                 if hosts.read(guest, setting) != value:
                     setattr(guest, setting, value)
             except Exception:
-                log.debugWarning(f"multilanguage: could not restore {setting} after a preview", exc_info=True)
+                log.debugWarning(f"dialingo: could not restore {setting} after a preview", exc_info=True)
         guest._mlangApplied = None
 
 

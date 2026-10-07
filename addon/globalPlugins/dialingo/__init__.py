@@ -1,4 +1,4 @@
-# The multilanguage add-on's global plugin: language detection on every speech sequence, the settings
+# Dialingo's global plugin: language detection on every speech sequence, the settings
 # panel, and the scripts. Detection inserts standard language commands, so it works with any synthesizer
 # that switches languages by itself, and with the add-on's language table synthesizer for the rest.
 
@@ -26,7 +26,7 @@ from speech.commands import LangChangeCommand  # noqa: E402
 from speech.extensions import filter_speechSequence  # noqa: E402
 from speech.languageHandling import getSpeechSequenceWithLangs  # noqa: E402
 
-from mlang import leaving, pipes, policy, prosody, voicedict, winvoices  # noqa: E402
+from mlang import leaving, pipes, policy, prosody, rename, voicedict, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME  # noqa: E402
@@ -84,7 +84,7 @@ def synth_languages():
         if policy.windows_voices_wanted(config.conf):
             langs.update(winvoices.languages())
     except Exception:
-        log.debugWarning("multilanguage: Windows voices could not be listed", exc_info=True)
+        log.debugWarning("dialingo: Windows voices could not be listed", exc_info=True)
     return tuple(sorted(langs))
 
 
@@ -106,7 +106,7 @@ def symbol_names(locale):
             symbol = processor.computedSymbols.get(character)
             return symbol is not None and bool(symbol.replacement) and symbol.level == characterProcessing.SymbolLevel.NONE
         except Exception:
-            log.debugWarning("multilanguage: the symbol table for %s could not be read" % locale, exc_info=True)
+            log.debugWarning("dialingo: the symbol table for %s could not be read" % locale, exc_info=True)
             return False
 
     return named
@@ -139,13 +139,13 @@ class Engine:
         self.grid = GridLabels()
         self.lock = threading.Lock()
         self.ready = threading.Event()
-        threading.Thread(target=self._warm, name="multilanguage-warm", daemon=True).start()
+        threading.Thread(target=self._warm, name="dialingo-warm", daemon=True).start()
 
     def _warm(self):
         try:
             self._backend(bool(config.conf[T.CONFIG_SECTION]["strict"]))
         except Exception:
-            log.error("multilanguage: the recognizer could not be loaded; language detection is off", exc_info=True)
+            log.error("dialingo: the recognizer could not be loaded; language detection is off", exc_info=True)
             self.failed = True
         finally:
             self.ready.set()
@@ -164,7 +164,7 @@ class Engine:
                 try:
                     self.strict_backend = recognizers.EnsembleBackend(self.backend)
                 except Exception:
-                    log.warning("multilanguage: Windows language detection unavailable; strict mode ignored", exc_info=True)
+                    log.warning("dialingo: Windows language detection unavailable; strict mode ignored", exc_info=True)
                     self.strict_backend = self.backend
             return self.strict_backend
 
@@ -197,7 +197,7 @@ class Engine:
 
             return characterProcessing.SymbolLevel(row.symbolLevel)
         except Exception:
-            log.debugWarning("multilanguage: no symbol level for %s" % locale, exc_info=True)
+            log.debugWarning("dialingo: no symbol level for %s" % locale, exc_info=True)
             return level
 
     def _dictionary(self):
@@ -207,7 +207,7 @@ class Engine:
 
                 self.dictionary = Dictionary()
             except Exception:
-                log.warning("multilanguage: spell checking API unavailable; dictionary evidence off", exc_info=True)
+                log.warning("dialingo: spell checking API unavailable; dictionary evidence off", exc_info=True)
                 self.dictionary = False
         return self.dictionary or None
 
@@ -257,7 +257,7 @@ class Engine:
                 self.detector.configure(default, configured, available, excluded, symbol_names(default))
                 self.key = key
             except Exception:
-                log.error("multilanguage: language detection could not start", exc_info=True)
+                log.error("dialingo: language detection could not start", exc_info=True)
                 self.failed = True
                 return None
         return self.detector
@@ -287,25 +287,25 @@ class Engine:
         try:
             locked = self.language_lock()
         except Exception:
-            log.error("multilanguage: the language lock could not be read", exc_info=True)
+            log.error("dialingo: the language lock could not be read", exc_info=True)
             locked = lock.AUTOMATIC
         if locked:
             try:
                 sequence = locked_sequence(sequence, lock.language(locked))
             except Exception:
-                log.error("multilanguage: the language lock failed on a sequence", exc_info=True)
+                log.error("dialingo: the language lock failed on a sequence", exc_info=True)
         else:
             try:
                 sequence = untagged_sequence(sequence, self.ignores_tag)
             except Exception:
-                log.error("multilanguage: tags for languages with detection off could not be dropped", exc_info=True)
+                log.error("dialingo: tags for languages with detection off could not be dropped", exc_info=True)
         try:
             detector = self.current()
             if detector is not None:
                 try:
                     detector.labels = self.grid.current()
                 except Exception:
-                    log.debugWarning("multilanguage: grid labels unavailable", exc_info=True)
+                    log.debugWarning("dialingo: grid labels unavailable", exc_info=True)
                 try:
                     sequence = filter_sequence(
                         sequence,
@@ -318,15 +318,15 @@ class Engine:
                 finally:
                     detector.labels = ()
         except Exception:
-            log.error("multilanguage: detection failed on a sequence", exc_info=True)
+            log.error("dialingo: detection failed on a sequence", exc_info=True)
         try:
             sequence = self.with_prosody(sequence)
         except Exception:
-            log.error("multilanguage: applying row parameters failed on a sequence", exc_info=True)
+            log.error("dialingo: applying row parameters failed on a sequence", exc_info=True)
         try:
             sequence = self.with_voice_dicts(sequence)
         except Exception:
-            log.error("multilanguage: applying the row voices' dictionaries failed on a sequence", exc_info=True)
+            log.error("dialingo: applying the row voices' dictionaries failed on a sequence", exc_info=True)
         return sequence
 
     def with_voice_dicts(self, sequence):
@@ -502,7 +502,12 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             # First: the synthesizer NVDA started with may be a 32-bit one.
             pipes.install(log)
         except Exception:
-            log.error("multilanguage: could not make 32-bit synthesizers close their pipes once", exc_info=True)
+            log.error("dialingo: could not make 32-bit synthesizers close their pipes once", exc_info=True)
+        try:
+            # Dialingo was multilanguage before 1.0; its settings move here (mlang.rename).
+            rename.apply_nvda(rename.drop_old, log)
+        except Exception:
+            log.error("dialingo: the settings of multilanguage could not be moved", exc_info=True)
         T.ensure_spec(config.conf)
         self.engine = Engine()
         settings.engine = self.engine
@@ -511,27 +516,27 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             self.unit_context.install()
             self.engine.unit_context = self.unit_context
         except Exception:
-            log.error("multilanguage: could not wrap the caret speech functions; characters read in the default voice", exc_info=True)
+            log.error("dialingo: could not wrap the caret speech functions; characters read in the default voice", exc_info=True)
         try:
             install_symbol_levels(self.engine)
         except Exception:
-            log.error("multilanguage: could not wrap symbol processing; every language uses NVDA's symbol level", exc_info=True)
+            log.error("dialingo: could not wrap symbol processing; every language uses NVDA's symbol level", exc_info=True)
         try:
             install_language_switching()
         except Exception:
-            log.error("multilanguage: could not pass language commands to the language table; it switches only with NVDA's automatic language switching on", exc_info=True)
+            log.error("dialingo: could not pass language commands to the language table; it switches only with NVDA's automatic language switching on", exc_info=True)
         filter_speechSequence.register(self.filter)
         # NVDA's language reporter must see the commands this filter inserts, so it runs after it.
         filter_speechSequence.moveToEnd(getSpeechSequenceWithLangs, last=True)
-        gui.settingsDialogs.NVDASettingsDialog.categoryClasses.append(settings.MultilanguagePanel)
+        gui.settingsDialogs.NVDASettingsDialog.categoryClasses.append(settings.DialingoPanel)
         try:
             lock.install()
         except Exception:
-            log.error("multilanguage: could not add the language lock to the synth settings ring", exc_info=True)
+            log.error("dialingo: could not add the language lock to the synth settings ring", exc_info=True)
         try:
             return_to_table()
         except Exception:
-            log.error("multilanguage: could not select the language table again", exc_info=True)
+            log.error("dialingo: could not select the language table again", exc_info=True)
 
     def terminate(self):
         try:
@@ -539,7 +544,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             if disabled_on_restart():
                 leaving.leave_nvda(log)
         except Exception:
-            log.error("multilanguage: could not put the host back as NVDA's synthesizer", exc_info=True)
+            log.error("dialingo: could not put the host back as NVDA's synthesizer", exc_info=True)
         lock.uninstall()
         settings.engine = None
         self.engine.unit_context = None
@@ -548,7 +553,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
         filter_speechSequence.unregister(self.filter)
         uninstall_language_switching()
         try:
-            gui.settingsDialogs.NVDASettingsDialog.categoryClasses.remove(settings.MultilanguagePanel)
+            gui.settingsDialogs.NVDASettingsDialog.categoryClasses.remove(settings.DialingoPanel)
         except ValueError:
             pass
         pipes.uninstall()

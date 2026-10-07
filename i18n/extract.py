@@ -24,10 +24,10 @@ else:
     if not os.path.isdir(NVDA_LOCALE):
         sys.exit("Set NVDA_SOURCE to a clone of https://github.com/nvaccess/nvda, or install NVDA.")
 SOURCES = [
-    "addon/globalPlugins/multilanguage/__init__.py",
-    "addon/globalPlugins/multilanguage/settings.py",
-    "addon/globalPlugins/multilanguage/context.py",
-    "addon/globalPlugins/multilanguage/lock.py",
+    "addon/globalPlugins/dialingo/__init__.py",
+    "addon/globalPlugins/dialingo/settings.py",
+    "addon/globalPlugins/dialingo/context.py",
+    "addon/globalPlugins/dialingo/lock.py",
     "addon/synthDrivers/languageTable.py",
 ]
 

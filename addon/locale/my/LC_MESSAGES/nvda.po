@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: multilanguage\n"
+"Project-Id-Version: dialingo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,10 +61,6 @@ msgstr "တပ်ဆင်မှု ပြီးသော်လည်း Windows
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%s အဘိဓာန် တပ်ဆင်၍ မရပါ။ Windows Update သို့မဟုတ် NVDA မှတ်တမ်းကို စစ်ဆေးပါ။"
-
-#. Translators: The title of the add-on's settings panel.
-msgid "Multilanguage"
-msgstr "ဘာသာစကားစုံ"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"
@@ -273,6 +269,6 @@ msgid "off"
 msgstr "ပိတ်"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
-msgid "Language table (multilanguage)"
-msgstr "ဘာသာစကားဇယား (ဘာသာစကားစုံ)"
+msgid "Language table (Dialingo)"
+msgstr "ဘာသာစကားဇယား (Dialingo)"
 

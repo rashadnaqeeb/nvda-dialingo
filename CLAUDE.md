@@ -1,12 +1,12 @@
-# NVDA multilanguage add-on
+# Dialingo
 
-An NVDA add-on that detects the language of untagged text and speaks each language with its own synthesizer and voice. Public repository. In beta, targeting NVDA 2026.1 and later, which runs 64-bit Python 3.13. `README.md` explains the design; read it before changing behaviour.
+An NVDA add-on (ID `dialingo`, called multilanguage before 1.0) that detects the language of untagged text and speaks each language with its own synthesizer and voice. Public repository. In beta, targeting NVDA 2026.1 and later, which runs 64-bit Python 3.13. `README.md` explains the design; read it before changing behaviour.
 
 Detailed notes load from `.claude/rules/` when you work on the matching files: `detection.md` (detector, context, harness), `synthesizers.md` (the Language table driver and its guests), `nvda-integration.md` (the plugin's hooks into NVDA, the lock, settings).
 
 ## Layout
 
-- `addon/globalPlugins/multilanguage/`: the plugin (speech filter, settings panel, language lock, caret and line context)
+- `addon/globalPlugins/dialingo/`: the plugin (speech filter, settings panel, language lock, caret and line context)
 - `addon/synthDrivers/languageTable.py`: the Language table driver, which hosts other synthesizers as guests
 - `addon/synthDrivers32/mlang_sapi5.py`: 32-bit SAPI 5 for the table, run inside NVDA's 32-bit synth driver host
 - `addon/lib/mlang/`: the shared library
@@ -20,14 +20,14 @@ Detailed notes load from `.claude/rules/` when you work on the matching files: `
 Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x64 environment holding `fasttext-predict`, `comtypes`, and `regex` (see README, "Building and testing"). Set `PYTHONUTF8=1`.
 
 - Tests: `(cd tests && "$PY" -m unittest discover)`. All must pass.
-- Build: `"$PY" build.py` writes `dist/multilanguage-<version>.nvda-addon`, named from `addon/manifest.ini`. It overwrites a package of the same version; don't rebuild a released version.
+- Build: `"$PY" build.py` writes `dist/<name>-<version>.nvda-addon`, named from `addon/manifest.ini`. It overwrites a package of the same version; don't rebuild a released version.
 - Acceptance cases: `"$PY" harness/harness.py fasttext`. Must stay at 106/106 or higher.
 - Translations, after any `_()` string changes: `"$PY" i18n/extract.py` then `"$PY" i18n/make_locale.py`. Fix any placeholder or accelerator problem it lists.
 
 ## Rules
 
 - Code in `addon/lib/mlang/` imports NVDA modules only inside functions, so tests and the harness run outside NVDA. The one exception is `speech.commands`, which `tests/nvda_stub.py` stands in for.
-- Every hook into NVDA is wrapped so a failure logs and lets speech through unchanged. Keep it that way. Log lines start with `multilanguage: `.
+- Every hook into NVDA is wrapped so a failure logs and lets speech through unchanged. Keep it that way. Log lines start with `dialingo: `.
 - Never change the user's NVDA settings on their behalf: not "Automatic language switching", not a synthesizer's own saved settings. Guest synthesizers never save their settings. The one setting the add-on does change is NVDA's synthesizer: to the language table and back when the panel is saved, and back to the table's host when the add-on is removed or disabled (`mlang/leaving.py`).
 - A wrong switch costs more than a missed one. A detection change must be measured with the harness before and after, and must not add false switches on English or NVDA's interface strings.
 - `KNOWN_GAPS.md` records problems left alone and alternatives already measured and rejected. Check it before trying a fix. When a gap is fixed, delete its entry.

@@ -2,6 +2,11 @@
 paths:
   - "addon/globalPlugins/**"
   - "addon/installTasks.py"
+  - "addon/lib/mlang/leaving.py"
+  - "addon/lib/mlang/rename.py"
+  - "addon/lib/mlang/nvdaconf.py"
+  - "tests/test_leaving.py"
+  - "tests/test_rename.py"
   - "tests/test_install_tasks.py"
   - "addon/lib/mlang/table.py"
   - "addon/lib/mlang/catalogs.py"
@@ -29,7 +34,7 @@ paths:
 
 ## Rows and the table (`table.py`)
 
-- Settings live in `[multilanguage]`: `mode`, `strict`, `detectInDefaultTagged`, `useWindowsVoices`, `defaultSynth`, `lock`, `table` (JSON rows: language, synthesizer, optional voice, variant, rate, rateBoost, pitch, inflection, volume, symbol level, and `detect` written only when off).
+- Settings live in `[dialingo]`: `mode`, `strict`, `detectInDefaultTagged`, `useWindowsVoices`, `defaultSynth`, `lock`, `table` (JSON rows: language, synthesizer, optional voice, variant, rate, rateBoost, pitch, inflection, volume, symbol level, and `detect` written only when off).
 - Row languages use NVDA's spelling (`fr_FR`), because NVDA's descriptions and symbol files fall back to `fr` only on the underscore. The row dialog rejects anything that isn't a language code.
 - `Table.row_for` resolves a tag by exact match, then same language (`scripts.code`), then base language.
 - A row with `detect` off is never chosen by any route: not as a stand-in for an unconfigured script, not by a free guess, not by typing echo, unless another row of the same language has detection on. Application tags reaching it are replaced with the default before detection. The lock still offers it.
@@ -55,3 +60,9 @@ paths:
 - Disable: the plugin's `terminate`, when the name is in `PENDING_DISABLE`. NVDA has already saved its configuration by then.
 - Coming back (re-enabled or reinstalled): `return_to_table` clears `leftTable` and, if NVDA is still on the host, runs `settings.follow_table` after startup to select the table again if needed.
 - Not handled: an update whose new copy then fails to install leaves the saved `languageTable`.
+
+## The rename from multilanguage (`mlang/rename.py`)
+
+- Until 1.0 the add-on's ID and config section were `multilanguage`; NVDA takes Dialingo for a different add-on. `installTasks.onInstall` copies `[multilanguage]` to `[dialingo]` (memory and every file on disk) so the language table driver, which loads before plugins, finds its settings at the next start, and requests the old add-on's removal so both don't load. The plugin's `__init__` then drops `[multilanguage]`, carrying over `leftTable` if the old copy's uninstall set it.
+- The driver name stays `languageTable` so `speech.synth` keeps working across the rename. Don't rename it.
+- `nvdaconf.py` reads and writes NVDA's config files the way NVDA does; `leaving.py` and `rename.py` share it. Modules installTasks imports must import `nvdaconf` at module level, since installTasks drops `mlang` from `sys.modules` after importing.

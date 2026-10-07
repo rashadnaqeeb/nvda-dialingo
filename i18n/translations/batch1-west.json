@@ -2,7 +2,6 @@
  "de": {
   "S0": "Aus",
   "S2": "Vollständig",
-  "S3": "Mehrsprachig",
   "S5": "Schaltet die strenge Spracherkennung um",
   "S6": "Spracherkennung %s",
   "S7": "Strenge Erkennung ein",
@@ -33,8 +32,7 @@
   "S37": "Sprache hinzufügen",
   "S39": "&Testen",
   "S40": "Sprachpaket &prüfen...",
-  "S42": "Sprachtabelle (Mehrsprachig)",
-  "summary": "Mehrsprachige Sprachausgabe",
+  "S42": "Sprachtabelle (Dialingo)",
   "description": "Eine Erweiterung, mit der Sie jede Sprache, die Sie sprechen, mit eigenen Einstellungen für Sprachausgabe, Stimme, Geschwindigkeit, Satzzeichen und Wörterbuch einrichten. Sie wechselt zwischen ihnen, auch wenn der Text nicht mit seiner Sprache markiert ist, und auch wenn die Sprache mitten im Satz wechselt.",
   "S43": "Stimmenwörterbuch für %s",
   "S44": "Diese Zeile hat keine eigene Stimme, daher gilt für sie das Stimmenwörterbuch der Sprachausgabe."
@@ -43,7 +41,6 @@
  "fr": {
   "S0": "Désactivée",
   "S2": "Complète",
-  "S3": "Multilingue",
   "S5": "Active ou désactive la détection stricte de langue",
   "S6": "Détection de langue %s",
   "S7": "Détection stricte activée",
@@ -74,8 +71,7 @@
   "S37": "Ajouter une langue",
   "S39": "&Tester",
   "S40": "&Vérifier le module linguistique...",
-  "S42": "Table des langues (multilingue)",
-  "summary": "Parole multilingue",
+  "S42": "Table des langues (Dialingo)",
   "description": "Une extension qui vous permet de configurer chaque langue que vous parlez avec ses propres réglages de synthétiseur, de voix, de débit, de ponctuation et de dictionnaire. Elle passe de l'une à l'autre même quand le texte n'est pas marqué avec sa langue, et même quand la langue change au milieu d'une phrase.",
   "S43": "Dictionnaire de la voix pour %s",
   "S44": "Cette ligne n'a pas de voix propre ; le dictionnaire de la voix du synthétiseur s'y applique."
@@ -83,7 +79,6 @@
  "es": {
   "S0": "Desactivada",
   "S2": "Completa",
-  "S3": "Multilingüe",
   "S5": "Activa o desactiva la detección estricta de idioma",
   "S6": "Detección de idioma %s",
   "S7": "Detección estricta activada",
@@ -114,8 +109,7 @@
   "S37": "Añadir idioma",
   "S39": "&Probar",
   "S40": "&Verificar paquete de idioma...",
-  "S42": "Tabla de idiomas (multilingüe)",
-  "summary": "Voz multilingüe",
+  "S42": "Tabla de idiomas (Dialingo)",
   "description": "Un complemento que le permite configurar cada idioma que habla con sus propios ajustes de sintetizador, voz, velocidad, puntuación y diccionario. Cambia entre ellos incluso cuando el texto no está etiquetado con su idioma, e incluso cuando el idioma cambia a mitad de una frase.",
   "S43": "Diccionario por voz para %s",
   "S44": "Esta fila no tiene voz propia, así que se le aplica el diccionario por voz del sintetizador."
@@ -124,7 +118,6 @@
  "it": {
   "S0": "Disattivato",
   "S2": "Completo",
-  "S3": "Multilingue",
   "S5": "Attiva o disattiva il rilevamento rigoroso della lingua",
   "S6": "Rilevamento lingua %s",
   "S7": "Rilevamento rigoroso attivato",
@@ -155,8 +148,7 @@
   "S37": "Aggiungi lingua",
   "S39": "&Prova",
   "S40": "&Verifica pacchetto lingua...",
-  "S42": "Tabella delle lingue (multilingue)",
-  "summary": "Sintesi vocale multilingue",
+  "S42": "Tabella delle lingue (Dialingo)",
   "description": "Un componente aggiuntivo che consente di configurare ogni lingua parlata con le proprie impostazioni di sintetizzatore, voce, velocità, punteggiatura e dizionario. Passa dall'una all'altra anche quando il testo non è contrassegnato con la sua lingua, e anche quando la lingua cambia a metà frase.",
   "S43": "Dizionario della voce per %s",
   "S44": "Questa riga non ha una voce propria, quindi si applica il dizionario della voce del sintetizzatore."
@@ -164,7 +156,6 @@
  "pt_BR": {
   "S0": "Desligada",
   "S2": "Completa",
-  "S3": "Multilíngue",
   "S5": "Liga ou desliga a detecção estrita de idioma",
   "S6": "Detecção de idioma %s",
   "S7": "Detecção estrita ligada",
@@ -195,8 +186,7 @@
   "S37": "Adicionar idioma",
   "S39": "&Testar",
   "S40": "&Verificar pacote de idioma...",
-  "S42": "Tabela de idiomas (multilíngue)",
-  "summary": "Fala multilíngue",
+  "S42": "Tabela de idiomas (Dialingo)",
   "description": "Um complemento que permite configurar cada idioma que você fala com suas próprias configurações de sintetizador, voz, velocidade, pontuação e dicionário. Ele alterna entre eles mesmo quando o texto não está marcado com seu idioma, e mesmo quando o idioma muda no meio de uma frase.",
   "S43": "Dicionário de voz para %s",
   "S44": "Esta linha não tem voz própria, então o dicionário de voz do sintetizador se aplica a ela."
@@ -204,7 +194,6 @@
  "pt_PT": {
   "S0": "Desligada",
   "S2": "Completa",
-  "S3": "Multilingue",
   "S5": "Liga ou desliga a detecção estrita de idioma",
   "S6": "Detecção de idioma %s",
   "S7": "Detecção estrita ligada",
@@ -235,8 +224,7 @@
   "S37": "Adicionar idioma",
   "S39": "&Testar",
   "S40": "&Verificar pacote de idioma...",
-  "S42": "Tabela de idiomas (multilingue)",
-  "summary": "Fala multilingue",
+  "S42": "Tabela de idiomas (Dialingo)",
   "description": "Um suplemento que permite configurar cada idioma que fala com as suas próprias definições de sintetizador, voz, velocidade, pontuação e dicionário. Alterna entre eles mesmo quando o texto não está marcado com o seu idioma, e mesmo quando o idioma muda a meio de uma frase.",
   "S43": "Dicionário de voz para %s",
   "S44": "Esta linha não tem voz própria, pelo que se aplica o dicionário de voz do sintetizador."
@@ -244,7 +232,6 @@
  "nl": {
   "S0": "Uit",
   "S2": "Volledig",
-  "S3": "Meertalig",
   "S5": "Schakelt strikte taaldetectie in of uit",
   "S6": "Taaldetectie %s",
   "S7": "Strikte detectie aan",
@@ -275,8 +262,7 @@
   "S37": "Taal toevoegen",
   "S39": "&Testen",
   "S40": "Taalpakket &controleren...",
-  "S42": "Taaltabel (meertalig)",
-  "summary": "Meertalige spraak",
+  "S42": "Taaltabel (Dialingo)",
   "description": "Een add-on waarmee u elke taal die u spreekt instelt met eigen instellingen voor synthesizer, stem, snelheid, interpunctie en woordenboek. Hij schakelt ertussen, ook als tekst niet met zijn taal is gemarkeerd, en ook als de taal midden in een zin verandert.",
   "S43": "Stemwoordenboek voor %s",
   "S44": "Deze rij heeft geen eigen stem, dus geldt het stemwoordenboek van de synthesizer."
@@ -284,7 +270,6 @@
  "nb_NO": {
   "S0": "Av",
   "S2": "Full",
-  "S3": "Flerspråklig",
   "S5": "Slår streng språkgjenkjenning av eller på",
   "S6": "Språkgjenkjenning %s",
   "S7": "Streng gjenkjenning på",
@@ -315,8 +300,7 @@
   "S37": "Legg til språk",
   "S39": "&Test",
   "S40": "&Kontroller språkpakke...",
-  "S42": "Språktabell (flerspråklig)",
-  "summary": "Flerspråklig tale",
+  "S42": "Språktabell (Dialingo)",
   "description": "Et tillegg som lar deg sette opp hvert språk du snakker med egne innstillinger for talesyntese, stemme, hastighet, tegnsetting og ordbok. Det bytter mellom dem selv når teksten ikke er merket med språket sitt, og selv når språket skifter midt i en setning.",
   "S43": "Stemmeordbok for %s",
   "S44": "Denne raden har ingen egen stemme, så talesyntesens stemmeordbok gjelder for den."
@@ -324,7 +308,6 @@
  "nn_NO": {
   "S0": "Av",
   "S2": "Full",
-  "S3": "Fleirspråkleg",
   "S5": "Slår streng språkattkjenning av eller på",
   "S6": "Språkattkjenning %s",
   "S7": "Streng attkjenning på",
@@ -355,8 +338,7 @@
   "S37": "Legg til språk",
   "S39": "&Test",
   "S40": "&Kontroller språkpakke...",
-  "S42": "Språktabell (fleirspråkleg)",
-  "summary": "Fleirspråkleg tale",
+  "S42": "Språktabell (Dialingo)",
   "description": "Eit tillegg som lèt deg setje opp kvart språk du snakkar med eigne innstillingar for talesyntese, stemme, fart, teiknsetjing og ordbok. Det byter mellom dei sjølv når teksten ikkje er merkt med språket sitt, og sjølv når språket skiftar midt i ei setning.",
   "S43": "Stemmeordbok for %s",
   "S44": "Denne rada har inga eiga stemme, så stemmeordboka til talesyntesen gjeld for henne."
@@ -364,7 +346,6 @@
  "sv": {
   "S0": "Av",
   "S2": "Fullständig",
-  "S3": "Flerspråkig",
   "S5": "Slår på eller av strikt språkigenkänning",
   "S6": "Språkigenkänning %s",
   "S7": "Strikt igenkänning på",
@@ -395,8 +376,7 @@
   "S37": "Lägg till språk",
   "S39": "&Testa",
   "S40": "&Kontrollera språkpaket...",
-  "S42": "Språktabell (flerspråkig)",
-  "summary": "Flerspråkigt tal",
+  "S42": "Språktabell (Dialingo)",
   "description": "Ett tillägg som låter dig ställa in varje språk du talar med egna inställningar för talsyntes, röst, hastighet, skiljetecken och ordlista. Det växlar mellan dem även när texten inte är märkt med sitt språk, och även när språket byts mitt i en mening.",
   "S43": "Röstordlista för %s",
   "S44": "Den här raden har ingen egen röst, så talsyntesens röstordlista gäller för den."
@@ -404,7 +384,6 @@
  "da": {
   "S0": "Fra",
   "S2": "Fuld",
-  "S3": "Flersproget",
   "S5": "Slår streng sproggenkendelse til eller fra",
   "S6": "Sproggenkendelse %s",
   "S7": "Streng genkendelse til",
@@ -435,8 +414,7 @@
   "S37": "Tilføj sprog",
   "S39": "&Test",
   "S40": "&Kontrollér sprogpakke...",
-  "S42": "Sprogtabel (flersproget)",
-  "summary": "Flersproget tale",
+  "S42": "Sprogtabel (Dialingo)",
   "description": "En tilføjelse, der lader dig indstille hvert sprog, du taler, med egne indstillinger for talesyntese, stemme, hastighed, tegnsætning og ordbog. Den skifter mellem dem, også når teksten ikke er mærket med sit sprog, og også når sproget skifter midt i en sætning.",
   "S43": "Stemmeordbog for %s",
   "S44": "Denne række har ingen egen stemme, så talesyntesens stemmeordbog gælder for den."
@@ -444,7 +422,6 @@
  "fi": {
   "S0": "Ei käytössä",
   "S2": "Täysi",
-  "S3": "Monikielisyys",
   "S5": "Ottaa tiukan kielentunnistuksen käyttöön tai poistaa sen käytöstä",
   "S6": "Kielentunnistus %s",
   "S7": "Tiukka tunnistus käytössä",
@@ -475,8 +452,7 @@
   "S37": "Lisää kieli",
   "S39": "&Testaa",
   "S40": "&Tarkista kielipaketti...",
-  "S42": "Kielitaulukko (monikielisyys)",
-  "summary": "Monikielinen puhe",
+  "S42": "Kielitaulukko (Dialingo)",
   "description": "Lisäosa, jolla voit määrittää jokaiselle puhumallesi kielelle omat syntetisaattori-, ääni-, nopeus-, välimerkki- ja sanastoasetukset. Se vaihtaa niiden välillä silloinkin, kun tekstiin ei ole merkitty sen kieltä, ja silloinkin, kun kieli vaihtuu kesken lauseen.",
   "S43": "Äänikohtainen sanasto äänelle %s",
   "S44": "Tällä rivillä ei ole omaa ääntä, joten siihen sovelletaan syntetisaattorin äänikohtaista sanastoa."

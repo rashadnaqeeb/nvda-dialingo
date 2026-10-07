@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: multilanguage\n"
+"Project-Id-Version: dialingo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,10 +61,6 @@ msgstr "Yükleme bitti, ancak Windows %s sözlüğünü henüz göstermiyor. Win
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%s sözlüğü yüklenmedi. Windows Update'i veya NVDA günlüğünü kontrol edin."
-
-#. Translators: The title of the add-on's settings panel.
-msgid "Multilanguage"
-msgstr "Çok dillilik"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"
@@ -273,6 +269,6 @@ msgid "off"
 msgstr "kapalı"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
-msgid "Language table (multilanguage)"
-msgstr "Dil tablosu (çok dillilik)"
+msgid "Language table (Dialingo)"
+msgstr "Dil tablosu (Dialingo)"
 

@@ -23,7 +23,6 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CODES = {
     "S0": "Off",
     "S2": "Full",
-    "S3": "Multilanguage",
     "S5": "Toggles strict language detection",
     "S6": "Language detection %s",
     "S7": "Strict detection on",
@@ -55,7 +54,7 @@ CODES = {
     "S38": "Rate &boost",
     "S39": "&Test",
     "S40": "&Verify language pack...",
-    "S42": "Language table (multilanguage)",
+    "S42": "Language table (Dialingo)",
     "S43": "Voice dictionary for %s",
     "S44": "This row has no voice of its own, so the synthesizer's voice dictionary applies to it.",
     "S45": "Pu&nctuation/symbol level:",
@@ -168,7 +167,7 @@ def po_escape(text):
 
 def write_po(path, lang, entries, comments):
     with open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write('msgid ""\nmsgstr ""\n"Project-Id-Version: multilanguage\\n"\n"MIME-Version: 1.0\\n"\n')
+        f.write('msgid ""\nmsgstr ""\n"Project-Id-Version: dialingo\\n"\n"MIME-Version: 1.0\\n"\n')
         f.write('"Content-Type: text/plain; charset=UTF-8\\n"\n"Content-Transfer-Encoding: 8bit\\n"\n')
         f.write(f'"Language: {lang}\\n"\n\n')
         for msgid, msgstr in entries:

@@ -2,7 +2,7 @@
 
 NVDA keeps a voice dictionary per synthesizer and voice, but loads only the current voice's and applies it
 to everything spoken. A row's voice has its own file among NVDA's voice dictionaries (the same file NVDA
-would load if that voice were the current one), edited from the Multilanguage panel with NVDA's dictionary
+would load if that voice were the current one), edited from the Dialingo panel with NVDA's dictionary
 dialog. Its entries apply to the runs in the row's language, in the add-on's filter, ahead of NVDA's own
 dictionaries. The files are reread when they change. NVDA is imported inside the functions, so `apply` runs
 under the tests.
@@ -77,7 +77,7 @@ def load(path):
         except Exception:
             from logHandler import log
 
-            log.debugWarning(f"multilanguage: voice dictionary {path} could not be read", exc_info=True)
+            log.debugWarning(f"dialingo: voice dictionary {path} could not be read", exc_info=True)
     _dictionaries[path] = (mtime, dictionary)
     return dictionary
 

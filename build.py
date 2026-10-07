@@ -1,4 +1,4 @@
-"""Builds dist/multilanguage-<version>.nvda-addon from addon/.
+"""Builds dist/<name>-<version>.nvda-addon from addon/, named from its manifest.
 
 Usage: python build.py
 An NVDA add-on is a zip file with manifest.ini at its root. The documentation is generated from
@@ -15,12 +15,12 @@ ADDON = os.path.join(HERE, "addon")
 DIST = os.path.join(HERE, "dist")
 
 
-def version():
+def manifest(key):
     for line in open(os.path.join(ADDON, "manifest.ini"), encoding="utf-8"):
-        m = re.match(r'version\s*=\s*"?([^"\n]+)"?', line)
+        m = re.match(rf'{key}\s*=\s*"?([^"\n]+)"?', line)
         if m:
             return m.group(1).strip()
-    raise SystemExit("no version in manifest.ini")
+    raise SystemExit(f"no {key} in manifest.ini")
 
 
 def inline(text):
@@ -81,15 +81,15 @@ def markdown_to_html(md, title):
 
 
 def build():
-    v = version()
+    name, v, title = manifest("name"), manifest("version"), manifest("summary")
     os.makedirs(DIST, exist_ok=True)
-    target = os.path.join(DIST, f"multilanguage-{v}.nvda-addon")
+    target = os.path.join(DIST, f"{name}-{v}.nvda-addon")
     docs = {}
     doc_root = os.path.join(ADDON, "doc")
     for lang in os.listdir(doc_root):
         md = os.path.join(doc_root, lang, "readme.md")
         if os.path.exists(md):
-            docs[f"doc/{lang}/readme.html"] = markdown_to_html(open(md, encoding="utf-8").read(), "Multilanguage speech")
+            docs[f"doc/{lang}/readme.html"] = markdown_to_html(open(md, encoding="utf-8").read(), title)
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as zf:
         for dirpath, dirnames, filenames in os.walk(ADDON):
             dirnames[:] = [d for d in dirnames if d != "__pycache__"]

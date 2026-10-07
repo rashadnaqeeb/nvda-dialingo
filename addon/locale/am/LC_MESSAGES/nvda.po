@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: multilanguage\n"
+"Project-Id-Version: dialingo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,10 +61,6 @@ msgstr "መጫኑ ተጠናቅቋል፣ ነገር ግን Windows የ%s መዝገ
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "የ%s መዝገበ ቃላት አልተጫነም። Windows Update ወይም የNVDA መዝገብ ይመልከቱ።"
-
-#. Translators: The title of the add-on's settings panel.
-msgid "Multilanguage"
-msgstr "ባለብዙ ቋንቋ"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"
@@ -273,6 +269,6 @@ msgid "off"
 msgstr "የጠፋ"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
-msgid "Language table (multilanguage)"
-msgstr "የቋንቋ ሰንጠረዥ (ባለብዙ ቋንቋ)"
+msgid "Language table (Dialingo)"
+msgstr "የቋንቋ ሰንጠረዥ (Dialingo)"
 

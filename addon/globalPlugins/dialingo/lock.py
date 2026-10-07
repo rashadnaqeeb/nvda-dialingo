@@ -86,7 +86,7 @@ class LockSetting(synthSettingsRing.SynthSetting):
 
     def __init__(self, synth):
         # Translators: The name of the language lock in the synth settings ring.
-        setting = DriverSetting("multilanguageLock", _("Language lock"), availableInSettingsRing=True, useConfig=False)
+        setting = DriverSetting("dialingoLock", _("Language lock"), availableInSettingsRing=True, useConfig=False)
         super().__init__(synth, setting)
         self.setting = Renamed(setting, LockName(setting.displayName))
 
@@ -135,7 +135,7 @@ class LockName(str):
             lang = locked_row_language()
             return words_for(lang)(name, RING_CONTEXT) if lang else name
         except Exception:
-            log.debugWarning("multilanguage: the language lock's name could not be put in its language", exc_info=True)
+            log.debugWarning("dialingo: the language lock's name could not be put in its language", exc_info=True)
             return name
 
     def __format__(self, spec):
@@ -155,7 +155,7 @@ class ModeSetting(DetectionSetting):
 
     def __init__(self, synth):
         # Translators: The name of the detection mode in the synth settings ring.
-        setting = DriverSetting("multilanguageDetection", _("Language detection"), availableInSettingsRing=True, useConfig=False)
+        setting = DriverSetting("dialingoDetection", _("Language detection"), availableInSettingsRing=True, useConfig=False)
         super().__init__(synth, setting, 0, len(MODES) - 1)
 
     def _get_value(self):
@@ -178,7 +178,7 @@ class RowDetection(DetectionSetting):
         self.lang = lang
         # Translators: The name of the entry in the synth settings ring that turns detection of one language on
         # or off; %s is the language's name.
-        setting = DriverSetting("multilanguageRowDetection", _("%s detection") % language_name(lang), availableInSettingsRing=True, useConfig=False)
+        setting = DriverSetting("dialingoRowDetection", _("%s detection") % language_name(lang), availableInSettingsRing=True, useConfig=False)
         super().__init__(synth, setting, 0, 1)
 
     def _get_value(self):
@@ -356,7 +356,7 @@ def localize(entries, lang):
             entry.setting = Renamed(entry.setting, name)
             entry._getReportValue = functools.partial(lambda report, val: words(report(val)), entry._getReportValue)
         except Exception:
-            log.debugWarning(f"multilanguage: a ring entry could not be put in {lang}", exc_info=True)
+            log.debugWarning(f"dialingo: a ring entry could not be put in {lang}", exc_info=True)
 
 
 def locked_row_language():
@@ -385,7 +385,7 @@ def install():
         try:
             entries = row_entries(synth)
         except Exception:
-            log.error("multilanguage: the locked language's settings could not be put in the ring", exc_info=True)
+            log.error("dialingo: the locked language's settings could not be put in the ring", exc_info=True)
             entries = None
         if entries is None:
             if kept is not None:
@@ -403,20 +403,20 @@ def install():
             if kept is LockSetting or ring._current is None:
                 ring._current = len(ring.settings) - 1
         except Exception:
-            log.error("multilanguage: the language lock could not be added to the synth settings ring", exc_info=True)
+            log.error("dialingo: the language lock could not be added to the synth settings ring", exc_info=True)
             return
         try:
             ring.settings.append(detection_entry(synth))
             if kept is DetectionSetting:
                 ring._current = len(ring.settings) - 1
         except Exception:
-            log.error("multilanguage: language detection could not be added to the synth settings ring", exc_info=True)
+            log.error("dialingo: language detection could not be added to the synth settings ring", exc_info=True)
         try:
             lang = locked_row_language()
             if lang:
                 localize(ring.settings, lang)
         except Exception:
-            log.error("multilanguage: the synth settings ring could not be put in the locked language", exc_info=True)
+            log.error("dialingo: the synth settings ring could not be put in the locked language", exc_info=True)
 
     updateSupportedSettings._mlang_original = original
     synthSettingsRing.SynthSettingsRing.updateSupportedSettings = updateSupportedSettings
@@ -439,4 +439,4 @@ def refresh_ring():
     try:
         ring.updateSupportedSettings(synth)
     except Exception:
-        log.error("multilanguage: the synth settings ring could not be rebuilt", exc_info=True)
+        log.error("dialingo: the synth settings ring could not be rebuilt", exc_info=True)

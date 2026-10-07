@@ -2,7 +2,6 @@
  "ru": {
   "S0": "Выключено",
   "S2": "Полное",
-  "S3": "Многоязычность",
   "S5": "Переключает строгое определение языка",
   "S6": "Определение языка: %s",
   "S7": "Строгое определение включено",
@@ -33,8 +32,7 @@
   "S37": "Добавить язык",
   "S39": "&Проверить",
   "S40": "&Проверить языковой пакет...",
-  "S42": "Таблица языков (многоязычность)",
-  "summary": "Многоязычная речь",
+  "S42": "Таблица языков (Dialingo)",
   "description": "Дополнение, которое позволяет настроить каждый язык, на котором вы говорите, с собственными параметрами синтезатора, голоса, скорости, пунктуации и словаря. Оно переключается между ними, даже когда текст не помечен своим языком и даже когда язык меняется посреди предложения.",
   "S43": "Голосовой словарь для %s",
   "S44": "У этой строки нет собственного голоса, поэтому к ней применяется голосовой словарь синтезатора."
@@ -42,7 +40,6 @@
  "uk": {
   "S0": "Вимкнено",
   "S2": "Повне",
-  "S3": "Багатомовність",
   "S5": "Перемикає суворе визначення мови",
   "S6": "Визначення мови: %s",
   "S7": "Суворе визначення увімкнено",
@@ -73,8 +70,7 @@
   "S37": "Додати мову",
   "S39": "&Перевірити",
   "S40": "&Перевірити мовний пакет...",
-  "S42": "Таблиця мов (багатомовність)",
-  "summary": "Багатомовне мовлення",
+  "S42": "Таблиця мов (Dialingo)",
   "description": "Додаток, який дає змогу налаштувати кожну мову, якою ви розмовляєте, з власними параметрами синтезатора, голосу, швидкості, пунктуації та словника. Він перемикається між ними, навіть коли текст не позначено його мовою, і навіть коли мова змінюється посеред речення.",
   "S43": "Голосовий словник для %s",
   "S44": "Цей рядок не має власного голосу, тому до нього застосовується голосовий словник синтезатора."
@@ -82,7 +78,6 @@
  "pl": {
   "S0": "Wyłączone",
   "S2": "Pełne",
-  "S3": "Wielojęzyczność",
   "S5": "Przełącza ścisłe wykrywanie języka",
   "S6": "Wykrywanie języka: %s",
   "S7": "Ścisłe wykrywanie włączone",
@@ -113,8 +108,7 @@
   "S37": "Dodaj język",
   "S39": "&Testuj",
   "S40": "&Sprawdź pakiet językowy...",
-  "S42": "Tabela języków (wielojęzyczność)",
-  "summary": "Mowa wielojęzyczna",
+  "S42": "Tabela języków (Dialingo)",
   "description": "Dodatek, który pozwala skonfigurować każdy używany język z własnymi ustawieniami syntezatora, głosu, szybkości, interpunkcji i słownika. Przełącza się między nimi nawet wtedy, gdy tekst nie jest oznaczony swoim językiem, i nawet wtedy, gdy język zmienia się w środku zdania.",
   "S43": "Słownik głosu dla %s",
   "S44": "Ten wiersz nie ma własnego głosu, więc stosuje się do niego słownik głosu syntezatora."
@@ -122,7 +116,6 @@
  "cs": {
   "S0": "Vypnuto",
   "S2": "Úplné",
-  "S3": "Vícejazyčnost",
   "S5": "Přepíná přísné rozpoznávání jazyka",
   "S6": "Rozpoznávání jazyka: %s",
   "S7": "Přísné rozpoznávání zapnuto",
@@ -153,8 +146,7 @@
   "S37": "Přidat jazyk",
   "S39": "&Vyzkoušet",
   "S40": "&Ověřit jazykový balíček...",
-  "S42": "Tabulka jazyků (vícejazyčnost)",
-  "summary": "Vícejazyčná řeč",
+  "S42": "Tabulka jazyků (Dialingo)",
   "description": "Doplněk, který vám umožní nastavit každý jazyk, kterým mluvíte, s vlastním nastavením hlasového výstupu, hlasu, rychlosti, interpunkce a slovníku. Přepíná mezi nimi, i když text není označen svým jazykem, a i když se jazyk změní uprostřed věty.",
   "S43": "Slovník hlasu pro %s",
   "S44": "Tento řádek nemá vlastní hlas, platí pro něj tedy slovník hlasu hlasového výstupu."
@@ -162,7 +154,6 @@
  "sk": {
   "S0": "Vypnuté",
   "S2": "Úplné",
-  "S3": "Viacjazyčnosť",
   "S5": "Prepína prísne rozpoznávanie jazyka",
   "S6": "Rozpoznávanie jazyka: %s",
   "S7": "Prísne rozpoznávanie zapnuté",
@@ -193,8 +184,7 @@
   "S37": "Pridať jazyk",
   "S39": "&Vyskúšať",
   "S40": "&Overiť jazykový balík...",
-  "S42": "Tabuľka jazykov (viacjazyčnosť)",
-  "summary": "Viacjazyčná reč",
+  "S42": "Tabuľka jazykov (Dialingo)",
   "description": "Doplnok, ktorý vám umožní nastaviť každý jazyk, ktorým hovoríte, s vlastným nastavením hlasového výstupu, hlasu, rýchlosti, interpunkcie a slovníka. Prepína medzi nimi, aj keď text nie je označený svojím jazykom, a aj keď sa jazyk zmení uprostred vety.",
   "S43": "Slovník hlasu pre %s",
   "S44": "Tento riadok nemá vlastný hlas, platí preň teda slovník hlasu hlasového výstupu."
@@ -202,7 +192,6 @@
  "sl": {
   "S0": "Izklopljeno",
   "S2": "Polno",
-  "S3": "Večjezičnost",
   "S5": "Preklopi strogo zaznavanje jezika",
   "S6": "Zaznavanje jezika: %s",
   "S7": "Strogo zaznavanje vklopljeno",
@@ -233,8 +222,7 @@
   "S37": "Dodaj jezik",
   "S39": "&Preizkusi",
   "S40": "&Preveri jezikovni paket...",
-  "S42": "Tabela jezikov (večjezičnost)",
-  "summary": "Večjezični govor",
+  "S42": "Tabela jezikov (Dialingo)",
   "description": "Dodatek, ki vam omogoča, da za vsak jezik, ki ga govorite, nastavite lastne nastavitve sintetizatorja, glasu, hitrosti, ločil in slovarja. Med njimi preklaplja, tudi ko besedilo ni označeno s svojim jezikom, in tudi ko se jezik spremeni sredi stavka.",
   "S43": "Glasovni slovar za %s",
   "S44": "Ta vrstica nima lastnega glasu, zato zanjo velja glasovni slovar sintetizatorja."
@@ -242,7 +230,6 @@
  "hr": {
   "S0": "Isključeno",
   "S2": "Potpuno",
-  "S3": "Višejezičnost",
   "S5": "Uključuje ili isključuje strogo prepoznavanje jezika",
   "S6": "Prepoznavanje jezika: %s",
   "S7": "Strogo prepoznavanje uključeno",
@@ -273,8 +260,7 @@
   "S37": "Dodaj jezik",
   "S39": "&Isprobaj",
   "S40": "&Provjeri jezični paket...",
-  "S42": "Tablica jezika (višejezičnost)",
-  "summary": "Višejezični govor",
+  "S42": "Tablica jezika (Dialingo)",
   "description": "Dodatak koji vam omogućuje da svaki jezik kojim govorite postavite s vlastitim postavkama sintetizatora, glasa, brzine, interpunkcije i rječnika. Prebacuje se između njih čak i kada tekst nije označen svojim jezikom, i čak i kada se jezik promijeni usred rečenice.",
   "S43": "Rječnik glasa za %s",
   "S44": "Ovaj redak nema vlastiti glas, pa se na njega primjenjuje rječnik glasa sintetizatora."
@@ -282,7 +268,6 @@
  "bs": {
   "S0": "Isključeno",
   "S2": "Potpuno",
-  "S3": "Višejezičnost",
   "S5": "Uključuje ili isključuje strogo prepoznavanje jezika",
   "S6": "Prepoznavanje jezika: %s",
   "S7": "Strogo prepoznavanje uključeno",
@@ -313,8 +298,7 @@
   "S37": "Dodaj jezik",
   "S39": "&Isprobaj",
   "S40": "&Provjeri jezički paket...",
-  "S42": "Tabela jezika (višejezičnost)",
-  "summary": "Višejezični govor",
+  "S42": "Tabela jezika (Dialingo)",
   "description": "Dodatak koji vam omogućava da svaki jezik kojim govorite podesite s vlastitim postavkama sintetizatora, glasa, brzine, interpunkcije i rječnika. Prebacuje se između njih čak i kada tekst nije označen svojim jezikom, i čak i kada se jezik promijeni usred rečenice.",
   "S43": "Rječnik glasa za %s",
   "S44": "Ovaj red nema vlastiti glas, pa se na njega primjenjuje rječnik glasa sintetizatora."
@@ -322,7 +306,6 @@
  "sr": {
   "S0": "Isključeno",
   "S2": "Potpuno",
-  "S3": "Višejezičnost",
   "S5": "Uključuje ili isključuje strogo prepoznavanje jezika",
   "S6": "Prepoznavanje jezika: %s",
   "S7": "Strogo prepoznavanje uključeno",
@@ -353,8 +336,7 @@
   "S37": "Dodaj jezik",
   "S39": "&Isprobaj",
   "S40": "&Proveri jezički paket...",
-  "S42": "Tabela jezika (višejezičnost)",
-  "summary": "Višejezični govor",
+  "S42": "Tabela jezika (Dialingo)",
   "description": "Dodatak koji vam omogućava da svaki jezik kojim govorite podesite sa sopstvenim podešavanjima sintetizatora, glasa, brzine, interpunkcije i rečnika. Prebacuje se između njih čak i kada tekst nije označen svojim jezikom, i čak i kada se jezik promeni usred rečenice.",
   "S43": "Rečnik glasa za %s",
   "S44": "Ovaj red nema sopstveni glas, pa se na njega primenjuje rečnik glasa sintetizatora."
@@ -362,7 +344,6 @@
  "bg": {
   "S0": "Изключено",
   "S2": "Пълно",
-  "S3": "Многоезичност",
   "S5": "Превключва строгото разпознаване на език",
   "S6": "Разпознаване на език: %s",
   "S7": "Строгото разпознаване е включено",
@@ -393,8 +374,7 @@
   "S37": "Добавяне на език",
   "S39": "&Тест",
   "S40": "&Проверка на езиковия пакет...",
-  "S42": "Таблица на езиците (многоезичност)",
-  "summary": "Многоезична реч",
+  "S42": "Таблица на езиците (Dialingo)",
   "description": "Добавка, която ви позволява да настроите всеки език, който говорите, със собствени настройки за синтезатор, глас, скорост, пунктуация и речник. Превключва между тях дори когато текстът не е маркиран с езика си и дори когато езикът се смени по средата на изречението.",
   "S43": "Гласов речник за %s",
   "S44": "Този ред няма собствен глас, затова за него важи гласовият речник на синтезатора."
@@ -402,7 +382,6 @@
  "mk": {
   "S0": "Исклучено",
   "S2": "Целосно",
-  "S3": "Повеќејазичност",
   "S5": "Го вклучува или исклучува строгото препознавање јазик",
   "S6": "Препознавање јазик: %s",
   "S7": "Строгото препознавање е вклучено",
@@ -433,8 +412,7 @@
   "S37": "Додај јазик",
   "S39": "&Тест",
   "S40": "&Провери јазичен пакет...",
-  "S42": "Табела на јазици (повеќејазичност)",
-  "summary": "Повеќејазичен говор",
+  "S42": "Табела на јазици (Dialingo)",
   "description": "Додаток што ви овозможува да го поставите секој јазик што го зборувате со сопствени поставки за синтетизатор, глас, брзина, интерпункција и речник. Префрла меѓу нив дури и кога текстот не е означен со својот јазик, и дури и кога јазикот се менува среде реченица.",
   "S43": "Гласовен речник за %s",
   "S44": "Овој ред нема сопствен глас, па за него важи гласовниот речник на синтетизаторот."
@@ -442,7 +420,6 @@
  "sq": {
   "S0": "Çaktivizuar",
   "S2": "E plotë",
-  "S3": "Shumëgjuhësi",
   "S5": "Aktivizon ose çaktivizon zbulimin e rreptë të gjuhës",
   "S6": "Zbulimi i gjuhës: %s",
   "S7": "Zbulimi i rreptë aktiv",
@@ -473,8 +450,7 @@
   "S37": "Shto gjuhë",
   "S39": "&Provo",
   "S40": "&Verifiko paketën gjuhësore...",
-  "S42": "Tabela e gjuhëve (shumëgjuhësi)",
-  "summary": "Të folur shumëgjuhësh",
+  "S42": "Tabela e gjuhëve (Dialingo)",
   "description": "Një shtesë që ju lejon të konfiguroni çdo gjuhë që flisni me cilësimet e veta për sintetizatorin, zërin, shpejtësinë, pikësimin dhe fjalorin. Kalon nga njëra te tjetra edhe kur teksti nuk është etiketuar me gjuhën e vet, dhe edhe kur gjuha ndryshon në mes të fjalisë.",
   "S43": "Fjalor zëri për %s",
   "S44": "Ky rresht nuk ka zë të vetin, prandaj për të vlen fjalori i zërit të sintetizatorit."
@@ -482,7 +458,6 @@
  "ro": {
   "S0": "Dezactivată",
   "S2": "Completă",
-  "S3": "Multilingv",
   "S5": "Comută detectarea strictă a limbii",
   "S6": "Detectarea limbii: %s",
   "S7": "Detectare strictă activată",
@@ -513,8 +488,7 @@
   "S37": "Adăugare limbă",
   "S39": "&Testează",
   "S40": "&Verifică pachetul lingvistic...",
-  "S42": "Tabel de limbi (multilingv)",
-  "summary": "Vorbire multilingvă",
+  "S42": "Tabel de limbi (Dialingo)",
   "description": "Un supliment care vă permite să configurați fiecare limbă pe care o vorbiți cu propriile setări de sintetizator, voce, viteză, punctuație și dicționar. Comută între ele chiar și atunci când textul nu este etichetat cu limba sa și chiar și atunci când limba se schimbă la mijlocul propoziției.",
   "S43": "Dicționar de voce pentru %s",
   "S44": "Acest rând nu are o voce proprie, așa că i se aplică dicționarul de voce al sintetizatorului."
@@ -522,7 +496,6 @@
  "hu": {
   "S0": "Ki",
   "S2": "Teljes",
-  "S3": "Többnyelvűség",
   "S5": "Be- vagy kikapcsolja a szigorú nyelvfelismerést",
   "S6": "Nyelvfelismerés: %s",
   "S7": "Szigorú felismerés be",
@@ -553,8 +526,7 @@
   "S37": "Nyelv hozzáadása",
   "S39": "&Teszt",
   "S40": "Nyelvi csomag &ellenőrzése...",
-  "S42": "Nyelvtáblázat (többnyelvűség)",
-  "summary": "Többnyelvű beszéd",
+  "S42": "Nyelvtáblázat (Dialingo)",
   "description": "Kiegészítő, amellyel minden beszélt nyelvét saját beszédszintetizátor-, hang-, sebesség-, írásjel- és szótárbeállításokkal állíthatja be. Akkor is vált közöttük, ha a szöveg nincs megjelölve a nyelvével, és akkor is, ha a nyelv mondat közben változik.",
   "S43": "Hangszótár ehhez: %s",
   "S44": "Ennek a sornak nincs saját hangja, ezért a beszédszintetizátor hangszótára vonatkozik rá."

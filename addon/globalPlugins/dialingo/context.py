@@ -81,7 +81,7 @@ def keyboard_language():
     try:
         return languageHandler.windowsLCIDToLocaleName(keyboardHandler.getInputHkl() & 0xFFFF)
     except Exception:
-        log.debugWarning("multilanguage: the keyboard layout's language could not be read", exc_info=True)
+        log.debugWarning("dialingo: the keyboard layout's language could not be read", exc_info=True)
         return None
 
 
@@ -188,7 +188,7 @@ class UnitContext:
             ch = text.strip()
             language = detector.keyboard(ch, self.keyboard or keyboard_language()) or detector.character(ch)
         except Exception:
-            log.debugWarning("multilanguage: no echo language for a spelled character", exc_info=True)
+            log.debugWarning("dialingo: no echo language for a spelled character", exc_info=True)
             return None
         return language if language and base(language) != base(detector.default_tag) else None
 
@@ -201,7 +201,7 @@ class UnitContext:
         try:
             return detector.keyboard(text, self.keyboard)
         except Exception:
-            log.debugWarning("multilanguage: no keyboard language for a typed word", exc_info=True)
+            log.debugWarning("dialingo: no keyboard language for a typed word", exc_info=True)
             return None
 
     def _getSpellingSpeech(self, text, locale=None, *args, **kwargs):
@@ -231,7 +231,7 @@ class UnitContext:
         try:
             return base(locale) != base(speech.getCurrentLanguage()) and not describes(locale, text)
         except Exception:
-            log.debugWarning("multilanguage: character descriptions for %s could not be checked" % locale, exc_info=True)
+            log.debugWarning("dialingo: character descriptions for %s could not be checked" % locale, exc_info=True)
             return False
 
     # ------------------------------------------------------------ context
@@ -248,7 +248,7 @@ class UnitContext:
         try:
             locked = self.engine.language_lock()
         except Exception:
-            log.debugWarning("multilanguage: the language lock could not be read", exc_info=True)
+            log.debugWarning("dialingo: the language lock could not be read", exc_info=True)
             locked = lock.AUTOMATIC
         if locked:
             return lock.language(locked)
@@ -256,7 +256,7 @@ class UnitContext:
             if locale is not None and self.engine.ignores_tag(locale):
                 locale = None
         except Exception:
-            log.debugWarning("multilanguage: whether the locale's row detects could not be read", exc_info=True)
+            log.debugWarning("dialingo: whether the locale's row detects could not be read", exc_info=True)
         if self.language is None:
             return locale
         if locale is not None and not self.overrides(locale):
@@ -297,7 +297,7 @@ class UnitContext:
             if unit_text:
                 language = self.language_at(info)
         except Exception:
-            log.debugWarning("multilanguage: no line context for the unit", exc_info=True)
+            log.debugWarning("dialingo: no line context for the unit", exc_info=True)
         self.language, self.unit_text = language, unit_text
         try:
             yield
@@ -336,7 +336,7 @@ class UnitContext:
                 lambda place: self.line_strings.place_last(place[0], place[1], place[2], reader_words),
             )
         except Exception:
-            log.debugWarning("multilanguage: a line could not be read in context", exc_info=True)
+            log.debugWarning("dialingo: a line could not be read in context", exc_info=True)
             return None
 
     def text_of_line(self):
@@ -346,7 +346,7 @@ class UnitContext:
             try:
                 self.line_text = line_of(self.line_info).text or False
             except Exception:
-                log.debugWarning("multilanguage: no text for the line", exc_info=True)
+                log.debugWarning("dialingo: no text for the line", exc_info=True)
         return self.line_text or None
 
     def place_of_line(self):
@@ -356,7 +356,7 @@ class UnitContext:
             try:
                 self.line_place = surroundings(self.line_info, self.text_of_line()) or False
             except Exception:
-                log.debugWarning("multilanguage: no text around the line", exc_info=True)
+                log.debugWarning("dialingo: no text around the line", exc_info=True)
         return self.line_place or None
 
     def read_in_context(self, detector, text, fetch, locate):
@@ -380,7 +380,7 @@ class UnitContext:
             runs = [(runs[0][0], lead)] + runs + [(runs[-1][0], trail)]
             runs = [(lang, piece) for lang, piece in runs if piece]
         if log.isEnabledFor(logging.DEBUG):
-            log.debug("multilanguage: line read in context, fetch %.1f ms, detection %.1f ms"
+            log.debug("dialingo: line read in context, fetch %.1f ms, detection %.1f ms"
                       % ((fetched - started) * 1000, (time.perf_counter() - fetched) * 1000))
         return runs
 
@@ -393,7 +393,7 @@ class UnitContext:
             try:
                 place = surroundings(line, text)
             except Exception:
-                log.debugWarning("multilanguage: no text around the unit's line", exc_info=True)
+                log.debugWarning("dialingo: no text around the unit's line", exc_info=True)
         key = (text, place[0] if place else None, self.engine.key)
         if key == self.last_key:
             return self.last_runs

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: multilanguage\n"
+"Project-Id-Version: dialingo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,10 +61,6 @@ msgstr "インストールは完了しましたが、Windowsに%sの辞書がま
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%sの辞書をインストールできませんでした。Windows UpdateまたはNVDAのログを確認してください。"
-
-#. Translators: The title of the add-on's settings panel.
-msgid "Multilanguage"
-msgstr "多言語"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"
@@ -273,6 +269,6 @@ msgid "off"
 msgstr "オフ"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
-msgid "Language table (multilanguage)"
-msgstr "言語テーブル(多言語)"
+msgid "Language table (Dialingo)"
+msgstr "言語テーブル(Dialingo)"
 

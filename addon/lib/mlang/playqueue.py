@@ -111,7 +111,7 @@ class QueuedPlayer:
         self.calls = deque()  # the items with a callback, in order, until it has run
         self.salvaging = None  # while the player is rebuilt (salvage): the callbacks a stop would drop
         self.closing = False
-        self.thread = threading.Thread(target=self._run, name="multilanguage SAPI 5 feeder", daemon=True)
+        self.thread = threading.Thread(target=self._run, name="dialingo SAPI 5 feeder", daemon=True)
         self.thread.start()
 
     def __getattr__(self, name):
@@ -348,4 +348,4 @@ class QueuedPlayer:
                     else:
                         self.player.feed(None, 0, onDone=onDone)
                 except Exception as e:
-                    self.log(f"multilanguage: feeding SAPI 5's player failed: {e!r}")
+                    self.log(f"dialingo: feeding SAPI 5's player failed: {e!r}")

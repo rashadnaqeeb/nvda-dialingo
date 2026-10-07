@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: multilanguage\n"
+"Project-Id-Version: dialingo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -61,10 +61,6 @@ msgstr "설치가 끝났지만 Windows에 %s 사전이 아직 표시되지 않�
 #. Translators: Message when the install failed; %s is a language name.
 msgid "%s dictionary did not install. Check Windows Update, or see the NVDA log."
 msgstr "%s 사전이 설치되지 않았습니다. Windows 업데이트 또는 NVDA 로그를 확인하세요."
-
-#. Translators: The title of the add-on's settings panel.
-msgid "Multilanguage"
-msgstr "다국어"
 
 #. Translators: Label of the detection mode combo box.
 msgid "Language &detection:"
@@ -273,6 +269,6 @@ msgid "off"
 msgstr "끔"
 
 #. Translators: Name of the synthesizer that speaks each language with its own synthesizer and voice.
-msgid "Language table (multilanguage)"
-msgstr "언어 표 (다국어)"
+msgid "Language table (Dialingo)"
+msgstr "언어 표 (Dialingo)"
 
