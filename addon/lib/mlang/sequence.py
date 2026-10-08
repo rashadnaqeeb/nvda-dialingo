@@ -10,7 +10,7 @@ Imports speech.commands, so it runs inside NVDA or under the test stub.
 """
 from speech.commands import LangChangeCommand, CharacterModeCommand
 
-from .scripts import base, is_text
+from .scripts import base, is_text, names_one_language
 
 
 def filter_sequence(seq, detector, default_language, detect_in_default_tagged=True, unit_language=None, line_runs=None):
@@ -34,6 +34,11 @@ def filter_sequence(seq, detector, default_language, detect_in_default_tagged=Tr
     changed = False
     for item in seq:
         if isinstance(item, LangChangeCommand):
+            if item.lang and not names_one_language(item.lang):
+                # No row speaks such a tag, so the default voice would read every language under it; it says
+                # nothing of which language a string is in, so its text is detected as untagged.
+                item = LangChangeCommand(None)
+                changed = True
             tag = item.lang or None
             out.append(item)
             continue

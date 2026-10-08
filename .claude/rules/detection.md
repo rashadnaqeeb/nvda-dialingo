@@ -48,6 +48,7 @@ paths:
 
 ## Tags
 
+- A tag that names no one language (a list such as WordReference's "es,en", which Chromium passes on as written; "mul"; "und") becomes the default before detection (`scripts.names_one_language`), so its text is detected as untagged. Kept, no row would match it and the default voice read everything under it.
 - A tag whose language writes none of the text's scripts is dropped; in mixed-script text, only from the parts in scripts it doesn't write.
 - In full mode, a tag in the default script is dropped from clauses that read as the default on a near-certain guess.
 - Default-language tags are treated as untagged while `detectInDefaultTagged` is on.

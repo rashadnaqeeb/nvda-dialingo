@@ -69,6 +69,7 @@ When an application does tag its text, the add-on checks the tag against the tex
 
 - A tag for a language that doesn't use the text's script, such as a Russian tag on Latin text, is dropped, and the text is treated as untagged.
 - In Full mode, a French tag on a clause that clearly reads as English is dropped from that clause.
+- A tag that names no one language is ignored, and the text is treated as untagged. Some sites list every language of a page in one tag, as WordReference's "es,en" does.
 - A tag for your default language tells you very little. Most web pages are marked English as a whole, French paragraphs included. So text tagged with the default language is checked like untagged text, unless you turn that off in the settings.
 
 ### 3. Guessing

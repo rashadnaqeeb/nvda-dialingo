@@ -68,6 +68,15 @@ def normalize(language):
 
 _TAG_SHAPE = regex.compile(r"^[A-Za-z]{2,3}(?:[-_][A-Za-z0-9]{2,8})*$")
 
+# Codes that are tags but name no one language: undetermined, and several languages.
+_NO_ONE_LANGUAGE = {"und", "mul"}
+
+
+def names_one_language(language):
+    """Whether an application's tag names one language. Pages put a list in `lang` ("es,en" on every page of
+    WordReference's Spanish-English dictionary), which browsers pass on as it is."""
+    return bool(_TAG_SHAPE.match(language)) and base(language) not in _NO_ONE_LANGUAGE
+
 
 def is_language(language):
     """Whether a string is a language tag Windows knows, so a typed 'French' is not taken for one."""

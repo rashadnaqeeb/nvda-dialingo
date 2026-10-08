@@ -56,6 +56,16 @@ class SequenceTests(unittest.TestCase):
         out = filter_sequence(seq, self.det, "en")
         self.assertEqual(out, [LangChangeCommand("fr"), LangChangeCommand(None), "About this result", LangChangeCommand("fr"), LangChangeCommand(None)])
 
+    def test_a_tag_listing_languages_is_read_as_untagged(self):
+        seq = [LangChangeCommand("es,en"), "Say bonjour now", LangChangeCommand(None)]
+        out = filter_sequence(seq, self.det, "en")
+        self.assertEqual(out, [LangChangeCommand(None), "Say ", LangChangeCommand("fr"), "bonjour", LangChangeCommand(None), " now", LangChangeCommand(None)])
+
+    def test_a_tag_naming_no_one_language_is_read_as_untagged(self):
+        for tag in ("mul", "und", "es, en"):
+            seq = [LangChangeCommand(tag), "Hello there"]
+            self.assertEqual(filter_sequence(seq, self.det, "en"), [LangChangeCommand(None), "Hello there"])
+
     def test_character_mode_is_left_alone(self):
         seq = [CharacterModeCommand(True), "bonjour", CharacterModeCommand(False)]
         self.assertIs(filter_sequence(seq, self.det, "en"), seq)
