@@ -170,6 +170,8 @@ Windows has free voices for many languages. The add-on reads which ones are inst
 
 Each row can have its own punctuation level. The add-on wraps NVDA's symbol processing so text in that row's language is processed at the row's level.
 
+Symbols are named in the language of the voice that reads them. An application whose interface is in French marks its text as French, even text that's in English. If nothing can speak French, your default voice reads that text, so its punctuation gets your default language's names, not French ones.
+
 NVDA only loads the voice dictionary of the current voice. The add-on also applies each row's voice dictionary to the text in that row's language. It uses the same file NVDA would use if that voice were current, so entries are shared.
 
 ## The language lock

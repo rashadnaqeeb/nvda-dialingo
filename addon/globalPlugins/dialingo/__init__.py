@@ -200,6 +200,25 @@ class Engine:
             log.debugWarning("dialingo: no symbol level for %s" % locale, exc_info=True)
             return level
 
+    def symbol_locale(self, locale):
+        """The language whose symbol names text NVDA speaks in `locale` is read with: the default's where the
+        language table has no voice for `locale`, since the default voice then reads it in its own language.
+        An application whose interface is French tags its English text French too, and with no French row an
+        English voice would otherwise say "parenthèse gauche". Other synthesizers keep NVDA's own handling."""
+        if not locale:
+            return locale
+        try:
+            synth = synthDriverHandler.getSynth()
+            if synth is None or synth.name != DRIVER_NAME:
+                return locale
+            default = getCurrentLanguage()
+            if base(locale) == base(default) or synth.languageIsSupported(locale):
+                return locale
+            return default
+        except Exception:
+            log.debugWarning("dialingo: no symbol language for %s" % locale, exc_info=True)
+            return locale
+
     def _dictionary(self):
         if self.dictionary is None:
             try:
@@ -451,7 +470,7 @@ def uninstall_language_switching():
 def install_symbol_levels(engine):
     """NVDA processes symbols once per speak call, at one level, through speech.speech.processText with the
     language of each string (the language commands this add-on inserts). The wrapper gives each language its
-    row's level."""
+    row's level, and text no voice of its language speaks the default's symbol names."""
     import speech.speech as speech_impl
 
     original = speech_impl.processText
@@ -459,6 +478,7 @@ def install_symbol_levels(engine):
         return
 
     def processText(locale, text, symbolLevel, *args, **kwargs):
+        locale = engine.symbol_locale(locale)
         return original(locale, text, engine.symbol_level(locale, symbolLevel), *args, **kwargs)
 
     processText._mlang_original = original

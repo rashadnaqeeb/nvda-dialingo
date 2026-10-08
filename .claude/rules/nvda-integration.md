@@ -31,6 +31,7 @@ paths:
 ## Symbol levels
 
 - Each row's level is applied by wrapping `speech.speech.processText`, which NVDA calls once per string with its language. Only NVDA's configured level is replaced; a level a caller asks for (all, when spelling) stands.
+- The same wrapper gives the default's locale to a language the table reports unsupported (no loaded row, no Windows voice, and the host can't speak it), since the default voice reads it. NVDA would name symbols in the tag's language, and the add-on makes language commands even with "Automatic language switching" off. Only on the table: other synthesizers' `languageIsSupported` can't be trusted.
 
 ## Rows and the table (`table.py`)
 
