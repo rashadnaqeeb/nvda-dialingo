@@ -18,7 +18,7 @@ Go to the NVDA settings and scroll down to the Dialingo settings. Tab to Add, th
 
 When adding a language, the addon checks if you have the Windows dictionary for that language. If you don't, it offers to install it for you, which significantly increases accuracy. Windows will ask for administrator permission. The install runs in a PowerShell window, which can take 5-10 minutes. The addon will let you know when the download is done. If Windows doesn't pick up the dictionary straight away, it will ask you to restart Windows.
 
-Each language gets its own synth, voice, speech rate, punctuation, and dictionary settings. If you give a language a different synth from your usual one, NVDA's synthesizer will show as "Language table" from then on. This is because the addon preloads all the synths you will be using to facilitate quick switching. If you switch back to your usual synth, the other synths stop being used until you go back to Language table.
+Each language gets its own synth, voice, speech rate, punctuation, and dictionary settings. If you give a language a different synth or voice from your usual one, NVDA's synthesizer will show as "Language table" from then on. This is because the addon preloads all the synths you will be using to facilitate quick switching. If you switch back to your usual synth, the other synths stop being used until you go back to Language table.
 
 If the addon finds a language you haven't added and your synth can't speak, say Arabic while you're using Eloquence, it uses the Windows OneCore voice for that language if you have one installed. There's a checkbox in the settings to turn this off.
 

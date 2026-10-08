@@ -403,7 +403,8 @@ class RowDictionaryDialog(DictionaryDialog):
 
 def follow_table():
     """The synthesizer follows the table and the installed voices: a row on another synthesizer than the
-    one in use, or a Windows voice for a language it cannot speak, needs the language table synthesizer,
+    one in use or with another voice (policy.needs_table), or a Windows voice for a language it cannot
+    speak, needs the language table synthesizer,
     which hosts the one in use unchanged, so it is selected; when nothing needs it any more, the default
     synthesizer is selected again. The user never visits NVDA's synthesizer dialog for this. Only after the
     panel saves a change: a synthesizer picked in NVDA's own dialog stays in use, across restarts too.

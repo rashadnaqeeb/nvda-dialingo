@@ -220,6 +220,41 @@ class FailedDefaultTest(Stubbed):
         self.assertEqual(self.created, ["sapi4_32"])
 
 
+class SameEngineRowTest(Stubbed):
+    """A row on the synthesizer in use needs the table once it carries what prosody commands cannot: without
+    the table, the synthesizer picks its own voice per tag (Vocalizer Expressive found none for es_MX)."""
+
+    def needs(self, *rows, own=None):
+        from mlang import policy
+        from mlang.table import Table
+
+        self.stub("synthDriverHandler", getSynth=lambda: Synth("vocalizer_expressive2"))
+        class Conf(dict):
+            spec = {"dialingo": {}}
+
+        conf = Conf({
+            "speech": {"synth": "vocalizer_expressive2", "vocalizer_expressive2": own or {"voice": "Daniel", "rate": 50}},
+            "dialingo": {"defaultSynth": "", "useWindowsVoices": False, "table": Table(list(rows)).to_json()},
+        })
+        return policy.needs_table(conf)
+
+    def test_a_voice_of_its_own_needs_the_table(self):
+        from mlang.table import Row
+
+        self.assertTrue(self.needs(Row("es", "vocalizer_expressive2", voice="Carlos", rate=50)))
+
+    def test_rate_pitch_and_volume_alone_do_not(self):
+        from mlang.table import Row
+
+        self.assertFalse(self.needs(Row("es", "vocalizer_expressive2", voice="Daniel", rate=30, pitch=60, volume=80)))
+        self.assertFalse(self.needs(Row("es", "vocalizer_expressive2", rate=30)))
+
+    def test_a_setting_the_engine_never_saved_needs_the_table(self):
+        from mlang.table import Row
+
+        self.assertTrue(self.needs(Row("es", "vocalizer_expressive2", variant="2"), own={"voice": "Daniel"}))
+
+
 class HalfBuiltTest(Stubbed):
     def test_a_guest_that_fails_after_creation_is_terminated_and_the_current_synthesizer_restored(self):
         events = []

@@ -44,7 +44,7 @@ Most of this is also in the code's docstrings, next to what it explains. Keep bo
 
 ## Selection (`policy.py`)
 
-- The table is needed when a saved row names another engine than the one speaking, or Windows voices are on and an installed Windows voice speaks a language the engine can't. Right after the default changes, the new engine is judged, loaded for the question if needed.
+- The table is needed when a saved row names another engine than the one speaking, or a row on that engine carries a setting prosody commands can't (voice, variant, rate boost, inflection) other than the engine's saved value, or Windows voices are on and an installed Windows voice speaks a language the engine can't. Without the table the engine picks its own voice per tag: Vocalizer Expressive takes the first voice whose language starts with the tag, so an es_CO row voice gets `es` and `es_CO` but not `es_MX`, which falls to the default voice. Right after the default changes, the new engine is judged, loaded for the question if needed.
 - Saving the panel switches to or from the table. NVDA's start does not, so a synthesizer the user picked in NVDA's dialog stays. `check()` lists the driver only while it is needed or selected.
 - `winvoices.py` reads OneCore voice tokens from the registry with the same validity checks as NVDA's OneCore driver, so OneCore isn't loaded just to ask. Unconfigured languages go to an implicit row on OneCore.
 

@@ -140,11 +140,13 @@ The user sets up a row for each language: a synthesizer, a voice, rate, pitch, v
 
 If French is set up on the same synthesizer you already use, say Eloquence at a slower rate, there's no need for a second synthesizer. The plugin wraps the French text in rate, pitch, and volume commands, which every major synthesizer applies in the middle of speech. Commands NVDA adds itself, like the higher pitch for a capital letter, are adjusted so they add on top of the row's values.
 
+This only works while the row keeps your own voice. A row with a voice of its own, or its own variant, rate boost, or inflection, needs the Language table even on the same synthesizer, since commands can't choose a voice. The synthesizer would pick one for each tag by its own rules, which can miss the row's voice, for example for a dialect it has no voice for.
+
 ### The Language table
 
-A language set up on a different synthesizer needs the Language table driver. It loads your normal synthesizer inside itself as the host, and the synthesizers your rows use as guests.
+A language set up on a different synthesizer, or with a different voice, needs the Language table driver. It loads your normal synthesizer inside itself as the host, and the synthesizers your rows use as guests.
 
-- **You never pick it yourself.** Saving a row that uses another synthesizer switches NVDA to the Language table. Removing the last such row switches back. It only appears in NVDA's synthesizer list while it's needed (`mlang/policy.py`).
+- **You never pick it yourself.** Saving a row that uses another synthesizer or another voice switches NVDA to the Language table. Removing the last such row switches back. It only appears in NVDA's synthesizer list while it's needed (`mlang/policy.py`).
 - **It looks like your normal synthesizer.** NVDA's voice settings and the settings ring show the host's settings, and changes go to the host's own configuration. If you leave the Language table, your synthesizer is exactly as you left it.
 - **Guests never save settings.** A guest is a separate copy of a synthesizer, so a row's settings never overwrite your own settings for that synthesizer.
 - **It always speaks.** If the table is broken or empty, it falls back to NVDA's usual order of synthesizers.

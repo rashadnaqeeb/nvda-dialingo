@@ -1,11 +1,13 @@
 """When the language table synthesizer is needed, so the add-on selects it itself and hides it otherwise.
 
 NVDA speaks through one synthesizer object, so a language spoken by another engine than the one in use
-needs the hosting driver. That is the case for a row on another synthesizer, and, with Windows voices in
-use, for any language a Windows voice speaks that the synthesizer in use cannot. NVDA is imported inside
-the functions, so the module loads under the tests.
+needs the hosting driver. That is the case for a row on another synthesizer, for a row on the one in use
+with a voice or another setting of its own beyond rate, pitch, and volume, and, with Windows voices in use,
+for any language a Windows voice speaks that the synthesizer in use cannot. NVDA is imported inside the
+functions, so the module loads under the tests.
 """
 from .hosts import DRIVER_NAME
+from .prosody import COMMANDS
 from .table import CONFIG_SECTION, load
 
 
@@ -89,10 +91,31 @@ def windows_languages_beyond_engine(conf):
             hosts.dispose(synth)
 
 
+def _beyond_prosody(conf, row, engine):
+    """Whether a row on the engine in use carries a setting prosody commands cannot: a voice, variant, rate
+    boost, or inflection other than the engine's own. On the synthesizer in use, the synthesizer picks its own
+    voice for a tag by rules of its own, which may miss the row's voice (Vocalizer Expressive takes the first
+    voice whose language starts with the tag, so an es_CO voice for "es" and "es_CO", none for "es_MX")."""
+    try:
+        section = conf["speech"][engine]
+    except KeyError:
+        section = None
+    for setting, value in row.settings.items():
+        if setting in COMMANDS:
+            continue
+        try:
+            own = section[setting] if section is not None else None
+        except KeyError:
+            own = None
+        if own is None or str(own) != str(value):
+            return True
+    return False
+
+
 def needs_table(conf):
     engine = current_engine(conf)
     if engine is None:
         return False
-    if any(row.synth != engine for row in load(conf).rows):
+    if any(row.synth != engine or _beyond_prosody(conf, row, engine) for row in load(conf).rows):
         return True
     return bool(windows_languages_beyond_engine(conf))

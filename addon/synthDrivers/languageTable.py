@@ -278,9 +278,9 @@ class SynthDriver(synthDriverHandler.SynthDriver):
     @classmethod
     def check(cls):
         """Listed in NVDA's synthesizer dialog only when something needs it: a row on another synthesizer
-        than the one in use, or a Windows voice for a language the one in use cannot speak. Rows on the
-        synthesizer in use work through prosody commands without this driver. Always available once it
-        is the selected one."""
+        than the one in use or with another voice, or a Windows voice for a language the one in use cannot
+        speak. Rows on the synthesizer in use that keep its voice work through prosody commands without this
+        driver. Always available once it is the selected one."""
         try:
             T.ensure_spec(config.conf)
             if config.conf["speech"]["synth"] == cls.name:

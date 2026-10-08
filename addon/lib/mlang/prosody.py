@@ -3,8 +3,8 @@
 NVDA's RateCommand, PitchCommand, and VolumeCommand take an offset from the user's configured value and
 synthesizers apply them in order with the text, so a row's rate for French becomes "configured rate plus
 (row rate minus configured rate)" at the start of each French run and a plain reset at its end. Voices
-cannot be chosen this way; the synthesizer picks its own voice for the language, as it does for tagged
-text without this add-on. Hosting another synthesizer needs the language table driver.
+cannot be chosen this way, so only rows that keep the synthesizer's own voice come here; another
+synthesizer or another voice needs the language table driver (policy.needs_table).
 
 Imports speech.commands, so it runs inside NVDA or under the test stub.
 """
