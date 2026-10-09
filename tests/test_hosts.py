@@ -141,6 +141,14 @@ class ReadTest(unittest.TestCase):
         self.assertTrue(hosts.supports(silent, "ar"))
         self.assertEqual((hosts.supports(declared, "en"), hosts.supports(declared, "ar")), (True, False))
 
+    def test_vocalizer_answers_with_the_voice_it_would_switch_to(self):
+        # Its voices start with the tag or are passed over; NVDA's own answer takes any dialect.
+        languages = ("en_US", "es_CO")
+        vocalizer = Synth("vocalizer_expressive2", availableVoices={"Carlos": Synth("v", language="es_CO")})
+        vocalizer.languageIsSupported = lambda lang: True
+        vocalizer.getVoiceNameForLanguage = lambda lang: next((l for l in languages if l.startswith(lang)), None)
+        self.assertEqual([hosts.supports(vocalizer, lang) for lang in ("es", "es_CO", "es_MX")], [True, True, False])
+
     def test_other_synthesizers_are_read_as_they_are(self):
         guest = Synth("ibmeci", rate=90, _rate=10)
         self.assertEqual(hosts.read(guest, "rate"), 90)

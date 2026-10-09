@@ -283,7 +283,17 @@ def speaks_declared(guest):
 
 
 def supports(guest, language):
-    """Whether a synthesizer can speak a language by itself; see speaks_declared."""
+    """Whether a synthesizer can speak a language by itself; see speaks_declared. A driver that says which voice
+    it switches to for a language answers for itself: NVDA's own answer takes any dialect of a voice's language,
+    but Vocalizer Expressive takes the first voice whose language starts with the tag, so with only an es_CO
+    voice, es_MX text is read by the default voice, in its own language, and must be named in it."""
+    if language is not None:
+        voice_for = getattr(guest, "getVoiceNameForLanguage", None)
+        if callable(voice_for):
+            try:
+                return voice_for(language) is not None
+            except Exception:
+                pass
     if not speaks_declared(guest):
         return True
     try:
