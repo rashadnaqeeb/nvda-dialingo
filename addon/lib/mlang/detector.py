@@ -27,8 +27,11 @@ UNSPACED = frozenset(("Hani", "Hira", "Kana", "Thai", "Laoo", "Khmr", "Mymr"))
 # Arabic, Devanagari, Armenian, Ethiopic, and full-width marks as well as the Latin ones.
 CLAUSE_ENDS = set('"“”«»,;:()!?./—–\n。，¿¡،؛؟।॥։።፣፤！？；：、')
 SENTENCE_ENDS = set('.!?。\n؟।॥։።！？')
-# Marks that open a clause, read with the clause after them; every other mark goes with the clause before.
-OPENERS = set('¡¿')
+# Marks that open a clause, read with the clause after them; every other mark goes with the clause before. An
+# opening bracket is read by the voice of what it encloses: "Salut ! (I'm new here)" would have the French voice
+# say "parenthèse gauche" before the English. Not quotation marks, whose opening and closing forms differ by
+# language: German opens with „ and closes with “.
+OPENERS = set('¡¿(')
 # Marks that end a clause except between two digits, where they belong to a number, a time, or a date.
 NUMBER_MARKS = set('.,:/')
 DASHES = set('—–')
@@ -219,6 +222,18 @@ def merge(runs):
         else:
             out.append((lang, text))
     return out
+
+
+def opening(chunk, cursor, start):
+    """Where the clause at `start` begins once the opening marks just before it, spaces aside, are read with it:
+    the gap from `cursor` goes with the clause before, but for those marks."""
+    at = start
+    while at > cursor and chunk[at - 1].isspace():
+        at -= 1
+    end = at
+    while at > cursor and chunk[at - 1] in OPENERS:
+        at -= 1
+    return start if at == end else at
 
 
 def sentence_window(text, start, end, limit=CONTEXT_CHARACTERS):
@@ -931,17 +946,10 @@ class Detector:
         for i, (s, e, _) in enumerate(cls):
             # The gap before a clause goes with the clause before it, but for the opening marks at its end:
             # "¿" in "Hello everyone. ¿Cómo estás?" is read by the Spanish voice.
-            opening = s
-            while opening > cursor and chunk[opening - 1].isspace():
-                opening -= 1
-            end = opening
-            while opening > cursor and chunk[opening - 1] in OPENERS:
-                opening -= 1
-            if opening == end:
-                opening = s
-            runs.append((runs[-1][0] if runs else None, chunk[cursor:opening]))
+            start = opening(chunk, cursor, s)
+            runs.append((runs[-1][0] if runs else None, chunk[cursor:start]))
             clause = self.peeled(chunk[s:e], langs[i]) if langs[i] else [(None, chunk[s:e])]
-            clause[0] = (clause[0][0], chunk[opening:s] + clause[0][1])
+            clause[0] = (clause[0][0], chunk[start:s] + clause[0][1])
             runs += clause
             cursor = e
         runs.append((runs[-1][0] if runs else None, chunk[cursor:]))
@@ -1003,11 +1011,12 @@ class Detector:
                 runs.append((carried, SEPARATOR))
             cursor = 0
             for s, e, _ in clauses(chunk):
-                runs.append((carried, chunk[cursor:s]))
+                start = opening(chunk, cursor, s)
+                runs.append((carried, chunk[cursor:start]))
                 clause = chunk[s:e]
                 kept = len(words(clause)) < 2 or not self.is_default(clause, counting_names=True, candidates=candidates)
                 carried = tag if kept else None
-                runs.append((carried, clause))
+                runs.append((carried, chunk[start:e]))
                 cursor = e
             runs.append((carried, chunk[cursor:]))
         return merge(runs)

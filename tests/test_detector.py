@@ -294,6 +294,11 @@ class ClauseTests(unittest.TestCase):
         self.assertEqual(d.tagged("Hello everyone. ¿Cómo estás amigo?"),
                          [(None, "Hello everyone. "), ("es_ES", "¿Cómo estás amigo?")])
 
+    def test_an_opening_bracket_goes_with_what_it_encloses(self):
+        d = self.detector(["fr_FR"], {"Salut tout le monde": ("fr", 1.0), "I am new here": ("en", 1.0)})
+        self.assertEqual(d.tagged("Salut tout le monde! (I am new here)"),
+                         [("fr_FR", "Salut tout le monde! "), (None, "(I am new here)")])
+
     def test_a_sentence_of_short_clauses_is_scored_whole(self):
         answers = {"Soy encantado": ("es", 1.0), "Hola": ("es", 0.99), "Soy": ("es", 1.0), "encantado": ("es", 1.0)}
         d = self.detector(["es_ES"], answers)
