@@ -421,6 +421,9 @@ class Detector:
         if guess is None:
             return None
         lang, conf = guess
+        if conf < FLOOR and lang != self.default and self.split_between_neighbours(ws, scored, lang, candidates):
+            conf = FLOOR
+            guess = (lang, conf)
         if conf >= FLOOR and lang != self.default:
             # A confident foreign guess that is the constraints' doing: left free, the recognizer prefers a
             # language nobody configured (Italian forced to Spanish). fastText's free guess on a short
@@ -433,6 +436,41 @@ class Detector:
                 if free[1] >= FLOOR or free[1] > UNCONFIGURED_MARGIN * chosen:
                     return None
         return guess
+
+    def split_between_neighbours(self, ws, scored, language, candidates):
+        """Whether a clause the recognizer splits between configured neighbours is still `language`'s, taken
+        as confident: Spanish beside Portuguese ("Haz clic para reaccionar con heart" is Spanish at 0.68,
+        Portuguese at 0.30, English at 0.01). The clause has three words or more; the default holds at most
+        what a confident guess would leave it; left free, the recognizer names `language` first; and its
+        dictionary knows every word but one, which the default's dictionary knows: an English word, often an
+        emoji's name, inside the clause. Every configured language among the candidates has its dictionary,
+        since one without would lose its text to a neighbour that has one. Each guard keeps out sentences of
+        languages nobody configured, which the free guess or the dictionaries give away: with Spanish,
+        Italian, and Portuguese configured, Catalan and Romanian sentences switched went from 193 and 64 to
+        219 and 114 per 1,000 on the share alone."""
+        if len(ws) < 3 or self.dictionary is None:
+            return False
+        neighbours = [c for c in candidates if c != self.default]
+        if len(neighbours) < 2:
+            return False  # with one foreign candidate, its share is the guess already
+        if not all(self.dictionary.has(self.spelling.get(c, c)) for c in neighbours):
+            return False
+        total = sum(self.backend.probability(scored, c) for c in candidates)
+        if not total or self.backend.probability(scored, self.default) / total > 1 - FLOOR:
+            return False
+        free = self.backend.free(scored)
+        if not free or free[0] != language:
+            return False
+        rejected = []
+        for w in ws:
+            verdict = self.dictionary.rejects_a_word(self._scored(w), self.spelling.get(language, language))
+            if verdict is None:
+                return False
+            if verdict:
+                rejected.append(w)
+        if len(rejected) > 1:
+            return False
+        return not rejected or self.dictionary.rejects_a_word(self._scored(rejected[0]), self.default_tag) is False
 
     def default_rejects(self, text):
         """Whether the default language's dictionary rejects a scored word of `text`."""

@@ -160,6 +160,77 @@ class Recognizer:
         return 0.0
 
 
+class NeighbourTests(unittest.TestCase):
+    """A clause the recognizer splits between configured neighbours, Spanish beside Portuguese, with an English
+    word in it, as Discord's reaction buttons are: "Haz clic para reaccionar con heart"."""
+
+    REACT = "Haz clic para reaccionar con heart"
+    SHARES = {"en": 0.01, "es": 0.675, "it": 0.02, "pt": 0.295}
+
+    class Shares:
+        def __init__(self, shares, free):
+            self.shares, self.frees = shares, free
+
+        def constrained(self, text, languages):
+            pairs = sorted(((c, self.shares.get(c, 0.0)) for c in languages), key=lambda p: -p[1])
+            total = sum(p for _, p in pairs)
+            return (pairs[0][0], pairs[0][1] / total) if total else None
+
+        def free(self, text):
+            return self.frees
+
+        def probability(self, text, language):
+            return self.shares.get(language, 0.0)
+
+    class Dictionary:
+        known = {
+            "en_US": {"heart", "con", "para"},
+            "es_ES": {"haz", "clic", "para", "reaccionar", "con"},
+            "it_IT": {"con", "per"},
+            "pt_BR": {"para", "com"},
+        }
+
+        def __init__(self, installed=("en_US", "es_ES", "it_IT", "pt_BR")):
+            self.installed = installed
+
+        def has(self, language):
+            return language in self.installed
+
+        def rejects_a_word(self, text, language):
+            if language not in self.installed:
+                return None
+            return any(w.lower() not in self.known[language] for w in text.split())
+
+        rejects_everywhere = rejects_a_word
+
+    def tagged(self, text, shares=None, free=("es", 0.58), dictionary=None):
+        configured = ["es_ES", "it_IT", "pt_BR"]
+        d = Detector(self.Shares(shares or self.SHARES, free), "en_US", configured, dictionary or self.Dictionary())
+        d.configure("en_US", configured)
+        return d.tagged(text)
+
+    def test_a_clause_split_between_neighbours_goes_to_the_leader(self):
+        self.assertEqual(self.tagged(self.REACT), [("es_ES", self.REACT)])
+
+    def test_not_while_a_neighbour_has_no_dictionary(self):
+        dictionary = self.Dictionary(installed=("en_US", "es_ES", "it_IT"))
+        self.assertEqual(self.tagged(self.REACT, dictionary=dictionary), [(None, self.REACT)])
+
+    def test_not_with_a_word_neither_dictionary_knows(self):
+        text = "Haz clic para reaccionar con thumbsup"
+        self.assertEqual(self.tagged(text), [(None, text)])
+
+    def test_not_where_the_free_guess_names_another_language(self):
+        self.assertEqual(self.tagged(self.REACT, free=("ca", 0.6)), [(None, self.REACT)])
+
+    def test_not_where_the_default_holds_more_than_a_confident_guess_leaves_it(self):
+        shares = {"en": 0.2, "es": 0.5, "it": 0.05, "pt": 0.25}
+        self.assertEqual(self.tagged(self.REACT, shares=shares), [(None, self.REACT)])
+
+    def test_not_under_three_words(self):
+        self.assertEqual(self.tagged("reaccionar heart"), [(None, "reaccionar heart")])
+
+
 class ChineseTests(unittest.TestCase):
     def detector(self, configured, answers):
         d = Detector(Recognizer(answers), "en_US", configured)
