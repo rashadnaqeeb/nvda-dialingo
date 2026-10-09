@@ -147,7 +147,7 @@ This only works while the row keeps your own voice. A row with a voice of its ow
 
 A language set up on a different synthesizer, or with a different voice, needs the Language table driver. It loads your normal synthesizer inside itself as the host, and the synthesizers your rows use as guests.
 
-- **You never pick it yourself.** Saving a row that uses another synthesizer or another voice switches NVDA to the Language table. Removing the last such row switches back. It only appears in NVDA's synthesizer list while it's needed (`mlang/policy.py`).
+- **You never pick it yourself.** Saving a row that uses another synthesizer or another voice switches NVDA to the Language table. Removing the last such row switches back. After an update, the add-on checks once at the next start, in case the new version needs the table for rows saved before. It only appears in NVDA's synthesizer list while it's needed (`mlang/policy.py`).
 - **It looks like your normal synthesizer.** NVDA's voice settings and the settings ring show the host's settings, and changes go to the host's own configuration. If you leave the Language table, your synthesizer is exactly as you left it.
 - **Guests never save settings.** A guest is a separate copy of a synthesizer, so a row's settings never overwrite your own settings for that synthesizer.
 - **It always speaks.** If the table is broken or empty, it falls back to NVDA's usual order of synthesizers.

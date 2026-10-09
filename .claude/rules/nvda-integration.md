@@ -4,9 +4,11 @@ paths:
   - "addon/installTasks.py"
   - "addon/lib/mlang/leaving.py"
   - "addon/lib/mlang/rename.py"
+  - "addon/lib/mlang/update.py"
   - "addon/lib/mlang/nvdaconf.py"
   - "tests/test_leaving.py"
   - "tests/test_rename.py"
+  - "tests/test_update.py"
   - "tests/test_install_tasks.py"
   - "addon/lib/mlang/table.py"
   - "addon/lib/mlang/catalogs.py"
@@ -61,6 +63,10 @@ paths:
 - Disable: the plugin's `terminate`, when the name is in `PENDING_DISABLE`. NVDA has already saved its configuration by then.
 - Coming back (re-enabled or reinstalled): `return_to_table` clears `leftTable` and, if NVDA is still on the host, runs `settings.follow_table` after startup to select the table again if needed.
 - Not handled: an update whose new copy then fails to install leaves the saved `languageTable`.
+
+## After an install or update (`mlang/update.py`)
+
+- `installTasks.onInstall` marks the base configuration (`followTable`), in memory and on disk, where it has a `[dialingo]` section. At the next start the plugin drops the mark the same way and, if the table has rows, runs `settings.follow_table` after startup. A new version may need the table where the old one did not, and the panel only switches on its next save.
 
 ## The rename from multilanguage (`mlang/rename.py`)
 

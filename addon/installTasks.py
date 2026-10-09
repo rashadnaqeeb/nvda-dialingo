@@ -34,9 +34,12 @@ def _mlang(name):
 
 def onInstall():
     """Dialingo was multilanguage before 1.0 (mlang.rename): its settings are copied, and the old copy is removed
-    at the restart that installs this one, since both would load the language table."""
+    at the restart that installs this one, since both would load the language table. The synthesizer follows the
+    table once at that restart, since this version may need it where the old one did not (mlang.update)."""
     rename = _mlang("rename")
     rename.apply_nvda(rename.copy_old, log)
+    update = _mlang("update")
+    update.apply_nvda(update.mark, log)
     for addon in addonHandler.getAvailableAddons():
         if addon.name == rename.OLD_NAME and not addon.isPendingRemove:
             addon.requestRemove()

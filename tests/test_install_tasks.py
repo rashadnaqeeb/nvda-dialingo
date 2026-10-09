@@ -1,6 +1,7 @@
 """installTasks: mlang is loaded from the add-on's own library and dropped from the module cache again. Removing the
 add-on puts the host back through mlang.leaving, and an update, which removes the old copy the same way, changes
-nothing. Installing copies the settings of multilanguage and asks for that add-on's removal."""
+nothing. Installing copies the settings of multilanguage, asks for that add-on's removal, and marks the configuration
+for the synthesizer to follow the table once."""
 import importlib.util
 import os
 import sys
@@ -73,14 +74,14 @@ class Tasks(unittest.TestCase):
     def test_install_copies_settings_and_removes_multilanguage(self):
         old, other = FakeAddon("multilanguage"), FakeAddon("someOtherAddon")
         calls, left = self.run_task("onInstall", installed=[old, other])
-        self.assertEqual(calls, ["copy_old"])
+        self.assertEqual(calls, ["copy_old", "mark"])
         self.assertEqual(left, {})
         self.assertTrue(old.removal_requested)
         self.assertFalse(other.removal_requested)
 
     def test_install_without_multilanguage(self):
         calls, _left = self.run_task("onInstall")
-        self.assertEqual(calls, ["copy_old"])
+        self.assertEqual(calls, ["copy_old", "mark"])
 
     def test_install_leaves_a_pending_removal_alone(self):
         old = FakeAddon("multilanguage", pending_remove=True)
@@ -94,7 +95,7 @@ class Tasks(unittest.TestCase):
         package.__path__ = []
         running = {"mlang": package, "mlang.table": types.ModuleType("mlang.table")}
         calls, left = self.run_task("onInstall", installed=[FakeAddon("multilanguage")], running=running)
-        self.assertEqual(calls, ["copy_old"])
+        self.assertEqual(calls, ["copy_old", "mark"])
         self.assertEqual(left, running)
 
 

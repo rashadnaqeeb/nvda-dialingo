@@ -25,6 +25,9 @@ CONFSPEC = {
     # Set when the add-on, removed or disabled, put the host back as NVDA's synthesizer (leaving.py), so the
     # plugin selects the language table again once it is back.
     "leftTable": "boolean(default=False)",
+    # Set when the add-on is installed or updated, so the plugin lets the synthesizer follow the table once at the
+    # next start (update.py).
+    "followTable": "boolean(default=False)",
 }
 
 # Settings a row can carry, in the order they are applied to a synthesizer: the voice first, because

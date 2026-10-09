@@ -26,7 +26,7 @@ from speech.commands import LangChangeCommand  # noqa: E402
 from speech.extensions import filter_speechSequence  # noqa: E402
 from speech.languageHandling import getSpeechSequenceWithLangs  # noqa: E402
 
-from mlang import leaving, pipes, policy, prosody, rename, voicedict, winvoices  # noqa: E402
+from mlang import leaving, pipes, policy, prosody, rename, update, voicedict, winvoices  # noqa: E402
 from mlang import table as T  # noqa: E402
 from mlang.detector import MODES, MODE_OFF, Detector  # noqa: E402
 from mlang.hosts import DRIVER_NAME  # noqa: E402
@@ -509,6 +509,20 @@ def return_to_table():
         wx.CallAfter(settings.follow_table)
 
 
+def follow_after_update():
+    """Once after an install or update (mlang.update), the synthesizer follows the table: this version may need the
+    language table for rows saved before it, which the panel would only switch for on its next save. With no rows
+    nothing is switched, so a first install leaves the synthesizer alone until the user sets something up."""
+    if not config.conf[T.CONFIG_SECTION][update.KEY]:
+        return
+    update.apply_nvda(update.unmark, log)
+    if T.load(config.conf).rows:
+        import wx
+
+        # After NVDA's start, not inside it.
+        wx.CallAfter(settings.follow_table)
+
+
 def disabled_on_restart():
     from addonHandler import AddonStateCategory, state
 
@@ -557,6 +571,10 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
             return_to_table()
         except Exception:
             log.error("dialingo: could not select the language table again", exc_info=True)
+        try:
+            follow_after_update()
+        except Exception:
+            log.error("dialingo: could not check the synthesizer against the table after an update", exc_info=True)
 
     def terminate(self):
         try:
