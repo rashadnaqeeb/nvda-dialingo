@@ -16,10 +16,12 @@ from .scripts import base, is_text, names_one_language
 def filter_sequence(seq, detector, default_language, detect_in_default_tagged=True, unit_language=None, line_runs=None):
     """A new sequence with LangChangeCommand items inserted around the runs the detector tags.
 
-    unit_language(text) -> a language for a string that is the unit being read at the caret (a character
+    unit_language(text, tag) -> a language for a string that is the unit being read at the caret (a character
     or a word, which cannot be detected alone), from the language its line reads in at that spot, or a
-    typed word in its keyboard's language; None otherwise. Such a string is tagged whole instead of
-    detected, or left as it is when the language is the default's.
+    typed word in its keyboard's language; None otherwise. `tag` is the application's tag where the string
+    is not detected (a language other than the default's), None where it is. Such a string is tagged whole
+    instead of detected or verified. The default's language leaves untagged or default-tagged text as it
+    is, and drops a foreign tag, as the line, read under it, drops it at that spot.
 
     line_runs(text, detected) is called for each string in order, so it can follow the strings' places in
     the line being read; for a string to be detected, it may return its runs as read among the text around
@@ -51,14 +53,19 @@ def filter_sequence(seq, detector, default_language, detect_in_default_tagged=Tr
             continue
         detected = tag is None or (detect_in_default_tagged and base(tag) == default_base)
         unit = None
-        if unit_language is not None and detected:
-            unit = unit_language(item)
+        if unit_language is not None and (detected or base(tag) != default_base):
+            unit = unit_language(item, None if detected else tag)
         in_line = None
         if line_runs is not None:
             in_line = line_runs(item, detected and unit is None and not character_mode)
         if unit is not None:
-            # The default's own language (a typed word on a keyboard of the default) leaves the text alone.
-            runs = [(tag if base(unit) == default_base else unit, item)]
+            if base(unit) != default_base:
+                runs = [(unit, item)]
+            elif detected:
+                # The default's own language (a typed word on a keyboard of the default) leaves the text alone.
+                runs = [(tag, item)]
+            else:
+                runs = [(None, item)]
         elif character_mode or (len(item.strip()) < 2 and not is_text(item)):
             out.append(item)
             continue

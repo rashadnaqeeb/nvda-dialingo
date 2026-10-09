@@ -71,32 +71,50 @@ class SequenceTests(unittest.TestCase):
         self.assertIs(filter_sequence(seq, self.det, "en"), seq)
 
     def test_unit_at_caret_takes_its_line_language(self):
-        unit = lambda text: "fr" if text.strip() == "é" else None  # noqa: E731
+        unit = lambda text, tag: "fr" if text.strip() == "é" else None  # noqa: E731
         seq = [CharacterModeCommand(True), "é", CharacterModeCommand(False)]
         out = filter_sequence(seq, self.det, "en", unit_language=unit)
         self.assertEqual(out, [CharacterModeCommand(True), LangChangeCommand("fr"), "é", LangChangeCommand(None), CharacterModeCommand(False)])
-        word = lambda text: "fr" if text.strip() == "Bonjour" else None  # noqa: E731
+        word = lambda text, tag: "fr" if text.strip() == "Bonjour" else None  # noqa: E731
         out = filter_sequence(["Bonjour", "bold"], self.det, "en", unit_language=word)
         self.assertEqual(out, [LangChangeCommand("fr"), "Bonjour", LangChangeCommand(None), "bold"])
 
     def test_unit_tagged_with_default_language_takes_its_line_language(self):
-        unit = lambda text: "fr" if text.strip() == "é" else None  # noqa: E731
+        unit = lambda text, tag: "fr" if text.strip() == "é" else None  # noqa: E731
         seq = [LangChangeCommand("en_US"), "é", LangChangeCommand(None)]
         out = filter_sequence(seq, self.det, "en", unit_language=unit)
         self.assertEqual(out, [LangChangeCommand("en_US"), LangChangeCommand("fr"), "é", LangChangeCommand("en_US"), LangChangeCommand(None)])
         # With default-tagged text trusted, the application's tag stands.
         self.assertIs(filter_sequence(seq, self.det, "en", detect_in_default_tagged=False, unit_language=unit), seq)
 
+    def test_unit_under_a_foreign_tag_its_line_drops_is_read_in_the_default(self):
+        # An English message on a page tagged Spanish: the line reads as English under the tag, so its character does.
+        calls = []
+
+        def unit(text, tag):
+            calls.append((text, tag))
+            return "en_US"
+
+        seq = [LangChangeCommand("es"), CharacterModeCommand(True), "a", CharacterModeCommand(False), LangChangeCommand(None)]
+        out = filter_sequence(seq, self.det, "en", unit_language=unit)
+        self.assertEqual(calls, [("a", "es")])
+        self.assertEqual(out, [LangChangeCommand("es"), CharacterModeCommand(True), LangChangeCommand(None), "a",
+                               LangChangeCommand("es"), CharacterModeCommand(False), LangChangeCommand(None)])
+
+    def test_unit_under_a_foreign_tag_its_line_keeps_stands(self):
+        seq = [LangChangeCommand("es"), "hola", LangChangeCommand(None)]
+        self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text, tag: None), seq)
+
     def test_unit_in_default_language_line_is_left_alone(self):
         seq = ["a"]
-        self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text: None), seq)
+        self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text, tag: None), seq)
 
     def test_unit_in_the_default_language_is_not_detected(self):
         # A word typed on a keyboard of the default language stays with the default voice.
         seq = ["bonjour"]
-        self.assertIs(filter_sequence(seq, self.det, "en_GB", unit_language=lambda text: "en_US"), seq)
+        self.assertIs(filter_sequence(seq, self.det, "en_GB", unit_language=lambda text, tag: "en_US"), seq)
         seq = [LangChangeCommand("en_US"), "bonjour"]
-        self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text: "en"), seq)
+        self.assertIs(filter_sequence(seq, self.det, "en", unit_language=lambda text, tag: "en"), seq)
 
     def test_mode_off_passes_through(self):
         self.det.mode = "off"

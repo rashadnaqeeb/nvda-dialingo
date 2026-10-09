@@ -46,6 +46,7 @@ def _stub_nvda():
     package = module("dialingo")
     package.__path__ = [package_dir]
     package.lock = module("dialingo.lock", AUTOMATIC="")
+    package.language_switching = lambda: True
     spec = importlib.util.spec_from_file_location("dialingo.context", os.path.join(package_dir, "context.py"))
     context = importlib.util.module_from_spec(spec)
     sys.modules["dialingo.context"] = context
@@ -117,6 +118,7 @@ class Detector:
     mode = "full"
     labels = ()
     reader_words = {"link"}
+    default_tag = "en_US"
 
     def __init__(self):
         self.asked = []
@@ -132,6 +134,10 @@ class Detector:
     def tagged(self, text):
         return [(None, text)]
 
+    def verified(self, text, tag):
+        """Under a tag, a line reads in the tag's language where it says "Spanish", and as the default otherwise."""
+        return [(tag if "Spanish" in text else None, text)]
+
 
 class Engine:
     key = 1
@@ -141,6 +147,12 @@ class Engine:
 
     def current(self):
         return self.detector
+
+    def language_lock(self):
+        return ""
+
+    def ignores_tag(self, lang):
+        return False
 
 
 TEXT = "A label reading this. We walked along the path by the side of the lake. A row of trees marks the edge."
@@ -241,6 +253,45 @@ class LineContextTests(unittest.TestCase):
         offset = TEXT.index("lake. A") + len("lake. ")
         self.assertEqual(self.unit.language_at(Info(s, offset, offset + 1)), "en_US")
         self.assertEqual(self.detector.asked[0][0], "by the side of the lake. A ")
+
+
+class TaggedUnitTests(unittest.TestCase):
+    """A character on a page the application tagged with a language other than the default's: Discord in
+    Spanish showing a message in English."""
+
+    TEXT = "An English message here.\nUn mensaje en Spanish.\n"
+
+    def setUp(self):
+        self.detector = Detector()
+        self.unit = context.UnitContext(Engine(self.detector))
+        lines, start = [], 0
+        for line in self.TEXT.splitlines(keepends=True):
+            lines.append((start, start + len(line)))
+            start += len(line)
+        self.story = Story(self.TEXT, lines)
+
+    def at(self, word):
+        offset = self.TEXT.index(word)
+        return Info(self.story, offset, offset + 1)
+
+    def test_a_character_of_a_line_that_drops_the_tag_is_read_in_the_default(self):
+        with self.unit.context(self.at("English")):
+            self.assertEqual(self.unit.locale_for("E", "es_ES"), "en_US")
+            self.assertEqual(self.unit.language_for("E", "es_ES"), "en_US")
+
+    def test_a_character_of_a_line_that_keeps_the_tag_keeps_it(self):
+        with self.unit.context(self.at("mensaje")):
+            self.assertEqual(self.unit.locale_for("m", "es_ES"), "es_ES")
+            self.assertIsNone(self.unit.language_for("m", "es_ES"))
+
+    def test_the_default_s_own_tag_is_not_read_under(self):
+        with self.unit.context(self.at("English")):
+            self.assertIsNone(self.unit.tagged_language("en_GB"))
+
+    def test_outside_a_unit_the_tag_stands(self):
+        self.assertEqual(self.unit.locale_for("E", "es_ES"), "es_ES")
+        with self.unit.context(self.at("English")):
+            self.assertIsNone(self.unit.language_for("x", "es_ES"))  # not the unit's text
 
 
 if __name__ == "__main__":

@@ -8,11 +8,14 @@
 # spelling helpers get the context language as their locale when they were given none, which gives the
 # character's description in that language too, and the sequence filter tags the unit's text.
 #
-# Text an application tagged with another language keeps its tag. A tag with the default language (a web
-# page's or a document's own language, which most carry) is treated like no tag, as the sequence filter
-# treats it: the character description NVDA builds from that locale would otherwise come out in the
-# default language, and be spoken by the default voice, after the character itself was read in the
-# line's language. The "detect in default-tagged text" setting turns that off along with the rest.
+# A tag with the default language (a web page's or a document's own language, which most carry) is treated
+# like no tag, as the sequence filter treats it: the character description NVDA builds from that locale
+# would otherwise come out in the default language, and be spoken by the default voice, after the character
+# itself was read in the line's language. The "detect in default-tagged text" setting turns that off along
+# with the rest. Text an application tagged with another language takes the language its line reads in
+# under that tag at the unit's offset: the tag where the line keeps it, the default where the line, a
+# message in English on a page in Spanish, reads as the default, as the sequence filter reads a line, so a
+# character read on its own does not come out in a voice and with symbol names its line is not read in.
 #
 # Typing echo follows the keyboard layout: a typed character, one deleted with backspace, and a typed word
 # are read in the keyboard's language where a row or a voice speaks it. A letter of a script the keyboard
@@ -96,14 +99,29 @@ def describes(locale, character):
     return bool(data.getCharacterDescription(character.lower()))
 
 
+def run_at(runs, offset):
+    """The language of the (language, text) run that holds `offset`, the last run's past their end."""
+    end = 0
+    language = None
+    for lang, piece in runs:
+        end += len(piece)
+        language = lang
+        if offset < end:
+            break
+    return language
+
+
 class UnitContext:
     def __init__(self, engine):
         self.engine = engine
         self.language = None  # the context language while a wrapped call runs, None otherwise
         self.unit_text = None
+        self.unit_line = None  # (the unit's line text, its offset in it) while a wrapped call runs
         self.keyboard = None  # the keyboard layout's language while NVDA echoes typing
         self.last_runs = None
         self.last_key = None  # (line text, text around it, the engine's configuration key) of last_runs
+        self.last_tag_runs = None
+        self.last_tag_key = None  # (line text, tag, the engine's configuration key) of last_tag_runs
         self.line_info = None  # the TextInfo of the line being spoken, while a wrapped call runs
         self.line_strings = None  # the strings of its sequence so far, a LineStrings
         self.line_text = None  # its text once fetched, False where it cannot be had
@@ -238,9 +256,10 @@ class UnitContext:
 
     def locale_for(self, text, locale):
         """The locale a spelling helper should use for `text`: the caller's, unless the context language
-        stands in for it (no locale, or the default language's tag when that is detected through). Under the
-        language lock, the locked language, None for the default. A tag for a language with detection off is
-        no locale. Without language switching, the caller's."""
+        stands in for it (no locale, or the default language's tag when that is detected through), or the
+        caller's is a foreign tag the unit's line, read under it, drops at the unit. Under the language lock,
+        the locked language, None for the default. A tag for a language with detection off is no locale.
+        Without language switching, the caller's."""
         from . import language_switching
 
         if not language_switching():
@@ -257,9 +276,9 @@ class UnitContext:
                 locale = None
         except Exception:
             log.debugWarning("dialingo: whether the locale's row detects could not be read", exc_info=True)
-        if self.language is None:
-            return locale
         if locale is not None and not self.overrides(locale):
+            return self.language_for(text, locale) or locale
+        if self.language is None:
             return locale
         return self.language_for(text) or locale
 
@@ -272,14 +291,20 @@ class UnitContext:
         except Exception:
             return False
 
-    def language_for(self, text):
+    def language_for(self, text, tag=None):
         """The context language for a string spoken while a context is held: the unit's own text only.
-        While NVDA echoes typing, a word's keyboard language."""
+        While NVDA echoes typing, a word's keyboard language. For a string an application tagged `tag`, a
+        language other than the default's: the language its line reads in under that tag at the unit, None
+        where that is the tag itself."""
         if not isinstance(text, str):
             return None
         stripped = text.strip()
         if not stripped:
             return None
+        if tag is not None:
+            if self.unit_line is None or (stripped != self.unit_text and stripped not in self.unit_text):
+                return None
+            return self.tagged_language(tag)
         if self.language is None:
             if self.keyboard is not None and self.unit_text is None:
                 return self.typed_word_language(stripped)
@@ -288,21 +313,40 @@ class UnitContext:
             return None
         return self.language
 
+    def tagged_language(self, tag):
+        """For the unit, which an application tagged `tag`: the language its line reads in under that tag at
+        the unit's offset, as the sequence filter reads a tagged line (the default's own tag where the line
+        drops the tag there); None where the line keeps the tag, or where the tag is the default's."""
+        detector = self.engine.current()
+        if detector is None or self.unit_line is None or base(tag) == base(detector.default_tag):
+            return None
+        text, offset = self.unit_line
+        key = (text, tag, self.engine.key)
+        if key != self.last_tag_key:
+            self.last_tag_key, self.last_tag_runs = key, detector.verified(text, tag)
+        language = run_at(self.last_tag_runs, offset)
+        if language == tag:
+            return None
+        return language or detector.default_tag
+
     @contextlib.contextmanager
     def context(self, info):
         language = None
         unit_text = None
+        unit_line = None
         try:
             unit_text = info.text.strip()
             if unit_text:
-                language = self.language_at(info)
+                unit_line = self.line_at(info)
+                language = self.language_at(info, unit_line)
         except Exception:
             log.debugWarning("dialingo: no line context for the unit", exc_info=True)
         self.language, self.unit_text = language, unit_text
+        self.unit_line = unit_line[1:] if unit_line else None
         try:
             yield
         finally:
-            self.language, self.unit_text = None, None
+            self.language, self.unit_text, self.unit_line = None, None, None
 
     @contextlib.contextmanager
     def line_context(self, info):
@@ -405,26 +449,27 @@ class UnitContext:
         self.last_key, self.last_runs = key, runs
         return runs
 
-    def language_at(self, info):
-        """The language the unit's line reads in at the unit's offset, or None for the default."""
-        detector = self.engine.current()
-        if detector is None:
-            return None
+    def line_at(self, info):
+        """(the unit's line TextInfo, its text, the unit's offset in it), or None where the line has no letter."""
         line = info.copy()
         line.expand(textInfos.UNIT_LINE)
         text = line.text
         if not text or not any(c.isalpha() for c in text):
             return None
-        offset = self.offset_in(line, text, info)
-        runs = self.runs_of_line(detector, line, text)
-        end = 0
-        language = None
-        for lang, piece in runs:
-            end += len(piece)
-            language = lang
-            if offset < end:
-                break
-        return language
+        return line, text, self.offset_in(line, text, info)
+
+    def language_at(self, info, found=None):
+        """The language the unit's line reads in at the unit's offset, or None for the default. `found` is
+        line_at(info), where the caller has it."""
+        detector = self.engine.current()
+        if detector is None:
+            return None
+        if found is None:
+            found = self.line_at(info)
+            if found is None:
+                return None
+        line, text, offset = found
+        return run_at(self.runs_of_line(detector, line, text), offset)
 
     @staticmethod
     def offset_in(line, text, info):

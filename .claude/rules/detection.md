@@ -76,6 +76,7 @@ paths:
 ## Caret and typing (`context.py`)
 
 - Wraps `speech.speakTextInfo` (character, word, and line units) and `speech.spellTextInfo`. The line is detected once and cached; the unit takes the run at its offset.
+- A unit an application tagged with another language takes the language its line reads in under that tag (`Detector.verified`) at the unit's offset: an English message on a page tagged Spanish (Discord) drops the tag there, so its characters and words are read in English, voice and symbol names both. `UnitContext.tagged_language`; the filter asks `unit_language(text, tag)`.
 - `getSpellingSpeech` and `getSingleCharDescription` get that language as locale when given none or only the default. Where NVDA would fall back to the English description for a non-default locale, the description is dropped.
 - Typing echo wraps `speech.speakSpelling` and `speech.speakTypedCharacters`, using the keyboard layout's language (`keyboardHandler.getInputHkl`) when a row or voice speaks it, with an exact-dialect row preferred.
 
