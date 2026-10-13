@@ -1,0 +1,35 @@
+# Ruff settings from NV Access's add-on template, which match NVDA's own coding standards.
+# Format with: uvx ruff format
+
+[tool.ruff]
+line-length = 110
+
+builtins = [
+	# translation lookup
+	"_",
+	# translation lookup
+	"ngettext",
+	# translation lookup
+	"pgettext",
+	# translation lookup
+	"npgettext",
+]
+
+exclude = [
+	".git",
+	"__pycache__",
+	".venv",
+	# Vendored fasttext-predict; kept as upstream ships it.
+	"addon/lib/fasttext",
+]
+
+[tool.ruff.format]
+indent-style = "tab"
+line-ending = "lf"
+
+[tool.ruff.lint]
+ignore = [
+	# indentation contains tabs
+	"W191",
+]
+logger-objects = ["logHandler.log"]

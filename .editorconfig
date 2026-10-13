@@ -1,0 +1,13 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+
+# NVDA's coding standards: one tab per indentation level.
+[*.py]
+indent_style = tab
+tab_width = 4
+trim_trailing_whitespace = true
+max_line_length = 110

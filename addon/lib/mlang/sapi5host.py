@@ -10,6 +10,7 @@ It relies on how NVDA 2026 builds the driver: its audio goes through `player`, m
 speaking thread appends each request's bookmarks to `_bookmarkLists` as it starts it, and calls `_onEndStream`
 once the request's audio is all written. When any of that is missing, the driver is hosted as it is, with its
 done freeing it as before. NVDA is imported inside the functions, so the module loads under the tests."""
+
 import os
 import threading
 from collections import deque
@@ -21,161 +22,165 @@ _classes = {}
 
 
 class _Requests(deque):
-    """The driver's list of bookmark lists, one per request; `current` is a copy of the bookmarks of the request its
-    speaking thread started last, taken before any of them is reported. Its last is the end marker of the piece."""
+	"""The driver's list of bookmark lists, one per request; `current` is a copy of the bookmarks of the request its
+	speaking thread started last, taken before any of them is reported. Its last is the end marker of the piece."""
 
-    current = ()
+	current = ()
 
-    def append(self, bookmarks):
-        self.current = tuple(bookmarks)
-        super().append(bookmarks)
+	def append(self, bookmarks):
+		self.current = tuple(bookmarks)
+		super().append(bookmarks)
 
-    def clear(self):
-        self.current = ()
-        super().clear()
+	def clear(self):
+		self.current = ()
+		super().clear()
 
 
 def _usable(cls):
-    import sys
+	import sys
 
-    module = sys.modules.get("synthDrivers.sapi5")
-    if module is None or not isinstance(cls, type) or not issubclass(cls, module.SynthDriver):
-        return False
-    return all(callable(getattr(cls, name, None)) for name in ("_initWasapiAudio", "_onEndStream", "_speakThread"))
+	module = sys.modules.get("synthDrivers.sapi5")
+	if module is None or not isinstance(cls, type) or not issubclass(cls, module.SynthDriver):
+		return False
+	return all(
+		callable(getattr(cls, name, None)) for name in ("_initWasapiAudio", "_onEndStream", "_speakThread")
+	)
 
 
 def hosted(cls, log=None):
-    """`cls`, or for a driver built on NVDA's SAPI 5 one (the Microsoft Speech Platform's too), its hosted subclass."""
-    if cls in _classes:
-        return _classes[cls]
-    result = cls
-    if _usable(cls):
+	"""`cls`, or for a driver built on NVDA's SAPI 5 one (the Microsoft Speech Platform's too), its hosted subclass."""
+	if cls in _classes:
+		return _classes[cls]
+	result = cls
+	if _usable(cls):
 
-        class Hosted(cls):
-            onSpeechEnded = None  # set by the language table: called with the end marker of a piece
+		class Hosted(cls):
+			onSpeechEnded = None  # set by the language table: called with the end marker of a piece
 
-            def __init__(self, *args, **kwargs):
-                # Before NVDA's init, which makes the first player.
-                self._mlangHoldLock = threading.Lock()
-                self._mlangHeld = False
-                super().__init__(*args, **kwargs)
-                if isinstance(self._bookmarkLists, deque) and not self._bookmarkLists:
-                    self._bookmarkLists = _Requests()
+			def __init__(self, *args, **kwargs):
+				# Before NVDA's init, which makes the first player.
+				self._mlangHoldLock = threading.Lock()
+				self._mlangHeld = False
+				super().__init__(*args, **kwargs)
+				if isinstance(self._bookmarkLists, deque) and not self._bookmarkLists:
+					self._bookmarkLists = _Requests()
 
-            def _initWasapiAudio(self):
-                with self._mlangHoldLock:
-                    super()._initWasapiAudio()
-                    if self.player is not None:
-                        self.player = QueuedPlayer(self.player, log.debugWarning if log else None)
-                        if self._mlangHeld:
-                            # A change of voice while holding a piece sent ahead: the new player holds it too.
-                            self.player.hold()
+			def _initWasapiAudio(self):
+				with self._mlangHoldLock:
+					super()._initWasapiAudio()
+					if self.player is not None:
+						self.player = QueuedPlayer(self.player, log.debugWarning if log else None)
+						if self._mlangHeld:
+							# A change of voice while holding a piece sent ahead: the new player holds it too.
+							self.player.hold()
 
-            def mlangHold(self, held):
-                """Hold what is sent to the player (QueuedPlayer.hold), or let it play: a state of the instance,
-                which a new player made for a change of voice keeps."""
-                with self._mlangHoldLock:
-                    self._mlangHeld = held
-                    player = self.player
-                    if isinstance(player, QueuedPlayer):
-                        if held:
-                            player.hold()
-                        else:
-                            player.unhold()
+			def mlangHold(self, held):
+				"""Hold what is sent to the player (QueuedPlayer.hold), or let it play: a state of the instance,
+				which a new player made for a change of voice keeps."""
+				with self._mlangHoldLock:
+					self._mlangHeld = held
+					player = self.player
+					if isinstance(player, QueuedPlayer):
+						if held:
+							player.hold()
+						else:
+							player.unhold()
 
-            def _initTts(self, *args, **kwargs):
-                """A change of voice makes a new engine and player, stopping the old player with the reports of
-                what it was still to play (the end of speech, NVDA's indexes, done), which NVDA's own driver
-                would have made by then. They are made once the new player is in place."""
-                old = getattr(self, "player", None)
-                if not isinstance(old, QueuedPlayer):
-                    return super()._initTts(*args, **kwargs)
-                old.salvage()
-                try:
-                    super()._initTts(*args, **kwargs)
-                finally:
-                    for call in old.salvaged():
-                        try:
-                            call()
-                        except Exception:
-                            if log:
-                                log.debugWarning("dialingo: a report of SAPI 5's failed", exc_info=True)
+			def _initTts(self, *args, **kwargs):
+				"""A change of voice makes a new engine and player, stopping the old player with the reports of
+				what it was still to play (the end of speech, NVDA's indexes, done), which NVDA's own driver
+				would have made by then. They are made once the new player is in place."""
+				old = getattr(self, "player", None)
+				if not isinstance(old, QueuedPlayer):
+					return super()._initTts(*args, **kwargs)
+				old.salvage()
+				try:
+					super()._initTts(*args, **kwargs)
+				finally:
+					for call in old.salvaged():
+						try:
+							call()
+						except Exception:
+							if log:
+								log.debugWarning("dialingo: a report of SAPI 5's failed", exc_info=True)
 
-            def _onEndStream(self):
-                player = self.player
-                lists = self._bookmarkLists
-                if not isinstance(player, QueuedPlayer) or not isinstance(lists, _Requests):
-                    return super()._onEndStream()
-                bookmarks = lists.current
-                if lists:
-                    # Reported once played, below: NVDA would report them now.
-                    lists[-1].clear()
-                try:
-                    callback = self.onSpeechEnded
-                    if callback is not None and bookmarks:
-                        player.mark_speech_end(lambda marker=bookmarks[-1]: callback(marker))
-                    if bookmarks:
-                        player.feed(None, 0, onDone=lambda: self._reportPlayed(bookmarks))
-                except Exception:
-                    if log:
-                        log.debugWarning("dialingo: could not mark the end of SAPI 5's speech", exc_info=True)
-                super()._onEndStream()
+			def _onEndStream(self):
+				player = self.player
+				lists = self._bookmarkLists
+				if not isinstance(player, QueuedPlayer) or not isinstance(lists, _Requests):
+					return super()._onEndStream()
+				bookmarks = lists.current
+				if lists:
+					# Reported once played, below: NVDA would report them now.
+					lists[-1].clear()
+				try:
+					callback = self.onSpeechEnded
+					if callback is not None and bookmarks:
+						player.mark_speech_end(lambda marker=bookmarks[-1]: callback(marker))
+					if bookmarks:
+						player.feed(None, 0, onDone=lambda: self._reportPlayed(bookmarks))
+				except Exception:
+					if log:
+						log.debugWarning("dialingo: could not mark the end of SAPI 5's speech", exc_info=True)
+				super()._onEndStream()
 
-            def _reportPlayed(self, bookmarks):
-                """The request's audio has played: its bookmarks are reached, whether or not the player reported
-                them; the language table ignores one reported twice."""
-                from synthDriverHandler import synthIndexReached
+			def _reportPlayed(self, bookmarks):
+				"""The request's audio has played: its bookmarks are reached, whether or not the player reported
+				them; the language table ignores one reported twice."""
+				from synthDriverHandler import synthIndexReached
 
-                for index in bookmarks:
-                    synthIndexReached.notify(synth=self, index=index)
+				for index in bookmarks:
+					synthIndexReached.notify(synth=self, index=index)
 
-        Hosted.__name__ = Hosted.__qualname__ = cls.__name__
-        result = Hosted
-    elif _usable32(cls):
+		Hosted.__name__ = Hosted.__qualname__ = cls.__name__
+		result = Hosted
+	elif _usable32(cls):
 
-        class Hosted32(cls):
-            """NVDA's 32-bit SAPI 5 runs in a process of its own, NVDA's 32-bit synth driver host, which reports
-            only indexes and done back. This proxy has the host load the add-on's driver (DRIVER32) instead of
-            NVDA's: NVDA's, hosted there as above, which reports the end of each piece's speech as its end marker
-            plus SPEECH_END, and its done once the request's audio has played. When it cannot load, NVDA's own
-            driver is loaded, as without the add-on."""
+		class Hosted32(cls):
+			"""NVDA's 32-bit SAPI 5 runs in a process of its own, NVDA's 32-bit synth driver host, which reports
+			only indexes and done back. This proxy has the host load the add-on's driver (DRIVER32) instead of
+			NVDA's: NVDA's, hosted there as above, which reports the end of each piece's speech as its end marker
+			plus SPEECH_END, and its done once the request's audio has played. When it cannot load, NVDA's own
+			driver is loaded, as without the add-on."""
 
-            synthDriver32Path = DRIVERS32
-            synthDriver32Name = DRIVER32
-            speechEndOffset = SPEECH_END
-            _mlangReturning = False
+			synthDriver32Path = DRIVERS32
+			synthDriver32Name = DRIVER32
+			speechEndOffset = SPEECH_END
+			_mlangReturning = False
 
-            def __init__(self, *args, **kwargs):
-                try:
-                    _launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
-                except Exception:
-                    if log:
-                        log.debugWarning("dialingo: the 32-bit SAPI 5 of the language table did not load; "
-                                         "NVDA's is used", exc_info=True)
-                    self.synthDriver32Path = cls.synthDriver32Path
-                    self.synthDriver32Name = cls.synthDriver32Name
-                    self.speechEndOffset = None
-                    _launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
+			def __init__(self, *args, **kwargs):
+				try:
+					_launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
+				except Exception:
+					if log:
+						log.debugWarning(
+							"dialingo: the 32-bit SAPI 5 of the language table did not load; NVDA's is used",
+							exc_info=True,
+						)
+					self.synthDriver32Path = cls.synthDriver32Path
+					self.synthDriver32Name = cls.synthDriver32Name
+					self.speechEndOffset = None
+					_launch(lambda: super(Hosted32, self).__init__(*args, **kwargs), log)
 
-            def mlangReturning(self):
-                """The table's `returning`: another voice has spoken since this one's last piece, so the silence
-                left of that piece may go. The table cannot reach the player in the other process; the next piece
-                tells the add-on's driver there, which drops it (DROP_SILENCE)."""
-                if self.speechEndOffset:
-                    self._mlangReturning = True
+			def mlangReturning(self):
+				"""The table's `returning`: another voice has spoken since this one's last piece, so the silence
+				left of that piece may go. The table cannot reach the player in the other process; the next piece
+				tells the add-on's driver there, which drops it (DROP_SILENCE)."""
+				if self.speechEndOffset:
+					self._mlangReturning = True
 
-            def speak(self, speechSequence):
-                if self._mlangReturning:
-                    from speech.commands import IndexCommand
+			def speak(self, speechSequence):
+				if self._mlangReturning:
+					from speech.commands import IndexCommand
 
-                    self._mlangReturning = False
-                    speechSequence = [IndexCommand(DROP_SILENCE), *speechSequence]
-                super().speak(speechSequence)
+					self._mlangReturning = False
+					speechSequence = [IndexCommand(DROP_SILENCE), *speechSequence]
+				super().speak(speechSequence)
 
-        Hosted32.__name__ = Hosted32.__qualname__ = cls.__name__
-        result = Hosted32
-    _classes[cls] = result
-    return result
+		Hosted32.__name__ = Hosted32.__qualname__ = cls.__name__
+		result = Hosted32
+	_classes[cls] = result
+	return result
 
 
 # The end of a piece's speech, from the language table's 32-bit SAPI 5: its end marker plus this. The scheduler's
@@ -185,49 +190,55 @@ SPEECH_END = 1_000_000
 # since its last piece: the silence left of that piece goes. Never spoken or reported.
 DROP_SILENCE = 2 * SPEECH_END
 # The folder of the add-on's 32-bit drivers, and the one NVDA's 32-bit synth driver host loads for the table.
-DRIVERS32 = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "synthDrivers32")
+DRIVERS32 = os.path.join(
+	os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "synthDrivers32"
+)
 DRIVER32 = "mlang_sapi5"
 
 
 def _usable32(cls):
-    """NVDA's 32-bit SAPI 5 proxy, with the add-on's driver for the host in place."""
-    return (isinstance(cls, type) and getattr(cls, "name", None) == "sapi5_32"
-            and getattr(cls, "synthDriver32Name", None) == "sapi5" and hasattr(cls, "synthDriver32Path")
-            and os.path.isfile(os.path.join(DRIVERS32, DRIVER32 + ".py")))
+	"""NVDA's 32-bit SAPI 5 proxy, with the add-on's driver for the host in place."""
+	return (
+		isinstance(cls, type)
+		and getattr(cls, "name", None) == "sapi5_32"
+		and getattr(cls, "synthDriver32Name", None) == "sapi5"
+		and hasattr(cls, "synthDriver32Path")
+		and os.path.isfile(os.path.join(DRIVERS32, DRIVER32 + ".py"))
+	)
 
 
 def _launch(init, log=None):
-    """Run a 32-bit proxy's init. NVDA's launcher starts the host process and connects to it before the driver is
-    loaded there, and keeps nothing of it when that load fails: the process would run on until NVDA exits. The
-    connections it makes on this thread meanwhile are closed then. Each closes its pipes once (pipes)."""
-    pipes.install(log)
-    try:
-        from _bridge.clients.synthDriverHost32 import launcher
+	"""Run a 32-bit proxy's init. NVDA's launcher starts the host process and connects to it before the driver is
+	loaded there, and keeps nothing of it when that load fails: the process would run on until NVDA exits. The
+	connections it makes on this thread meanwhile are closed then. Each closes its pipes once (pipes)."""
+	pipes.install(log)
+	try:
+		from _bridge.clients.synthDriverHost32 import launcher
 
-        real = launcher.Connection
-    except Exception:
-        init()
-        return
-    thread = threading.get_ident()
-    made = []
+		real = launcher.Connection
+	except Exception:
+		init()
+		return
+	thread = threading.get_ident()
+	made = []
 
-    def connection(*args, **kwargs):
-        conn = real(*args, **kwargs)
-        if threading.get_ident() == thread:
-            made.append(conn)
-        return conn
+	def connection(*args, **kwargs):
+		conn = real(*args, **kwargs)
+		if threading.get_ident() == thread:
+			made.append(conn)
+		return conn
 
-    with pipes.launching:
-        launcher.Connection = connection
-        try:
-            init()
-        except Exception:
-            for conn in made:
-                try:
-                    conn.close()
-                except Exception:
-                    if log:
-                        log.debugWarning("dialingo: a 32-bit synth driver host was not closed", exc_info=True)
-            raise
-        finally:
-            launcher.Connection = real
+	with pipes.launching:
+		launcher.Connection = connection
+		try:
+			init()
+		except Exception:
+			for conn in made:
+				try:
+					conn.close()
+				except Exception:
+					if log:
+						log.debugWarning("dialingo: a 32-bit synth driver host was not closed", exc_info=True)
+			raise
+		finally:
+			launcher.Connection = real

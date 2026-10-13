@@ -23,6 +23,7 @@ Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x6
 - Build: `"$PY" build.py` writes `dist/<name>-<version>.nvda-addon`, named from `addon/manifest.ini`. It overwrites a package of the same version; don't rebuild a released version.
 - Acceptance cases: `"$PY" harness/harness.py fasttext`. Must stay at 106/106 or higher.
 - Translations, after any `_()` string changes: `"$PY" i18n/extract.py` then `"$PY" i18n/make_locale.py`. Fix any placeholder or accelerator problem it lists.
+- Format: `uvx ruff format` after any Python change. The settings in `pyproject.toml` come from NV Access's add-on template.
 
 ## Rules
 
@@ -33,6 +34,7 @@ Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x6
 - `KNOWN_GAPS.md` records problems left alone and alternatives already measured and rejected. Check it before trying a fix. When a gap is fixed, delete its entry.
 - Every user-visible string goes through `_()` with a `# Translators:` comment above it.
 - Comments explain why, in plain sentences, at the density of the surrounding code.
+- Python follows NVDA's coding standards as far as Ruff formats them: tab indentation, lines up to 110 characters, LF endings. `.editorconfig` sets the same for editors. Names stay snake_case, except where NVDA's own API names a method.
 
 ## Docs
 

@@ -9,6 +9,7 @@ A tag an application supplied is distrusted when the text contradicts it, in bot
 
 Languages are base codes ('fr') inside the detector; `tagged` returns the caller's configured spelling.
 """
+
 import re
 import unicodedata
 
@@ -26,15 +27,15 @@ NOUN_CAPITALIZING = {"de", "lb"}
 UNSPACED = frozenset(("Hani", "Hira", "Kana", "Thai", "Laoo", "Khmr", "Mymr"))
 # Arabic, Devanagari, Armenian, Ethiopic, and full-width marks as well as the Latin ones.
 CLAUSE_ENDS = set('"“”«»,;:()!?./—–\n。，¿¡،؛؟।॥։።፣፤！？；：、')
-SENTENCE_ENDS = set('.!?。\n؟।॥։።！？')
+SENTENCE_ENDS = set(".!?。\n؟।॥։።！？")
 # Marks that open a clause, read with the clause after them; every other mark goes with the clause before. An
 # opening bracket is read by the voice of what it encloses: "Salut ! (I'm new here)" would have the French voice
 # say "parenthèse gauche" before the English. Not quotation marks, whose opening and closing forms differ by
 # language: German opens with „ and closes with “.
-OPENERS = set('¡¿(')
+OPENERS = set("¡¿(")
 # Marks that end a clause except between two digits, where they belong to a number, a time, or a date.
-NUMBER_MARKS = set('.,:/')
-DASHES = set('—–')
+NUMBER_MARKS = set(".,:/")
+DASHES = set("—–")
 JOINERS = set("'’-")
 # Inside a word: the joiners Persian and the Indic scripts write between letters.
 ZERO_WIDTH = set("\u200c\u200d")
@@ -49,1012 +50,1056 @@ MODES = (MODE_OFF, MODE_SCRIPT, MODE_FULL)
 
 # ---------------------------------------------------------------- word rules
 
+
 def is_mark(c):
-    return unicodedata.category(c).startswith("M")
+	return unicodedata.category(c).startswith("M")
 
 
 def word(piece):
-    first = next((i for i, c in enumerate(piece) if c.isalpha() or c.isdigit()), None)
-    if first is None:
-        return None
-    last = max(i for i, c in enumerate(piece) if c.isalpha() or c.isdigit())
-    # A vowel sign, virama, or haraka after the last letter is part of it: "है", "كِتَابٌ".
-    while last + 1 < len(piece) and is_mark(piece[last + 1]):
-        last += 1
-    core = piece[first:last + 1]
-    return core if all(c.isalpha() or c in JOINERS or c in ZERO_WIDTH or is_mark(c) for c in core) else None
+	first = next((i for i, c in enumerate(piece) if c.isalpha() or c.isdigit()), None)
+	if first is None:
+		return None
+	last = max(i for i, c in enumerate(piece) if c.isalpha() or c.isdigit())
+	# A vowel sign, virama, or haraka after the last letter is part of it: "है", "كِتَابٌ".
+	while last + 1 < len(piece) and is_mark(piece[last + 1]):
+		last += 1
+	core = piece[first : last + 1]
+	return core if all(c.isalpha() or c in JOINERS or c in ZERO_WIDTH or is_mark(c) for c in core) else None
 
 
 _SPLIT = re.compile(r"[\s—–]+")
 
 
 def words(text):
-    return [w for w in (word(p) for p in _SPLIT.split(text)) if w]
+	return [w for w in (word(p) for p in _SPLIT.split(text)) if w]
 
 
 def shouted(w):
-    return any(c.isupper() for c in w) and not any(c.islower() for c in w)
+	return any(c.isupper() for c in w) and not any(c.islower() for c in w)
 
 
 def common_words(text, noun=None):
-    """Words that are not names or abbreviations: a capital word of fewer than five letters is an
-    abbreviation in any position; a capitalized word after the first is a name unless shouted, or unless
-    noun(word) says it is a noun of a language that capitalizes them. A word of a script without case
-    (Arabic, Hebrew, Devanagari) is neither."""
-    out = []
-    for index, w in enumerate(words(text)):
-        capitals = shouted(w)
-        if capitals and len(w) < 5:
-            continue
-        if index > 0 and w[0].isupper():
-            if capitals or (noun is not None and noun(w)):
-                out.append(w)
-            continue
-        out.append(w)
-    return out
+	"""Words that are not names or abbreviations: a capital word of fewer than five letters is an
+	abbreviation in any position; a capitalized word after the first is a name unless shouted, or unless
+	noun(word) says it is a noun of a language that capitalizes them. A word of a script without case
+	(Arabic, Hebrew, Devanagari) is neither."""
+	out = []
+	for index, w in enumerate(words(text)):
+		capitals = shouted(w)
+		if capitals and len(w) < 5:
+			continue
+		if index > 0 and w[0].isupper():
+			if capitals or (noun is not None and noun(w)):
+				out.append(w)
+			continue
+		out.append(w)
+	return out
 
 
 def headline(text):
-    """Whether a clause is a headline, where case says nothing of names or abbreviations: two or more words
-    in capitals ("MINDEN VAGY SEMMI"), or three or more that all start with one ("Régi Házak Új Élete").
-    Two capitalized words alone are as often a name ("Mario Moreno")."""
-    ws = [w for w in words(text) if any(c.isupper() or c.islower() for c in w)]
-    if len(ws) < 2 or not all(w[0].isupper() for w in ws):
-        return False
-    return len(ws) >= 3 or not any(c.islower() for w in ws for c in w)
+	"""Whether a clause is a headline, where case says nothing of names or abbreviations: two or more words
+	in capitals ("MINDEN VAGY SEMMI"), or three or more that all start with one ("Régi Házak Új Élete").
+	Two capitalized words alone are as often a name ("Mario Moreno")."""
+	ws = [w for w in words(text) if any(c.isupper() or c.islower() for c in w)]
+	if len(ws) < 2 or not all(w[0].isupper() for w in ws):
+		return False
+	return len(ws) >= 3 or not any(c.islower() for w in ws for c in w)
 
 
 def scored_words(text, noun=None):
-    """The words a clause is judged by: in a headline all of them, lowercased, since the recognizer reads
-    capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "VENDÉGEK a
-    KONYHÁBAN" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
-    if headline(text):
-        return [w.lower() for w in words(text)]
-    return [w.lower() if shouted(w) else w for w in common_words(text, noun)]
+	"""The words a clause is judged by: in a headline all of them, lowercased, since the recognizer reads
+	capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "VENDÉGEK a
+	KONYHÁBAN" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
+	if headline(text):
+		return [w.lower() for w in words(text)]
+	return [w.lower() if shouted(w) else w for w in common_words(text, noun)]
 
 
 def is_text(piece):
-    return sum(1 for c in piece if c.isalpha()) >= 2
+	return sum(1 for c in piece if c.isalpha()) >= 2
 
 
 def _token(chunk, i, step):
-    """The characters beside position i, before it (step -1) or after it (step 1), up to a space or a slash."""
-    j = i + step
-    while 0 <= j < len(chunk) and not chunk[j].isspace() and chunk[j] != "/":
-        j += step
-    return chunk[j + 1:i] if step < 0 else chunk[i + 1:j]
+	"""The characters beside position i, before it (step -1) or after it (step 1), up to a space or a slash."""
+	j = i + step
+	while 0 <= j < len(chunk) and not chunk[j].isspace() and chunk[j] != "/":
+		j += step
+	return chunk[j + 1 : i] if step < 0 else chunk[i + 1 : j]
 
 
 def _letters(text):
-    return sum(1 for c in text if c.isalpha())
+	return sum(1 for c in text if c.isalpha())
 
 
 def clauses(chunk):
-    out = []
-    sentence = 0
-    start = 0
-    previous = None
-    n = len(chunk)
+	out = []
+	sentence = 0
+	start = 0
+	previous = None
+	n = len(chunk)
 
-    def close(end):
-        first = start
-        while first < end and chunk[first].isspace():
-            first += 1
-        last = end
-        while last > first and chunk[last - 1].isspace():
-            last -= 1
-        if first < last:
-            out.append([first, last, sentence])
+	def close(end):
+		first = start
+		while first < end and chunk[first].isspace():
+			first += 1
+		last = end
+		while last > first and chunk[last - 1].isspace():
+			last -= 1
+		if first < last:
+			out.append([first, last, sentence])
 
-    i = 0
-    while i < n:
-        ch = chunk[i]
-        dash = ch == "-" and previous == "-"
-        # A hyphen with a space on both sides is a dash, as in a title: "Filebox - Einfache, private Dateifreigabe".
-        hyphen = ch == "-" and previous is not None and previous.isspace()
-        spaced = (i + 1 == n) or chunk[i + 1].isspace()
-        separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS)
-        # "about 2.6 metres" is one clause: split at the point, each half is a word too few to score.
-        if separates and ch in NUMBER_MARKS and previous is not None and previous.isdigit() and not spaced and chunk[i + 1].isdigit():
-            separates = False
-        # A slash against a word in capitals joins abbreviations ("UNCTAD/WTO", "R/3"), and one between two
-        # pieces of a letter or two joins a unit ("km/h", "g/l"); splitting there leaves a heading or a name
-        # too short to score, and gains nothing, since such pieces never switch alone. A spaced slash splits.
-        if separates and ch == "/" and not spaced and previous is not None and not previous.isspace():
-            before, after = _token(chunk, i, -1), _token(chunk, i, 1)
-            if shouted(before) or shouted(after) or (_letters(before) <= 2 and _letters(after) <= 2):
-                separates = False
-        if separates:
-            close(max(start, i - 1) if dash else i)
-            if ch in SENTENCE_ENDS:
-                sentence += 1
-            start = i + 1
-        previous = ch
-        i += 1
-    close(n)
-    return out
+	i = 0
+	while i < n:
+		ch = chunk[i]
+		dash = ch == "-" and previous == "-"
+		# A hyphen with a space on both sides is a dash, as in a title: "Filebox - Einfache, private Dateifreigabe".
+		hyphen = ch == "-" and previous is not None and previous.isspace()
+		spaced = (i + 1 == n) or chunk[i + 1].isspace()
+		separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS)
+		# "about 2.6 metres" is one clause: split at the point, each half is a word too few to score.
+		if (
+			separates
+			and ch in NUMBER_MARKS
+			and previous is not None
+			and previous.isdigit()
+			and not spaced
+			and chunk[i + 1].isdigit()
+		):
+			separates = False
+		# A slash against a word in capitals joins abbreviations ("UNCTAD/WTO", "R/3"), and one between two
+		# pieces of a letter or two joins a unit ("km/h", "g/l"); splitting there leaves a heading or a name
+		# too short to score, and gains nothing, since such pieces never switch alone. A spaced slash splits.
+		if separates and ch == "/" and not spaced and previous is not None and not previous.isspace():
+			before, after = _token(chunk, i, -1), _token(chunk, i, 1)
+			if shouted(before) or shouted(after) or (_letters(before) <= 2 and _letters(after) <= 2):
+				separates = False
+		if separates:
+			close(max(start, i - 1) if dash else i)
+			if ch in SENTENCE_ENDS:
+				sentence += 1
+			start = i + 1
+		previous = ch
+		i += 1
+	close(n)
+	return out
 
 
 def labelled(chunk, cls, labels):
-    """The clauses split where a field label starts, as (clauses, label indexes). A label is a whole word or
-    words, matched in its case: a grid row reads "From Anna Berg, Subject Välkommen till kursen", and
-    judged whole, "Subject" opens the clause, so "Välkommen" is taken for a name and read with it in English."""
-    if not labels:
-        return cls, set()
-    ordered = sorted(labels, key=len, reverse=True)
-    out, marked = [], set()
-    for s, e, sentence in cls:
-        cursor = s
-        i = s
-        while i < e:
-            at_word = i == s or chunk[i - 1].isspace()
-            found = None
-            if at_word:
-                for label in ordered:
-                    end = i + len(label)
-                    if end <= e and chunk.startswith(label, i) and (end == e or chunk[end].isspace()):
-                        found = end
-                        break
-            if found is None:
-                i += 1
-                continue
-            before = chunk[cursor:i].rstrip()
-            if before:
-                out.append([cursor, cursor + len(before), sentence])
-            marked.add(len(out))
-            out.append([i, found, sentence])
-            i = found
-            while i < e and chunk[i].isspace():
-                i += 1
-            cursor = i
-        if cursor < e:
-            out.append([cursor, e, sentence])
-    return out, marked
+	"""The clauses split where a field label starts, as (clauses, label indexes). A label is a whole word or
+	words, matched in its case: a grid row reads "From Anna Berg, Subject Välkommen till kursen", and
+	judged whole, "Subject" opens the clause, so "Välkommen" is taken for a name and read with it in English."""
+	if not labels:
+		return cls, set()
+	ordered = sorted(labels, key=len, reverse=True)
+	out, marked = [], set()
+	for s, e, sentence in cls:
+		cursor = s
+		i = s
+		while i < e:
+			at_word = i == s or chunk[i - 1].isspace()
+			found = None
+			if at_word:
+				for label in ordered:
+					end = i + len(label)
+					if end <= e and chunk.startswith(label, i) and (end == e or chunk[end].isspace()):
+						found = end
+						break
+			if found is None:
+				i += 1
+				continue
+			before = chunk[cursor:i].rstrip()
+			if before:
+				out.append([cursor, cursor + len(before), sentence])
+			marked.add(len(out))
+			out.append([i, found, sentence])
+			i = found
+			while i < e and chunk[i].isspace():
+				i += 1
+			cursor = i
+		if cursor < e:
+			out.append([cursor, e, sentence])
+	return out, marked
 
 
 def merge(runs):
-    out = []
-    for lang, text in runs:
-        if not text:
-            continue
-        if out and out[-1][0] == lang:
-            out[-1] = (lang, out[-1][1] + text)
-        else:
-            out.append((lang, text))
-    return out
+	out = []
+	for lang, text in runs:
+		if not text:
+			continue
+		if out and out[-1][0] == lang:
+			out[-1] = (lang, out[-1][1] + text)
+		else:
+			out.append((lang, text))
+	return out
 
 
 def opening(chunk, cursor, start):
-    """Where the clause at `start` begins once the opening marks just before it, spaces aside, are read with it:
-    the gap from `cursor` goes with the clause before, but for those marks."""
-    at = start
-    while at > cursor and chunk[at - 1].isspace():
-        at -= 1
-    end = at
-    while at > cursor and chunk[at - 1] in OPENERS:
-        at -= 1
-    return start if at == end else at
+	"""Where the clause at `start` begins once the opening marks just before it, spaces aside, are read with it:
+	the gap from `cursor` goes with the clause before, but for those marks."""
+	at = start
+	while at > cursor and chunk[at - 1].isspace():
+		at -= 1
+	end = at
+	while at > cursor and chunk[at - 1] in OPENERS:
+		at -= 1
+	return start if at == end else at
 
 
 def sentence_window(text, start, end, limit=CONTEXT_CHARACTERS):
-    """(a, b): the span of `text` holding [start, end), widened to the sentences the span cuts. It stops at a
-    newline, which ends a paragraph, and after `limit` characters on either side, there at a space."""
-    a = start
-    floor = max(0, start - limit)
-    while a > floor:
-        before = text[a - 1]
-        if before == "\n" or (before.isspace() and a >= 2 and text[a - 2] in SENTENCE_ENDS):
-            break
-        a -= 1
-    if a == floor and floor > 0:
-        while a < start and not text[a - 1].isspace():
-            a += 1
-    b = end
-    ceiling = min(len(text), end + limit)
-    # A wrapped line ends in the space it broke at: "…kitchen. Orange. " ends its sentence. A newline is an end.
-    tail = end
-    while tail > start and text[tail - 1].isspace() and text[tail - 1] != "\n":
-        tail -= 1
-    if tail > start and text[tail - 1] not in SENTENCE_ENDS:
-        while b < ceiling:
-            ch = text[b]
-            if ch == "\n":
-                break
-            b += 1
-            if ch in SENTENCE_ENDS and (b == len(text) or text[b].isspace()):
-                break
-        if b == ceiling and ceiling < len(text):
-            while b > end and not text[b].isspace():
-                b -= 1
-    return a, b
+	"""(a, b): the span of `text` holding [start, end), widened to the sentences the span cuts. It stops at a
+	newline, which ends a paragraph, and after `limit` characters on either side, there at a space."""
+	a = start
+	floor = max(0, start - limit)
+	while a > floor:
+		before = text[a - 1]
+		if before == "\n" or (before.isspace() and a >= 2 and text[a - 2] in SENTENCE_ENDS):
+			break
+		a -= 1
+	if a == floor and floor > 0:
+		while a < start and not text[a - 1].isspace():
+			a += 1
+	b = end
+	ceiling = min(len(text), end + limit)
+	# A wrapped line ends in the space it broke at: "…kitchen. Orange. " ends its sentence. A newline is an end.
+	tail = end
+	while tail > start and text[tail - 1].isspace() and text[tail - 1] != "\n":
+		tail -= 1
+	if tail > start and text[tail - 1] not in SENTENCE_ENDS:
+		while b < ceiling:
+			ch = text[b]
+			if ch == "\n":
+				break
+			b += 1
+			if ch in SENTENCE_ENDS and (b == len(text) or text[b].isspace()):
+				break
+		if b == ceiling and ceiling < len(text):
+			while b > end and not text[b].isspace():
+				b -= 1
+	return a, b
 
 
 def slice_runs(runs, start, end):
-    """The runs over [start, end) of the text they cover."""
-    out = []
-    position = 0
-    for lang, piece in runs:
-        s, e = position, position + len(piece)
-        position = e
-        lo, hi = max(s, start), min(e, end)
-        if lo < hi:
-            out.append((lang, piece[lo - s:hi - s]))
-    return out
+	"""The runs over [start, end) of the text they cover."""
+	out = []
+	position = 0
+	for lang, piece in runs:
+		s, e = position, position + len(piece)
+		position = e
+		lo, hi = max(s, start), min(e, end)
+		if lo < hi:
+			out.append((lang, piece[lo - s : hi - s]))
+	return out
 
 
 # ---------------------------------------------------------------- detector
 
+
 class Detector:
-    """
-    backend: a recognizer (recognizers.py).
-    default: the default voice's language, any spelling.
-    configured: the languages with a voice configured and detection on, any spelling; the detector answers in
-    these spellings.
-    dictionary: a dictionary.Dictionary, or None for no spelling evidence.
-    mode: off, script, or full.
-    reader_words: lowercased strings that are the reader's own vocabulary, never scored.
-    labels: the field labels of what is being read (a grid's column headers), each its own clause in the
-    default language; set by the caller for each sequence.
-    """
+	"""
+	backend: a recognizer (recognizers.py).
+	default: the default voice's language, any spelling.
+	configured: the languages with a voice configured and detection on, any spelling; the detector answers in
+	these spellings.
+	dictionary: a dictionary.Dictionary, or None for no spelling evidence.
+	mode: off, script, or full.
+	reader_words: lowercased strings that are the reader's own vocabulary, never scored.
+	labels: the field labels of what is being read (a grid's column headers), each its own clause in the
+	default language; set by the caller for each sequence.
+	"""
 
-    def __init__(self, backend, default="en", configured=(), dictionary=None, mode=MODE_FULL, reader_words=()):
-        self.backend = backend
-        self.mode = mode
-        self.dictionary = dictionary
-        self.reader_words = set(reader_words)
-        self.labels = ()
-        self.calls = 0
-        self.configure(default, configured)
+	def __init__(
+		self, backend, default="en", configured=(), dictionary=None, mode=MODE_FULL, reader_words=()
+	):
+		self.backend = backend
+		self.mode = mode
+		self.dictionary = dictionary
+		self.reader_words = set(reader_words)
+		self.labels = ()
+		self.calls = 0
+		self.configure(default, configured)
 
-    def configure(self, default, configured, available=(), excluded=(), named=None):
-        """default: the default voice's language; configured: the languages with a row and detection on;
-        available: the languages the synthesizer's voices speak, the second tier for a script nobody
-        configured; excluded: the languages of rows with detection off, never switched to, though a voice
-        speaks them or the recognizer guesses them, unless another row of the language detects; named:
-        whether the default language's symbol table names a character at every symbol level, so the default
-        voice reads it by name (None names nothing)."""
-        self.named = named or (lambda character: False)
-        self.default_tag = default
-        self.default = S.code(default)
-        self.default_script = S.primary_script(default)
-        self.spelling = {}  # base code -> configured spelling, the default first
-        for tag in [default] + list(configured):
-            self.spelling.setdefault(S.code(tag), S.normalize(tag))
-        self.configured = {S.normalize(tag) for tag in configured}
-        self.excluded = {S.code(tag) for tag in excluded} - set(self.spelling)
-        self.spoken = list(self.spelling)
-        # Languages of the default script are the clause candidates; the others are reached by script.
-        self.script_languages = {}
-        for code in self.spoken:
-            for script in S.scripts_of(self.spelling[code]):
-                self.script_languages.setdefault(script, []).append(code)
-        self.clause_candidates = [c for c in self.spoken if self.default_script in S.scripts_of(self.spelling[c])]
-        if self.default not in self.clause_candidates:
-            self.clause_candidates.insert(0, self.default)
-        # The voices' languages, by script, for scripts no configured language writes.
-        self.voice_spelling = {}
-        self.voice_languages = {}
-        for tag in available:
-            if not tag:
-                continue
-            code = S.code(tag)
-            if code in self.spelling or code in self.voice_spelling or code in self.excluded:
-                continue
-            self.voice_spelling[code] = S.normalize(tag)
-            for script in S.scripts_of(tag):
-                if script not in self.script_languages:
-                    self.voice_languages.setdefault(script, []).append(code)
-        self.foreign_scripts = frozenset(
-            s for s in set(self.script_languages) | set(self.voice_languages) if s != self.default_script
-        )
-        # Detectors for the clauses of a foreign-script piece, by the piece's pick and its script's languages.
-        self._within = {}
-        # Runs of the sentence windows lines were read in, by the window's text.
-        self._windows = {}
+	def configure(self, default, configured, available=(), excluded=(), named=None):
+		"""default: the default voice's language; configured: the languages with a row and detection on;
+		available: the languages the synthesizer's voices speak, the second tier for a script nobody
+		configured; excluded: the languages of rows with detection off, never switched to, though a voice
+		speaks them or the recognizer guesses them, unless another row of the language detects; named:
+		whether the default language's symbol table names a character at every symbol level, so the default
+		voice reads it by name (None names nothing)."""
+		self.named = named or (lambda character: False)
+		self.default_tag = default
+		self.default = S.code(default)
+		self.default_script = S.primary_script(default)
+		self.spelling = {}  # base code -> configured spelling, the default first
+		for tag in [default] + list(configured):
+			self.spelling.setdefault(S.code(tag), S.normalize(tag))
+		self.configured = {S.normalize(tag) for tag in configured}
+		self.excluded = {S.code(tag) for tag in excluded} - set(self.spelling)
+		self.spoken = list(self.spelling)
+		# Languages of the default script are the clause candidates; the others are reached by script.
+		self.script_languages = {}
+		for code in self.spoken:
+			for script in S.scripts_of(self.spelling[code]):
+				self.script_languages.setdefault(script, []).append(code)
+		self.clause_candidates = [
+			c for c in self.spoken if self.default_script in S.scripts_of(self.spelling[c])
+		]
+		if self.default not in self.clause_candidates:
+			self.clause_candidates.insert(0, self.default)
+		# The voices' languages, by script, for scripts no configured language writes.
+		self.voice_spelling = {}
+		self.voice_languages = {}
+		for tag in available:
+			if not tag:
+				continue
+			code = S.code(tag)
+			if code in self.spelling or code in self.voice_spelling or code in self.excluded:
+				continue
+			self.voice_spelling[code] = S.normalize(tag)
+			for script in S.scripts_of(tag):
+				if script not in self.script_languages:
+					self.voice_languages.setdefault(script, []).append(code)
+		self.foreign_scripts = frozenset(
+			s for s in set(self.script_languages) | set(self.voice_languages) if s != self.default_script
+		)
+		# Detectors for the clauses of a foreign-script piece, by the piece's pick and its script's languages.
+		self._within = {}
+		# Runs of the sentence windows lines were read in, by the window's text.
+		self._windows = {}
 
-    # ------------------------------------------------------------ recognizer
+	# ------------------------------------------------------------ recognizer
 
-    def is_near_certain(self, scored, language):
-        """Whether `scored`, judged between `language` and the default alone, is in `language` at the embedded floor."""
-        if not is_text(scored):
-            return False
-        self.calls += 1
-        g = self.backend.constrained(self._scored(scored), [self.default, language])
-        return bool(g) and g[0] == language and g[1] >= EMBEDDED_FLOOR
+	def is_near_certain(self, scored, language):
+		"""Whether `scored`, judged between `language` and the default alone, is in `language` at the embedded floor."""
+		if not is_text(scored):
+			return False
+		self.calls += 1
+		g = self.backend.constrained(self._scored(scored), [self.default, language])
+		return bool(g) and g[0] == language and g[1] >= EMBEDDED_FLOOR
 
-    def _scored(self, text):
-        """The text as the recognizer sees it: straight apostrophes, and hyphens as spaces, since fastText
-        splits on whitespace alone and knows "vas" and "tu" where it may not know "vas-tu"."""
-        return text.replace("’", "'").replace("-", " ")
+	def _scored(self, text):
+		"""The text as the recognizer sees it: straight apostrophes, and hyphens as spaces, since fastText
+		splits on whitespace alone and knows "vas" and "tu" where it may not know "vas-tu"."""
+		return text.replace("’", "'").replace("-", " ")
 
-    def scored_words(self, text):
-        return scored_words(text, self.is_noun)
+	def scored_words(self, text):
+		return scored_words(text, self.is_noun)
 
-    def is_noun(self, w):
-        """Whether a capitalized word inside a clause is a noun of a configured language that capitalizes its
-        nouns, rather than a name: the default's dictionary does not know it, and the recognizer, on the word
-        alone, is near certain of that language. "Dateifreigabe" is German at 0.998; "Müller", "Berlin", and
-        "Mozilla" fall short, and stay names. Where the noun language's dictionary is installed it must know
-        the word too, which keeps out Icelandic, Afrikaans, and Scandinavian words that only look German; it
-        knows "Müller" and "Mozilla" as well, so it cannot stand alone."""
-        nouns = [c for c in self.clause_candidates if c in NOUN_CAPITALIZING and c != self.default]
-        if not nouns or len(w) < LONE_WORD_LETTERS:
-            return False
-        if self.dictionary is not None:
-            if self.dictionary.rejects_a_word(w, self.default_tag) is False:
-                return False
-            verdicts = [self.dictionary.rejects_a_word(w, self.spelling[c]) for c in nouns]
-            if True in verdicts and False not in verdicts:
-                return False
-        self.calls += 1
-        g = self.backend.constrained(self._scored(w), self.clause_candidates)
-        return bool(g) and g[0] in nouns and g[1] >= EMBEDDED_FLOOR
+	def is_noun(self, w):
+		"""Whether a capitalized word inside a clause is a noun of a configured language that capitalizes its
+		nouns, rather than a name: the default's dictionary does not know it, and the recognizer, on the word
+		alone, is near certain of that language. "Dateifreigabe" is German at 0.998; "Müller", "Berlin", and
+		"Mozilla" fall short, and stay names. Where the noun language's dictionary is installed it must know
+		the word too, which keeps out Icelandic, Afrikaans, and Scandinavian words that only look German; it
+		knows "Müller" and "Mozilla" as well, so it cannot stand alone."""
+		nouns = [c for c in self.clause_candidates if c in NOUN_CAPITALIZING and c != self.default]
+		if not nouns or len(w) < LONE_WORD_LETTERS:
+			return False
+		if self.dictionary is not None:
+			if self.dictionary.rejects_a_word(w, self.default_tag) is False:
+				return False
+			verdicts = [self.dictionary.rejects_a_word(w, self.spelling[c]) for c in nouns]
+			if True in verdicts and False not in verdicts:
+				return False
+		self.calls += 1
+		g = self.backend.constrained(self._scored(w), self.clause_candidates)
+		return bool(g) and g[0] in nouns and g[1] >= EMBEDDED_FLOOR
 
-    def is_embedded(self, text, language):
-        """Whether a foreign clause beside default-language clauses of its sentence keeps its tag: the
-        near-certain two-way guess, or the two dictionaries agreeing it is foreign. The embedded floor
-        exists for English clauses mistaken for another language, which the English dictionary spells."""
-        if self.dictionaries_decide(text, language):
-            return True
-        return self.is_near_certain(" ".join(self.scored_words(text)), language)
+	def is_embedded(self, text, language):
+		"""Whether a foreign clause beside default-language clauses of its sentence keeps its tag: the
+		near-certain two-way guess, or the two dictionaries agreeing it is foreign. The embedded floor
+		exists for English clauses mistaken for another language, which the English dictionary spells."""
+		if self.dictionaries_decide(text, language):
+			return True
+		return self.is_near_certain(" ".join(self.scored_words(text)), language)
 
-    def survives_dictionaries(self, text, language):
-        """A clause the default dictionary accepts whole switches only if the guess's own dictionary accepts it
-        too and the guess is near certain between the two languages; a clause the default rejects a word of stands."""
-        if self.dictionary is None:
-            return True
-        scored = self._scored(" ".join(self.scored_words(text)))
-        if self.dictionary.rejects_a_word(scored, self.default_tag) is not False:
-            return True
-        if self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is True:
-            return False
-        return self.is_near_certain(scored, language)
+	def survives_dictionaries(self, text, language):
+		"""A clause the default dictionary accepts whole switches only if the guess's own dictionary accepts it
+		too and the guess is near certain between the two languages; a clause the default rejects a word of stands."""
+		if self.dictionary is None:
+			return True
+		scored = self._scored(" ".join(self.scored_words(text)))
+		if self.dictionary.rejects_a_word(scored, self.default_tag) is not False:
+			return True
+		if self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is True:
+			return False
+		return self.is_near_certain(scored, language)
 
-    def hypothesis(self, text, counting_names=False, candidates=None):
-        ws = words(text) if counting_names else self.scored_words(text)
-        scored = self._scored(" ".join(ws))
-        if not is_text(scored):
-            return None
-        self.calls += 1
-        candidates = candidates or self.clause_candidates
-        guess = self.backend.constrained(scored, candidates)
-        if guess is None:
-            return None
-        lang, conf = guess
-        if conf < FLOOR and lang != self.default and self.split_between_neighbours(ws, scored, lang, candidates):
-            conf = FLOOR
-            guess = (lang, conf)
-        if conf >= FLOOR and lang != self.default:
-            # A confident foreign guess that is the constraints' doing: left free, the recognizer prefers a
-            # language nobody configured (Italian forced to Spanish). fastText's free guess on a short
-            # clause is rarely confident in itself, so it is enough that the unconfigured language
-            # outranks the chosen one clearly. A sibling edging it out (Galician over
-            # Spanish on a word pair) is not that: Italian over Spanish on "Dio mi l'ha dato" is 0.73 to 0.005.
-            free = self.backend.free(scored)
-            if free and free[0] not in self.spoken and free[0] != lang:
-                chosen = self.backend.probability(scored, lang)
-                if free[1] >= FLOOR or free[1] > UNCONFIGURED_MARGIN * chosen:
-                    return None
-        return guess
+	def hypothesis(self, text, counting_names=False, candidates=None):
+		ws = words(text) if counting_names else self.scored_words(text)
+		scored = self._scored(" ".join(ws))
+		if not is_text(scored):
+			return None
+		self.calls += 1
+		candidates = candidates or self.clause_candidates
+		guess = self.backend.constrained(scored, candidates)
+		if guess is None:
+			return None
+		lang, conf = guess
+		if (
+			conf < FLOOR
+			and lang != self.default
+			and self.split_between_neighbours(ws, scored, lang, candidates)
+		):
+			conf = FLOOR
+			guess = (lang, conf)
+		if conf >= FLOOR and lang != self.default:
+			# A confident foreign guess that is the constraints' doing: left free, the recognizer prefers a
+			# language nobody configured (Italian forced to Spanish). fastText's free guess on a short
+			# clause is rarely confident in itself, so it is enough that the unconfigured language
+			# outranks the chosen one clearly. A sibling edging it out (Galician over
+			# Spanish on a word pair) is not that: Italian over Spanish on "Dio mi l'ha dato" is 0.73 to 0.005.
+			free = self.backend.free(scored)
+			if free and free[0] not in self.spoken and free[0] != lang:
+				chosen = self.backend.probability(scored, lang)
+				if free[1] >= FLOOR or free[1] > UNCONFIGURED_MARGIN * chosen:
+					return None
+		return guess
 
-    def split_between_neighbours(self, ws, scored, language, candidates):
-        """Whether a clause the recognizer splits between configured neighbours is still `language`'s, taken
-        as confident: Spanish beside Portuguese ("Haz clic para reaccionar con heart" is Spanish at 0.68,
-        Portuguese at 0.30, English at 0.01). The clause has three words or more; the default holds at most
-        what a confident guess would leave it; left free, the recognizer names `language` first; and its
-        dictionary knows every word but one, which the default's dictionary knows: an English word, often an
-        emoji's name, inside the clause. Every configured language among the candidates has its dictionary,
-        since one without would lose its text to a neighbour that has one. Each guard keeps out sentences of
-        languages nobody configured, which the free guess or the dictionaries give away: with Spanish,
-        Italian, and Portuguese configured, Catalan and Romanian sentences switched went from 193 and 64 to
-        219 and 114 per 1,000 on the share alone."""
-        if len(ws) < 3 or self.dictionary is None:
-            return False
-        neighbours = [c for c in candidates if c != self.default]
-        if len(neighbours) < 2:
-            return False  # with one foreign candidate, its share is the guess already
-        if not all(self.dictionary.has(self.spelling.get(c, c)) for c in neighbours):
-            return False
-        total = sum(self.backend.probability(scored, c) for c in candidates)
-        if not total or self.backend.probability(scored, self.default) / total > 1 - FLOOR:
-            return False
-        free = self.backend.free(scored)
-        if not free or free[0] != language:
-            return False
-        rejected = []
-        for w in ws:
-            verdict = self.dictionary.rejects_a_word(self._scored(w), self.spelling.get(language, language))
-            if verdict is None:
-                return False
-            if verdict:
-                rejected.append(w)
-        if len(rejected) > 1:
-            return False
-        return not rejected or self.dictionary.rejects_a_word(self._scored(rejected[0]), self.default_tag) is False
+	def split_between_neighbours(self, ws, scored, language, candidates):
+		"""Whether a clause the recognizer splits between configured neighbours is still `language`'s, taken
+		as confident: Spanish beside Portuguese ("Haz clic para reaccionar con heart" is Spanish at 0.68,
+		Portuguese at 0.30, English at 0.01). The clause has three words or more; the default holds at most
+		what a confident guess would leave it; left free, the recognizer names `language` first; and its
+		dictionary knows every word but one, which the default's dictionary knows: an English word, often an
+		emoji's name, inside the clause. Every configured language among the candidates has its dictionary,
+		since one without would lose its text to a neighbour that has one. Each guard keeps out sentences of
+		languages nobody configured, which the free guess or the dictionaries give away: with Spanish,
+		Italian, and Portuguese configured, Catalan and Romanian sentences switched went from 193 and 64 to
+		219 and 114 per 1,000 on the share alone."""
+		if len(ws) < 3 or self.dictionary is None:
+			return False
+		neighbours = [c for c in candidates if c != self.default]
+		if len(neighbours) < 2:
+			return False  # with one foreign candidate, its share is the guess already
+		if not all(self.dictionary.has(self.spelling.get(c, c)) for c in neighbours):
+			return False
+		total = sum(self.backend.probability(scored, c) for c in candidates)
+		if not total or self.backend.probability(scored, self.default) / total > 1 - FLOOR:
+			return False
+		free = self.backend.free(scored)
+		if not free or free[0] != language:
+			return False
+		rejected = []
+		for w in ws:
+			verdict = self.dictionary.rejects_a_word(self._scored(w), self.spelling.get(language, language))
+			if verdict is None:
+				return False
+			if verdict:
+				rejected.append(w)
+		if len(rejected) > 1:
+			return False
+		return (
+			not rejected
+			or self.dictionary.rejects_a_word(self._scored(rejected[0]), self.default_tag) is False
+		)
 
-    def default_rejects(self, text):
-        """Whether the default language's dictionary rejects a scored word of `text`."""
-        if self.dictionary is None:
-            return False
-        scored = self._scored(" ".join(self.scored_words(text)))
-        return self.dictionary.rejects_a_word(scored, self.default_tag) is True
+	def default_rejects(self, text):
+		"""Whether the default language's dictionary rejects a scored word of `text`."""
+		if self.dictionary is None:
+			return False
+		scored = self._scored(" ".join(self.scored_words(text)))
+		return self.dictionary.rejects_a_word(scored, self.default_tag) is True
 
-    def dictionaries_decide(self, text, language):
-        """Whether the spelling dictionaries alone call `text` foreign: the default language's rejects a
-        word of it and the guessed language's accepts every word. Both dictionaries must be installed.
-        fastText scores "Dieu me la donne" at 0.76, short of the floor, and the two dictionaries settle
-        what the recognizer cannot."""
-        if self.dictionary is None:
-            return False
-        scored = self._scored(" ".join(self.scored_words(text)))
-        if self.dictionary.rejects_a_word(scored, self.default_tag) is not True:
-            return False
-        return self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is False
+	def dictionaries_decide(self, text, language):
+		"""Whether the spelling dictionaries alone call `text` foreign: the default language's rejects a
+		word of it and the guessed language's accepts every word. Both dictionaries must be installed.
+		fastText scores "Dieu me la donne" at 0.76, short of the floor, and the two dictionaries settle
+		what the recognizer cannot."""
+		if self.dictionary is None:
+			return False
+		scored = self._scored(" ".join(self.scored_words(text)))
+		if self.dictionary.rejects_a_word(scored, self.default_tag) is not True:
+			return False
+		return self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is False
 
-    def switches(self, text, guess):
-        """Whether a scored clause's guess switches it: a confident foreign guess that survives the
-        dictionaries, or a leading foreign guess the dictionaries decide for."""
-        if not guess or guess[0] == self.default:
-            return False
-        lang, conf = guess
-        if headline(text):
-            # Names are scored in a headline, so it switches only near certain, never on the dictionaries alone.
-            return conf >= EMBEDDED_FLOOR and self.survives_dictionaries(text, lang)
-        if conf >= FLOOR:
-            return self.survives_dictionaries(text, lang)
-        return conf >= DICTIONARY_FLOOR and self.dictionaries_decide(text, lang)
+	def switches(self, text, guess):
+		"""Whether a scored clause's guess switches it: a confident foreign guess that survives the
+		dictionaries, or a leading foreign guess the dictionaries decide for."""
+		if not guess or guess[0] == self.default:
+			return False
+		lang, conf = guess
+		if headline(text):
+			# Names are scored in a headline, so it switches only near certain, never on the dictionaries alone.
+			return conf >= EMBEDDED_FLOOR and self.survives_dictionaries(text, lang)
+		if conf >= FLOOR:
+			return self.survives_dictionaries(text, lang)
+		return conf >= DICTIONARY_FLOOR and self.dictionaries_decide(text, lang)
 
-    def foreign(self, text):
-        h = self.hypothesis(text)
-        return h[0] if self.switches(text, h) else None
+	def foreign(self, text):
+		h = self.hypothesis(text)
+		return h[0] if self.switches(text, h) else None
 
-    def is_default(self, text, counting_names=False, candidates=None):
-        h = self.hypothesis(text, counting_names, candidates)
-        return bool(h) and h[1] >= FLOOR and h[0] == self.default
+	def is_default(self, text, counting_names=False, candidates=None):
+		h = self.hypothesis(text, counting_names, candidates)
+		return bool(h) and h[1] >= FLOOR and h[0] == self.default
 
-    # ------------------------------------------------------------ entry points
+	# ------------------------------------------------------------ entry points
 
-    def tagged(self, text):
-        """Untagged text as (language or None, text) runs, languages in their configured spelling."""
-        if self.mode == MODE_OFF or not text or not any(c.isalpha() for c in text):
-            return [(None, text)]
-        if text.strip().lower() in self.reader_words:
-            return [(None, text)]
-        out = []
-        for lang, piece in self.by_script(text):
-            if lang == self.default:
-                out.append((None, piece))
-            elif lang is not None or self.mode != MODE_FULL:
-                out.append((lang, piece))
-            else:
-                out += self.by_clause(piece)
-        return merge([(self.tag_of(l) if l else None, t) for l, t in out])
+	def tagged(self, text):
+		"""Untagged text as (language or None, text) runs, languages in their configured spelling."""
+		if self.mode == MODE_OFF or not text or not any(c.isalpha() for c in text):
+			return [(None, text)]
+		if text.strip().lower() in self.reader_words:
+			return [(None, text)]
+		out = []
+		for lang, piece in self.by_script(text):
+			if lang == self.default:
+				out.append((None, piece))
+			elif lang is not None or self.mode != MODE_FULL:
+				out.append((lang, piece))
+			else:
+				out += self.by_clause(piece)
+		return merge([(self.tag_of(l) if l else None, t) for l, t in out])
 
-    def verified(self, text, tag):
-        """Text an application tagged `tag`, as it is read: the tag dropped and the text detected as untagged
-        where it is in a script the tag's language is not written in, so "PDF" keeps an English tag and the
-        Russian around it on a Russian page wrongly declared English does not; in full mode, the tag dropped
-        too from each clause that reads as the default language. Runs are (language or None, text), where
-        the language is `tag` itself where it is kept."""
-        if self.mode == MODE_OFF or not text:
-            return [(tag, text)]
-        tag_base = S.code(tag)
-        tag_scripts = S.scripts_of(tag)
-        if is_text(text) and not self._holds_letter(text, tag_scripts):
-            return self.tagged(text)
-        runs = []
-        for piece, foreign in self._by_tag_script(text, tag, tag_scripts):
-            if foreign:
-                runs += self.tagged(piece)
-            elif self.mode != MODE_FULL or S.primary_script(tag) != self.default_script or tag_base == self.default:
-                runs.append((tag, piece))
-            else:
-                runs += self.by_clause_against_tag(piece, tag, tag_base)
-        return merge(runs)
+	def verified(self, text, tag):
+		"""Text an application tagged `tag`, as it is read: the tag dropped and the text detected as untagged
+		where it is in a script the tag's language is not written in, so "PDF" keeps an English tag and the
+		Russian around it on a Russian page wrongly declared English does not; in full mode, the tag dropped
+		too from each clause that reads as the default language. Runs are (language or None, text), where
+		the language is `tag` itself where it is kept."""
+		if self.mode == MODE_OFF or not text:
+			return [(tag, text)]
+		tag_base = S.code(tag)
+		tag_scripts = S.scripts_of(tag)
+		if is_text(text) and not self._holds_letter(text, tag_scripts):
+			return self.tagged(text)
+		runs = []
+		for piece, foreign in self._by_tag_script(text, tag, tag_scripts):
+			if foreign:
+				runs += self.tagged(piece)
+			elif (
+				self.mode != MODE_FULL
+				or S.primary_script(tag) != self.default_script
+				or tag_base == self.default
+			):
+				runs.append((tag, piece))
+			else:
+				runs += self.by_clause_against_tag(piece, tag, tag_base)
+		return merge(runs)
 
-    def in_context(self, line, text, start, undecided=None):
-        """Untagged `line`, which stands at `start` in `text`, as tagged() gives it, but read among the
-        sentences it cuts where an edge of it cannot be decided alone. A line of wrapped text often ends in
-        the first word of a sentence ("lake. A") or holds the last word of a paragraph alone ("garden."),
-        which tagged() leaves to the default; the sentence around it decides them as it decides its own
-        words. Only `line` is read when its edges are decided, so a decided line costs nothing more.
-        undecided: undecided_edge(line), where the caller has it already."""
-        end = start + len(line)
-        if undecided is None:
-            undecided = self.undecided_edge(line)
-        if self.mode != MODE_FULL or self.labels or text[start:end] != line or not undecided:
-            return self.tagged(line)
-        a, b = sentence_window(text, start, end)
-        if (a, b) == (start, end):
-            return self.tagged(line)
-        window = text[a:b]
-        runs = self._windows.get(window)
-        if runs is None:
-            runs = self.tagged(window)
-            if len(self._windows) >= WINDOWS_KEPT:
-                self._windows.clear()
-            self._windows[window] = runs
-        return slice_runs(runs, start - a, end - a)
+	def in_context(self, line, text, start, undecided=None):
+		"""Untagged `line`, which stands at `start` in `text`, as tagged() gives it, but read among the
+		sentences it cuts where an edge of it cannot be decided alone. A line of wrapped text often ends in
+		the first word of a sentence ("lake. A") or holds the last word of a paragraph alone ("garden."),
+		which tagged() leaves to the default; the sentence around it decides them as it decides its own
+		words. Only `line` is read when its edges are decided, so a decided line costs nothing more.
+		undecided: undecided_edge(line), where the caller has it already."""
+		end = start + len(line)
+		if undecided is None:
+			undecided = self.undecided_edge(line)
+		if self.mode != MODE_FULL or self.labels or text[start:end] != line or not undecided:
+			return self.tagged(line)
+		a, b = sentence_window(text, start, end)
+		if (a, b) == (start, end):
+			return self.tagged(line)
+		window = text[a:b]
+		runs = self._windows.get(window)
+		if runs is None:
+			runs = self.tagged(window)
+			if len(self._windows) >= WINDOWS_KEPT:
+				self._windows.clear()
+			self._windows[window] = runs
+		return slice_runs(runs, start - a, end - a)
 
-    def undecided_edge(self, line):
-        """Whether `line`, read alone, leaves an edge to the default for want of words: its first or last
-        clause has fewer than two scored words, or none of its clauses has two, or an edge clause's guess was
-        withheld because a language nobody configured outranks the pick ("hazier blue" is Italian to
-        fastText left free). Judged from the line alone, so the text around it is fetched only when needed.
-        Where words are not spaced, a clause counts as one word, so the rule stands down."""
-        if self.mode != MODE_FULL or self.default_script in UNSPACED or not is_text(line):
-            return False
-        if line.strip().lower() in self.reader_words:
-            return False
-        cls = clauses(line)
-        if not cls:
-            return False
-        counts = [len(self.scored_words(line[s:e])) for s, e, _ in cls]
-        if max(counts) < 2 or counts[0] < 2 or counts[-1] < 2:
-            return True
-        return any(self.hypothesis(line[cls[i][0]:cls[i][1]]) is None for i in sorted({0, len(cls) - 1}))
+	def undecided_edge(self, line):
+		"""Whether `line`, read alone, leaves an edge to the default for want of words: its first or last
+		clause has fewer than two scored words, or none of its clauses has two, or an edge clause's guess was
+		withheld because a language nobody configured outranks the pick ("hazier blue" is Italian to
+		fastText left free). Judged from the line alone, so the text around it is fetched only when needed.
+		Where words are not spaced, a clause counts as one word, so the rule stands down."""
+		if self.mode != MODE_FULL or self.default_script in UNSPACED or not is_text(line):
+			return False
+		if line.strip().lower() in self.reader_words:
+			return False
+		cls = clauses(line)
+		if not cls:
+			return False
+		counts = [len(self.scored_words(line[s:e])) for s, e, _ in cls]
+		if max(counts) < 2 or counts[0] < 2 or counts[-1] < 2:
+			return True
+		return any(self.hypothesis(line[cls[i][0] : cls[i][1]]) is None for i in sorted({0, len(cls) - 1}))
 
-    def _by_tag_script(self, text, tag, tag_scripts):
-        """(piece, foreign) for tagged text: foreign where the piece holds no script the tag's language writes,
-        or a script of the CJK family it does not (kana under a Chinese tag). A letter standing alone is
-        foreign only where lone_letter() gives it a voice."""
-        if "Latn" in tag_scripts and not S.may_leave_latin(text):
-            return [(text, False)]
-        known = self.foreign_scripts | set(tag_scripts) | {self.default_script}
-        out = []
-        for scripts_here, start, end in S.segments(text, S.primary_script(tag), known, tag_scripts):
-            piece = text[start:end]
-            foreign = (
-                scripts_here is not None
-                and (S.is_text(piece) or self.lone_letter(scripts_here, piece) is not None)
-                and (not (scripts_here & tag_scripts) or bool((scripts_here & S.CJK) - tag_scripts))
-            )
-            if out and out[-1][1] == foreign:
-                out[-1] = (out[-1][0] + piece, foreign)
-            else:
-                out.append((piece, foreign))
-        return out
+	def _by_tag_script(self, text, tag, tag_scripts):
+		"""(piece, foreign) for tagged text: foreign where the piece holds no script the tag's language writes,
+		or a script of the CJK family it does not (kana under a Chinese tag). A letter standing alone is
+		foreign only where lone_letter() gives it a voice."""
+		if "Latn" in tag_scripts and not S.may_leave_latin(text):
+			return [(text, False)]
+		known = self.foreign_scripts | set(tag_scripts) | {self.default_script}
+		out = []
+		for scripts_here, start, end in S.segments(text, S.primary_script(tag), known, tag_scripts):
+			piece = text[start:end]
+			foreign = (
+				scripts_here is not None
+				and (S.is_text(piece) or self.lone_letter(scripts_here, piece) is not None)
+				and (not (scripts_here & tag_scripts) or bool((scripts_here & S.CJK) - tag_scripts))
+			)
+			if out and out[-1][1] == foreign:
+				out[-1] = (out[-1][0] + piece, foreign)
+			else:
+				out.append((piece, foreign))
+		return out
 
-    def _holds_letter(self, text, scripts):
-        if "Latn" in scripts and any(c.isalpha() and ord(c) < 0x300 for c in text):
-            return True
-        return any(s != "other" for s, _, _ in S.letter_runs(text, scripts))
+	def _holds_letter(self, text, scripts):
+		if "Latn" in scripts and any(c.isalpha() and ord(c) < 0x300 for c in text):
+			return True
+		return any(s != "other" for s, _, _ in S.letter_runs(text, scripts))
 
-    # ------------------------------------------------------------ script mode
+	# ------------------------------------------------------------ script mode
 
-    def by_script(self, text):
-        """(base language or None, piece) runs by script alone; None is the default script, and the default's own
-        code a piece in another script it writes that its clause pass settled as the default."""
-        if self.default_script == "Latn" and not S.may_leave_latin(text):
-            return [(None, text)]
-        runs = []
-        known = self.foreign_scripts | {self.default_script}
-        for scripts_here, start, end in S.segments(text, self.default_script, known, S.scripts_of(self.default_tag)):
-            piece = text[start:end]
-            if scripts_here is None:
-                runs.append((None, piece))
-                continue
-            if not S.is_text(piece):
-                lone = self.lone_letter(scripts_here, piece)
-                if lone is None:
-                    runs.append((None, piece))
-                else:
-                    lang, first, last = lone
-                    runs += [(None, piece[:first]), (lang, piece[first:last]), (None, piece[last:])]
-                continue
-            lang = self.language_for(scripts_here, piece)
-            if lang is None:
-                runs.append((None, piece))
-                continue
-            last = max(i for i, c in enumerate(piece) if c.isalpha()) + 1
-            # A mark after the last letter (a virama, a separate accent) belongs to that letter.
-            while last < len(piece) and unicodedata.category(piece[last]).startswith("M"):
-                last += 1
-            # The default's code, not None, where its script's own clause pass settled it: tagged() then
-            # leaves it with the default voice without scoring it again.
-            runs += self.within_script(scripts_here, piece[:last], lang)
-            runs.append((None, piece[last:]))
-        return merge(runs)
+	def by_script(self, text):
+		"""(base language or None, piece) runs by script alone; None is the default script, and the default's own
+		code a piece in another script it writes that its clause pass settled as the default."""
+		if self.default_script == "Latn" and not S.may_leave_latin(text):
+			return [(None, text)]
+		runs = []
+		known = self.foreign_scripts | {self.default_script}
+		for scripts_here, start, end in S.segments(
+			text, self.default_script, known, S.scripts_of(self.default_tag)
+		):
+			piece = text[start:end]
+			if scripts_here is None:
+				runs.append((None, piece))
+				continue
+			if not S.is_text(piece):
+				lone = self.lone_letter(scripts_here, piece)
+				if lone is None:
+					runs.append((None, piece))
+				else:
+					lang, first, last = lone
+					runs += [(None, piece[:first]), (lang, piece[first:last]), (None, piece[last:])]
+				continue
+			lang = self.language_for(scripts_here, piece)
+			if lang is None:
+				runs.append((None, piece))
+				continue
+			last = max(i for i, c in enumerate(piece) if c.isalpha()) + 1
+			# A mark after the last letter (a virama, a separate accent) belongs to that letter.
+			while last < len(piece) and unicodedata.category(piece[last]).startswith("M"):
+				last += 1
+			# The default's code, not None, where its script's own clause pass settled it: tagged() then
+			# leaves it with the default voice without scoring it again.
+			runs += self.within_script(scripts_here, piece[:last], lang)
+			runs.append((None, piece[last:]))
+		return merge(runs)
 
-    def within_script(self, scripts_here, piece, lang):
-        """A foreign-script piece, in full mode, clause by clause among the configured languages of its
-        script, as text in the default script is among the default and its own: the piece's pick stands in
-        for the default, so a Ukrainian sentence after a Russian one in English prose switches to Ukrainian
-        where the piece as a whole reads Russian. The default leads when it writes the script too (Serbian in
-        Cyrillic beside Russian). Words run together in Han and kana, so a piece in those is left whole."""
-        if self.mode != MODE_FULL or "other" in scripts_here or scripts_here & S.CJK:
-            return [(lang, piece)]
-        options = []
-        for script in scripts_here:
-            for code in self.script_languages.get(script, ()):
-                if (code != self.default or lang == self.default) and code not in options:
-                    options.append(code)
-        if lang not in options or len(options) < 2:
-            return [(lang, piece)]
-        key = (lang, tuple(options))
-        sub = self._within.get(key)
-        if sub is None:
-            others = [self.spelling[c] for c in options if c != lang]
-            sub = Detector(self.backend, self.spelling[lang], others, self.dictionary, MODE_FULL, self.reader_words)
-            # The piece's script, not the lead's primary one: Serbian's is Latin, and Russian writes no Latin.
-            sub.clause_candidates = [lang] + [c for c in options if c != lang]
-            self._within[key] = sub
-        before = sub.calls
-        runs = sub.by_clause(piece)
-        self.calls += sub.calls - before
-        return [(found or lang, text) for found, text in runs]
+	def within_script(self, scripts_here, piece, lang):
+		"""A foreign-script piece, in full mode, clause by clause among the configured languages of its
+		script, as text in the default script is among the default and its own: the piece's pick stands in
+		for the default, so a Ukrainian sentence after a Russian one in English prose switches to Ukrainian
+		where the piece as a whole reads Russian. The default leads when it writes the script too (Serbian in
+		Cyrillic beside Russian). Words run together in Han and kana, so a piece in those is left whole."""
+		if self.mode != MODE_FULL or "other" in scripts_here or scripts_here & S.CJK:
+			return [(lang, piece)]
+		options = []
+		for script in scripts_here:
+			for code in self.script_languages.get(script, ()):
+				if (code != self.default or lang == self.default) and code not in options:
+					options.append(code)
+		if lang not in options or len(options) < 2:
+			return [(lang, piece)]
+		key = (lang, tuple(options))
+		sub = self._within.get(key)
+		if sub is None:
+			others = [self.spelling[c] for c in options if c != lang]
+			sub = Detector(
+				self.backend, self.spelling[lang], others, self.dictionary, MODE_FULL, self.reader_words
+			)
+			# The piece's script, not the lead's primary one: Serbian's is Latin, and Russian writes no Latin.
+			sub.clause_candidates = [lang] + [c for c in options if c != lang]
+			self._within[key] = sub
+		before = sub.calls
+		runs = sub.by_clause(piece)
+		self.calls += sub.calls - before
+		return [(found or lang, text) for found, text in runs]
 
-    def language_for(self, scripts_here, piece):
-        """The language to speak a foreign-script piece in: the one configured language of its script, the
-        recognizer's confident pick among several, its free guess when nobody configured the script."""
-        if "other" in scripts_here:
-            return self._free_guess(piece, scripts_here)
-        options = self.script_options(scripts_here)
-        if self.default in options:
-            if len(options) == 1:
-                return None
-            if scripts_here & S.CJK:
-                # Han the default writes too (Chinese beside a Japanese or Korean default): switched only on a
-                # near-certain guess, since kanji-only headings and names are common in Japanese.
-                self.calls += 1
-                g = self.backend.constrained(piece, options)
-                return g[0] if g and g[0] != self.default and g[1] >= FLOOR else None
-            # Another script the default writes: its clauses are detected with the default leading.
-            return self.default
-        if not options:
-            return self._free_guess(piece, scripts_here)
-        if len(options) == 1:
-            return options[0]
-        self.calls += 1
-        g = self.backend.constrained(piece, options)
-        # Cantonese is chosen over Mandarin only near certain: the recognizer names text written in Cantonese
-        # ("我哋去食飯啦") at 0.99 and more, and standard written Chinese, which Hong Kong and Taiwan write too, Mandarin.
-        if g and g[1] >= (FLOOR if g[0] == "yue" and "zh" in options else SCRIPT_FLOOR):
-            return g[0]
-        return options[0]
+	def language_for(self, scripts_here, piece):
+		"""The language to speak a foreign-script piece in: the one configured language of its script, the
+		recognizer's confident pick among several, its free guess when nobody configured the script."""
+		if "other" in scripts_here:
+			return self._free_guess(piece, scripts_here)
+		options = self.script_options(scripts_here)
+		if self.default in options:
+			if len(options) == 1:
+				return None
+			if scripts_here & S.CJK:
+				# Han the default writes too (Chinese beside a Japanese or Korean default): switched only on a
+				# near-certain guess, since kanji-only headings and names are common in Japanese.
+				self.calls += 1
+				g = self.backend.constrained(piece, options)
+				return g[0] if g and g[0] != self.default and g[1] >= FLOOR else None
+			# Another script the default writes: its clauses are detected with the default leading.
+			return self.default
+		if not options:
+			return self._free_guess(piece, scripts_here)
+		if len(options) == 1:
+			return options[0]
+		self.calls += 1
+		g = self.backend.constrained(piece, options)
+		# Cantonese is chosen over Mandarin only near certain: the recognizer names text written in Cantonese
+		# ("我哋去食飯啦") at 0.99 and more, and standard written Chinese, which Hong Kong and Taiwan write too, Mandarin.
+		if g and g[1] >= (FLOOR if g[0] == "yue" and "zh" in options else SCRIPT_FLOOR):
+			return g[0]
+		return options[0]
 
-    def script_options(self, scripts_here):
-        """The languages that write a foreign-script piece, best first: the configured ones in table order,
-        else the voices'. Kana means Japanese, hangul Korean, and pure Han a Chinese voice before the others,
-        Mandarin before Cantonese."""
-        options = []
-        for table in (self.script_languages, self.voice_languages):
-            for script in scripts_here:
-                for code in table.get(script, ()):
-                    if code not in options:
-                        options.append(code)
-            if options:
-                break
-        if scripts_here & S.CJK:
-            if "Hira" in scripts_here or "Kana" in scripts_here:
-                options = [c for c in options if "Hira" in S.scripts_of(self.tag_of(c))] or options
-            elif "Hang" in scripts_here:
-                options = [c for c in options if "Hang" in S.scripts_of(self.tag_of(c))] or options
-            else:
-                # Pure Han: a Chinese voice before a Japanese or Korean one, and Mandarin before Cantonese.
-                order = {c: i for i, c in enumerate(list(self.spoken) + list(self.voice_spelling))}
-                options.sort(key=lambda c: (S.scripts_of(self.tag_of(c)) != {"Hani"}, c == "yue", order.get(c, 999)))
-        return options
+	def script_options(self, scripts_here):
+		"""The languages that write a foreign-script piece, best first: the configured ones in table order,
+		else the voices'. Kana means Japanese, hangul Korean, and pure Han a Chinese voice before the others,
+		Mandarin before Cantonese."""
+		options = []
+		for table in (self.script_languages, self.voice_languages):
+			for script in scripts_here:
+				for code in table.get(script, ()):
+					if code not in options:
+						options.append(code)
+			if options:
+				break
+		if scripts_here & S.CJK:
+			if "Hira" in scripts_here or "Kana" in scripts_here:
+				options = [c for c in options if "Hira" in S.scripts_of(self.tag_of(c))] or options
+			elif "Hang" in scripts_here:
+				options = [c for c in options if "Hang" in S.scripts_of(self.tag_of(c))] or options
+			else:
+				# Pure Han: a Chinese voice before a Japanese or Korean one, and Mandarin before Cantonese.
+				order = {c: i for i, c in enumerate(list(self.spoken) + list(self.voice_spelling))}
+				options.sort(
+					key=lambda c: (S.scripts_of(self.tag_of(c)) != {"Hani"}, c == "yue", order.get(c, 999))
+				)
+		return options
 
-    def keyboard(self, text, keyboard):
-        """The language typing echo reads `text` in: the keyboard layout's language where a row or a voice
-        speaks it and the text holds no letter of a script it does not write, the default's own tag when that
-        is the default; otherwise None, and the text goes by its script. A row in the keyboard's exact
-        spelling is taken over another dialect of its language (a Taiwan keyboard, a zh_TW row beside zh_CN)."""
-        if self.mode == MODE_OFF or not keyboard:
-            return None
-        tag = S.normalize(keyboard)
-        lang = S.code(tag)
-        if lang not in self.spelling and lang not in self.voice_spelling:
-            return None
-        if any(script == "other" for script, _, _ in S.letter_runs(text, S.scripts_of(tag))):
-            return None
-        if lang == self.default:
-            return self.default_tag
-        return tag if tag in self.configured else self.tag_of(lang)
+	def keyboard(self, text, keyboard):
+		"""The language typing echo reads `text` in: the keyboard layout's language where a row or a voice
+		speaks it and the text holds no letter of a script it does not write, the default's own tag when that
+		is the default; otherwise None, and the text goes by its script. A row in the keyboard's exact
+		spelling is taken over another dialect of its language (a Taiwan keyboard, a zh_TW row beside zh_CN)."""
+		if self.mode == MODE_OFF or not keyboard:
+			return None
+		tag = S.normalize(keyboard)
+		lang = S.code(tag)
+		if lang not in self.spelling and lang not in self.voice_spelling:
+			return None
+		if any(script == "other" for script, _, _ in S.letter_runs(text, S.scripts_of(tag))):
+			return None
+		if lang == self.default:
+			return self.default_tag
+		return tag if tag in self.configured else self.tag_of(lang)
 
-    def character(self, text):
-        """The language to spell a lone character in when no line places it, as one typed or deleted: by its
-        script alone, as letter_language() reads a letter standing alone in a line, in the configured
-        spelling, or None for the default's scripts."""
-        if self.mode == MODE_OFF or not any(c.isalpha() for c in text):
-            return None
-        if self.default_script == "Latn" and not S.may_leave_latin(text):
-            return None
-        known = self.foreign_scripts | {self.default_script}
-        segs = S.segments(text, self.default_script, known, S.scripts_of(self.default_tag))
-        foreign = [s for s, _, _ in segs if s is not None]
-        if len(foreign) != 1:
-            return None
-        lang = self.letter_language(foreign[0], next(c for c in text if c.isalpha()))
-        return self.tag_of(lang) if lang else None
+	def character(self, text):
+		"""The language to spell a lone character in when no line places it, as one typed or deleted: by its
+		script alone, as letter_language() reads a letter standing alone in a line, in the configured
+		spelling, or None for the default's scripts."""
+		if self.mode == MODE_OFF or not any(c.isalpha() for c in text):
+			return None
+		if self.default_script == "Latn" and not S.may_leave_latin(text):
+			return None
+		known = self.foreign_scripts | {self.default_script}
+		segs = S.segments(text, self.default_script, known, S.scripts_of(self.default_tag))
+		foreign = [s for s, _, _ in segs if s is not None]
+		if len(foreign) != 1:
+			return None
+		lang = self.letter_language(foreign[0], next(c for c in text if c.isalpha()))
+		return self.tag_of(lang) if lang else None
 
-    def lone_letter(self, scripts_here, piece):
-        """(base language, start, end) for a piece in a script the default does not write that holds one
-        letter: the letter with the marks after it, read in letter_language(), and the digits and punctuation
-        around it left to the default voice. None where the whole piece stays with the default voice."""
-        first = next((i for i, c in enumerate(piece) if c.isalpha()), None)
-        if first is None:
-            return None
-        lang = self.letter_language(scripts_here, piece[first])
-        if lang is None:
-            return None
-        last = first + 1
-        while last < len(piece) and is_mark(piece[last]):
-            last += 1
-        return lang, first, last
+	def lone_letter(self, scripts_here, piece):
+		"""(base language, start, end) for a piece in a script the default does not write that holds one
+		letter: the letter with the marks after it, read in letter_language(), and the digits and punctuation
+		around it left to the default voice. None where the whole piece stays with the default voice."""
+		first = next((i for i, c in enumerate(piece) if c.isalpha()), None)
+		if first is None:
+			return None
+		lang = self.letter_language(scripts_here, piece[first])
+		if lang is None:
+			return None
+		last = first + 1
+		while last < len(piece) and is_mark(piece[last]):
+			last += 1
+		return lang, first, last
 
-    def letter_language(self, scripts_here, letter):
-        """The base language a letter standing alone in a script the default does not write is read in, or
-        None for the default voice. A letter the default language's symbol table names at every level stays,
-        read by its name. So does a modifier letter, a mark when it stands alone (the iteration marks 々 and
-        ヽ). Otherwise the first of script_options, since one letter is too little for the recognizer, and a
-        script no configured language or voice writes is left to the default, as there is no voice to take it."""
-        if "other" in scripts_here or unicodedata.category(letter) == "Lm" or self.named(letter):
-            return None
-        options = self.script_options(scripts_here)
-        if not options or self.default in options:
-            return None
-        return options[0]
+	def letter_language(self, scripts_here, letter):
+		"""The base language a letter standing alone in a script the default does not write is read in, or
+		None for the default voice. A letter the default language's symbol table names at every level stays,
+		read by its name. So does a modifier letter, a mark when it stands alone (the iteration marks 々 and
+		ヽ). Otherwise the first of script_options, since one letter is too little for the recognizer, and a
+		script no configured language or voice writes is left to the default, as there is no voice to take it."""
+		if "other" in scripts_here or unicodedata.category(letter) == "Lm" or self.named(letter):
+			return None
+		options = self.script_options(scripts_here)
+		if not options or self.default in options:
+			return None
+		return options[0]
 
-    def tag_of(self, code):
-        return self.spelling.get(code) or self.voice_spelling.get(code) or code
+	def tag_of(self, code):
+		return self.spelling.get(code) or self.voice_spelling.get(code) or code
 
-    def _free_guess(self, piece, scripts_here):
-        self.calls += 1
-        g = self.backend.free(piece)
-        if not g or g[0] == self.default or S.code(g[0]) in self.excluded:
-            return None
-        # By the text's script: many languages share Latin, few share another script. The guess's own
-        # script would not do, since Windows knows no script for some of the recognizer's codes (arz, yue).
-        latin = "Latn" in scripts_here or any(s == "Latn" for s, _, _ in S.letter_runs(piece, ("Latn",)))
-        floor = FLOOR if latin else SCRIPT_FLOOR
-        # Tagged whether or not any voice can speak it: NVDA's "report when switching to
-        # language is not supported" setting then names the language before the attempt, which beats
-        # silence from a voice handed a script it cannot read.
-        if g[1] < floor:
-            return None
-        return g[0]
+	def _free_guess(self, piece, scripts_here):
+		self.calls += 1
+		g = self.backend.free(piece)
+		if not g or g[0] == self.default or S.code(g[0]) in self.excluded:
+			return None
+		# By the text's script: many languages share Latin, few share another script. The guess's own
+		# script would not do, since Windows knows no script for some of the recognizer's codes (arz, yue).
+		latin = "Latn" in scripts_here or any(s == "Latn" for s, _, _ in S.letter_runs(piece, ("Latn",)))
+		floor = FLOOR if latin else SCRIPT_FLOOR
+		# Tagged whether or not any voice can speak it: NVDA's "report when switching to
+		# language is not supported" setting then names the language before the attempt, which beats
+		# silence from a voice handed a script it cannot read.
+		if g[1] < floor:
+			return None
+		return g[0]
 
-    # ------------------------------------------------------------ full mode
+	# ------------------------------------------------------------ full mode
 
-    def by_clause(self, text):
-        lone = self.lone_word(text)
-        if lone:
-            return [(lone, text)]
-        runs = []
-        for index, chunk in enumerate(text.split(SEPARATOR)):
-            if index > 0:
-                runs.append((runs[-1][0] if runs else None, SEPARATOR))
-            runs += self.clause_runs(chunk)
-        return merge(runs)
+	def by_clause(self, text):
+		lone = self.lone_word(text)
+		if lone:
+			return [(lone, text)]
+		runs = []
+		for index, chunk in enumerate(text.split(SEPARATOR)):
+			if index > 0:
+				runs.append((runs[-1][0] if runs else None, SEPARATOR))
+			runs += self.clause_runs(chunk)
+		return merge(runs)
 
-    def lone_word(self, text):
-        """The language of text that is one word alone, as a button or a link is, or None. The recognizer
-        cannot tell one word, so the dictionaries do: the default's rejects it in every installed region and
-        exactly one configured language's accepts it. Against a configured language with no dictionary the
-        recognizer arbitrates, but never against the default, whose dictionary has spoken: it calls "Cancelar"
-        English at 0.89 and "fraser" at 0.60. "Beállítások" beside an English default is Hungarian; "Google",
-        which the English dictionary knows, is not, nor "paris", which it knows capitalized, nor "numLock"."""
-        if self.dictionary is None:
-            return None
-        ws = words(text)
-        if len(ws) != 1 or len(ws[0]) < LONE_WORD_LETTERS or not any(c.islower() for c in ws[0]):
-            return None
-        w = ws[0]
-        if any(a.islower() and b.isupper() for a, b in zip(w, w[1:])):
-            return None  # an identifier
-        scored = self._scored(w)
-        if self.dictionary.rejects_everywhere(scored, self.default_tag) is not True:
-            return None
-        if w.islower() and self.dictionary.rejects_a_word(scored.capitalize(), self.default_tag) is False:
-            return None  # a name, written small
-        accepting, unknown = [], []
-        for code in self.clause_candidates:
-            if code != self.default:
-                verdict = self.dictionary.rejects_a_word(scored, self.spelling[code])
-                if verdict is False:
-                    accepting.append(code)
-                elif verdict is None:
-                    unknown.append(code)
-        if len(accepting) != 1:
-            return None
-        if not unknown:
-            return accepting[0]
-        self.calls += 1
-        g = self.backend.constrained(scored, accepting + unknown)
-        return accepting[0] if g and g[0] == accepting[0] and g[1] >= DICTIONARY_FLOOR else None
+	def lone_word(self, text):
+		"""The language of text that is one word alone, as a button or a link is, or None. The recognizer
+		cannot tell one word, so the dictionaries do: the default's rejects it in every installed region and
+		exactly one configured language's accepts it. Against a configured language with no dictionary the
+		recognizer arbitrates, but never against the default, whose dictionary has spoken: it calls "Cancelar"
+		English at 0.89 and "fraser" at 0.60. "Beállítások" beside an English default is Hungarian; "Google",
+		which the English dictionary knows, is not, nor "paris", which it knows capitalized, nor "numLock"."""
+		if self.dictionary is None:
+			return None
+		ws = words(text)
+		if len(ws) != 1 or len(ws[0]) < LONE_WORD_LETTERS or not any(c.islower() for c in ws[0]):
+			return None
+		w = ws[0]
+		if any(a.islower() and b.isupper() for a, b in zip(w, w[1:])):
+			return None  # an identifier
+		scored = self._scored(w)
+		if self.dictionary.rejects_everywhere(scored, self.default_tag) is not True:
+			return None
+		if w.islower() and self.dictionary.rejects_a_word(scored.capitalize(), self.default_tag) is False:
+			return None  # a name, written small
+		accepting, unknown = [], []
+		for code in self.clause_candidates:
+			if code != self.default:
+				verdict = self.dictionary.rejects_a_word(scored, self.spelling[code])
+				if verdict is False:
+					accepting.append(code)
+				elif verdict is None:
+					unknown.append(code)
+		if len(accepting) != 1:
+			return None
+		if not unknown:
+			return accepting[0]
+		self.calls += 1
+		g = self.backend.constrained(scored, accepting + unknown)
+		return accepting[0] if g and g[0] == accepting[0] and g[1] >= DICTIONARY_FLOOR else None
 
-    def clause_runs(self, chunk):
-        if not any(c.isalpha() for c in chunk):
-            return [(None, chunk)]
-        cls, held = labelled(chunk, clauses(chunk), self.labels)
-        # A label's value with every word capitalized is a name, not a headline: "From Lotte Janssen Visser".
-        held |= {i + 1 for i in held if i + 1 < len(cls) and i + 1 not in held and headline(chunk[cls[i + 1][0]:cls[i + 1][1]])}
-        langs = [None] * len(cls)
-        guesses = {}
+	def clause_runs(self, chunk):
+		if not any(c.isalpha() for c in chunk):
+			return [(None, chunk)]
+		cls, held = labelled(chunk, clauses(chunk), self.labels)
+		# A label's value with every word capitalized is a name, not a headline: "From Lotte Janssen Visser".
+		held |= {
+			i + 1
+			for i in held
+			if i + 1 < len(cls) and i + 1 not in held and headline(chunk[cls[i + 1][0] : cls[i + 1][1]])
+		}
+		langs = [None] * len(cls)
+		guesses = {}
 
-        def guess(i):
-            if i not in guesses:
-                guesses[i] = self.hypothesis(chunk[cls[i][0]:cls[i][1]])
-            return guesses[i]
+		def guess(i):
+			if i not in guesses:
+				guesses[i] = self.hypothesis(chunk[cls[i][0] : cls[i][1]])
+			return guesses[i]
 
-        scored = set()
-        for i, (s, e, _) in enumerate(cls):
-            if i not in held and len(self.scored_words(chunk[s:e])) >= 2:
-                scored.add(i)
-                g = guess(i)
-                if self.switches(chunk[s:e], g):
-                    langs[i] = g[0]
-        leanings = {guess(i)[0] for i in scored if guess(i)}
-        switched = {langs[i] for i in scored if langs[i]}
-        # A sentence none of whose clauses has two scored words is scored whole, and its clauses that lean
-        # the same way follow it: "Soy Marcos, encantado." is "Soy encantado", Spanish at 0.9996. A sentence
-        # with fewer than two scored words in all ("¡Hola!") is kept for the line's agreed language below.
-        # Where words are not spaced, two clauses would pass for two words, so the rule stands down.
-        lone = []
-        for sentence in sorted({c[2] for c in cls}) if self.default_script not in UNSPACED else ():
-            members = [i for i in range(len(cls)) if cls[i][2] == sentence and i not in held]
-            if not members or any(i in scored for i in members):
-                continue
-            # Judged as one clause: a capitalized word that opened a later clause is a name here ("Hola, Pedro.").
-            joined = " ".join(w for i in members for w in self.scored_words(chunk[cls[i][0]:cls[i][1]]))
-            if len(self.scored_words(joined)) < 2:
-                lone += members
-                continue
-            g = self.hypothesis(joined)
-            if g:
-                leanings.add(g[0])
-            if self.switches(joined, g):
-                switched.add(g[0])
-                for i in members:
-                    if guess(i) and guess(i)[0] == g[0]:
-                        langs[i] = g[0]
-        # A scored clause whose guess was withheld, because a language no row speaks outranked the pick, is judged
-        # with its whole sentence, which must pass the same check: "non tu" is Interlingua to fastText left free,
-        # and "No, non tu, lei." is Italian whole, left free too. The sentence's guess must be confident, as only a
-        # confident guess is checked against the free one, and a headline's near certain: the dictionaries alone
-        # never overrule the check.
-        for sentence in sorted({c[2] for c in cls}):
-            members = [i for i in range(len(cls)) if cls[i][2] == sentence and i not in held]
-            withheld = [i for i in members if i in scored and langs[i] is None and guess(i) is None]
-            if not withheld:
-                continue
-            joined = " ".join(w for i in members for w in self.scored_words(chunk[cls[i][0]:cls[i][1]]))
-            g = self.hypothesis(joined)
-            floor = EMBEDDED_FLOOR if headline(chunk[cls[members[0]][0]:cls[members[-1]][1]]) else FLOOR
-            if g and g[1] >= floor and self.switches(joined, g):
-                leanings.add(g[0])
-                switched.add(g[0])
-                for i in withheld:
-                    langs[i] = g[0]
-        agreed = None
-        if len(leanings) == 1:
-            leaning = next(iter(leanings))
-            if leaning in self.spoken and leaning != self.default and leaning in switched:
-                agreed = leaning
-        if agreed:
-            # A clause whose hypothesis was withheld, because a language no row speaks outranked the
-            # constrained pick, stays untagged rather than following the line.
-            for i in scored:
-                if langs[i] is None and guess(i):
-                    langs[i] = agreed
-            for i in lone:
-                if guess(i) and guess(i)[0] == agreed:
-                    langs[i] = agreed
-        # A foreign clause beside a scored default clause of its sentence, with no foreign neighbor, is embedded
-        # in default-language speech and keeps its tag only at the embedded floor.
-        for i in sorted(scored):
-            if langs[i] is None:
-                continue
-            neighbors = [j for j in (i - 1, i + 1) if 0 <= j < len(cls) and cls[j][2] == cls[i][2]]
-            embedded = all(langs[j] is None for j in neighbors) and any(j in scored for j in neighbors)
-            if embedded and not self.is_embedded(chunk[cls[i][0]:cls[i][1]], langs[i]):
-                langs[i] = None
-        settled = False
-        while not settled:
-            settled = True
-            for i in range(len(cls)):
-                if langs[i] is not None or i in scored or i in held:
-                    continue
-                neighbors = [langs[j] for j in (i - 1, i + 1) if 0 <= j < len(cls) and cls[j][2] == cls[i][2] and langs[j]]
-                if not neighbors:
-                    continue
-                g = guess(i)
-                if not g or g[0] not in self.spoken:
-                    continue
-                if g[0] not in neighbors:
-                    continue
-                # A near-certain guess, the line's agreed language, or, as for a scored clause, a leading
-                # guess the dictionaries decide for: "demain" between two commas is French at 0.62, and
-                # the English dictionary rejects it where the French one knows it.
-                joins = g[1] >= FLOOR or g[0] == agreed
-                if not joins and g[1] >= DICTIONARY_FLOOR:
-                    joins = self.dictionaries_decide(chunk[cls[i][0]:cls[i][1]], g[0])
-                if joins:
-                    langs[i] = g[0]
-                    settled = False
-        # A clause of one word that nothing above settled is judged as a word alone is, by the dictionaries:
-        # "Chiedi" between a speaker's label and an English quote.
-        for i, (s, e, _) in enumerate(cls):
-            if langs[i] is None and i not in scored and i not in held and len(words(chunk[s:e])) == 1:
-                langs[i] = self.lone_word(chunk[s:e])
-        runs = []
-        cursor = 0
-        for i, (s, e, _) in enumerate(cls):
-            # The gap before a clause goes with the clause before it, but for the opening marks at its end:
-            # "¿" in "Hello everyone. ¿Cómo estás?" is read by the Spanish voice.
-            start = opening(chunk, cursor, s)
-            runs.append((runs[-1][0] if runs else None, chunk[cursor:start]))
-            clause = self.peeled(chunk[s:e], langs[i]) if langs[i] else [(None, chunk[s:e])]
-            clause[0] = (clause[0][0], chunk[start:s] + clause[0][1])
-            runs += clause
-            cursor = e
-        runs.append((runs[-1][0] if runs else None, chunk[cursor:]))
-        return runs
+		scored = set()
+		for i, (s, e, _) in enumerate(cls):
+			if i not in held and len(self.scored_words(chunk[s:e])) >= 2:
+				scored.add(i)
+				g = guess(i)
+				if self.switches(chunk[s:e], g):
+					langs[i] = g[0]
+		leanings = {guess(i)[0] for i in scored if guess(i)}
+		switched = {langs[i] for i in scored if langs[i]}
+		# A sentence none of whose clauses has two scored words is scored whole, and its clauses that lean
+		# the same way follow it: "Soy Marcos, encantado." is "Soy encantado", Spanish at 0.9996. A sentence
+		# with fewer than two scored words in all ("¡Hola!") is kept for the line's agreed language below.
+		# Where words are not spaced, two clauses would pass for two words, so the rule stands down.
+		lone = []
+		for sentence in sorted({c[2] for c in cls}) if self.default_script not in UNSPACED else ():
+			members = [i for i in range(len(cls)) if cls[i][2] == sentence and i not in held]
+			if not members or any(i in scored for i in members):
+				continue
+			# Judged as one clause: a capitalized word that opened a later clause is a name here ("Hola, Pedro.").
+			joined = " ".join(w for i in members for w in self.scored_words(chunk[cls[i][0] : cls[i][1]]))
+			if len(self.scored_words(joined)) < 2:
+				lone += members
+				continue
+			g = self.hypothesis(joined)
+			if g:
+				leanings.add(g[0])
+			if self.switches(joined, g):
+				switched.add(g[0])
+				for i in members:
+					if guess(i) and guess(i)[0] == g[0]:
+						langs[i] = g[0]
+		# A scored clause whose guess was withheld, because a language no row speaks outranked the pick, is judged
+		# with its whole sentence, which must pass the same check: "non tu" is Interlingua to fastText left free,
+		# and "No, non tu, lei." is Italian whole, left free too. The sentence's guess must be confident, as only a
+		# confident guess is checked against the free one, and a headline's near certain: the dictionaries alone
+		# never overrule the check.
+		for sentence in sorted({c[2] for c in cls}):
+			members = [i for i in range(len(cls)) if cls[i][2] == sentence and i not in held]
+			withheld = [i for i in members if i in scored and langs[i] is None and guess(i) is None]
+			if not withheld:
+				continue
+			joined = " ".join(w for i in members for w in self.scored_words(chunk[cls[i][0] : cls[i][1]]))
+			g = self.hypothesis(joined)
+			floor = EMBEDDED_FLOOR if headline(chunk[cls[members[0]][0] : cls[members[-1]][1]]) else FLOOR
+			if g and g[1] >= floor and self.switches(joined, g):
+				leanings.add(g[0])
+				switched.add(g[0])
+				for i in withheld:
+					langs[i] = g[0]
+		agreed = None
+		if len(leanings) == 1:
+			leaning = next(iter(leanings))
+			if leaning in self.spoken and leaning != self.default and leaning in switched:
+				agreed = leaning
+		if agreed:
+			# A clause whose hypothesis was withheld, because a language no row speaks outranked the
+			# constrained pick, stays untagged rather than following the line.
+			for i in scored:
+				if langs[i] is None and guess(i):
+					langs[i] = agreed
+			for i in lone:
+				if guess(i) and guess(i)[0] == agreed:
+					langs[i] = agreed
+		# A foreign clause beside a scored default clause of its sentence, with no foreign neighbor, is embedded
+		# in default-language speech and keeps its tag only at the embedded floor.
+		for i in sorted(scored):
+			if langs[i] is None:
+				continue
+			neighbors = [j for j in (i - 1, i + 1) if 0 <= j < len(cls) and cls[j][2] == cls[i][2]]
+			embedded = all(langs[j] is None for j in neighbors) and any(j in scored for j in neighbors)
+			if embedded and not self.is_embedded(chunk[cls[i][0] : cls[i][1]], langs[i]):
+				langs[i] = None
+		settled = False
+		while not settled:
+			settled = True
+			for i in range(len(cls)):
+				if langs[i] is not None or i in scored or i in held:
+					continue
+				neighbors = [
+					langs[j]
+					for j in (i - 1, i + 1)
+					if 0 <= j < len(cls) and cls[j][2] == cls[i][2] and langs[j]
+				]
+				if not neighbors:
+					continue
+				g = guess(i)
+				if not g or g[0] not in self.spoken:
+					continue
+				if g[0] not in neighbors:
+					continue
+				# A near-certain guess, the line's agreed language, or, as for a scored clause, a leading
+				# guess the dictionaries decide for: "demain" between two commas is French at 0.62, and
+				# the English dictionary rejects it where the French one knows it.
+				joins = g[1] >= FLOOR or g[0] == agreed
+				if not joins and g[1] >= DICTIONARY_FLOOR:
+					joins = self.dictionaries_decide(chunk[cls[i][0] : cls[i][1]], g[0])
+				if joins:
+					langs[i] = g[0]
+					settled = False
+		# A clause of one word that nothing above settled is judged as a word alone is, by the dictionaries:
+		# "Chiedi" between a speaker's label and an English quote.
+		for i, (s, e, _) in enumerate(cls):
+			if langs[i] is None and i not in scored and i not in held and len(words(chunk[s:e])) == 1:
+				langs[i] = self.lone_word(chunk[s:e])
+		runs = []
+		cursor = 0
+		for i, (s, e, _) in enumerate(cls):
+			# The gap before a clause goes with the clause before it, but for the opening marks at its end:
+			# "¿" in "Hello everyone. ¿Cómo estás?" is read by the Spanish voice.
+			start = opening(chunk, cursor, s)
+			runs.append((runs[-1][0] if runs else None, chunk[cursor:start]))
+			clause = self.peeled(chunk[s:e], langs[i]) if langs[i] else [(None, chunk[s:e])]
+			clause[0] = (clause[0][0], chunk[start:s] + clause[0][1])
+			runs += clause
+			cursor = e
+		runs.append((runs[-1][0] if runs else None, chunk[cursor:]))
+		return runs
 
-    def peeled(self, clause, language):
-        return self.split(clause, language) or [(language, clause)]
+	def peeled(self, clause, language):
+		return self.split(clause, language) or [(language, clause)]
 
-    def split(self, clause, language):
-        ws = clause.split(" ")
-        if len(ws) < 4:
-            return None
+	def split(self, clause, language):
+		ws = clause.split(" ")
+		if len(ws) < 4:
+			return None
 
-        def default_end(end):
-            # The longest end that reads as the default. Stopping at the first length that does not
-            # suits a recognizer whose confidence grows with the text; fastText dips on a two-word
-            # fragment ("Orthodox army" scored 0.89 between "Russian army" at 0.999 and "the army" at 0.98),
-            # so every length is tried and the rest is still held to the foreign and embedded floors.
-            # Two words at least, counted as words: "csillagai 😂" is one, and a lone word is never judged.
-            # An end the default's dictionary rejects a word of is not the default's: fastText calls "the edge"
-            # Swedish at 0.94 between Swedish and English. Sparing an end the clause's language's dictionary
-            # rejects too ("via npm") was measured, and lost more than it saved (KNOWN_GAPS.md).
-            found = None
-            for length in range(2, len(ws) - 1):
-                if len(words(end(length))) >= 2 and self.is_default(end(length)) and not self.default_rejects(end(length)):
-                    found = length
-            return found
+		def default_end(end):
+			# The longest end that reads as the default. Stopping at the first length that does not
+			# suits a recognizer whose confidence grows with the text; fastText dips on a two-word
+			# fragment ("Orthodox army" scored 0.89 between "Russian army" at 0.999 and "the army" at 0.98),
+			# so every length is tried and the rest is still held to the foreign and embedded floors.
+			# Two words at least, counted as words: "csillagai 😂" is one, and a lone word is never judged.
+			# An end the default's dictionary rejects a word of is not the default's: fastText calls "the edge"
+			# Swedish at 0.94 between Swedish and English. Sparing an end the clause's language's dictionary
+			# rejects too ("via npm") was measured, and lost more than it saved (KNOWN_GAPS.md).
+			found = None
+			for length in range(2, len(ws) - 1):
+				if (
+					len(words(end(length))) >= 2
+					and self.is_default(end(length))
+					and not self.default_rejects(end(length))
+				):
+					found = length
+			return found
 
-        def rest(text):
-            return language if self.foreign(text) == language and self.is_embedded(text, language) else None
+		def rest(text):
+			return language if self.foreign(text) == language and self.is_embedded(text, language) else None
 
-        length = default_end(lambda n: " ".join(ws[len(ws) - n:]))
-        if length:
-            head = " ".join(ws[:len(ws) - length])
-            found = rest(head)
-            if found:
-                return [(found, head), (None, " " + " ".join(ws[len(ws) - length:]))]
-        length = default_end(lambda n: " ".join(ws[:n]))
-        if length:
-            tail = " ".join(ws[length:])
-            found = rest(tail)
-            if found:
-                return [(None, " ".join(ws[:length]) + " "), (found, tail)]
-        return None
+		length = default_end(lambda n: " ".join(ws[len(ws) - n :]))
+		if length:
+			head = " ".join(ws[: len(ws) - length])
+			found = rest(head)
+			if found:
+				return [(found, head), (None, " " + " ".join(ws[len(ws) - length :]))]
+		length = default_end(lambda n: " ".join(ws[:n]))
+		if length:
+			tail = " ".join(ws[length:])
+			found = rest(tail)
+			if found:
+				return [(None, " ".join(ws[:length]) + " "), (found, tail)]
+		return None
 
-    # ------------------------------------------------------------ tag distrust
+	# ------------------------------------------------------------ tag distrust
 
-    def by_clause_against_tag(self, text, tag, tag_base):
-        """The tag dropped from each clause of two or more words that reads as the default language on a
-        near-certain guess, names counted: for a tagged clause the question is whether it is not the tag's
-        language, and a name is evidence of that."""
-        candidates = list(self.clause_candidates)
-        if tag_base not in candidates:
-            candidates.append(tag_base)
-        runs = []
-        carried = tag
-        for index, chunk in enumerate(text.split(SEPARATOR)):
-            if index > 0:
-                runs.append((carried, SEPARATOR))
-            cursor = 0
-            for s, e, _ in clauses(chunk):
-                start = opening(chunk, cursor, s)
-                runs.append((carried, chunk[cursor:start]))
-                clause = chunk[s:e]
-                kept = len(words(clause)) < 2 or not self.is_default(clause, counting_names=True, candidates=candidates)
-                carried = tag if kept else None
-                runs.append((carried, chunk[start:e]))
-                cursor = e
-            runs.append((carried, chunk[cursor:]))
-        return merge(runs)
+	def by_clause_against_tag(self, text, tag, tag_base):
+		"""The tag dropped from each clause of two or more words that reads as the default language on a
+		near-certain guess, names counted: for a tagged clause the question is whether it is not the tag's
+		language, and a name is evidence of that."""
+		candidates = list(self.clause_candidates)
+		if tag_base not in candidates:
+			candidates.append(tag_base)
+		runs = []
+		carried = tag
+		for index, chunk in enumerate(text.split(SEPARATOR)):
+			if index > 0:
+				runs.append((carried, SEPARATOR))
+			cursor = 0
+			for s, e, _ in clauses(chunk):
+				start = opening(chunk, cursor, s)
+				runs.append((carried, chunk[cursor:start]))
+				clause = chunk[s:e]
+				kept = len(words(clause)) < 2 or not self.is_default(
+					clause, counting_names=True, candidates=candidates
+				)
+				carried = tag if kept else None
+				runs.append((carried, chunk[start:e]))
+				cursor = e
+			runs.append((carried, chunk[cursor:]))
+		return merge(runs)
