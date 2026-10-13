@@ -1,0 +1,5 @@
+# Formatting-only commits, skipped by git blame and by GitHub's blame view.
+# Locally: git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# Code style: Python is formatted by Ruff with NVDA's settings, tabs for indentation
+89413ee8db71b2dd5ba5afedaa08c1c6c238441d
