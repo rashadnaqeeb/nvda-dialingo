@@ -1,1 +1,1 @@
-fasttext: 106/106 acceptance cases pass
+fasttext: 115/115 acceptance cases pass

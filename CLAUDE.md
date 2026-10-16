@@ -21,7 +21,7 @@ Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x6
 
 - Tests: `(cd tests && "$PY" -m unittest discover)`. All must pass.
 - Build: `"$PY" build.py` writes `dist/<name>-<version>.nvda-addon`, named from `addon/manifest.ini`. It overwrites a package of the same version; don't rebuild a released version.
-- Acceptance cases: `"$PY" harness/harness.py fasttext`. Must stay at 106/106 or higher.
+- Acceptance cases: `"$PY" harness/harness.py fasttext`. Must stay at 115/115 or higher.
 - Translations, after any `_()` string changes: `"$PY" i18n/extract.py` then `"$PY" i18n/make_locale.py`. Fix any placeholder or accelerator problem it lists.
 - Format: `uvx ruff format` after any Python change. The settings in `pyproject.toml` come from NV Access's add-on template.
 

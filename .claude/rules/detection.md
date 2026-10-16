@@ -85,6 +85,6 @@ paths:
 ## Measuring
 
 - Run before and after any rule change, and compare with `results/`. English lines and NVDA's English UI strings must not gain false switches.
-- Commands: `harness/harness.py fasttext` (acceptance, 106/106), `harness/dataset_eval.py fasttext datasets/ui-strings fr,es,de,it,pt`, `harness/dataset_eval.py fasttext datasets/lingua fr,es` (add `--default <code>`, `--case title|upper|mixed`, `--show N`), `harness/line_eval.py fasttext datasets/lingua <default> <other>`. `ensemble` in place of `fasttext` measures strict mode; `HARNESS_NODICT=1` disables dictionary rules; `HARNESS_NODICT=de,it` hides only those languages' dictionaries (`results/dictionaries-fasttext.txt` is each language with and without its own).
+- Commands: `harness/harness.py fasttext` (acceptance, 115/115), `harness/dataset_eval.py fasttext datasets/ui-strings fr,es,de,it,pt`, `harness/dataset_eval.py fasttext datasets/lingua fr,es` (add `--default <code>`, `--case title|upper|mixed`, `--show N`), `harness/line_eval.py fasttext datasets/lingua <default> <other>`. `ensemble` in place of `fasttext` measures strict mode; `HARNESS_NODICT=1` disables dictionary rules; `HARNESS_NODICT=de,it` hides only those languages' dictionaries (`results/dictionaries-fasttext.txt` is each language with and without its own).
 - Results depend on installed Windows dictionaries; the saved runs had English, French, Spanish, German, and Italian.
 - Many alternatives were measured and rejected; they are recorded in `KNOWN_GAPS.md` with their numbers.
