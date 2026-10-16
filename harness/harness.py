@@ -119,6 +119,8 @@ def acceptance(backend):
 		case(D, t, ["es"])
 	for t in ["¿Tú eres Miguel? No, yo no soy Miguel.", "Hola, buenos días"]:
 		case(D, t, ["es"])
+	# "Oye Pedro" is English to fastText, Pedro being a name, and "dame ideas" is two English words too.
+	case(D, "Oye Pedro, dame ideas para preparar una sopa de verduras", ["es"])
 	for t in ["Orange, la naranja", "Desk, el escritorio"]:
 		case(D, t, "es", "last")
 	for t in [

@@ -350,6 +350,41 @@ class ClauseTests(unittest.TestCase):
 		d = Detector(Recognizer(answers), "en_US", ["fr_FR"], Dictionary())
 		self.assertEqual(d.tagged(clause), [("fr_FR", clause)])
 
+	def test_an_end_the_clause_language_spells_is_not_peeled(self):
+		# "dame ideas" is two English words to fastText and to the English dictionary, but the Spanish
+		# dictionary knows them too, so they stay with the Spanish clause they open.
+		class Dictionary:
+			def rejects_a_word(self, text, language):
+				return False
+
+		answers = {
+			"dame ideas para preparar una sopa": ("es", 0.99),
+			"para preparar una sopa": ("es", 0.99),
+			"dame ideas": ("en", 0.94),
+		}
+		clause = "dame ideas para preparar una sopa"
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"])
+		self.assertEqual(d.tagged(clause), [(None, "dame ideas "), ("es_ES", "para preparar una sopa")])
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"], Dictionary())
+		self.assertEqual(d.tagged(clause), [("es_ES", clause)])
+
+	def test_a_short_clause_follows_the_neighbour_whose_dictionary_knows_it(self):
+		# "Oye Pedro" is English to fastText, Pedro being a name, but the English dictionary rejects "Oye"
+		# and the Spanish one knows it, so the clause follows its Spanish neighbour. Without dictionaries,
+		# a guess that names no neighbour keeps the clause with the default.
+		class Dictionary:
+			known = {"en_US": set(), "es_ES": {"Oye"}}
+
+			def rejects_a_word(self, text, language):
+				return text not in self.known[language]
+
+		answers = {"Oye": ("en", 0.92), "para preparar una sopa": ("es", 0.99)}
+		text = "Oye Pedro, para preparar una sopa"
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"])
+		self.assertEqual(d.tagged(text), [(None, "Oye Pedro, "), ("es_ES", "para preparar una sopa")])
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"], Dictionary())
+		self.assertEqual(d.tagged(text), [("es_ES", text)])
+
 	def test_a_noun_is_counted_where_a_name_is_not(self):
 		self.assertEqual(common_words("private Dateifreigabe"), ["private"])
 		self.assertEqual(

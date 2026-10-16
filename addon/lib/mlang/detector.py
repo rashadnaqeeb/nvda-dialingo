@@ -536,6 +536,14 @@ class Detector:
 		scored = self._scored(" ".join(self.scored_words(text)))
 		return self.dictionary.rejects_a_word(scored, self.default_tag) is True
 
+	def language_knows(self, text, language):
+		"""Whether `language`'s dictionary accepts every scored word of `text`: "dame ideas" is English to
+		fastText at 0.94, but the Spanish dictionary knows both words, so it is not peeled off a Spanish clause."""
+		if self.dictionary is None:
+			return False
+		scored = self._scored(" ".join(self.scored_words(text)))
+		return self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is False
+
 	def dictionaries_decide(self, text, language):
 		"""Whether the spelling dictionaries alone call `text` foreign: the default language's rejects a
 		word of it and the guessed language's accepts every word. Both dictionaries must be installed.
@@ -1066,6 +1074,15 @@ class Detector:
 				if not g or g[0] not in self.spoken:
 					continue
 				if g[0] not in neighbors:
+					# A guess the dictionaries contradict: "Oye Pedro," is English at 0.92 to fastText, "Pedro"
+					# being a name, but the English dictionary rejects "Oye" and the Spanish one knows it, and
+					# the clause beside it is Spanish. Only a neighbour whose dictionary knows every word takes it.
+					deciding = [
+						l for l in set(neighbors) if self.dictionaries_decide(chunk[cls[i][0] : cls[i][1]], l)
+					]
+					if len(deciding) == 1:
+						langs[i] = deciding[0]
+						settled = False
 					continue
 				# A near-certain guess, the line's agreed language, or, as for a scored clause, a leading
 				# guess the dictionaries decide for: "demain" between two commas is French at 0.62, and
@@ -1113,14 +1130,17 @@ class Detector:
 			# so every length is tried and the rest is still held to the foreign and embedded floors.
 			# Two words at least, counted as words: "csillagai 😂" is one, and a lone word is never judged.
 			# An end the default's dictionary rejects a word of is not the default's: fastText calls "the edge"
-			# Swedish at 0.94 between Swedish and English. Sparing an end the clause's language's dictionary
-			# rejects too ("via npm") was measured, and lost more than it saved (KNOWN_GAPS.md).
+			# Swedish at 0.94 between Swedish and English. Nor is an end the clause's own language spells
+			# whole: "dame ideas" is English at 0.94 to fastText, and Spanish to the Spanish dictionary.
+			# Sparing an end the clause's language's dictionary rejects too ("via npm") was measured, and
+			# lost more than it saved (KNOWN_GAPS.md).
 			found = None
 			for length in range(2, len(ws) - 1):
 				if (
 					len(words(end(length))) >= 2
 					and self.is_default(end(length))
 					and not self.default_rejects(end(length))
+					and not self.language_knows(end(length), language)
 				):
 					found = length
 			return found
