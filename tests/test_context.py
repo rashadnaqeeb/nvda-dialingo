@@ -271,6 +271,31 @@ class LineContextTests(unittest.TestCase):
 		self.assertEqual(self.unit.language_at(Info(s, offset, offset + 1)), "en_US")
 		self.assertEqual(self.detector.asked[0][0], "by the side of the lake. A ")
 
+	def test_characters_along_a_line_fetch_the_text_around_it_once(self):
+		s = story()
+		start = s.lines[2][0]
+		for offset in (start, start + 1, start + 2):
+			self.assertEqual(self.unit.language_at(Info(s, offset, offset + 1)), "en_US")
+		self.assertEqual(s.moves, 2)
+		self.assertEqual(len(self.detector.asked), 1)
+
+	def test_a_line_spoken_between_characters_fetches_the_text_around_again(self):
+		# The caret may have gone to edit a line beside this one.
+		s = story()
+		start = s.lines[2][0]
+		self.unit.language_at(Info(s, start, start + 1))
+		self.unit._speakTextInfo(self.line(s, 1), unit=UNIT_LINE)
+		self.unit.language_at(Info(s, start + 1, start + 2))
+		self.assertEqual(s.moves, 4)
+
+	def test_without_a_detector_a_unit_fetches_nothing_of_its_line(self):
+		s = story()
+		unit = context.UnitContext(Engine(None))
+		start = s.lines[2][0]
+		with unit.context(Info(s, start, start + 1)):
+			self.assertIsNone(unit.language)
+		self.assertEqual((s.fetches, s.moves), (1, 0))  # the unit's own text
+
 
 class TaggedUnitTests(unittest.TestCase):
 	"""A character on a page the application tagged with a language other than the default's: Discord in

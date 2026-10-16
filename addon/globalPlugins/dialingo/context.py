@@ -26,9 +26,9 @@
 # the default voice. While a line is spoken its TextInfo is held, and a string of it whose edge the detector
 # cannot decide alone, and which is in the line's own text (not NVDA's "level 2"), is read among the text
 # around the line, two lines either side, fetched once for the line. A line whose edges are decided fetches
-# nothing more. A character or word takes its language from its line read the same way. Say all needs none
-# of this: it does not speak through speakTextInfo, and NVDA holds its text back to the last sentence end
-# (speechWithoutPauses), so the filter gets whole sentences.
+# nothing more. A character or word takes its language from its line read the same way, read once while the
+# caret moves along the line. Say all needs none of this: it does not speak through speakTextInfo, and NVDA
+# holds its text back to the last sentence end (speechWithoutPauses), so the filter gets whole sentences.
 
 import contextlib
 import logging
@@ -120,6 +120,7 @@ class UnitContext:
 		self.keyboard = None  # the keyboard layout's language while NVDA echoes typing
 		self.last_runs = None
 		self.last_key = None  # (line text, text around it, the engine's configuration key) of last_runs
+		self.last_line = None  # the line TextInfo last_runs were read for
 		self.last_tag_runs = None
 		self.last_tag_key = None  # (line text, tag, the engine's configuration key) of last_tag_runs
 		self.line_info = None  # the TextInfo of the line being spoken, while a wrapped call runs
@@ -338,9 +339,11 @@ class UnitContext:
 		unit_line = None
 		try:
 			unit_text = info.text.strip()
-			if unit_text:
+			# Without a detector (off, locked, no language switching) the line would go unused.
+			if unit_text and self.engine.current() is not None:
 				unit_line = self.line_at(info)
-				language = self.language_at(info, unit_line)
+				if unit_line:
+					language = self.language_at(info, unit_line)
 		except Exception:
 			log.debugWarning("dialingo: no line context for the unit", exc_info=True)
 		self.language, self.unit_text = language, unit_text
@@ -354,6 +357,8 @@ class UnitContext:
 	def line_context(self, info):
 		saved = (self.line_info, self.line_strings, self.line_text, self.line_place)
 		self.line_info, self.line_strings, self.line_text, self.line_place = info, LineStrings(), None, None
+		# The caret has left its line, perhaps to edit one beside it, so a unit back on the line fetches again.
+		self.last_line = None
 		try:
 			yield
 		finally:
@@ -437,14 +442,18 @@ class UnitContext:
 	def runs_of_line(self, detector, line, text):
 		"""The runs of a unit's line, read in context as a line at the caret is, and kept for the next unit:
 		by the line's text where it is decided alone, and by the text around it too where it is not, since
-		two lines of the same text ("garden.") in different paragraphs read differently."""
+		two lines of the same text ("garden.") in different paragraphs read differently. The caret moving
+		along the line keeps its runs without fetching the text around it again."""
 		place = None
 		if detector.undecided_edge(text):
+			if self.same_line(line, text):
+				return self.last_runs
 			try:
 				place = surroundings(line, text)
 			except Exception:
 				log.debugWarning("dialingo: no text around the unit's line", exc_info=True)
 		key = (text, place[0] if place else None, self.engine.key)
+		self.last_line = line
 		if key == self.last_key:
 			return self.last_runs
 		runs = None
@@ -454,6 +463,25 @@ class UnitContext:
 			runs = detector.tagged(text)
 		self.last_key, self.last_runs = key, runs
 		return runs
+
+	def same_line(self, line, text):
+		"""Whether `line` is the line of last_runs, at the same place, under the same configuration. Fetching
+		the text around it again would cost the most where text is slowest to fetch: in a browser's rich
+		text editor, each fetch crosses into the browser's process several times."""
+		last = self.last_line
+		if last is None or self.last_key is None or self.last_key[0] != text:
+			return False
+		if self.last_key[2] != self.engine.key:
+			return False
+		if getattr(line, "obj", None) is not getattr(last, "obj", None):
+			return False
+		start, last_start = getattr(line, "_startOffset", None), getattr(last, "_startOffset", None)
+		if isinstance(start, int) and isinstance(last_start, int):
+			return start == last_start
+		try:
+			return line.compareEndPoints(last, "startToStart") == 0
+		except Exception:
+			return False
 
 	def line_at(self, info):
 		"""(the unit's line TextInfo, its text, the unit's offset in it), or None where the line has no letter."""
