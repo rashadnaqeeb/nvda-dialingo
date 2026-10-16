@@ -466,6 +466,51 @@ class ClauseTests(unittest.TestCase):
 		self.assertEqual(d.tagged("Thanks. Hola, amigo."), [(None, "Thanks. "), ("es_ES", "Hola, amigo.")])
 
 
+class InvertedMarkTests(unittest.TestCase):
+	"""A question or exclamation opened by ¿ or ¡ goes to the one candidate that writes those marks."""
+
+	def tagged(self, text, configured=("es_ES", "it_IT", "pt_BR"), answers=None, default="en_US"):
+		d = Detector(Recognizer(answers or {}), default, list(configured))
+		d.configure(default, list(configured))
+		return d.tagged(text)
+
+	def test_the_marks_outweigh_a_neighbour_s_guess(self):
+		text = "¡Primer arrivoto!"
+		self.assertEqual(self.tagged(text, answers={"Primer arrivoto": ("it", 0.59)}), [("es_ES", text)])
+
+	def test_a_word_or_a_name_too_few_to_score_switches(self):
+		for text in ["¡Hola!", "¿Qué?", "¡Vamos Messi!"]:
+			self.assertEqual(self.tagged(text), [("es_ES", text)])
+
+	def test_only_what_the_marks_enclose_switches(self):
+		answers = {"Great game": ("en", 1.0), "to everyone": ("en", 1.0)}
+		self.assertEqual(
+			self.tagged("Great game. ¡Qué golazo!", answers=answers),
+			[(None, "Great game. "), ("es_ES", "¡Qué golazo!")],
+		)
+		self.assertEqual(
+			self.tagged("I said ¡Hola! to everyone.", answers=answers),
+			[(None, "I said "), ("es_ES", "¡Hola! "), (None, "to everyone.")],
+		)
+
+	def test_every_clause_between_the_marks_switches(self):
+		text = "¿Y tú, qué haces?"
+		self.assertEqual(self.tagged(text, answers={"qué haces": ("pt", 0.6)}), [("es_ES", text)])
+
+	def test_no_sign_without_a_closing_mark_or_inside_a_word(self):
+		for text in ["¡Hola amigos", "¡Hola amigos. Bye!", "ï¿½nca din Egiptul?", "Th¡s is ¡t!"]:
+			self.assertEqual(self.tagged(text), [(None, text)])
+
+	def test_no_sign_where_the_default_writes_the_marks_or_no_candidate_does(self):
+		self.assertEqual(self.tagged("¡Ola!", default="gl_ES", configured=["es_ES"]), [(None, "¡Ola!")])
+		self.assertEqual(self.tagged("¡Hola!", configured=["fr_FR"]), [(None, "¡Hola!")])
+
+	def test_the_recognizer_picks_among_candidates_that_write_the_marks(self):
+		text = "¿Que tal estás hoxe?"
+		answers = {"Que tal estás hoxe": ("gl", 0.7)}
+		self.assertEqual(self.tagged(text, configured=["es_ES", "gl_ES"], answers=answers), [("gl_ES", text)])
+
+
 class Asked(Recognizer):
 	"""A table recognizer that records what it is asked."""
 

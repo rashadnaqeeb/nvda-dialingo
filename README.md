@@ -84,6 +84,8 @@ In Full mode, text in your default language's script is split into clauses. Each
 
 **Short pieces.** Very short clauses can't be scored reliably, so they follow their neighbours. In "¿Tú eres Miguel? No, yo no soy Miguel." the "No" stays Spanish because the rest of the sentence is. A sentence made only of short clauses, like "Soy Marcos, encantado.", is scored as a whole.
 
+**Inverted marks.** A question or exclamation that opens with "¿" or "¡" and closes with "?" or "!" goes to the voice of the language that writes those marks, without scoring. That's Spanish, unless you've also set up Galician, Asturian, or Aragonese, which write them too; the model then picks among those. So "¡Hola!" and "¿Qué?" switch although they're one word, and "¡Primer arrivoto!" goes to Spanish although it looks Italian to the model, because Italian never writes "¡". The marks belong to the sentence they enclose, which is why this works for them and not for quotation marks: those follow the language around them, so a German text quotes English between „ and “. When your default language writes these marks, they mean nothing and the usual rules apply.
+
 **Trimming.** A foreign clause of four or more words can start or end with a few words in the default language. Those words are trimmed off and left with the default voice, as long as what remains still clearly reads as foreign. A word the default dictionary rejects is never trimmed off as default-language text, however it scores.
 
 **Languages you didn't set up.** The model is also asked for its unrestricted guess. If that clearly favours a language you haven't set up, the clause stays in your default language. So with Spanish set up but not Italian, Italian text isn't read by the Spanish voice.

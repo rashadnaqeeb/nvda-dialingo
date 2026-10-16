@@ -168,6 +168,13 @@ def acceptance(backend):
 		("es", "¡Qué bonito día hace hoy!"),
 		"last run",
 	)
+	# Between ¿ or ¡ and its closing mark, Spanish, the one candidate writing those marks, whatever the length,
+	# the names, or the neighbours' guesses: Italian, Portuguese, and French write neither.
+	IP = Detector(backend, "en", ["en", "es", "fr", "it", "pt"])
+	for t in ["¡Primer arrivoto!", "¿Dónde está?", "¡Qué bien!", "¡Ay, caramba!", "¡Hola!", "¡Vamos Messi!"]:
+		case(IP, t, ["es"])
+	case(IP, "Great game. ¡Qué golazo!", [None, "es"])
+	case(IP, "I said ¡Hola! to everyone.", [None, "es", None])
 	# German nouns are not names, and a spaced hyphen splits a title; names that read German stay names.
 	case(E, "Filebox - Einfache, private Dateifreigabe — Mozilla Firefox", [None, "de", None])
 	for t in ["I met Hans Müller in Berlin yesterday.", "We took the train from Hamburg to the Bahnhof."]:

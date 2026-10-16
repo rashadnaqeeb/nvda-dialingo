@@ -33,6 +33,13 @@ SENTENCE_ENDS = set(".!?。\n؟।॥։።！？")
 # say "parenthèse gauche" before the English. Not quotation marks, whose opening and closing forms differ by
 # language: German opens with „ and closes with “.
 OPENERS = set("¡¿(")
+# Languages that open a question with ¿ and an exclamation with ¡. These marks belong to the sentence they
+# enclose, so what stands between one and its closing mark is in one of these languages, whatever surrounds
+# it. Quotation marks are no such sign: they follow the language around them, as a German article quotes
+# English between „ and “.
+INVERTED = set("¿¡")
+INVERTED_CLOSERS = set("?!")
+INVERTING = frozenset(("es", "gl", "ast", "an"))
 # Marks that end a clause except between two digits, where they belong to a number, a time, or a date.
 NUMBER_MARKS = set(".,:/")
 DASHES = set("—–")
@@ -181,6 +188,35 @@ def clauses(chunk):
 		previous = ch
 		i += 1
 	close(n)
+	return out
+
+
+def inverted_spans(chunk):
+	"""(start, end) of each question or exclamation opened by ¿ or ¡ and closed by ? or !, the marks included.
+	The opener starts a word, no sentence ends before the closer, and two letters at least stand between. An
+	opener short of that is no sign: the ¿ of garbled text ("ï¿½"), a ¡ written for an i ("¡t!"), a closing
+	mark forgotten before the next sentence."""
+	out = []
+	n = len(chunk)
+	i = 0
+	while i < n:
+		if chunk[i] not in INVERTED or (i > 0 and chunk[i - 1].isalnum()):
+			i += 1
+			continue
+		j = i + 1
+		while j < n and chunk[j] not in INVERTED_CLOSERS and chunk[j] != "\n":
+			# A period ends a sentence where a space or the end follows it, not in "3.5" or "www.ejemplo.com".
+			if chunk[j] == "." and (j + 1 == n or chunk[j + 1].isspace()):
+				break
+			j += 1
+		if j == n or chunk[j] not in INVERTED_CLOSERS:
+			i = j
+			continue
+		while j < n and chunk[j] in INVERTED_CLOSERS:
+			j += 1
+		if _letters(chunk[i:j]) >= 2:
+			out.append((i, j))
+		i = j
 	return out
 
 
@@ -849,8 +885,23 @@ class Detector:
 
 	# ------------------------------------------------------------ full mode
 
+	def inverted_language(self, text):
+		"""The language of a question or exclamation opened by ¿ or ¡: the one candidate that writes these
+		marks, or the recognizer's pick among several. None where the default writes them, as its own
+		detection then decides, or no candidate does."""
+		if self.default in INVERTING:
+			return None
+		options = [c for c in self.clause_candidates if c in INVERTING]
+		if len(options) < 2:
+			return options[0] if options else None
+		scored = self._scored(" ".join(words(text)))
+		self.calls += 1
+		g = self.backend.constrained(scored, options) if is_text(scored) else None
+		return g[0] if g else options[0]
+
 	def by_clause(self, text):
-		lone = self.lone_word(text)
+		# A word between ¿ or ¡ and its closing mark goes by the marks in the clause pass, not by the dictionaries.
+		lone = None if inverted_spans(text) else self.lone_word(text)
 		if lone:
 			return [(lone, text)]
 		runs = []
@@ -914,6 +965,18 @@ class Detector:
 				guesses[i] = self.hypothesis(chunk[cls[i][0] : cls[i][1]])
 			return guesses[i]
 
+		# The clauses of a question or exclamation between ¿ or ¡ and its closing mark take the language that
+		# writes those marks, at any length and names and all: "¡Primer arrivoto!" is Italian at 0.59 with
+		# Spanish, Italian, and Portuguese configured, and "¡Hola!" is a word too few to score. They count as
+		# switched clauses for the rest of the line.
+		inverted = {}
+		for a, b in inverted_spans(chunk):
+			members = [i for i, (s, e, _) in enumerate(cls) if a <= s and e <= b and i not in held]
+			lang = self.inverted_language(chunk[a:b]) if members else None
+			for i in members if lang else ():
+				inverted[i] = lang
+				langs[i] = lang
+		held |= set(inverted)
 		scored = set()
 		for i, (s, e, _) in enumerate(cls):
 			if i not in held and len(self.scored_words(chunk[s:e])) >= 2:
@@ -921,8 +984,8 @@ class Detector:
 				g = guess(i)
 				if self.switches(chunk[s:e], g):
 					langs[i] = g[0]
-		leanings = {guess(i)[0] for i in scored if guess(i)}
-		switched = {langs[i] for i in scored if langs[i]}
+		leanings = {guess(i)[0] for i in scored if guess(i)} | set(inverted.values())
+		switched = {langs[i] for i in scored if langs[i]} | set(inverted.values())
 		# A sentence none of whose clauses has two scored words is scored whole, and its clauses that lean
 		# the same way follow it: "Soy Marcos, encantado." is "Soy encantado", Spanish at 0.9996. A sentence
 		# with fewer than two scored words in all ("¡Hola!") is kept for the line's agreed language below.
@@ -1025,7 +1088,10 @@ class Detector:
 			# "¿" in "Hello everyone. ¿Cómo estás?" is read by the Spanish voice.
 			start = opening(chunk, cursor, s)
 			runs.append((runs[-1][0] if runs else None, chunk[cursor:start]))
-			clause = self.peeled(chunk[s:e], langs[i]) if langs[i] else [(None, chunk[s:e])]
+			if langs[i] and i not in inverted:
+				clause = self.peeled(chunk[s:e], langs[i])
+			else:
+				clause = [(langs[i], chunk[s:e])]
 			clause[0] = (clause[0][0], chunk[start:s] + clause[0][1])
 			runs += clause
 			cursor = e
