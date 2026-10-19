@@ -46,5 +46,12 @@ Run from the repository root in Git Bash, with `PY` pointing at a Python 3.13 x6
 ## Commits and releases
 
 - Commit subjects state the change as a fact, prefixed with the area when there is one: "Scheduler: a piece's marker takes the place of NVDA's index at its end", "Known gaps: ...".
-- A release bumps `version` in `addon/manifest.ini` in a commit titled "Version X.Y", tagged `vX.Y`, with a GitHub release titled "X.Y". Release notes are a short list of changes in user terms. The release asset is the `.nvda-addon` file itself; the add-on store needs a direct link to it. Each release is then submitted to the store through the "Add-on registration" issue form on nvaccess/addon-datastore (stable channel, GPL 2). NV Access bans accounts that post there through AI tools without the person behind them, so nothing goes up on that repository unless the maintainer asked for that specific post and approved its wording. The submission itself is always made by the maintainer in the browser: open the form for them prefilled through query parameters named after the field ids (`download-url`, `source-url`, `publisher`, `channel`, `license-name`, `license-url`), and never file it with `gh` or the API. Reading the repository, such as checking a submission's progress, is fine.
-- `dist/` is not committed.
+- A release bumps `version` in `addon/manifest.ini` in a commit titled "Version X.Y", tagged `vX.Y`, with a GitHub release titled "X.Y". Release notes are a short list of changes in user terms. The release asset is the `.nvda-addon` file itself; the add-on store needs a direct link to it. Each release is then submitted to the store through the "Add-on registration" issue form on nvaccess/addon-datastore (stable channel, GPL 2). NV Access bans accounts that post there through AI tools without the person behind them, so nothing goes up on that repository unless the maintainer asked for that specific post and approved its wording. The submission itself is always made by the maintainer in the browser: open the form for them prefilled through query parameters named after the field ids, and never file it with `gh` or the API. Reading the repository, such as checking a submission's progress, is fine. The form's values, with only the version changing between releases:
+  - `template`: `registerAddon.yml`
+  - `title`: `[Submit add-on]: Dialingo`
+  - `download-url`: the release asset, `https://github.com/rashadnaqeeb/nvda-dialingo/releases/download/vX.Y/dialingo-X.Y.nvda-addon`
+  - `source-url`: `https://github.com/rashadnaqeeb/nvda-dialingo`
+  - `publisher`: `Rashad Naqeeb`
+  - `channel`: `stable`
+  - `license-name`: `GPL v2`
+  - `license-url`: `https://github.com/rashadnaqeeb/nvda-dialingo/blob/main/LICENSE`- `dist/` is not committed.
