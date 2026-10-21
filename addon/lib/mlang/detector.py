@@ -450,15 +450,31 @@ class Detector:
 
 	def survives_dictionaries(self, text, language):
 		"""A clause the default dictionary accepts whole switches only if the guess's own dictionary accepts it
-		too and the guess is near certain between the two languages; a clause the default rejects a word of stands."""
+		too and the guess is near certain between the two languages; a clause the default rejects a word of stands,
+		unless the guess's own dictionary rejects every word and the default's knows one: "slash enfr", ending an
+		English sentence after a comma, is Spanish at 0.99 to fastText, and only English knows "slash"."""
 		if self.dictionary is None:
 			return True
 		scored = self._scored(" ".join(self.scored_words(text)))
 		if self.dictionary.rejects_a_word(scored, self.default_tag) is not False:
-			return True
+			return not self.only_default_knows(text, language)
 		if self.dictionary.rejects_a_word(scored, self.spelling.get(language, language)) is True:
 			return False
 		return self.is_near_certain(scored, language)
+
+	def only_default_knows(self, text, language):
+		"""Whether `language`'s dictionary rejects every scored word of `text`, as written and capitalized, and the
+		default's knows one of them. Capitalized too, since German nouns written small ("optionen") are rejected.
+		False where either dictionary is missing."""
+		known = False
+		spelling = self.spelling.get(language, language)
+		for w in self.scored_words(text):
+			scored = self._scored(w)
+			for form in (scored, scored[:1].upper() + scored[1:]):
+				if self.dictionary.rejects_a_word(form, spelling) is not True:
+					return False
+			known = known or self.dictionary.rejects_a_word(scored, self.default_tag) is False
+		return known
 
 	def hypothesis(self, text, counting_names=False, candidates=None):
 		ws = words(text) if counting_names else self.scored_words(text)

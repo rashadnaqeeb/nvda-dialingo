@@ -385,6 +385,29 @@ class ClauseTests(unittest.TestCase):
 		d = Detector(Recognizer(answers), "en_US", ["es_ES"], Dictionary())
 		self.assertEqual(d.tagged(text), [("es_ES", text)])
 
+	def test_a_confident_guess_its_own_dictionary_knows_no_word_of_stays_with_the_default(self):
+		# "slash enfr" is Spanish at 0.99 to fastText, but only the English dictionary knows a word of it, so it
+		# stays with the English sentence it ends. Once the Spanish dictionary knows a word, it switches.
+		class Dictionary:
+			def __init__(self, spanish):
+				self.known = {
+					"en_US": {"The", "parcel", "is", "at", "the", "depot", "slash"},
+					"es_ES": spanish,
+				}
+
+			def rejects_a_word(self, text, language):
+				return any(w not in self.known[language] for w in text.split())
+
+		answers = {"The parcel is at the depot": ("en", 0.99), "slash enfr": ("es", 0.99)}
+		text = "The parcel is at the depot, slash enfr."
+		split = [(None, "The parcel is at the depot, "), ("es_ES", "slash enfr.")]
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"])
+		self.assertEqual(d.tagged(text), split)
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"], Dictionary(set()))
+		self.assertEqual(d.tagged(text), [(None, text)])
+		d = Detector(Recognizer(answers), "en_US", ["es_ES"], Dictionary({"enfr"}))
+		self.assertEqual(d.tagged(text), split)
+
 	def test_a_noun_is_counted_where_a_name_is_not(self):
 		self.assertEqual(common_words("private Dateifreigabe"), ["private"])
 		self.assertEqual(

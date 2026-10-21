@@ -104,6 +104,7 @@ The Windows spelling dictionaries give a second opinion that doesn't depend on t
 
 - A clause your default dictionary accepts completely needs 98 percent to switch. Rejected words are the strongest sign that text is foreign.
 - A clause the model leans toward but isn't sure of switches when your default dictionary rejects one of its words and the other language's dictionary accepts all of them.
+- A clause the model is sure of still stays with the default when the other language's dictionary knows none of its words and your default dictionary knows one. WordReference ends an English example with "com, slash enfr."; the model calls "slash enfr" Spanish at 99 percent, but only English knows "slash".
 - A single word on its own, like a button or link label, never switches on the model alone. On one word the model is close to noise: it calls "Cancelar" English at 89 percent. A word switches only when your default dictionary rejects it and exactly one other language's dictionary accepts it.
 
 The dictionaries make a big difference on short text. These were measured with English as the default and one other language set up, first without that language's dictionary and then with it. The test data was Lingua's word pairs and single words, and NVDA's translated interface strings:
