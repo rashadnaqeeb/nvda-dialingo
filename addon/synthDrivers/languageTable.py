@@ -190,11 +190,19 @@ def _more_queued(synth):
 	"""Whether eSpeak, which reports done after each speak call, and after one a cancel cut short, still holds
 	a later call in its queue. Or whether Acapela's own driver is still in a call: it reports done once when
 	its synthesis of a call ends, with the audio still to play, and again once its queue is empty and the audio
-	played."""
+	played. Or whether Eloquence is synthesizing, or holds a call not yet started: its done for a piece comes
+	from a timer that waits for its player, so it can arrive just after the next piece was sent, when the end
+	of the first piece's audio has freed the guest, and would finish that next piece in the scheduler."""
 	name = getattr(synth, "name", None)
 	if name == "AcaTTS":
 		try:
 			return synth.speakQueue.unfinished_tasks > 0
+		except Exception:
+			return False
+	if name == "ibmeci":
+		engine = _eloquence(synth)
+		try:
+			return engine is not None and (bool(engine.speaking) or engine.eciQueue.unfinished_tasks > 0)
 		except Exception:
 			return False
 	if name != "espeak":
@@ -942,7 +950,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			return
 		if getattr(synth, "_speakRequests", None) or _more_queued(synth):
 			# SAPI 5 reports done after each request, with more of them still to speak; eSpeak after each call;
-			# Acapela inside each call.
+			# Acapela inside each call; Eloquence, late, for a piece before the one it is now given.
 			return
 		queued = getattr(synth, "_queuedSpeech", None)
 		if queued and any(isinstance(item, str) for item in queued):
