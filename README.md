@@ -54,10 +54,13 @@ Text in a script your default language doesn't use goes to:
 
 - the one language you've set up that uses that script, if there's exactly one
 - the best guess among them, if you've set up several (Russian, Ukrainian, and Bulgarian, for example), then checked clause by clause like any other text
+- the first of them in your table, if you've set up several but the text is too short to guess, as "ogg" after a Russian file name is
 - one of your installed voices that speaks that script, if you haven't set any up
 - the model's best guess otherwise, even with no voice for it, so NVDA can say "Arabic, not supported" instead of the synthesizer mangling it or going silent
 
 Chinese, Japanese, and Korean are handled together within a sentence. Kana means Japanese and hangul means Korean. Han characters on their own go to Chinese first. Mandarin and Cantonese are separate languages: with rows for both, Han text goes to Cantonese only when the model is nearly sure it's written Cantonese, and to Mandarin otherwise.
+
+Digits written against the letters go with them, so "mp3" in Russian text is read by one voice, not two. A number set apart by a space, as in "Windows 11", is read with the text around it.
 
 A single letter in another script, as in "Is it س?", goes to a voice for that script. That doesn't apply if your default language's symbol list already gives the letter a name.
 
@@ -78,7 +81,7 @@ In Full mode, text in your default language's script is split into clauses. Each
 
 **Clauses.** Text is split at sentence punctuation, commas, quotes, brackets, dashes, slashes, and line breaks. Numbers like "2.6", "8:05", and "10/03/2026" aren't split. The Spanish "¿" and "¡" belong to the clause they open, so the voice that reads "¿Cómo estás?" reads its "¿" too.
 
-**Words.** Only ordinary words count. Numbers, paths, and identifiers don't. A capitalized word in the middle of a clause is taken as a name and ignored. The exception is German, which capitalizes every noun: a capitalized word counts when the model is nearly sure it's German and your default dictionary doesn't know it. A word in capitals under five letters is taken as an abbreviation. Headlines, three or more words that all start with a capital or two or more in capitals, are scored with all their words, since capitals mean nothing there. A headline only switches at 98 percent.
+**Words.** Only ordinary words count. Numbers, paths, and identifiers don't. A capitalized word in the middle of a clause is taken as a name and ignored. The exception is German, which capitalizes every noun: a capitalized word counts when the model is nearly sure it's German and your default dictionary doesn't know it. A word in capitals under five letters is taken as an abbreviation. A word said again straight after itself counts once, so "omg omg omg" weighs no more than one "omg". Headlines, three or more words that all start with a capital or two or more in capitals, are scored with all their words, since capitals mean nothing there. A headline only switches at 98 percent.
 
 **Scoring.** A clause needs at least two ordinary words to be scored. It switches when the model gives another language 90 percent or more. A foreign clause sitting between two default-language clauses of the same sentence needs 98 percent.
 

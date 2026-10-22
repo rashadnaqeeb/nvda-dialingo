@@ -81,6 +81,13 @@ def words(text):
 	return [w for w in (word(p) for p in _SPLIT.split(text)) if w]
 
 
+def unrepeated(ws):
+	"""Words without a word repeated straight after itself, which adds no evidence of its language: "omg omg
+	omg I love 9th wonder" is Dutch at 0.98 between English and Dutch, "omg I love 9th wonder" 0.58. A word
+	repeated alone ("cursos cursos") is then judged as a word alone."""
+	return [w for i, w in enumerate(ws) if not i or w.lower() != ws[i - 1].lower()]
+
+
 def shouted(w):
 	return any(c.isupper() for c in w) and not any(c.islower() for c in w)
 
@@ -91,7 +98,7 @@ def common_words(text, noun=None):
 	noun(word) says it is a noun of a language that capitalizes them. A word of a script without case
 	(Arabic, Hebrew, Devanagari) is neither."""
 	out = []
-	for index, w in enumerate(words(text)):
+	for index, w in enumerate(unrepeated(words(text))):
 		capitals = shouted(w)
 		if capitals and len(w) < 5:
 			continue
@@ -118,7 +125,7 @@ def scored_words(text, noun=None):
 	capitals poorly; elsewhere the common ones, those in capitals lowercased too. It reads "VENDÉGEK a
 	KONYHÁBAN" as English at 0.98, and the same words lowercased as Hungarian at 1.0."""
 	if headline(text):
-		return [w.lower() for w in words(text)]
+		return [w.lower() for w in unrepeated(words(text))]
 	return [w.lower() if shouted(w) else w for w in common_words(text, noun)]
 
 
@@ -734,9 +741,11 @@ class Detector:
 				runs.append((None, piece))
 				continue
 			last = max(i for i, c in enumerate(piece) if c.isalpha()) + 1
-			# A mark after the last letter (a virama, a separate accent) belongs to that letter.
+			# A mark after the last letter (a virama, a separate accent) belongs to that letter, and so do
+			# digits written against it.
 			while last < len(piece) and unicodedata.category(piece[last]).startswith("M"):
 				last += 1
+			last = S.attached_end(piece, last)
 			# The default's code, not None, where its script's own clause pass settled it: tagged() then
 			# leaves it with the default voice without scoring it again.
 			runs += self.within_script(scripts_here, piece[:last], lang)
@@ -775,7 +784,8 @@ class Detector:
 
 	def language_for(self, scripts_here, piece):
 		"""The language to speak a foreign-script piece in: the one configured language of its script, the
-		recognizer's confident pick among several, its free guess when nobody configured the script."""
+		recognizer's confident pick among several, the first of them for a piece too short to guess, its free
+		guess when nobody configured the script."""
 		if "other" in scripts_here:
 			return self._free_guess(piece, scripts_here)
 		options = self.script_options(scripts_here)
@@ -793,6 +803,12 @@ class Detector:
 		if not options:
 			return self._free_guess(piece, scripts_here)
 		if len(options) == 1:
+			return options[0]
+		if not scripts_here & S.CJK and sum(c.isalpha() or is_mark(c) for c in piece) < LONE_WORD_LETTERS:
+			# Too short to guess, as a word alone is in the default's script: between English and Italian,
+			# "ogg" after a Russian file name is Italian at 0.99. The first configured language takes it, as
+			# it takes a lone letter. Vowel signs are marks, and count: "संघाचे" is a word of Marathi, not three
+			# letters.
 			return options[0]
 		self.calls += 1
 		g = self.backend.constrained(piece, options)
@@ -862,8 +878,9 @@ class Detector:
 
 	def lone_letter(self, scripts_here, piece):
 		"""(base language, start, end) for a piece in a script the default does not write that holds one
-		letter: the letter with the marks after it, read in letter_language(), and the digits and punctuation
-		around it left to the default voice. None where the whole piece stays with the default voice."""
+		letter: the letter with the marks after it and the digits written against it ("x64", "3D"), read in
+		letter_language(), and the punctuation around it left to the default voice. None where the whole
+		piece stays with the default voice."""
 		first = next((i for i, c in enumerate(piece) if c.isalpha()), None)
 		if first is None:
 			return None
@@ -873,7 +890,7 @@ class Detector:
 		last = first + 1
 		while last < len(piece) and is_mark(piece[last]):
 			last += 1
-		return lang, first, last
+		return lang, S.attached_start(piece, first), S.attached_end(piece, last)
 
 	def letter_language(self, scripts_here, letter):
 		"""The base language a letter standing alone in a script the default does not write is read in, or
@@ -944,7 +961,7 @@ class Detector:
 		which the English dictionary knows, is not, nor "paris", which it knows capitalized, nor "numLock"."""
 		if self.dictionary is None:
 			return None
-		ws = words(text)
+		ws = unrepeated(words(text))
 		if len(ws) != 1 or len(ws[0]) < LONE_WORD_LETTERS or not any(c.islower() for c in ws[0]):
 			return None
 		w = ws[0]
@@ -1112,7 +1129,12 @@ class Detector:
 		# A clause of one word that nothing above settled is judged as a word alone is, by the dictionaries:
 		# "Chiedi" between a speaker's label and an English quote.
 		for i, (s, e, _) in enumerate(cls):
-			if langs[i] is None and i not in scored and i not in held and len(words(chunk[s:e])) == 1:
+			if (
+				langs[i] is None
+				and i not in scored
+				and i not in held
+				and len(unrepeated(words(chunk[s:e]))) == 1
+			):
 				langs[i] = self.lone_word(chunk[s:e])
 		runs = []
 		cursor = 0

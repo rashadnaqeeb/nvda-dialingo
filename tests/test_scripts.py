@@ -37,6 +37,17 @@ class CommonModifierLetterTests(unittest.TestCase):
 	def test_unlisted_script_run_keeps_its_modifier_letter(self):
 		self.assertEqual(self.runs("мʼясо", {"Latn"}), [("other", "мʼясо")])
 
+	def test_foreign_segment_takes_the_digits_written_against_it(self):
+		latin_and_cyrillic = frozenset(("Latn", "Cyrl"))
+		for text, expected in [
+			("песня.mp3", ["mp3"]),
+			("Цена 3D модели", ["3D"]),
+			("вирус COVID-19 в мире", ["COVID-19"]),
+			("Windows 11 вышла", ["Windows"]),
+		]:
+			foreign = [text[a:b] for scripts, a, b in S.segments(text, "Cyrl", latin_and_cyrillic) if scripts]
+			self.assertEqual(foreign, expected, text)
+
 	def test_cjk_sentence_end_still_splits(self):
 		text = "我喜欢喝茶。コーヒーも好き"
 		segs = [scripts for scripts, _, _ in S.segments(text, "Hani", CJK_AND_LATIN, ("Hani",))]

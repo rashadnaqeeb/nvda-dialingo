@@ -216,12 +216,30 @@ def letter_runs(text, scripts):
 	return out
 
 
+_ATTACHED_DIGITS = regex.compile(r"(?:-?\d+)+")
+
+
+def attached_end(text, end):
+	"""Where a run of letters ending at `end` ends with the digits written against it, a hyphen allowed
+	between: "mp3", "beta2", "COVID-19". They are one token, read by one voice."""
+	m = _ATTACHED_DIGITS.match(text, end)
+	return m.end() if m else end
+
+
+def attached_start(text, start, floor=0):
+	"""Where a run of letters starting at `start` starts with the digits written against it: "3D", "4K"."""
+	while start > floor and text[start - 1].isdecimal():
+		start -= 1
+	return start
+
+
 def segments(text, default_script, scripts, default_scripts=()):
 	"""Split `text` into (script_set, start, end) segments: consecutive letter runs
 	of one script (or of the CJK family, within a sentence) merge with the non-letter text between them;
 	text before a segment's first letter belongs to it, text after a foreign segment's last letter goes to
-	the default. A segment is foreign without the default's primary script, or with a script of the CJK
-	family the default does not write (kana for Chinese). The script_set of a default-script segment is None."""
+	the default, but for digits written against its letters, which are part of the token ("mp3" in Russian
+	text). A segment is foreign without the default's primary script, or with a script of the CJK family
+	the default does not write (kana for Chinese). The script_set of a default-script segment is None."""
 	runs = letter_runs(text, scripts)
 	if not runs:
 		return [(None, 0, len(text))]
@@ -239,12 +257,20 @@ def segments(text, default_script, scripts, default_scripts=()):
 				prev[2] = end
 				continue
 		groups.append([scripts_here, start, end])
+
+	def is_foreign(scripts_here):
+		return default_script not in scripts_here or bool(
+			default_scripts and (scripts_here & CJK) - set(default_scripts)
+		)
+
+	for i, group in enumerate(groups):
+		if is_foreign(group[0]):
+			group[1] = attached_start(text, group[1], groups[i - 1][2] if i else 0)
+			group[2] = attached_end(text, group[2])
 	out = []
 	cursor = 0
 	for i, (scripts_here, start, end) in enumerate(groups):
-		foreign = default_script not in scripts_here or bool(
-			default_scripts and (scripts_here & CJK) - set(default_scripts)
-		)
+		foreign = is_foreign(scripts_here)
 		seg_start = cursor
 		if foreign:
 			out.append((scripts_here, seg_start, end))

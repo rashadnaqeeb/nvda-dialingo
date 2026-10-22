@@ -84,6 +84,12 @@ class LoneLetterTests(unittest.TestCase):
 		self.assertEqual(d.tagged("(ب) 5"), [(None, "("), ("ar_SA", "ب"), (None, ") 5")])
 		self.assertEqual(d.tagged("سَ."), [("ar_SA", "سَ"), (None, ".")])
 
+	def test_digits_written_against_the_letter_switch_with_it(self):
+		d = by_script("ru_RU", ["en_US"])
+		self.assertEqual(
+			d.tagged("кодек x64 и 3D"), [(None, "кодек "), ("en_US", "x64"), (None, " и "), ("en_US", "3D")]
+		)
+
 	def test_letter_without_a_voice_stays_with_the_default(self):
 		self.assertEqual(by_script("en_US", ["fr_FR"]).tagged("Is it س?"), [(None, "Is it س?")])
 
@@ -300,6 +306,27 @@ class ClauseTests(unittest.TestCase):
 			self.assertEqual([text[s:e] for s, e, _ in clauses(text)], [text], text)
 		text = "vorrebbe / he/she"
 		self.assertEqual([text[s:e] for s, e, _ in clauses(text)], ["vorrebbe", "he", "she"])
+
+	def test_a_word_repeated_straight_after_itself_counts_once(self):
+		answers = {"omg omg omg love wonder": ("nl", 0.98), "omg love wonder": ("nl", 0.58)}
+		d = self.detector(["nl_NL"], answers)
+		text = "omg omg omg I love 9th wonder."
+		self.assertEqual(d.tagged(text), [(None, text)])
+		self.assertEqual(common_words("omg OMG omg I love"), ["omg", "love"])
+		# Repeated in the text, not once the names between are left out.
+		self.assertEqual(common_words("Error de Fichero de Configuración"), ["Error", "de", "de"])
+
+	def test_a_word_repeated_alone_is_judged_as_a_word_alone(self):
+		class Dictionary:
+			known = {"en_US": set(), "es_ES": {"cursos"}}
+
+			def rejects_a_word(self, text, language):
+				return any(w not in self.known[language] for w in text.split())
+
+			rejects_everywhere = rejects_a_word
+
+		d = Detector(NoRecognizer(), "en_US", ["es_ES"], Dictionary())
+		self.assertEqual(d.tagged("cursos cursos"), [("es_ES", "cursos cursos")])
 
 	def test_a_one_word_clause_goes_by_the_dictionaries(self):
 		class Dictionary:
@@ -652,6 +679,26 @@ class ContextTests(unittest.TestCase):
 	def test_slice_runs(self):
 		runs = [("en", "abc "), (None, "def"), ("en", " gh")]
 		self.assertEqual(slice_runs(runs, 2, 9), [("en", "c "), (None, "def"), ("en", " g")])
+
+
+class ForeignScriptPieceTests(unittest.TestCase):
+	"""A piece in a script the default does not write, among the configured languages of its script."""
+
+	def test_digits_written_against_its_letters_go_with_it(self):
+		d = by_script("ru_RU", ["en_US"])
+		self.assertEqual(d.tagged("песня.mp3"), [(None, "песня."), ("en_US", "mp3")])
+		self.assertEqual(d.tagged("COVID-19 в мире"), [("en_US", "COVID-19"), (None, " в мире")])
+		# A number set apart by a space is the sentence's to read.
+		self.assertEqual(d.tagged("Windows 11"), [("en_US", "Windows"), (None, " 11")])
+
+	def test_a_piece_too_short_to_guess_takes_the_first_configured_language(self):
+		d = detector("ru_RU", ["en_US", "it_IT"])
+		self.assertEqual(d.tagged("песня.ogg"), [(None, "песня."), ("en_US", "ogg")])
+		self.assertEqual(d.tagged("IPv6 адрес"), [("en_US", "IPv6"), (None, " адрес")])
+
+	def test_a_longer_piece_is_guessed(self):
+		d = Detector(Recognizer({"Ciao mondo": ("it", 0.99)}), "ru_RU", ["en_US", "it_IT"], mode="script")
+		self.assertEqual(d.tagged("Он сказал Ciao mondo"), [(None, "Он сказал "), ("it_IT", "Ciao mondo")])
 
 
 class ExcludedTests(unittest.TestCase):
