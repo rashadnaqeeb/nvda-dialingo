@@ -77,6 +77,20 @@ class CodeTests(unittest.TestCase):
 		self.assertEqual(S.scripts_of("zh_HK"), frozenset({"Hani"}))
 
 
+class StyledLetterTests(unittest.TestCase):
+	"""Letters styled as social media posts write them, folded to the letters they style, one for one."""
+
+	def test_styled_letters_become_the_letters_they_style(self):
+		styled = "𝗯𝗼𝗹𝗱 𝘪𝘵𝘢𝘭𝘪𝘤 ℌ𝔢𝔩𝔩𝔬 ⓒⓘⓡⓒⓛⓔ ｗｉｄｅ 🅝🅔🅖 𝟏𝟐 𝛑"
+		self.assertEqual(S.plain(styled), "bold italic Hello circle wide NEG 12 π")
+		self.assertEqual(len(S.plain(styled)), len(styled))
+
+	def test_other_characters_are_left_alone(self):
+		# µ is Greek and ℵ Hebrew to NFKC; ™ is two letters; 🅰 is the A button emoji, which NVDA keeps.
+		for text in ("5 µs", "ℵ0", "Dialingo™", "🅰", "Привет", "ｺｰﾋｰ", "ﬁle"):
+			self.assertEqual(S.plain(text), text)
+
+
 class FakeModel:
 	def __init__(self, labels):
 		self.labels = labels

@@ -334,6 +334,17 @@ def slice_runs(runs, start, end):
 	return out
 
 
+def restyled(runs, text):
+	"""Runs detected over `text` folded by scripts.plain, which keeps every character's place, given back over
+	`text` itself: the voice gets the characters as written, which NVDA's own normalization folds for it."""
+	out = []
+	position = 0
+	for lang, piece in runs:
+		out.append((lang, text[position : position + len(piece)]))
+		position += len(piece)
+	return out
+
+
 # ---------------------------------------------------------------- detector
 
 
@@ -604,6 +615,9 @@ class Detector:
 
 	def tagged(self, text):
 		"""Untagged text as (language or None, text) runs, languages in their configured spelling."""
+		plain = S.plain(text)
+		if plain != text:
+			return restyled(self.tagged(plain), text)
 		if self.mode == MODE_OFF or not text or not any(c.isalpha() for c in text):
 			return [(None, text)]
 		if text.strip().lower() in self.reader_words:
@@ -626,6 +640,9 @@ class Detector:
 		the language is `tag` itself where it is kept."""
 		if self.mode == MODE_OFF or not text:
 			return [(tag, text)]
+		plain = S.plain(text)
+		if plain != text:
+			return restyled(self.verified(plain, tag), text)
 		tag_base = S.code(tag)
 		tag_scripts = S.scripts_of(tag)
 		if is_text(text) and not self._holds_letter(text, tag_scripts):
@@ -674,6 +691,7 @@ class Detector:
 		withheld because a language nobody configured outranks the pick ("hazier blue" is Italian to
 		fastText left free). Judged from the line alone, so the text around it is fetched only when needed.
 		Where words are not spaced, a clause counts as one word, so the rule stands down."""
+		line = S.plain(line)
 		if self.mode != MODE_FULL or self.default_script in UNSPACED or not is_text(line):
 			return False
 		if line.strip().lower() in self.reader_words:
@@ -864,6 +882,7 @@ class Detector:
 		"""The language to spell a lone character in when no line places it, as one typed or deleted: by its
 		script alone, as letter_language() reads a letter standing alone in a line, in the configured
 		spelling, or None for the default's scripts."""
+		text = S.plain(text)
 		if self.mode == MODE_OFF or not any(c.isalpha() for c in text):
 			return None
 		if self.default_script == "Latn" and not S.may_leave_latin(text):

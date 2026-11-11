@@ -701,6 +701,25 @@ class ForeignScriptPieceTests(unittest.TestCase):
 		self.assertEqual(d.tagged("Он сказал Ciao mondo"), [(None, "Он сказал "), ("it_IT", "Ciao mondo")])
 
 
+class StyledLetterTests(unittest.TestCase):
+	"""Letters styled as social media posts write them (mathematical bold, italic) have no script of their own.
+	They are read as the letters they style, and handed back as written, for NVDA's normalization to fold."""
+
+	def test_styled_latin_is_latin(self):
+		d = by_script("ru_RU", ["en_US"])
+		self.assertEqual(d.tagged("Он сказал 𝗛𝗲𝗹𝗹𝗼 𝘄𝗼𝗿𝗹𝗱"), [(None, "Он сказал "), ("en_US", "𝗛𝗲𝗹𝗹𝗼 𝘄𝗼𝗿𝗹𝗱")])
+		self.assertEqual(d.character("𝗮"), "en_US")
+		self.assertIsNone(detector("en_US", ["ru_RU"]).character("𝗮"))
+
+	def test_styled_words_after_another_script_stay_default(self):
+		# They were a script nobody configured, and the free guess sent them to Tajik.
+		d = Detector(Recognizer({}), "en_US", ["bn_BD"])
+		self.assertEqual(
+			d.tagged("আমি বাংলায় লিখি। 𝗕𝗮𝗻𝗴𝗹𝗮 𝘁𝗲𝘅𝘁"), [("bn_BD", "আমি বাংলায় লিখি"), (None, "। 𝗕𝗮𝗻𝗴𝗹𝗮 𝘁𝗲𝘅𝘁")]
+		)
+		self.assertEqual(d.verified("𝗕𝗮𝗻𝗴𝗹𝗮 𝘁𝗲𝘅𝘁", "ru_RU"), [(None, "𝗕𝗮𝗻𝗴𝗹𝗮 𝘁𝗲𝘅𝘁")])
+
+
 class ExcludedTests(unittest.TestCase):
 	"""A row with detection off: its language is never switched to, by any route."""
 

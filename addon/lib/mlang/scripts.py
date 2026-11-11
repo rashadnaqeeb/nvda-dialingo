@@ -6,6 +6,7 @@ Windows names the scripts a language is written in (GetLocaleInfoEx with LOCALE_
 
 import ctypes
 import functools
+import unicodedata
 
 import regex
 
@@ -174,6 +175,49 @@ def primary_script(language):
 	if "Hang" in scripts:
 		return "Hang"
 	return "Latn" if "Latn" in scripts else sorted(scripts)[0]
+
+
+# Blocks of styled letters: the bold, italic, script and double-struck alphabets of mathematics and the
+# letterlike symbols that fill their gaps (ℌ, ℯ), circled and squared letters, and full-width Latin. Social
+# media posts write whole words in them, which have no script of their own (Common), so they would be read
+# as a script nobody configured and guessed as anything.
+_STYLED_BLOCKS = (
+	(0x2100, 0x214F),
+	(0x2460, 0x24FF),
+	(0xFF10, 0xFF5A),
+	(0x1D400, 0x1D7FF),
+	(0x1F100, 0x1F1FF),
+)
+# Negative circled and squared capitals, which NVDA's Unicode normalization adds to NFKC; the squared ones it
+# leaves as emoji (A, B, O and P buttons) are left out the same way.
+_NEGATIVE_CAPITALS = (0x1F150, 0x1F170)
+_EMOJI_CAPITALS = {0x1F170, 0x1F171, 0x1F17E, 0x1F17F}
+
+
+@functools.lru_cache(maxsize=1)
+def _plain_table():
+	table = {}
+	for first, last in _STYLED_BLOCKS:
+		for cp in range(first, last + 1):
+			folded = unicodedata.normalize("NFKC", chr(cp))
+			# One character for one, so offsets in the folded text are offsets in the original, and only into
+			# Latin and Greek: ℵ is Hebrew alef to NFKC, but a set's size in mathematics.
+			if len(folded) == 1 and folded.isalnum() and (folded < "\u0080" or "Ͱ" <= folded <= "Ͽ"):
+				table[cp] = folded
+	for first in _NEGATIVE_CAPITALS:
+		for offset in range(26):
+			if first + offset not in _EMOJI_CAPITALS:
+				table[first + offset] = chr(ord("A") + offset)
+	return table
+
+
+def plain(text):
+	"""`text` with its styled letters as the letters they style ("𝗯𝗼𝗹𝗱" as "bold"), one character for one, as
+	NVDA's Unicode normalization has the voice read them. Other characters are left as they are: µ is Greek
+	to NFKC, but a unit in a Latin sentence."""
+	if not text or max(text) < "℀":
+		return text
+	return text.translate(_plain_table())
 
 
 def may_leave_latin(text):
