@@ -342,11 +342,13 @@ def _prosody_mode(cls):
 		if module is not None:
 			names.update(_names_in(vars(module).values(), module.__name__))
 			ssml = ssml or _converts_with_speech_xml(vars(module).values(), module.__name__)
+	if names & RAW_PROSODY:
+		# The values as NVDA was given them, which no configured value has touched. Before newValue, which such
+		# a driver reads at most as a fallback: Eloquence C adds the raw offset to its own value and names
+		# newValue only on a path NVDA's commands never take, and as "absolute" its capitals went to the top.
+		return "offset"
 	if "newValue" in names:
 		return "absolute"
-	if names & RAW_PROSODY:
-		# The values as NVDA was given them, which no configured value has touched.
-		return "offset"
 	if "multiplier" in names or ssml:
 		# NVDA's SSML converter, which RHVoice builds on, writes the multiplier as a percentage.
 		return "relative"

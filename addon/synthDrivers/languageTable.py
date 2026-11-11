@@ -1014,10 +1014,11 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		host = self.__dict__.get("host")
 		if host is None:
 			return
-		resets = setting in ("voice", "variant")
+		resets = setting in ("voice", "variant", "language")
 		if resets:
-			# A voice or variant can reset the other settings (Eloquence copies a preset voice): set it on the
-			# default's own values, not a row's, and take what it leaves as the default's.
+			# A voice or variant can reset the other settings (Eloquence copies a preset voice), and a language
+			# its voice (Eloquence C lists voices per language): set it on the default's own values, not a row's,
+			# and take what it leaves as the default's.
 			try:
 				self._apply_row(host, self.default_row())
 			except Exception:
@@ -1172,12 +1173,26 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			language = languageHandler.getLanguage()
 		return language
 
+	def _set_language(self, value):
+		# Only a host with a language setting of its own lists it, and NVDA's dialog sets it here.
+		self._host_set("language", value)
+
 	def _get_availableLanguages(self):
 		"""The languages this driver speaks: its rows whose synthesizer loaded, the Windows voices', and the
-		host's own."""
+		host's own. A host with a language setting of its own (Eloquence C) gives its choices for it here, as
+		NVDA's settings dialog reads every setting's choices, and the dialog takes this driver's as the host's:
+		they are then the whole list, since the dialog cannot open on a set and a row's language is no choice of
+		the host's. The detector is given the rows' languages and the Windows voices' apart from this list."""
 		host = self.__dict__.get("host")
 		if host is None:
 			return set()
+		if host.isSupported("language"):
+			try:
+				choices = host.availableLanguages
+				if isinstance(choices, dict):
+					return choices
+			except Exception:
+				log.debugWarning(f"dialingo: {self.host_name} could not list its languages", exc_info=True)
 		langs = {r.lang for r in self.table.rows if self.guest(r.synth) is not None}
 		if policy.windows_voices_wanted(config.conf) and self.host_name != winvoices.ONECORE:
 			try:

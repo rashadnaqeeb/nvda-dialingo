@@ -537,6 +537,22 @@ class SynthDriver:
 """
 		self.assertEqual(hosts.prosody_mode(self.driver("synthDrivers.fakeElo", source)), "offset")
 
+	def test_raw_offset_readers_with_a_new_value_fallback_add_it_to_their_own_value(self):
+		# Eloquence C: the raw offset on its own pitch, newValue only when a command has no multiplier.
+		source = """
+def _command_pitch(command, base):
+    if getattr(command, "_offset", 0):
+        return base + command.offset
+    elif hasattr(command, "multiplier"):
+        return base * command.multiplier
+    return command.newValue
+
+class SynthDriver:
+    def speak(self, seq):
+        return [_command_pitch(i, self.pitch) for i in seq]
+"""
+		self.assertEqual(hosts.prosody_mode(self.driver("synthDrivers.fakeEloC", source)), "offset")
+
 	def test_drivers_in_another_process_are_native(self):
 		module = types.ModuleType("_bridge.fakeProxy")
 		exec("class SynthDriverProxy:\n    pass\n", module.__dict__)
