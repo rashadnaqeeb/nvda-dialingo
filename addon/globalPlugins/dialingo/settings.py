@@ -679,21 +679,7 @@ class RowDialog(wx.Dialog):
 		if self.voices:
 			self.voiceChoice.SetSelection(voice_index)
 
-		try:
-			self.variants = list(guest.availableVariants.values()) if guest.isSupported("variant") else []
-		except Exception:
-			self.variants = []
-		self.variantChoice.Clear()
-		for info in self.variants:
-			self.variantChoice.Append(info.displayName)
-		self.variantChoice.Enable(bool(self.variants))
-		variant = row.get("variant") if row else None
-		if variant is None and self.variants:
-			variant = hosts.own_value(guest, "variant")
-		if self.variants:
-			self.variantChoice.SetSelection(
-				next((i for i, v in enumerate(self.variants) if v.id == variant), 0)
-			)
+		self.fill_variants(row.get("variant") if row else None)
 
 		for setting, slider in self.sliders.items():
 			supported = guest.isSupported(setting)
@@ -728,7 +714,32 @@ class RowDialog(wx.Dialog):
 		else:
 			self.onVoice(None)
 
+	def fill_variants(self, wanted):
+		"""The variants of the voice selected, `wanted` selected if it is one of them, else the synthesizer's
+		own, else the first. Some synthesizers list variants per voice (Google TTS For NVDA's are its speakers),
+		so the list follows the voice."""
+		i = self.voiceChoice.GetSelection()
+		voice = self.voices[i].id if 0 <= i < len(self.voices) else None
+		try:
+			self.variants = hosts.variants_for(self.guest, voice, log)
+		except Exception:
+			log.debugWarning("dialingo: variants unavailable", exc_info=True)
+			self.variants = []
+		self.variantChoice.Clear()
+		for info in self.variants:
+			self.variantChoice.Append(info.displayName)
+		self.variantChoice.Enable(bool(self.variants))
+		if not self.variants:
+			return
+		ids = [v.id for v in self.variants]
+		if wanted not in ids:
+			wanted = hosts.own_value(self.guest, "variant")
+		self.variantChoice.SetSelection(ids.index(wanted) if wanted in ids else 0)
+
 	def onVoice(self, evt):
+		if evt is not None:
+			i = self.variantChoice.GetSelection()
+			self.fill_variants(self.variants[i].id if 0 <= i < len(self.variants) else None)
 		if self.language_typed and evt is not None:
 			return
 		i = self.voiceChoice.GetSelection()

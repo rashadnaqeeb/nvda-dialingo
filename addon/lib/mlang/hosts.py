@@ -493,6 +493,40 @@ def own_value(guest, setting):
 		return None
 
 
+def variants_for(guest, voice, log=None):
+	"""A synthesizer's variants for one of its voices, for the row dialog. Some list them per voice: Google TTS
+	For NVDA's voices are languages and its variants their speakers, and Sonata's multilingual voices have a
+	variant per language. A synthesizer lists only its current voice's, so it is given the voice for the
+	question, as NVDA's own voice panel does, and its settings are put back after, since a voice can reset the
+	others. A guest of the language table then puts its own row back for its next piece."""
+	if not guest.isSupported("variant"):
+		return []
+	if voice is None or not guest.isSupported("voice") or read(guest, "voice") == voice:
+		return list(guest.availableVariants.values())
+	before = {}
+	for setting in APPLY_ORDER:
+		try:
+			if guest.isSupported(setting):
+				before[setting] = read(guest, setting)
+		except Exception:
+			pass
+	try:
+		guest.voice = voice
+		return list(guest.availableVariants.values())
+	finally:
+		for setting, value in before.items():
+			try:
+				if read(guest, setting) != value:
+					setattr(guest, setting, value)
+			except Exception:
+				if log:
+					log.debugWarning(
+						f"dialingo: could not put back {setting} on {guest.name} after listing variants",
+						exc_info=True,
+					)
+		guest._mlangApplied = None
+
+
 def is_live(guest):
 	import synthDriverHandler
 

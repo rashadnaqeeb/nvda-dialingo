@@ -175,6 +175,60 @@ class ApplyOrderTest(unittest.TestCase):
 		self.assertLess(hosts.APPLY_ORDER.index("rateBoost"), hosts.APPLY_ORDER.index("rate"))
 
 
+class SpeakersPerLanguage:
+	"""Google TTS For NVDA: its voices are languages, its variants the speakers of the current one, and a new
+	voice takes that language's first speaker."""
+
+	name = "googleTtsForNvda"
+	SPEAKERS = {"en-GB": ["en-gb-a", "en-gb-b"], "ar-XA": ["ar-xa-a", "ar-xa-b"]}
+
+	def __init__(self):
+		self._voice = "en-GB"
+		self.variant = "en-gb-b"
+		self.rate = 40
+		self.sets = []
+
+	def isSupported(self, setting):
+		return setting in ("voice", "variant", "rate")
+
+	@property
+	def voice(self):
+		return self._voice
+
+	@voice.setter
+	def voice(self, value):
+		self.sets.append(value)
+		self._voice = value
+		self.variant = self.SPEAKERS[value][0]
+
+	@property
+	def availableVariants(self):
+		return {s: types.SimpleNamespace(id=s) for s in self.SPEAKERS[self._voice]}
+
+
+class VariantsForTest(unittest.TestCase):
+	def test_another_voices_variants_are_listed_and_the_guest_put_back(self):
+		guest = SpeakersPerLanguage()
+		guest._mlangApplied = ("en", "googleTtsForNvda")
+		got = hosts.variants_for(guest, "ar-XA")
+		self.assertEqual([v.id for v in got], ["ar-xa-a", "ar-xa-b"])
+		self.assertEqual((guest.voice, guest.variant, guest.rate), ("en-GB", "en-gb-b", 40))
+		# A guest of the language table puts its own row back for its next piece.
+		self.assertIsNone(guest._mlangApplied)
+
+	def test_the_current_voice_is_not_set_again(self):
+		guest = SpeakersPerLanguage()
+		got = hosts.variants_for(guest, "en-GB")
+		self.assertEqual([v.id for v in got], ["en-gb-a", "en-gb-b"])
+		self.assertEqual(guest.sets, [])
+
+	def test_a_synthesizer_without_variants_has_none(self):
+		guest = SpeakersPerLanguage()
+		guest.isSupported = lambda setting: setting == "voice"
+		self.assertEqual(hosts.variants_for(guest, "ar-XA"), [])
+		self.assertEqual(guest.sets, [])
+
+
 class TakeOverTest(Stubbed):
 	def test_the_settings_dialogs_instance_becomes_the_guest(self):
 		# eSpeak keeps its engine in module globals: a second instance would re-initialize it.
