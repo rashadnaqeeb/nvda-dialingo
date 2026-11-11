@@ -366,16 +366,33 @@ class Engine:
 
 	def with_voice_dicts(self, sequence):
 		"""Each row voice's own voice dictionary applies to the text in its language. NVDA applies one voice
-		dictionary, the current voice's, to everything, so a row whose voice is the current one needs nothing
-		here. Off while NVDA's dictionary processing is off, as when a dictionary dialog is open."""
+		dictionary, the current voice's, and the symbol wrapper keeps it off a row voice's text, so a row whose
+		voice is the current one needs nothing here. Off while NVDA's dictionary processing is off, as when a
+		dictionary dialog is open."""
 		if not globalVars.speechDictionaryProcessing:
 			return sequence
+		row_voice = self.row_voices()
+		if row_voice is None:
+			return sequence
+		found = {}  # language -> its dictionary or None, looked up once per sequence
+
+		def dict_for(lang):
+			if lang not in found:
+				voice = row_voice(lang)
+				found[lang] = voicedict.dictionary(*voice) if voice is not None else None
+			return found[lang]
+
+		return voicedict.apply(sequence, LangChangeCommand, dict_for)
+
+	def row_voices(self):
+		"""A function giving, for a language, the (synthesizer, voice) of the row voice that reads it when that
+		is not the current voice, else None; None in place of the function when no row has a voice."""
 		self._sync_table()
 		if not any(r.get("voice") for r in self.table_rows):
-			return sequence
+			return None
 		synth = synthDriverHandler.getSynth()
 		if synth is None:
-			return sequence
+			return None
 		engine = getattr(synth, "host", None) if synth.name == DRIVER_NAME else synth
 		try:
 			# The table's voice is its host's own, not the row voice a foreign piece may have left on the host.
@@ -386,19 +403,23 @@ class Engine:
 		# The default language has no row; one for a dialect of it never speaks, so its voice's dictionary
 		# stays off the default voice's text.
 		default = base(getCurrentLanguage())
-		found = {}  # language -> its dictionary or None, looked up once per sequence
 
-		def dict_for(lang):
-			if lang not in found:
-				row = table.row_for(lang) if base(lang) != default else None
-				voice = row.get("voice") if row is not None else None
-				if not voice or (row.synth, voice) == current:
-					found[lang] = None
-				else:
-					found[lang] = voicedict.dictionary(row.synth, voice)
-			return found[lang]
+		def row_voice(lang):
+			row = table.row_for(lang) if lang and base(lang) != default else None
+			voice = row.get("voice") if row is not None else None
+			if not voice or (row.synth, voice) == current:
+				return None
+			return (row.synth, voice)
 
-		return voicedict.apply(sequence, LangChangeCommand, dict_for)
+		return row_voice
+
+	def read_by_row_voice(self, locale):
+		"""Whether text NVDA speaks in `locale` is read by a row voice other than the current one, so the current
+		voice's dictionary is not its own. Only while the add-on's language commands reach the synthesizer."""
+		if not locale or not language_switching():
+			return False
+		row_voice = self.row_voices()
+		return row_voice is not None and row_voice(locale) is not None
 
 	def with_prosody(self, sequence):
 		"""On a synthesizer other than the language table, rows for that synthesizer set their rate, pitch,
@@ -486,7 +507,8 @@ def uninstall_language_switching():
 def install_symbol_levels(engine):
 	"""NVDA processes symbols once per speak call, at one level, through speech.speech.processText with the
 	language of each string (the language commands this add-on inserts). The wrapper gives each language its
-	row's level, and text no voice of its language speaks the default's symbol names."""
+	row's level, and text no voice of its language speaks the default's symbol names. It also keeps the current
+	voice's dictionary off text a row voice reads, which gets that voice's dictionary in the filter instead."""
 	import speech.speech as speech_impl
 
 	original = speech_impl.processText
@@ -494,8 +516,14 @@ def install_symbol_levels(engine):
 		return
 
 	def processText(locale, text, symbolLevel, *args, **kwargs):
+		try:
+			other_voice = engine.read_by_row_voice(locale)
+		except Exception:
+			log.debugWarning("dialingo: no row voice for %s" % locale, exc_info=True)
+			other_voice = False
 		locale = engine.symbol_locale(locale)
-		return original(locale, text, engine.symbol_level(locale, symbolLevel), *args, **kwargs)
+		with voicedict.without_current_voice(other_voice):
+			return original(locale, text, engine.symbol_level(locale, symbolLevel), *args, **kwargs)
 
 	processText._mlang_original = original
 	speech_impl.processText = processText
@@ -578,6 +606,13 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				exc_info=True,
 			)
 		try:
+			voicedict.install()
+		except Exception:
+			log.error(
+				"dialingo: could not wrap NVDA's dictionaries; the current voice's applies to row voices too",
+				exc_info=True,
+			)
+		try:
 			install_language_switching()
 		except Exception:
 			log.error(
@@ -615,6 +650,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		self.engine.unit_context = None
 		self.unit_context.uninstall()
 		uninstall_symbol_levels()
+		voicedict.uninstall()
 		filter_speechSequence.unregister(self.filter)
 		uninstall_language_switching()
 		try:
