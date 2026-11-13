@@ -287,3 +287,22 @@ class Dictionary:
 			self.cache.clear()
 		self.cache[key] = result
 		return result
+
+	def suggestions(self, word, language):
+		"""The spellings the language's dictionary offers in place of `word`; none where it has no dictionary
+		or the call fails."""
+		key = (language, word, "suggestions")
+		if key in self.cache:
+			return self.cache[key]
+		try:
+			checker = self.checker(language)
+			if checker is None:
+				return ()  # not cached: the dictionary may appear
+			self.calls += 1
+			result = tuple(_enum_strings(checker.Suggest(word)))
+		except Exception:
+			return ()  # a failed call is no evidence, and no memory either
+		if len(self.cache) > 8192:
+			self.cache.clear()
+		self.cache[key] = result
+		return result

@@ -336,5 +336,89 @@ class TaggedUnitTests(unittest.TestCase):
 			self.assertIsNone(self.unit.language_for("x", "es_ES"))  # not the unit's text
 
 
+class DefaultUnitTests(unittest.TestCase):
+	"""A word of a line that reads as the default, which the dictionaries would switch were it read alone."""
+
+	TEXT = "They mostly say platicar here.\n"
+
+	class Alone(Detector):
+		def tagged(self, text):
+			return [("es_ES" if text.strip() == "platicar" else None, text)]
+
+	def setUp(self):
+		self.detector = self.Alone()
+		self.unit = context.UnitContext(Engine(self.detector))
+		self.story = Story(self.TEXT, [(0, len(self.TEXT))])
+		start = self.TEXT.index("platicar")
+		self.word = Info(self.story, start, start + len("platicar"))
+
+	def filtered(self, seq):
+		return filter_sequence(seq, self.detector, "en_US", unit_language=self.unit.language_for)
+
+	def test_the_word_is_not_detected_again_alone(self):
+		seq = ["platicar"]
+		with self.unit.context(self.word):
+			self.assertIs(self.filtered(seq), seq)
+		# Outside a unit, as a button's name, it goes by its own detection.
+		self.assertEqual(
+			self.filtered(seq), [LangChangeCommand("es_ES"), "platicar", LangChangeCommand(None)]
+		)
+
+	def test_its_letters_keep_the_caller_s_locale(self):
+		with self.unit.context(self.word):
+			self.assertIsNone(self.unit.locale_for("p", None))
+			self.assertEqual(self.unit.locale_for("p", "en_GB"), "en_GB")
+
+	def test_a_string_that_is_not_the_unit_s_is_detected(self):
+		with self.unit.context(self.word):
+			self.assertIsNone(self.unit.language_for("misspelled"))
+
+	def test_nothing_is_held_afterwards(self):
+		with self.unit.context(self.word):
+			self.assertEqual(self.unit.default, "en_US")
+		self.assertIsNone(self.unit.default)
+
+
+class ForeignWordUnitTests(unittest.TestCase):
+	"""A letter of a foreign word alone in a clause of the default: its line reads the word in its language,
+	and read under that language as an application's tag, the clause would drop it whole."""
+
+	TEXT = "They mostly say platicar here.\n"
+
+	class Embedding(Detector):
+		def tagged(self, text):
+			before, word, after = text.partition("platicar")
+			return [(None, before), ("es_ES", word), (None, after)] if word else [(None, text)]
+
+		def verified(self, text, tag):
+			return [(None, text)]
+
+	def setUp(self):
+		self.detector = self.Embedding()
+		self.unit = context.UnitContext(Engine(self.detector))
+		self.story = Story(self.TEXT, [(0, len(self.TEXT))])
+		start = self.TEXT.index("platicar")
+		self.letter = Info(self.story, start, start + 1)
+
+	def filtered(self, seq):
+		return filter_sequence(seq, self.detector, "en_US", unit_language=self.unit.language_for)
+
+	def test_the_letter_keeps_the_language_its_line_reads_the_word_in(self):
+		with self.unit.context(self.letter):
+			self.assertEqual(self.unit.locale_for("p", None), "es_ES")
+			seq = [LangChangeCommand("es_ES"), "p"]
+			self.assertIs(self.filtered(seq), seq)
+
+	def test_an_application_s_tag_on_it_is_still_verified(self):
+		seq = [LangChangeCommand("es_ES"), "p"]
+		with self.unit.context(self.letter):
+			self.assertEqual(self.filtered(seq)[:2], [LangChangeCommand("es_ES"), LangChangeCommand(None)])
+		# Nor is one context's stand-in held for the next.
+		with self.unit.context(self.letter):
+			self.unit.locale_for("p", None)
+		with self.unit.context(self.letter):
+			self.assertIsNot(self.filtered(seq), seq)
+
+
 if __name__ == "__main__":
 	unittest.main()

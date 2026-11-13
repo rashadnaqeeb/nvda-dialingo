@@ -123,6 +123,15 @@ def acceptance(backend):
 	case(D, "Oye Pedro, dame ideas para preparar una sopa de verduras", ["es"])
 	for t in ["Orange, la naranja", "Desk, el escritorio"]:
 		case(D, t, "es", "last")
+	# A Spanish word inside an English clause switches alone, and an arrow splits clauses as a colon does.
+	case(D, "Ordenador → Spain, computadora → Mexico.", ["es", None, "es", None])
+	case(D, "Both words mean the same thing; platicar is simply more common there.", [None, "es", None])
+	# French typed without its accents is not English, though only the English dictionary knows it so.
+	case(
+		Detector(backend, "fr", ["fr", "en"]),
+		"Il faut revoir la definition de ce mot avant la réunion.",
+		[None],
+	)
 	for t in [
 		"Documents",
 		"Documents list",

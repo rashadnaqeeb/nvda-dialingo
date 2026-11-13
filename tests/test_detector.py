@@ -212,6 +212,9 @@ class NeighbourTests(unittest.TestCase):
 
 		rejects_everywhere = rejects_a_word
 
+		def suggestions(self, word, language):
+			return ()
+
 	def tagged(self, text, shares=None, free=("es", 0.58), dictionary=None):
 		configured = ["es_ES", "it_IT", "pt_BR"]
 		d = Detector(
@@ -346,6 +349,20 @@ class ClauseTests(unittest.TestCase):
 		# A name the default's dictionary knows stays with its sentence.
 		self.assertEqual(d.tagged("Marco, see you."), [(None, "Marco, see you.")])
 
+	def test_an_arrow_splits_clauses(self):
+		# Each side of an arrow is a clause of its own, so a word before one goes by the dictionaries.
+		class Dictionary:
+			known = {"en_US": {"Spain"}, "es_ES": {"Ordenador"}}
+
+			def rejects_a_word(self, text, language):
+				return text not in self.known[language]
+
+			rejects_everywhere = rejects_a_word
+
+		d = Detector(Recognizer({}), "en_US", ["es_ES"], Dictionary())
+		self.assertEqual(d.tagged("Ordenador → Spain."), [("es_ES", "Ordenador → "), (None, "Spain.")])
+		self.assertEqual(d.tagged("Spain ➜ Ordenador"), [(None, "Spain ➜ "), ("es_ES", "Ordenador")])
+
 	def test_an_end_the_default_dictionary_rejects_is_not_peeled(self):
 		class Dictionary:
 			def rejects_a_word(self, text, language):
@@ -424,6 +441,11 @@ class ClauseTests(unittest.TestCase):
 
 			def rejects_a_word(self, text, language):
 				return any(w not in self.known[language] for w in text.split())
+
+			rejects_everywhere = rejects_a_word
+
+			def suggestions(self, word, language):
+				return ()
 
 		answers = {"The parcel is at the depot": ("en", 0.99), "slash enfr": ("es", 0.99)}
 		text = "The parcel is at the depot, slash enfr."
@@ -527,6 +549,9 @@ class ClauseTests(unittest.TestCase):
 
 			rejects_everywhere = rejects_a_word
 
+			def suggestions(self, word, language):
+				return ()
+
 		answers = {"amigo mío": ("es", 0.95), "amigo mío gracias": ("es", 0.7)}
 		d = Detector(Free(answers), "en_US", ["es_ES"], Dictionary())
 		self.assertEqual(d.tagged("amigo mío, gracias."), [(None, "amigo mío, gracias.")])
@@ -549,6 +574,118 @@ class ClauseTests(unittest.TestCase):
 		}
 		d = self.detector(["es_ES"], answers)
 		self.assertEqual(d.tagged("Thanks. Hola, amigo."), [(None, "Thanks. "), ("es_ES", "Hola, amigo.")])
+
+
+class EmbeddedWordTests(unittest.TestCase):
+	"""A word of a configured language inside a clause of the default: "platicar" in an English sentence."""
+
+	class Dictionary:
+		known = {
+			"en_US": {"they", "say", "here", "there", "definition"},
+			"es_ES": {"platicar", "buenas", "noches", "Platicar"},
+			"fr_FR": {"ils", "disent", "ici"},
+		}
+		accented = {}
+
+		def rejects_a_word(self, text, language):
+			return any(w not in self.known[language] for w in text.split())
+
+		rejects_everywhere = rejects_a_word
+
+		def suggestions(self, word, language):
+			return self.accented.get(word, ())
+
+	class Leaning(Recognizer):
+		"""Gives two words or more to the default at 0.95, and a word alone to nobody, but as its table says."""
+
+		def __init__(self, answers, default):
+			super().__init__(answers)
+			self.default = default
+
+		def constrained(self, text, languages):
+			return self.answers.get(text, (self.default, 0.95) if " " in text else None)
+
+	WORDS = {"platicar": ("es", 0.97), "buenas": ("es", 0.6), "noches": ("es", 0.99)}
+
+	def tagged(self, text, answers=None, default="en_US", other="es_ES", dictionary=None):
+		recognizer = self.Leaning({**self.WORDS, **(answers or {})}, default[:2])
+		return Detector(recognizer, default, [other], dictionary or self.Dictionary()).tagged(text)
+
+	def test_it_switches_alone(self):
+		self.assertEqual(
+			self.tagged("they say platicar here"),
+			[(None, "they say "), ("es_ES", "platicar"), (None, " here")],
+		)
+
+	def test_neighbours_are_one_run(self):
+		self.assertEqual(
+			self.tagged("they say buenas noches here"),
+			[(None, "they say "), ("es_ES", "buenas noches"), (None, " here")],
+		)
+		self.assertEqual(
+			self.tagged("they say buenas there noches here"),
+			[
+				(None, "they say "),
+				("es_ES", "buenas"),
+				(None, " there "),
+				("es_ES", "noches"),
+				(None, " here"),
+			],
+		)
+
+	def test_not_a_word_with_a_capital(self):
+		# A name, or a sentence's first word, which may be one.
+		for text in ("they say Platicar here", "Platicar they say here"):
+			self.assertEqual(self.tagged(text), [(None, text)])
+
+	def test_not_a_word_with_a_hyphen_or_an_apostrophe(self):
+		for text in ("they say buenas-noches here", "they say platicar's here"):
+			self.assertEqual(self.tagged(text), [(None, text)])
+
+	def test_not_a_word_the_default_s_dictionary_offers_with_its_accents(self):
+		# French typed without its accents, which the English dictionary happens to know.
+		class Accents(self.Dictionary):
+			accented = {"definition": ("definitions", "définition")}
+
+		answers = {"definition": ("en", 0.97)}
+		text = "ils disent definition ici"
+		french = {"default": "fr_FR", "other": "en_US"}
+		self.assertEqual(
+			self.tagged(text, answers, **french),
+			[(None, "ils disent "), ("en_US", "definition"), (None, " ici")],
+		)
+		self.assertEqual(self.tagged(text, answers, dictionary=Accents(), **french), [(None, text)])
+
+	def test_not_a_word_the_recognizer_gives_to_the_default(self):
+		text = "they say platicar here"
+		for alone in (("en", 0.6), ("es", 0.4), None):
+			self.assertEqual(self.tagged(text, {"platicar": alone}), [(None, text)])
+		# It stays with the default, and the word beside it still switches.
+		self.assertEqual(
+			self.tagged("they say buenas noches here", {"buenas": ("en", 0.6)}),
+			[(None, "they say buenas "), ("es_ES", "noches"), (None, " here")],
+		)
+
+	def test_not_in_a_clause_the_recognizer_gives_to_another_language(self):
+		# Short of switching it: such a clause is as often in a language nobody configured.
+		text = "they say platicar here"
+		self.assertEqual(self.tagged(text, {text: ("es", 0.6)}), [(None, text)])
+
+	def test_not_where_the_rest_of_the_clause_is_not_the_default_s(self):
+		text = "they say platicar here"
+		self.assertEqual(self.tagged(text, {"they say here": ("en", 0.7)}), [(None, text)])
+
+	def test_not_beside_a_word_neither_dictionary_knows(self):
+		# A clause in a language nobody configured has such words, and some a configured dictionary knows.
+		for text in ("they say platicar thumbsup here", "Thumbsup they say platicar here"):
+			self.assertEqual(self.tagged(text), [(None, text)])
+
+	def test_not_with_one_word_left(self):
+		self.assertEqual(self.tagged("say platicar", {"say": ("en", 0.99)}), [(None, "say platicar")])
+
+	def test_not_without_dictionaries(self):
+		d = Detector(self.Leaning(self.WORDS, "en"), "en_US", ["es_ES"])
+		self.assertEqual(d.tagged("they say platicar here"), [(None, "they say platicar here")])
 
 
 class InvertedMarkTests(unittest.TestCase):

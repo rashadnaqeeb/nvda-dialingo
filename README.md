@@ -79,7 +79,7 @@ When an application does tag its text, the add-on checks the tag against the tex
 
 In Full mode, text in your default language's script is split into clauses. Each clause is scored by a small language model and checked against the Windows spelling dictionaries. The only candidates are your default language and the languages you've set up that use that script.
 
-**Clauses.** Text is split at sentence punctuation, commas, quotes, brackets, dashes, slashes, and line breaks. Numbers like "2.6", "8:05", and "10/03/2026" aren't split. The Spanish "¿" and "¡" belong to the clause they open, so the voice that reads "¿Cómo estás?" reads its "¿" too.
+**Clauses.** Text is split at sentence punctuation, commas, quotes, brackets, dashes, slashes, arrows, and line breaks. Numbers like "2.6", "8:05", and "10/03/2026" aren't split. The Spanish "¿" and "¡" belong to the clause they open, so the voice that reads "¿Cómo estás?" reads its "¿" too.
 
 **Words.** Only ordinary words count. Numbers, paths, and identifiers don't. A capitalized word in the middle of a clause is taken as a name and ignored. The exception is German, which capitalizes every noun: a capitalized word counts when the model is nearly sure it's German and your default dictionary doesn't know it. A word in capitals under five letters is taken as an abbreviation. A word said again straight after itself counts once, so "omg omg omg" weighs no more than one "omg". Headlines, three or more words that all start with a capital or two or more in capitals, are scored with all their words, since capitals mean nothing there. A headline only switches at 98 percent.
 
@@ -109,6 +109,7 @@ The Windows spelling dictionaries give a second opinion that doesn't depend on t
 - A clause the model leans toward but isn't sure of switches when your default dictionary rejects one of its words and the other language's dictionary accepts all of them.
 - A clause the model is sure of still stays with the default when the other language's dictionary knows none of its words and your default dictionary knows one. WordReference ends an English example with "com, slash enfr."; the model calls "slash enfr" Spanish at 99 percent, but only English knows "slash".
 - A single word on its own, like a button or link label, never switches on the model alone. On one word the model is close to noise: it calls "Cancelar" English at 89 percent. A word switches only when your default dictionary rejects it and exactly one other language's dictionary accepts it.
+- A word of another language inside a sentence in your default language switches by the same test, so "platicar" is read in Spanish in "Both words mean the same thing; platicar is simply more common there." Inside a sentence the test is stricter. The word must be written small, since a capital may be a name. The model must lean the same way on the word. And every other word of the clause must be one your default dictionary knows. That last condition is what keeps a sentence in a language you haven't set up from being read in pieces, by whichever of your voices happens to know some of its words.
 
 The dictionaries make a big difference on short text. These were measured with English as the default and one other language set up, first without that language's dictionary and then with it. The test data was Lingua's word pairs and single words, and NVDA's translated interface strings:
 
@@ -131,7 +132,7 @@ A guess is only as good as the text it gets, and NVDA often hands over less than
 
 **Lines.** When you arrow through wrapped text, NVDA reads one line at a time, and a line can start or end partway through a sentence. A line ending in "…side of the lake. A" has a one-word sentence at its end that can't be scored. When a line's edges can't be decided, the add-on fetches the text around the line and judges the cut sentences as wholes (`globalPlugins/dialingo/context.py`). Say all doesn't need this, because NVDA already gives it whole sentences.
 
-**Characters and words.** A single letter or word can't be detected on its own. When you move by character or word, the add-on detects the whole line and uses the language at the cursor's position. That means stepping through "Bonjour" in a French sentence reads each letter, and its character description, with the French voice.
+**Characters and words.** A single letter or word can't be detected on its own. When you move by character or word, the add-on detects the whole line and uses the language at the cursor's position. A word the line leaves in your default language stays there, even one that would switch as a button's label, so a word is read the same way in its line, on its own, and letter by letter. That means stepping through "Bonjour" in a French sentence reads each letter, and its character description, with the French voice.
 
 **Typing.** What you type is read in the language of your keyboard layout, as long as you have a voice for it.
 

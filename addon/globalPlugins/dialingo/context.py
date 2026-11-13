@@ -6,7 +6,10 @@
 # speech functions that the caret and review scripts call for character and word units, works the line
 # context out from the TextInfo, and holds it while the wrapped call runs. Inside that window, the
 # spelling helpers get the context language as their locale when they were given none, which gives the
-# character's description in that language too, and the sequence filter tags the unit's text.
+# character's description in that language too, and the sequence filter tags the unit's text. Where the
+# line reads as the default at that spot, the filter leaves the unit's text alone: detected again on its
+# own, a word would go by the dictionaries, as a button's does, and be read in a language neither its line
+# nor its letters are read in.
 #
 # A tag with the default language (a web page's or a document's own language, which most carry) is treated
 # like no tag, as the sequence filter treats it: the character description NVDA builds from that locale
@@ -115,6 +118,8 @@ class UnitContext:
 	def __init__(self, engine):
 		self.engine = engine
 		self.language = None  # the context language while a wrapped call runs, None otherwise
+		self.default = None  # the default's tag while one runs on a unit its line reads as the default
+		self.stands_in = False  # whether a spelling helper was given the context language as its locale
 		self.unit_text = None
 		self.unit_line = None  # (the unit's line text, its offset in it) while a wrapped call runs
 		self.keyboard = None  # the keyboard layout's language while NVDA echoes typing
@@ -283,7 +288,11 @@ class UnitContext:
 			return self.language_for(text, locale) or locale
 		if self.language is None:
 			return locale
-		return self.language_for(text) or locale
+		language = self.language_for(text)
+		if language is None:
+			return locale
+		self.stands_in = True
+		return language
 
 	def overrides(self, tag):
 		"""Whether a tag is the default language's, which the line's detected language stands in for."""
@@ -307,10 +316,17 @@ class UnitContext:
 		if tag is not None:
 			if self.unit_line is None or (stripped != self.unit_text and stripped not in self.unit_text):
 				return None
+			if self.stands_in and self.language is not None and base(tag) == base(self.language):
+				# The tag is the one locale_for gave a spelling helper, the line's own reading, not an
+				# application's. Verified as an application's tag, a foreign word alone in a clause of the
+				# default would lose it, since a tag is dropped from a clause whole and a word is not looked at.
+				return self.language
 			return self.tagged_language(tag)
 		if self.language is None:
 			if self.keyboard is not None and self.unit_text is None:
 				return self.typed_word_language(stripped)
+			if self.default is not None and (stripped == self.unit_text or stripped in self.unit_text):
+				return self.default
 			return None
 		if self.unit_text is not None and stripped != self.unit_text and stripped not in self.unit_text:
 			return None
@@ -335,23 +351,29 @@ class UnitContext:
 	@contextlib.contextmanager
 	def context(self, info):
 		language = None
+		default = None
 		unit_text = None
 		unit_line = None
 		try:
 			unit_text = info.text.strip()
 			# Without a detector (off, locked, no language switching) the line would go unused.
-			if unit_text and self.engine.current() is not None:
+			detector = self.engine.current() if unit_text else None
+			if detector is not None:
 				unit_line = self.line_at(info)
 				if unit_line:
 					language = self.language_at(info, unit_line)
+					if language is None:
+						default = detector.default_tag
 		except Exception:
 			log.debugWarning("dialingo: no line context for the unit", exc_info=True)
-		self.language, self.unit_text = language, unit_text
+		self.language, self.default, self.unit_text = language, default, unit_text
 		self.unit_line = unit_line[1:] if unit_line else None
+		self.stands_in = False
 		try:
 			yield
 		finally:
-			self.language, self.unit_text, self.unit_line = None, None, None
+			self.language, self.default, self.unit_text, self.unit_line = None, None, None, None
+			self.stands_in = False
 
 	@contextlib.contextmanager
 	def line_context(self, info):

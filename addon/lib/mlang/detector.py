@@ -75,10 +75,35 @@ def word(piece):
 
 
 _SPLIT = re.compile(r"[\s—–]+")
+_PIECE = re.compile(r"[^\s—–]+")
 
 
 def words(text):
 	return [w for w in (word(p) for p in _SPLIT.split(text)) if w]
+
+
+_UNACCENTED = str.maketrans({"œ": "oe", "æ": "ae", "ß": "ss", "ø": "o", "ł": "l", "đ": "d", "ı": "i"})
+
+
+def unaccented(w):
+	"""A word as it is typed without its accents and ligatures: "œuvre" as "oeuvre", "définition" as
+	"definition"."""
+	decomposed = unicodedata.normalize("NFD", w.lower().translate(_UNACCENTED))
+	return "".join(c for c in decomposed if not is_mark(c))
+
+
+_ARROWS = {}
+
+
+def is_arrow(c):
+	"""Whether a character is an arrow, which stands between two pieces of text as a dash or a colon does:
+	"Ordenador → Spain"."""
+	# The arrows, dingbats, and symbols blocks: the names are looked up for their characters alone.
+	if not "\u2190" <= c <= "\u2bff":
+		return False
+	if c not in _ARROWS:
+		_ARROWS[c] = "ARROW" in unicodedata.name(c, "")
+	return _ARROWS[c]
 
 
 def unrepeated(ws):
@@ -169,7 +194,7 @@ def clauses(chunk):
 		# A hyphen with a space on both sides is a dash, as in a title: "Filebox - Einfache, private Dateifreigabe".
 		hyphen = ch == "-" and previous is not None and previous.isspace()
 		spaced = (i + 1 == n) or chunk[i + 1].isspace()
-		separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS)
+		separates = spaced if (ch in DASHES or dash or hyphen) else (ch in CLAUSE_ENDS or is_arrow(ch))
 		# "about 2.6 metres" is one clause: split at the point, each half is a word too few to score.
 		if (
 			separates
@@ -1007,6 +1032,103 @@ class Detector:
 		g = self.backend.constrained(scored, accepting + unknown)
 		return accepting[0] if g and g[0] == accepting[0] and g[1] >= DICTIONARY_FLOOR else None
 
+	def embedded_words(self, clause):
+		"""(start, end, language) of the words of a default-language clause that are another language's, each
+		judged by the dictionaries as a word alone is: "platicar" in "platicar is simply more common there",
+		which is English as a clause. Only a word written small and whole: a capital is a name's or a
+		sentence's first ("Flemming has agreed"), and a hyphen or an apostrophe joins parts the dictionaries
+		spell apart ("post-pleistocene" is two Italian words). Two kinds of word the dictionaries call foreign
+		stay with the default. One the default's dictionary offers with the accents it was typed without:
+		"definition" for "définition" in French, which the English one knows. And one the recognizer, between
+		the default and that language, does not lean the dictionaries' way on, as it must for a clause they
+		decide: the German dictionary builds "portcheck", and the English one knows "mellitus" and "tretinoin"
+		in a Swedish sentence, each at 0.0 to the recognizer.
+
+		The rest of the clause, two words or more, must be the default's: to its dictionary, which knows every
+		word of it, and to the recognizer. A sentence in a language nobody configured stays with the default,
+		and has many words one configured dictionary happens to know; with the rest judged by the recognizer
+		alone, and no lean asked of the word, Portuguese sentences with a tag beside Spanish and French went
+		from 212 to 528 per 1,000, "mais" and "todos" picked out of them. So a word neither language knows, or
+		two configured ones do, a misspelling or a name written small, leaves its clause whole."""
+		if self.dictionary is None or self.default_script in UNSPACED or headline(clause):
+			return []
+		candidates = []
+		for piece in _PIECE.finditer(clause):
+			w = word(piece.group())
+			if (
+				w
+				and w.islower()
+				and len(w) >= LONE_WORD_LETTERS
+				and all(c.isalpha() or is_mark(c) for c in w)
+			):
+				candidates.append((piece.start() + piece.group().index(w), w))
+		# Most clauses end here, on one call: the default's dictionary knows every word.
+		if (
+			not candidates
+			or self.dictionary.rejects_a_word(" ".join(w for _, w in candidates), self.default_tag)
+			is not True
+		):
+			return []
+		scored = self.scored_words(clause)
+		found = []
+		explained = set()  # the words the default's dictionary rejects and one other language's knows
+		for at, w in candidates:
+			if self.dictionary.rejects_everywhere(w, self.default_tag) is not True:
+				continue
+			explained.add(w)
+			# A clause in a language nobody configured ends here, at its first word no dictionary knows or
+			# once too few words are left to be the default's.
+			if len(scored) - len(explained) < 2:
+				return []
+			language = self.lone_word(w)
+			if not language:
+				return []
+			if self.leans(w, language):
+				found.append((at, at + len(w), language))
+		if not found:
+			return []
+		rest = [w for w in scored if w not in explained]
+		if len(rest) < 2:
+			return []
+		rest = " ".join(rest)
+		if not self.is_default(rest):
+			return []
+		if self.dictionary.rejects_everywhere(self._scored(rest), self.default_tag) is not False:
+			return []
+		# Asked last, of the words that are left: a dictionary's suggestions take as long as thirty checks.
+		return [(a, b, language) for a, b, language in found if not self.respelled(clause[a:b])]
+
+	def leans(self, w, language):
+		"""Whether the recognizer, between the default and `language` alone, gives the word `w` to `language`
+		at the floor the dictionaries decide a clause from."""
+		self.calls += 1
+		g = self.backend.constrained(self._scored(w), [self.default, language])
+		return bool(g) and g[0] == language and g[1] >= DICTIONARY_FLOOR
+
+	def respelled(self, w):
+		"""Whether the default's dictionary offers `w` written with accents or ligatures it lacks."""
+		plain = unaccented(w)
+		return any(
+			s != w and unaccented(s) == plain for s in self.dictionary.suggestions(w, self.default_tag)
+		)
+
+	def with_embedded(self, clause):
+		"""A default-language clause as runs, the words of embedded_words() in their languages; neighbours in
+		one language are one run, so the voice changes once for "fashion victim"."""
+		spans = []
+		for a, b, language in self.embedded_words(clause):
+			if spans and spans[-1][2] == language and not clause[spans[-1][1] : a].strip():
+				spans[-1] = (spans[-1][0], b, language)
+			else:
+				spans.append((a, b, language))
+		runs = []
+		cursor = 0
+		for a, b, language in spans:
+			runs += [(None, clause[cursor:a]), (language, clause[a:b])]
+			cursor = b
+		runs.append((None, clause[cursor:]))
+		return [(language, piece) for language, piece in runs if piece]
+
 	def clause_runs(self, chunk):
 		if not any(c.isalpha() for c in chunk):
 			return [(None, chunk)]
@@ -1164,6 +1286,11 @@ class Detector:
 			runs.append((runs[-1][0] if runs else None, chunk[cursor:start]))
 			if langs[i] and i not in inverted:
 				clause = self.peeled(chunk[s:e], langs[i])
+			elif i in scored and langs[i] is None and guess(i) and guess(i)[0] == self.default:
+				# Only a clause the recognizer gives to the default, as it stands: one it gives to another
+				# language, short of switching, is as often in a language nobody configured, and its words
+				# would each be asked of every dictionary.
+				clause = self.with_embedded(chunk[s:e])
 			else:
 				clause = [(langs[i], chunk[s:e])]
 			clause[0] = (clause[0][0], chunk[start:s] + clause[0][1])

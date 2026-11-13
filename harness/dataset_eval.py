@@ -1,9 +1,11 @@
 """Dataset evaluation: switch rates over a directory of <kind>/<lang>.txt files.
 
 Usage: python dataset_eval.py <backend> <dataset root> [configured, default fr,es] [--default L] [--limit N] [--show N]
-    [--case title|upper|mixed]
+    [--case title|upper|mixed] [--also L,L]
 A line in the default language (English unless --default names another) with any tag is a false switch; a line
 in a configured language is a hit when its own language is tagged, and its letters in that language are counted too.
+--also reads the files of languages nobody configured as well: their lines should stay untagged, so "switched" is
+their wrong switches.
 --case recases every line: as a headline, each word capitalized or all in capitals, or mixed, every other word in capitals.
 """
 
@@ -42,6 +44,7 @@ def main():
 	limit = None
 	show = 15
 	recase = None
+	also = []
 	args = sys.argv[3:]
 	i = 0
 	while i < len(args):
@@ -57,6 +60,9 @@ def main():
 		elif args[i] == "--show":
 			show = int(args[i + 1])
 			i += 2
+		elif args[i] == "--also":
+			also = args[i + 1].split(",")
+			i += 2
 		else:
 			configured = args[i].split(",")
 			i += 1
@@ -65,7 +71,7 @@ def main():
 	files = []
 	for dirpath, _, names in os.walk(root):
 		for n in sorted(names):
-			if n.endswith(".txt") and n[:-4] in [default] + configured:
+			if n.endswith(".txt") and n[:-4] in [default] + configured + also:
 				files.append(os.path.join(dirpath, n))
 	print(f"backend {name}, default {default}, configured {configured}")
 	for path in sorted(files):
