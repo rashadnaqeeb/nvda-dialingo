@@ -315,6 +315,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self._loaded_voice = {}  # synthesizer name -> the voice its instance in `guests` was loaded with
 		self._failed = set()  # names, and (name, voice) pairs, that could not be loaded
 		self._windows_rows = {}  # language code -> implicit row on a Windows voice, or None
+		self._own_rows = {}  # language tag -> implicit row on a voice of the host's own, or None
 		self.scheduler = Scheduler(
 			LangChangeCommand,
 			IndexCommand,
@@ -566,6 +567,8 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		if row is None:
 			row = T.Row(self.language or "en", self.host_name, **self._defaults)
 			self.__dict__["_default_row"] = row
+			# They carry the default's rate, pitch, and volume, which have just changed.
+			self.__dict__.get("_own_rows", {}).clear()
 		return row
 
 	def _row_for_lang(self, lang):
@@ -576,15 +579,49 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		row = self.table.row_for(lang)
 		if row is not None:
 			return row if self.guest(row.synth) is not None else None
-		return self._windows_row(lang)
+		return self._own_row(lang) or self._windows_row(lang)
+
+	def _own_row(self, lang):
+		"""An implicit row on the host's own voice for a language no row covers, for a host that reads every
+		language in the voice it was given (hosts.one_voice: Runa TTS 2.0, SAPI 4): what a host that takes
+		language commands does by itself. At the default's rate, pitch, and volume. None when it has no voice
+		for the language, or switches by itself."""
+		# By the tag as it is spelled, not its language alone: a host may have a voice for each dialect.
+		key = (lang or "").replace("-", "_").lower()
+		if key in self._own_rows:
+			return self._own_rows[key]
+		row = None
+		try:
+			if hosts.one_voice(self.host):
+				voice = hosts.voice_for(self.host, lang)
+				if voice is not None and voice != self._defaults.get("voice"):
+					own = {
+						setting: value
+						for setting, value in self._defaults.items()
+						if setting in ("rate", "rateBoost", "pitch", "inflection", "volume")
+					}
+					info = self.host.availableVoices.get(voice)
+					spoken = getattr(info, "language", None) or lang
+					row = T.Row(spoken, self.host_name, voice=voice, **own)
+					name = getattr(info, "displayName", None) or voice
+					log.debug(f"dialingo: {lang} goes to {self.host_name}'s voice {name}")
+		except Exception:
+			log.debugWarning(f"dialingo: no voice of {self.host_name} for {lang}", exc_info=True)
+		self._own_rows[key] = row
+		return row
 
 	def _windows_voices_needed(self):
-		"""Whether a Windows voice speaks a language the host cannot, so the OneCore guest is wanted up
-		front rather than built inside the first utterance that needs it."""
+		"""Whether a Windows voice speaks a language the host cannot, in no voice of its own either, so the
+		OneCore guest is wanted up front rather than built inside the first utterance that needs it."""
 		if not policy.windows_voices_wanted(config.conf) or self.host_name == winvoices.ONECORE:
 			return False
 		try:
-			return any(not hosts.supports(self.host, lang) for lang in winvoices.languages())
+			one_voice = hosts.one_voice(self.host)
+			return any(
+				not hosts.supports(self.host, lang)
+				and not (one_voice and hosts.voice_for(self.host, lang) is not None)
+				for lang in winvoices.languages()
+			)
 		except Exception:
 			log.debugWarning("dialingo: Windows voices could not be checked against the host", exc_info=True)
 			return False
@@ -800,6 +837,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self.table = table.copy()
 		self._failed.clear()
 		self._windows_rows.clear()
+		self._own_rows.clear()
 		winvoices.refresh()
 		for guest in list(self.guests.values()) + list(self.voiced.values()):
 			guest._mlangApplied = None

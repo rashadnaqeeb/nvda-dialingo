@@ -159,6 +159,8 @@ A language set up on a different synthesizer, or with a different voice, needs t
 - **Guests never save settings.** A guest is a separate copy of a synthesizer, so a row's settings never overwrite your own settings for that synthesizer.
 - **It always speaks.** If the table is broken or empty, it falls back to NVDA's usual order of synthesizers.
 
+Most synthesizers change to their own voice for a language when text is marked with it. A few never do, and read everything in the voice you picked. For those, the Language table changes the voice itself: a language you haven't set up goes to the synthesizer's own voice for it, at your usual rate, pitch, and volume.
+
 ### Joining the pieces
 
 Each utterance is cut at every change of language, and the pieces play in order across the guests (`mlang/scheduler.py`). Every piece ends with a private marker so the add-on knows when it's done. NVDA's own position markers, which keep the caret moving during say all, are passed on in order.

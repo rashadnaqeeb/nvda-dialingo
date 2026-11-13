@@ -167,6 +167,161 @@ class ReadTest(unittest.TestCase):
 		self.assertEqual(hosts.read(guest, "rate"), 90)
 
 
+class OneVoiceTest(Stubbed):
+	"""A synthesizer that takes no language commands reads every language in the voice it was given: it
+	speaks that voice's language alone, and the language table gives it its other voices itself."""
+
+	def runa(self, language="en_US", commands=(nvda_stub.IndexCommand,)):
+		guest = Synth(
+			"runaTts2",
+			language=language,
+			supportedCommands=set(commands),
+			availableVoices={
+				"tom": Synth("v", language="en_US"),
+				"ana": Synth("v", language="pt_PT"),
+				"bia": Synth("v", language="pt_BR"),
+				"anna": Synth("v", language="de_DE"),
+				"sinji": Synth("v", language="zh_HK"),
+			},
+		)
+		guest.languageIsSupported = lambda lang: True
+		# Runa TTS 2.0 names the voice it would start with, and never switches to it.
+		guest.getVoiceNameForLanguage = lambda lang: "anna"
+		return guest
+
+	def test_a_synthesizer_switches_when_it_lists_the_language_command(self):
+		self.assertFalse(hosts.switches(self.runa()))
+		self.assertTrue(
+			hosts.switches(self.runa(commands=(nvda_stub.IndexCommand, nvda_stub.LangChangeCommand)))
+		)
+		self.assertTrue(hosts.switches(Synth("stand-in")))
+
+	def test_it_speaks_its_own_voices_language_alone(self):
+		self.stub("synthDriverHandler", getSynth=lambda: None)
+		guest = self.runa()
+		self.assertEqual(
+			[hosts.supports(guest, lang) for lang in ("en", "en_GB", "de", "de_DE", "pt_BR", "ar")],
+			[True, True, False, False, False, False],
+		)
+
+	def test_one_that_takes_the_command_answers_as_before(self):
+		guest = self.runa(commands=(nvda_stub.LangChangeCommand,))
+		self.assertTrue(hosts.supports(guest, "de"))
+
+	def test_the_tables_host_is_asked_for_the_defaults_language_not_a_rows_left_on_it(self):
+		guest = self.runa(language="de_DE")  # the German row spoke last
+		table = Synth(DRIVER_NAME, host=guest, language="en_US")
+		self.stub("synthDriverHandler", getSynth=lambda: table)
+		self.assertEqual((hosts.supports(guest, "en"), hosts.supports(guest, "de")), (True, False))
+
+	def test_voices_that_name_no_language_still_speak_them_all(self):
+		guest = Synth(
+			"AcaTTS", supportedCommands=set(), availableVoices={"Rachel": Synth("v", language=None)}
+		)
+		self.assertFalse(hosts.one_voice(guest))
+		self.assertTrue(hosts.supports(guest, "ar"))
+
+	def test_its_voice_for_a_language_is_the_tags_dialect_first_then_any_of_the_language(self):
+		guest = self.runa()
+		self.assertEqual(
+			[
+				hosts.voice_for(guest, lang)
+				for lang in ("pt_BR", "pt-br", "pt", "pt_AO", "de", "zh_CN", "yue", "ar", "")
+			],
+			["bia", "bia", "ana", "ana", "anna", None, "sinji", None, None],
+		)
+
+	def test_voices_of_other_languages_need_the_table(self):
+		from mlang import policy
+		from mlang.table import Table
+
+		class Conf(dict):
+			spec = {"dialingo": {}}
+
+		def needs(guest):
+			self.stub("synthDriverHandler", getSynth=lambda: guest)
+			conf = Conf(
+				{
+					"speech": {"synth": guest.name, guest.name: {"voice": "tom"}},
+					"dialingo": {"defaultSynth": "", "useWindowsVoices": False, "table": Table().to_json()},
+				}
+			)
+			return policy.needs_table(conf)
+
+		self.assertTrue(needs(self.runa()))
+		english_only = self.runa()
+		english_only.availableVoices = {
+			"tom": Synth("v", language="en_US"),
+			"amy": Synth("v", language="en_GB"),
+		}
+		self.assertFalse(needs(english_only))
+		# One that switches by itself needs no table for its own voices.
+		self.assertFalse(needs(self.runa(commands=(nvda_stub.LangChangeCommand,))))
+
+
+class VoiceWithoutCancelTest(unittest.TestCase):
+	"""Runa TTS 2.0's voice setter cancels the driver first; a row's voice is given to it without that."""
+
+	def guest(self, name):
+		class Driver:
+			def __init__(self):
+				self.name = name
+				self._voice = "tom"
+				self.cancels = 0
+
+			def isSupported(self, setting):
+				return setting == "voice"
+
+			ids = {"tom": "tom", "anna": "anna", "anna-old-id": "anna"}
+
+			def _resolveVoiceId(self, voice):
+				return self.ids.get(voice)
+
+			@property
+			def voice(self):
+				return self._voice
+
+			@voice.setter
+			def voice(self, value):
+				resolved = self.ids.get(value)
+				if resolved is None:
+					raise LookupError(value)
+				self.cancels += 1
+				self._voice = resolved
+
+		return Driver()
+
+	def row(self, voice):
+		from mlang.table import Row
+
+		return Row("de", "runaTts2", voice=voice)
+
+	def test_runa_takes_a_rows_voice_without_its_setters_cancel(self):
+		guest = self.guest("runaTts2")
+		hosts.apply_row(guest, self.row("anna"))
+		self.assertEqual((guest.voice, guest.cancels), ("anna", 0))
+		self.assertEqual(guest._mlangApplied, self.row("anna").key())
+
+	def test_runa_resolves_a_voice_saved_under_another_id(self):
+		guest = self.guest("runaTts2")
+		hosts.apply_row(guest, self.row("anna-old-id"))
+		self.assertEqual((guest.voice, guest.cancels), ("anna", 0))
+
+	def test_a_voice_runa_does_not_have_is_left_to_its_setter_to_refuse(self):
+		guest = self.guest("runaTts2")
+		hosts.apply_row(guest, self.row("nobody"))
+		self.assertEqual((guest.voice, guest.cancels), ("tom", 0))
+
+	def test_a_runa_driver_without_those_internals_and_other_synthesizers_use_their_setter(self):
+		other = self.guest("vocalizer_expressive2")
+		hosts.apply_row(other, self.row("anna"))
+		self.assertEqual((other.voice, other.cancels), ("anna", 1))
+		changed = self.guest("runaTts2")
+		changed._resolveVoiceId = None
+		hosts.apply_row(changed, self.row("anna"))
+		self.assertEqual((changed.voice, changed.cancels), ("anna", 1))
+
+
 class ApplyOrderTest(unittest.TestCase):
 	def test_every_row_setting_is_applied_rate_boost_before_rate(self):
 		from mlang.table import ROW_SETTINGS

@@ -291,11 +291,75 @@ def speaks_declared(guest):
 		return True
 
 
+def switches(guest):
+	"""Whether a synthesizer changes voice by itself on a language command: it lists the command among those it
+	supports. Runa TTS 2.0 does not: it leaves switching to its own profiles, which go by script, and passes
+	over NVDA's language commands. Nor does SAPI 4. An object with no list of commands to ask is taken to."""
+	try:
+		commands = guest.supportedCommands
+	except Exception:
+		return True
+	return any(getattr(command, "__name__", None) == "LangChangeCommand" for command in commands)
+
+
+def one_voice(guest):
+	"""Whether a synthesizer reads every language in the voice it was given, though its voices say which
+	languages they speak: it takes no language commands (switches). The language table then gives it the voice
+	itself (voice_for)."""
+	return not switches(guest) and speaks_declared(guest)
+
+
+def own_language(guest):
+	"""The language of a synthesizer's own voice, the user's: the language table's default for its host, whose
+	instance may carry a row's voice."""
+	import synthDriverHandler
+
+	current = synthDriverHandler.getSynth()
+	if (
+		current is not None
+		and getattr(current, "name", None) == DRIVER_NAME
+		and guest is getattr(current, "host", None)
+	):
+		return current.language
+	return guest.language
+
+
+def voice_for(guest, language):
+	"""The id of a synthesizer's voice for a language, or None: the first whose language is spelled as the tag,
+	then the first of that language in any dialect (scripts.code, so not a Cantonese voice for Mandarin)."""
+	from .scripts import code, normalize
+
+	if not language:
+		return None
+	try:
+		voices = [(key, getattr(info, "language", None)) for key, info in guest.availableVoices.items()]
+	except Exception:
+		return None
+	wanted = normalize(language)
+	for key, spoken in voices:
+		if spoken and normalize(spoken) == wanted:
+			return key
+	for key, spoken in voices:
+		if spoken and code(spoken) == code(language):
+			return key
+	return None
+
+
 def supports(guest, language):
 	"""Whether a synthesizer can speak a language by itself; see speaks_declared. A driver that says which voice
 	it switches to for a language answers for itself: NVDA's own answer takes any dialect of a voice's language,
 	but Vocalizer Expressive takes the first voice whose language starts with the tag, so with only an es_CO
-	voice, es_MX text is read by the default voice, in its own language, and must be named in it."""
+	voice, es_MX text is read by the default voice, in its own language, and must be named in it. One that takes
+	no language commands (one_voice) speaks only its own voice's language, whatever voices it has and whichever
+	it names for a language: Runa TTS 2.0 names the voice it starts with."""
+	if language is not None and one_voice(guest):
+		from .scripts import code
+
+		try:
+			own = own_language(guest)
+		except Exception:
+			return False
+		return bool(own) and code(own) == code(language)
 	if language is not None:
 		voice_for = getattr(guest, "getVoiceNameForLanguage", None)
 		if callable(voice_for):
@@ -399,6 +463,28 @@ def _names_in(values, module_name):
 APPLY_ORDER = ("voice", "variant", "rateBoost", "rate", "pitch", "inflection", "volume")
 
 
+# Synthesizers whose voice setter cancels them before it takes the voice, and whose queued speech carries the
+# voice it was queued with, so that the voice can be given without that cancel. Runa TTS 2.0: its cancel stops
+# its runtime and its audio player, right ahead of the change of voice and the piece in the new voice, and that
+# piece was reported silent, most often between a Vocalizer and a ReadSpeaker voice. Its own driver code over
+# a stand-in engine plays every piece, so the loss is in its runtime, which could not be run here.
+VOICE_WITHOUT_CANCEL = {"runaTts2"}
+
+
+def set_voice(guest, voice):
+	"""Give a guest a voice. One of VOICE_WITHOUT_CANCEL is given it without the cancel its own setter makes
+	first: the language table changes a guest's voice only once it is done or cancelled, and the settings
+	dialog cancels it before its sample."""
+	if getattr(guest, "name", None) in VOICE_WITHOUT_CANCEL:
+		resolve = getattr(guest, "_resolveVoiceId", None)
+		if callable(resolve) and "_voice" in vars(guest):
+			resolved = resolve(voice)
+			if resolved:
+				guest._voice = resolved
+				return
+	guest.voice = voice
+
+
 def apply_row(guest, row, log=None):
 	"""Set a guest's voice and parameters from a row; only settings the guest supports are touched."""
 	for setting in APPLY_ORDER:
@@ -410,7 +496,10 @@ def apply_row(guest, row, log=None):
 				continue
 			if read(guest, setting) == value:
 				continue
-			setattr(guest, setting, value)
+			if setting == "voice":
+				set_voice(guest, value)
+			else:
+				setattr(guest, setting, value)
 			if setting == "voice" and log and getattr(guest, "voice", value) != value:
 				# SAPI 5 ignores a voice it does not have; the row then speaks in the voice last used.
 				log.debugWarning(f"dialingo: {guest.name} has no voice {value!r}")

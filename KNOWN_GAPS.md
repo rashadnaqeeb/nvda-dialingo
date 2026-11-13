@@ -75,3 +75,14 @@ Handled from its code alone, without running it. To check once it can be run:
 - It reports every notification for its newest instance, not the one speaking. The add-on keeps one instance, taking over the settings dialog's; a second one would get the first's notifications.
 - It ignores pitch and volume commands, so a capital letter is not raised, and it resolves a rate command against a fixed value rather than its own rate. NVDA sends rate commands only from SSML, which is rare.
 - It reports no language for its voices, so the language table cannot tell which language a row's voice speaks; the row's language is what the user entered.
+
+## Runa TTS 2.0
+
+Handled from its add-on's code, run over a stand-in for its runtime; the runtime itself, with its voices and licence, has not been run. Its older add-on (1.2) is the Vocalizer Expressive driver adapted and is taken to behave as that does; not run either.
+
+- A piece in a row's voice was reported silent, most often between a Vocalizer and a ReadSpeaker voice. Over the stand-in every piece plays, so the loss is in the runtime. Its voice setter stops the runtime and the audio player just ahead of the change of voice; a row's voice is now given without that stop (`hosts.set_voice`). Whether that ends the silence is not known.
+- An utterance that interrupts another, in another voice, still sends the runtime the stop of the cancel just ahead of the change of voice. If the silence is still heard there, it is the runtime's to fix.
+- It takes no language commands, so the language table gives it its own voice for a language with no row. Which voice is the table's choice, not Runa's: the first one listed for the tag's dialect, then the first of that language. A profile voice can be that first voice when no single voice of the language is listed before it.
+- A synthesizer is taken to change voice by itself when it lists the language command among those it supports, and not otherwise (Runa TTS 2.0, SAPI 4). One that acts on the command without listing it would be given the table's choice of voice for a language in place of its own. None is known.
+- SAPI 4 gets its own voices for other languages the same way. Not run with more than one language's voices.
+- Its Smart Switch is set in its own control panel and cannot be turned off for rows. With its option to apply Smart Switch to individual voices, a row's text may go to another voice than the row's. Read from its manual; not seen.

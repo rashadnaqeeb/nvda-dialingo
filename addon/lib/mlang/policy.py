@@ -2,8 +2,9 @@
 
 NVDA speaks through one synthesizer object, so a language spoken by another engine than the one in use
 needs the hosting driver. That is the case for a row on another synthesizer, for a row on the one in use
-with a voice or another setting of its own beyond rate, pitch, and volume, and, with Windows voices in use,
-for any language a Windows voice speaks that the synthesizer in use cannot. NVDA is imported inside the
+with a voice or another setting of its own beyond rate, pitch, and volume, with Windows voices in use,
+for any language a Windows voice speaks that the synthesizer in use cannot, and for a synthesizer that takes
+no language commands and has voices of other languages than its own voice's. NVDA is imported inside the
 functions, so the module loads under the tests.
 """
 
@@ -70,16 +71,22 @@ def windows_voices_wanted(conf):
 	return bool(conf[CONFIG_SECTION]["useWindowsVoices"])
 
 
-def windows_languages_beyond_engine(conf):
+_ASK = object()
+
+
+def windows_languages_beyond_engine(conf, synth=_ASK):
 	"""The languages Windows voices speak that the engine in use cannot; empty unless Windows voices are
-	in use or the engine is OneCore itself, which speaks them without help."""
+	in use or the engine is OneCore itself, which speaks them without help. `synth`: the engine's instance
+	when the caller already has it, None when it could not be loaded."""
 	if not windows_voices_wanted(conf):
 		return []
 	from . import winvoices
 
 	if current_engine(conf) == winvoices.ONECORE:
 		return []
-	synth, temporary = _engine(conf)
+	temporary = False
+	if synth is _ASK:
+		synth, temporary = _engine(conf)
 	if synth is None:
 		# Not engine_supports with no instance: each call would try to load the engine again.
 		return list(winvoices.languages())
@@ -113,10 +120,35 @@ def _beyond_prosody(conf, row, engine):
 	return False
 
 
+def voices_beyond_own(synth):
+	"""Whether an engine reads every language in the one voice it was given (hosts.one_voice) and has voices of
+	other languages than that voice's: only the language table gives it those voices for their languages."""
+	if synth is None:
+		return False
+	from . import hosts
+	from .scripts import code
+
+	try:
+		if not hosts.one_voice(synth):
+			return False
+		own = code(hosts.own_language(synth) or "")
+		languages = [getattr(voice, "language", None) for voice in synth.availableVoices.values()]
+		return any(language and code(language) != own for language in languages)
+	except Exception:
+		return False
+
+
 def needs_table(conf):
 	engine = current_engine(conf)
 	if engine is None:
 		return False
 	if any(row.synth != engine or _beyond_prosody(conf, row, engine) for row in load(conf).rows):
 		return True
-	return bool(windows_languages_beyond_engine(conf))
+	synth, temporary = _engine(conf)
+	try:
+		return bool(windows_languages_beyond_engine(conf, synth)) or voices_beyond_own(synth)
+	finally:
+		if temporary and synth is not None:
+			from . import hosts
+
+			hosts.dispose(synth)
