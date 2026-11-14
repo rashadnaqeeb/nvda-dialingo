@@ -269,6 +269,53 @@ class SchedulerTests(unittest.TestCase):
 		self.h.scheduler.pause(False)
 		self.assertEqual(len(self.h.guests["B"].spoken), 1)
 
+	def test_a_resume_goes_to_the_guest_that_was_paused(self):
+		"""A guest that went quiet while paused is no longer the busy one at the resume: left paused, it would
+		never play its next piece (Eloquence C, held after its done and released with nothing left to play)."""
+		self.h.speak(
+			[LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un", LangChangeCommand("en"), "two"]
+		)
+		a = self.h.guests["A"]
+		self.h.scheduler.pause(True)
+		a.finish(self.h.scheduler)
+		self.h.run_main()
+		self.h.scheduler.pause(False)
+		self.assertIs(a.paused, False)
+		b = self.h.guests["B"]
+		self.assertEqual(len(b.spoken), 1)
+		self.assertIsNone(b.paused)
+
+	def test_a_pause_repeated_keeps_the_guest_it_was_sent_to(self):
+		self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
+		a = self.h.guests["A"]
+		self.h.scheduler.pause(True)
+		a.finish(self.h.scheduler)
+		self.h.scheduler.pause(True)
+		self.h.scheduler.pause(False)
+		self.assertIs(a.paused, False)
+
+	def test_a_cancel_forgets_the_paused_guest(self):
+		"""Its cancel ends its pause; a resume after it is for whoever speaks then."""
+		self.h.speak([LangChangeCommand("en"), "one"])
+		a = self.h.guests["A"]
+		self.h.scheduler.pause(True)
+		a.finish(self.h.scheduler)
+		self.h.scheduler.cancel()
+		self.assertEqual(a.cancelled, 1)
+		self.h.speak([LangChangeCommand("fr"), "un"])
+		b = self.h.guests["B"]
+		self.h.scheduler.pause(False)
+		self.assertIs(a.paused, True)
+		self.assertIs(b.paused, False)
+
+	def test_a_forgotten_guest_is_not_resumed(self):
+		self.h.speak([LangChangeCommand("en"), "one"])
+		a = self.h.guests["A"]
+		self.h.scheduler.pause(True)
+		self.h.scheduler.forget(a)
+		self.h.scheduler.pause(False)
+		self.assertIs(a.paused, True)
+
 	def test_guest_done_without_marker_completes_piece(self):
 		self.h.speak([LangChangeCommand("en"), "one", LangChangeCommand("fr"), "un"])
 		a = self.h.guests["A"]

@@ -193,6 +193,7 @@ class Scheduler:
 		self.waiting = None  # a guest sent the next piece ahead, its audio held until the busy guest is free
 		self.speaking = False  # whether NVDA is owed a done notification
 		self.paused = False
+		self.paused_guest = None  # the guest the pause was sent to, which the resume goes to
 		# Raised by every cancel. A done the driver defers until a guest's audio has played (64-bit SAPI 5's)
 		# carries the one it was reported in: should it outlive the cancel of its guest (see owed), it would finish
 		# the guest's next piece.
@@ -209,10 +210,12 @@ class Scheduler:
 	def cancel(self):
 		with self.lock:
 			guests = {p.guest for p in self.inflight.values() if p.guest is not None}
-			for guest in (self.current_guest, self.busy_guest, *self.owed.values()):
+			# The paused guest too, though it is the guest the last piece went to: its cancel ends its pause.
+			for guest in (self.current_guest, self.busy_guest, self.paused_guest, *self.owed.values()):
 				if guest is not None:
 					guests.add(guest)
 			waiting = self.waiting
+			self.paused_guest = None
 			self.owed.clear()
 			self.epoch += 1
 			self.pending.clear()
@@ -239,7 +242,17 @@ class Scheduler:
 	def pause(self, switch):
 		with self.lock:
 			self.paused = switch
-			guest = self.busy_guest
+			if switch:
+				guest = self.busy_guest
+				if guest is not None:
+					self.paused_guest = guest
+			else:
+				# The guest that was paused, though it may have gone quiet since (held after its done, and
+				# released with nothing left to play): it would stay paused, and its next piece never play.
+				guest = self.paused_guest
+				self.paused_guest = None
+				if guest is None:
+					guest = self.busy_guest
 		if guest is not None:
 			try:
 				guest.pause(switch)
@@ -275,6 +288,8 @@ class Scheduler:
 				self.played = None
 			if self.waiting is guest:
 				self.waiting = None
+			if self.paused_guest is guest:
+				self.paused_guest = None
 			self.reached.pop(id(guest), None)
 			self.last_marker.pop(id(guest), None)
 			self.held.pop(id(guest), None)
