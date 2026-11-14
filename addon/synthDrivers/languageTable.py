@@ -226,6 +226,23 @@ def _done_early(synth):
 	return getattr(synth, "name", None) == "sapi5_32" and not getattr(synth, "speechEndOffset", None)
 
 
+def _held_after_done(synth):
+	"""Guests held after their done until their audio has played: 32-bit SAPI 5 (_done_early), freed by its
+	marks' second report, and Eloquence C, freed once its player has played (_release_when_played)."""
+	return _done_early(synth) or _reloq_player(synth) is not None
+
+
+def _reloq_player(synth):
+	"""Eloquence C's player, or None. With its pauses shortened (only at text end, or always) it reports a call's
+	marks and done once its last feed has returned, while up to the player's buffer is still to play: the next
+	guest would talk over that tail. With pauses kept it reports them once the audio has played, and the wait for
+	its player ends at once."""
+	if getattr(synth, "name", None) != "reloqC":
+		return None
+	player = getattr(getattr(synth, "_transport", None), "_player", None)
+	return player if callable(getattr(player, "sync", None)) else None
+
+
 # How long a guest held after an early done may go without the report that its audio played before it is
 # freed anyway. SAPI 5 reports done once its last feed has returned, and NVDA's player returns from a feed only
 # when what is left fits its 0.4 second buffer, so no more than that is still to play; the margin is for the
@@ -331,7 +348,7 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 			done_drains=_done_drains,
 			settles=lambda guest: guest.name in SETTLES,
 			serial=_serial,
-			done_early=_done_early,
+			done_early=_held_after_done,
 			returning=_drop_silence,
 			cuts_silence=lambda guest: guest.name in CUTS_SILENCE,
 			holds=_holds,
@@ -1007,7 +1024,29 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		self.scheduler.on_done(synth)
 		token = self.scheduler.holding(synth)
 		if token is not None and token is not held:
-			self._release_later(self.scheduler, synth, token)
+			player = _reloq_player(synth)
+			if player is not None:
+				self._release_when_played(self.scheduler, synth, token, player)
+			else:
+				self._release_later(self.scheduler, synth, token)
+
+	def _release_when_played(self, scheduler, synth, token, player):
+		"""Free Eloquence C, held after its done, once its player has played what it was fed. NVDA's player runs
+		the callbacks of chunks that have played only inside a feed, sync, or idle, and with its pauses shortened
+		Eloquence C makes none of these after its last feed, so a callback would wait for its next piece; sync
+		waits for the audio itself. On a thread of its own: the done comes from Eloquence C's worker, inside its
+		lock for notifications, which the callbacks that sync runs take too. Nothing else is fed to the player
+		meanwhile, since a guest is held only with nothing of it in flight; a cancel stops the player, which ends
+		the wait, and its token is then stale."""
+
+		def wait():
+			try:
+				player.sync()
+			except Exception:
+				log.debugWarning("dialingo: Eloquence C's player could not wait for its audio", exc_info=True)
+			scheduler.release(synth, token)
+
+		threading.Thread(target=wait, name="dialingo.reloqPlayed", daemon=True).start()
 
 	def _release_later(self, scheduler, synth, token):
 		"""Free a guest held after its early done if the report that its audio played never comes: the end
