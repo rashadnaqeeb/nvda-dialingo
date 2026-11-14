@@ -6,6 +6,7 @@ paths:
   - "addon/lib/mlang/hosts.py"
   - "addon/lib/mlang/sapi5host.py"
   - "addon/lib/mlang/playqueue.py"
+  - "addon/lib/mlang/playclock.py"
   - "addon/lib/mlang/pipes.py"
   - "addon/lib/mlang/prosody.py"
   - "addon/lib/mlang/policy.py"
@@ -14,6 +15,7 @@ paths:
   - "tests/test_hosts.py"
   - "tests/test_sapi5host.py"
   - "tests/test_playqueue.py"
+  - "tests/test_playclock.py"
   - "tests/test_pipes.py"
   - "tests/test_prosody.py"
   - "tests/fake_bridge.py"
@@ -60,12 +62,13 @@ Most of this is also in the code's docstrings, next to what it explains. Keep bo
 - Rows are reapplied on every send, skipped when the guest already carries that row. A new voice clears Eloquence's memory of its last language.
 - Done semantics: OneCore, Eloquence, SAPI 4 report done when their queue is empty. eSpeak, Vocalizer, RHVoice, SAPI 5 report after each call with the next still queued, so a done after one of the guest's markers while a later piece is in flight is taken as that call's. A done with none of the guest's markers reached is a failed synthesis. eSpeak's done is also checked against its queue (a cancelled utterance's done can arrive late).
 - A guest that never reports done is freed at its last marker. A piece with no guest, a failed `speak`, or no progress (silence driver) is treated as done, and its NVDA indexes are still reported in order. OneCore whose first utterance fails stays marked speaking forever; on the add-on's instances that is completed.
-- Cancel cancels every guest with pieces in flight and drops index maps. Pause goes to the speaking guest and holds the seam.
+- Cancel cancels every guest with pieces in flight and drops index maps. Pause goes to the speaking guest and holds the seam. The resume goes to the guest that was paused, not to the one speaking then: a guest held after its done can be released during the pause, with nothing left to play, and left paused it never played its next piece (seen with Eloquence C, pausing at the very end of its audio).
 
 ## Freeing a guest early
 
 - Eloquence (IBMTTS) signals done from a timer 0.3 s after synthesis ends. Its player is asked to report when audio up to each end marker has played (`on_played`), which frees it; its pending done is cancelled. A piece with more than 0.3 s of audio has its timer already running by then, waiting in the player for that audio, so its done comes at the same moment as `on_played`, and can follow the next piece sent to it. A done while Eloquence is synthesizing or holds a call not yet started is therefore dropped (`_more_queued`); otherwise it would finish that next piece, and a voice change after it would not wait.
-- Eloquence C (`reloqC`) with its pauses shortened ("only at text end" or "always") reports a call's marks and done once its last feed has returned, with up to 0.4 s still to play, and never idles its player after that. NVDA's player runs the callbacks of played chunks only inside a feed, sync, or idle, so a callback would wait for its next piece. It is held after its done (`done_early`) and freed once `sync()` on its player returns, on a thread of its own (the done comes from inside its notification lock). Nothing else is fed meanwhile, since a held guest has nothing in flight; a cancel stops the player and ends the wait. With pauses kept it reports after its audio played and the sync returns at once. Measured in real NVDA with eSpeak for Persian: eSpeak started 50 ms into Eloquence C's last 0.35 s, and now starts after it.
+- Eloquence C (`reloqC`) with its pauses shortened ("only at text end" or "always") reports a call's marks and done once its last feed has returned, with up to 0.4 s still to play, and never idles its player after that. NVDA's player runs the callbacks of played chunks only inside a feed, sync, or idle, so a callback would wait for its next piece. While audio is left it is held after its done (`done_early`) and freed by a timer when that audio has had its time, by a clock of what it feeds its player (`playclock.py`): its player's feed, idle, stop, and pause are replaced on the instance, ahead of every piece, to tell the clock and then do what they did. With pauses kept it idles its player before its done, nothing is left, and it is not held. Measured in real NVDA with eSpeak for Persian: the clock runs out 2 to 33 ms before a sync on the player returns, and eSpeak starts 0 to 60 ms after Eloquence C's last sound, where without the hold it started 50 ms into Eloquence C's last 0.35 s.
+- Never call a guest's player from a thread other than the one that feeds it, except `stop` and `pause`. NVDA's player keeps its pending callbacks in a list without a lock; `sync`, `idle`, and `feed` all walk or change it. 1.1.1 waited for Eloquence C's audio with `sync()` on a thread of its own, and NVDA crashed as soon as Eloquence C fed its next piece: the second character spelled, typed, or moved over (issue 13). A piece for the same guest is sent while it is held, so a held guest's player is not idle.
 - OneCore reports each mark once the audio before it has played, and done 0.2 s after the end marker. Another guest may follow at the end marker. A voice change on it, or its own piece after another guest's, would wait for that silence, so its player is stopped once the end marker has played (`cuts_silence`). One engine per process: no instance per voice. Mark to Zira: 60 to 130 ms, from 190 to 320.
 - SAPI 5 places marks in the audio itself, inaccurately (Zira's end marker 0.5 to 0.7 s early; David's after the pause). The table hosts it as a subclass (`sapi5host.py`) whose audio goes through a queue fed to NVDA's player by its own thread (`playqueue.py`). Each chunk with speech is cut after its last loud sample (above 32 of 32767), plus 20 ms carried into a quiet next chunk, and a probe callback goes there. The request's last probe is the end of speech. Bookmarks NVDA's driver would report at request end are reported after their audio plays.
 - SAPI 5 and the Speech Platform keep an instance per row voice (a voice change is then a guest change): David to Zira 75 to 205 ms, from 0.8 to 1 s. No other engine can: OneCore runs one engine per process, eSpeak and Vocalizer use module globals, Acapela reports for its newest instance, Sonata reloads its model per utterance.

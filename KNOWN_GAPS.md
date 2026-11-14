@@ -47,6 +47,7 @@ Things found and deliberately left alone, with the reason. When one is fixed, de
 - Sonata: a narrow window where the done of a cancelled utterance can land after the next one starts.
 - eSpeak's rate multiplier is approximate, as in NVDA itself.
 - Eloquence: the language and voice annotations it emits stay in effect on the instance into its next piece; only its memory of the last language is reset, on a change of voice.
+- Eloquence C with its pauses shortened: when its audio has played is worked out from what it feeds its player, not asked of the player, which only the thread feeding it may call. The next voice can start up to about 30 ms before Eloquence C's audio has quite ended, by the player's own count. And a player it makes for a new sample rate while a piece is already on its way is fed unseen, so after that one piece the next voice waits 0.45 seconds whatever is left of it.
 - Acapela: a change of voice queues a stop on the driver's own thread, which every cancel ends and restarts, so in a rare order the stop could run while the next piece is starting and silence it. Read from the code only; not seen.
 
 ## Settings side effects
