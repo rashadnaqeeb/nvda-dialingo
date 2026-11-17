@@ -31,9 +31,11 @@ CONFSPEC = {
 	"followTable": "boolean(default=False)",
 }
 
-# Settings a row can carry, in the order they are applied to a synthesizer: the voice first, because
-# changing it resets parameters in some engines.
-ROW_SETTINGS = ("voice", "variant", "rate", "rateBoost", "pitch", "inflection", "volume")
+# Settings a row can carry, in the order they are applied to a synthesizer: the voice ahead of the
+# parameters, because changing it resets them in some engines. "language" is the synthesizer's own setting
+# of that name, on one that has it (Eloquence C, whose voices are those of the language selected), ahead of
+# the voice, which is one of that language's. A row's `lang` is the language of the text the row reads.
+ROW_SETTINGS = ("language", "voice", "variant", "rate", "rateBoost", "pitch", "inflection", "volume")
 # What a row carries for NVDA rather than the synthesizer: the symbol level (none, some, most, all) for text
 # in its language, None for NVDA's own setting; and whether detection may switch to its language. Kept out
 # of the settings, so no synthesizer is sent them.

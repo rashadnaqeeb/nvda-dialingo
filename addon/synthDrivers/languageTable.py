@@ -495,11 +495,18 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 
 	def _snapshot_language(self):
 		"""The host's language while it carries its own voice, for a voice that reports none of its own, and
-		its variants, which some synthesizers list per voice (Sonata gives each the voice's language)."""
+		its variants, which some synthesizers list per voice (Sonata gives each the voice's language). And its
+		voices, for a host with a language setting of its own, which lists those of the language selected
+		(Eloquence C gives each that language): a row may leave another language on it."""
 		try:
 			self.__dict__["_default_language"] = self.host.language
 		except Exception:
 			self.__dict__["_default_language"] = None
+		try:
+			voices = OrderedDict(self.host.availableVoices) if self.host.isSupported("language") else None
+		except Exception:
+			voices = None
+		self.__dict__["_default_voices"] = voices
 		try:
 			variants = OrderedDict(self.host.availableVariants) if self.host.isSupported("variant") else None
 		except Exception:
@@ -1199,6 +1206,10 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		host = self.__dict__.get("host")
 		if host is None:
 			return OrderedDict()
+		# The default language's, not those of a row's language still on the host.
+		voices = self.__dict__.get("_default_voices")
+		if voices is not None:
+			return voices
 		try:
 			return host.availableVoices
 		except Exception:
@@ -1256,13 +1267,13 @@ class SynthDriver(synthDriverHandler.SynthDriver):
 		if host is None:
 			return None
 		# The variant's first: Sonata's multilingual voices have one variant per language, and the voice
-		# reports its first variant's. The default voice's variants, since the host's own list may be a row
-		# voice's.
+		# reports its first variant's. The default's variants and voices as this driver lists them, since the
+		# host's own lists may be those of a row's voice or language.
 		for setting, available in (("variant", "availableVariants"), ("voice", "availableVoices")):
 			try:
 				value = self._defaults.get(setting)
 				if value is not None:
-					info = getattr(self if setting == "variant" else host, available).get(value)
+					info = getattr(self, available).get(value)
 					if info is not None and getattr(info, "language", None):
 						return info.language
 			except Exception:

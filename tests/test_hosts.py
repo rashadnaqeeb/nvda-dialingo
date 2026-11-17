@@ -384,6 +384,132 @@ class VariantsForTest(unittest.TestCase):
 		self.assertEqual(guest.sets, [])
 
 
+class VoicesPerLanguage:
+	"""Eloquence C: a language setting of its own, and the same preset voices in every language, listed for
+	the language selected and each named as a voice of it. A language keeps the voice where it has it."""
+
+	name = "reloqC"
+	LANGUAGES = {"en_US": "American English", "it_IT": "Italian", "de_DE": "German"}
+	VOICES = {"en_US": ["1", "2"], "it_IT": ["1", "2"], "de_DE": ["1"]}
+
+	def __init__(self):
+		self._language = "en_US"
+		self._voice = "2"
+		self.rate = 40
+		self.sets = []
+
+	def isSupported(self, setting):
+		return setting in ("language", "voice", "rate")
+
+	@property
+	def language(self):
+		return self._language
+
+	@language.setter
+	def language(self, value):
+		self.sets.append(("language", value))
+		self._language = value
+		if self._voice not in self.VOICES[value]:
+			self._voice = self.VOICES[value][0]
+
+	@property
+	def voice(self):
+		return self._voice
+
+	@voice.setter
+	def voice(self, value):
+		if value not in self.VOICES[self._language]:
+			raise ValueError(value)
+		self.sets.append(("voice", value))
+		self._voice = value
+
+	@property
+	def availableLanguages(self):
+		return {key: types.SimpleNamespace(id=key, displayName=name) for key, name in self.LANGUAGES.items()}
+
+	@property
+	def availableVoices(self):
+		return {
+			v: types.SimpleNamespace(id=v, displayName=f"Voice {v}", language=self._language)
+			for v in self.VOICES[self._language]
+		}
+
+
+class LanguageSettingTest(unittest.TestCase):
+	"""A synthesizer whose voice list names only the language selected in a setting of its own (issue 14)."""
+
+	def test_its_languages_are_the_choices_of_its_own_setting(self):
+		self.assertEqual(
+			hosts.languages_of(VoicesPerLanguage()),
+			[("en_US", "American English"), ("it_IT", "Italian"), ("de_DE", "German")],
+		)
+
+	def test_a_synthesizer_without_the_setting_has_none(self):
+		self.assertEqual(hosts.languages_of(SpeakersPerLanguage()), [])
+
+	def test_another_languages_voices_are_listed_and_the_guest_put_back(self):
+		guest = VoicesPerLanguage()
+		guest._mlangApplied = ("en", "reloqC")
+		got = hosts.voices_in(guest, "it_IT")
+		self.assertEqual([(v.id, v.language) for v in got], [("1", "it_IT"), ("2", "it_IT")])
+		self.assertEqual((guest.language, guest.voice, guest.rate), ("en_US", "2", 40))
+		self.assertIsNone(guest._mlangApplied)
+
+	def test_a_voice_the_language_lacks_is_put_back_after(self):
+		guest = VoicesPerLanguage()
+		got = hosts.voices_in(guest, "de_DE")
+		self.assertEqual([v.id for v in got], ["1"])
+		self.assertEqual((guest.language, guest.voice), ("en_US", "2"))
+
+	def test_the_current_language_is_not_set_again(self):
+		guest = VoicesPerLanguage()
+		self.assertEqual([v.id for v in hosts.voices_in(guest, "en_US")], ["1", "2"])
+		self.assertEqual([v.id for v in hosts.voices_in(guest, None)], ["1", "2"])
+		self.assertEqual(guest.sets, [])
+
+	def test_a_synthesizer_without_the_setting_lists_its_voices(self):
+		guest = SpeakersPerLanguage()
+		guest.availableVoices = {"en-GB": types.SimpleNamespace(id="en-GB")}
+		self.assertEqual([v.id for v in hosts.voices_in(guest, None)], ["en-GB"])
+		self.assertEqual(guest.sets, [])
+
+	def test_a_row_gives_the_language_before_its_voice(self):
+		from mlang.table import Row
+
+		guest = VoicesPerLanguage()
+		guest.language = "de_DE"
+		guest.sets.clear()
+		hosts.apply_row(guest, Row("it_IT", "reloqC", language="it_IT", voice="2", rate=40))
+		self.assertEqual(guest.sets, [("language", "it_IT"), ("voice", "2")])
+		self.assertEqual((guest.language, guest.voice), ("it_IT", "2"))
+
+	def test_a_row_saved_without_the_language_is_given_the_one_for_its_own(self):
+		from mlang.table import Row
+
+		guest = VoicesPerLanguage()
+		hosts.apply_row(guest, Row("it", "reloqC", voice="1"))
+		self.assertEqual((guest.language, guest.voice), ("it_IT", "1"))
+		# A language it does not speak leaves it where it was.
+		hosts.apply_row(guest, Row("ca", "reloqC", voice="2"))
+		self.assertEqual((guest.language, guest.voice), ("it_IT", "2"))
+
+	def test_the_choice_for_a_language_is_its_tag_then_any_dialect_of_it(self):
+		guest = VoicesPerLanguage()
+		self.assertEqual(hosts.language_choice(guest, "de-de"), "de_DE")
+		self.assertEqual(hosts.language_choice(guest, "it"), "it_IT")
+		self.assertEqual(hosts.language_choice(guest, "en_GB"), "en_US")
+		self.assertIsNone(hosts.language_choice(guest, "ca"))
+		self.assertIsNone(hosts.language_choice(guest, ""))
+		self.assertIsNone(hosts.language_choice(SpeakersPerLanguage(), "it"))
+
+	def test_the_language_is_kept_in_the_stored_table(self):
+		from mlang.table import Row, Table
+
+		table = Table([Row("it_IT", "reloqC", language="it_IT", voice="2")])
+		row = Table.from_json(table.to_json()).rows[0]
+		self.assertEqual((row.lang, row.get("language"), row.get("voice")), ("it_IT", "it_IT", "2"))
+
+
 class TakeOverTest(Stubbed):
 	def test_the_settings_dialogs_instance_becomes_the_guest(self):
 		# eSpeak keeps its engine in module globals: a second instance would re-initialize it.
@@ -507,6 +633,16 @@ class SameEngineRowTest(Stubbed):
 		from mlang.table import Row
 
 		self.assertTrue(self.needs(Row("es", "vocalizer_expressive2", variant="2"), own={"voice": "Daniel"}))
+
+	def test_another_language_of_the_engines_own_setting_needs_the_table(self):
+		# Eloquence C: the voice is the same preset in every language, and the language a setting of its own.
+		from mlang.table import Row
+
+		own = {"language": "en_US", "voice": "1"}
+		self.assertTrue(
+			self.needs(Row("it_IT", "vocalizer_expressive2", language="it_IT", voice="1"), own=own)
+		)
+		self.assertFalse(self.needs(Row("ca", "vocalizer_expressive2", language="en_US", voice="1"), own=own))
 
 
 class HalfBuiltTest(Stubbed):

@@ -247,7 +247,7 @@ class RowSynth:
 		value = row.get(name) if row is not None else None
 		if value is None:
 			value = hosts.own_value(self.guest, name)
-		if value is None and name not in ("voice", "variant"):
+		if value is None and name not in ("language", "voice", "variant"):
 			value = False if name == "rateBoost" else 50
 		return value
 
@@ -262,8 +262,8 @@ class RowSynth:
 		synth = synthDriverHandler.getSynth()
 		if synth is not None and synth.name == DRIVER_NAME:
 			synth.update_row(row)
-		if setting == "voice":
-			# The variants listed are the new voice's.
+		if setting in ("language", "voice"):
+			# The variants listed are the new voice's, and the voices the new language's.
 			refresh_later()
 
 

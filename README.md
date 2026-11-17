@@ -148,7 +148,7 @@ The user sets up a row for each language: a synthesizer, a voice, rate, pitch, v
 
 If French is set up on the same synthesizer you already use, say Eloquence at a slower rate, there's no need for a second synthesizer. The plugin wraps the French text in rate, pitch, and volume commands, which every major synthesizer applies in the middle of speech. Commands NVDA adds itself, like the higher pitch for a capital letter, are adjusted so they add on top of the row's values.
 
-This only works while the row keeps your own voice. A row with a voice of its own, or its own variant, rate boost, or inflection, needs the Language table even on the same synthesizer, since commands can't choose a voice. The synthesizer would pick one for each tag by its own rules, which can miss the row's voice, for example for a dialect it has no voice for.
+This only works while the row keeps your own voice. A row with a voice of its own, or its own variant, rate boost, or inflection, or another language of a synthesizer that keeps its language as a setting apart from the voice, needs the Language table even on the same synthesizer, since commands can't choose a voice. The synthesizer would pick one for each tag by its own rules, which can miss the row's voice, for example for a dialect it has no voice for.
 
 ### The Language table
 

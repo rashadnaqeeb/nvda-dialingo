@@ -459,8 +459,9 @@ def _names_in(values, module_name):
 
 # The order a row's settings are set in. Rate boost before rate: a driver's rate boost setter re-applies the
 # rate it reads back, and eSpeak, busy, reads the engine's old one while the rate set before it waits in its
-# queue; the rate set after it is the one that stands.
-APPLY_ORDER = ("voice", "variant", "rateBoost", "rate", "pitch", "inflection", "volume")
+# queue; the rate set after it is the one that stands. The language setting of a synthesizer that has one
+# before the voice, which is one of that language's (Eloquence C).
+APPLY_ORDER = ("language", "voice", "variant", "rateBoost", "rate", "pitch", "inflection", "volume")
 
 
 # Synthesizers whose voice setter cancels them before it takes the voice, and whose queued speech carries the
@@ -486,9 +487,14 @@ def set_voice(guest, voice):
 
 
 def apply_row(guest, row, log=None):
-	"""Set a guest's voice and parameters from a row; only settings the guest supports are touched."""
+	"""Set a guest's voice and parameters from a row; only settings the guest supports are touched. A row
+	without the language of a guest that has the setting, saved before rows carried it, is given the guest's
+	language for the row's: its piece comes without language commands, and would be read in the language
+	left on the guest."""
 	for setting in APPLY_ORDER:
 		value = row.get(setting)
+		if value is None and setting == "language":
+			value = language_choice(guest, row.lang)
 		if value is None:
 			continue
 		try:
@@ -592,25 +598,77 @@ def variants_for(guest, voice, log=None):
 		return []
 	if voice is None or not guest.isSupported("voice") or read(guest, "voice") == voice:
 		return list(guest.availableVariants.values())
+	return _listed_with(guest, "voice", voice, "availableVariants", log)
+
+
+def languages_of(guest):
+	"""The choices of a synthesizer's own language setting, as (id, name) pairs, for the row dialog; empty for
+	one without the setting. Eloquence C has it: its voices are the same presets in every language, and it lists
+	them for the language selected, each as a voice of that language, so its voice list alone names one
+	language (issue 14)."""
+	try:
+		if not guest.isSupported("language"):
+			return []
+		return [
+			(key, getattr(info, "displayName", None) or key) for key, info in guest.availableLanguages.items()
+		]
+	except Exception:
+		return []
+
+
+def language_choice(guest, language):
+	"""The choice of a synthesizer's own language setting (languages_of) that speaks a language: the one
+	spelled as the tag, else the first of that language in any dialect (scripts.code). None when it has none,
+	or no such setting."""
+	from .scripts import code, normalize
+
+	if not language:
+		return None
+	keys = [key for key, _name in languages_of(guest)]
+	wanted = normalize(language)
+	for key in keys:
+		if normalize(key) == wanted:
+			return key
+	for key in keys:
+		if code(key) == code(language):
+			return key
+	return None
+
+
+def voices_in(guest, language, log=None):
+	"""A synthesizer's voices for a choice of its own language setting (languages_of). It lists only those of
+	the language selected, so it is given the language for the question and its settings are put back after,
+	as for variants_for."""
+	if not guest.isSupported("voice"):
+		return []
+	if language is None or not guest.isSupported("language") or read(guest, "language") == language:
+		return list(guest.availableVoices.values())
+	return _listed_with(guest, "language", language, "availableVoices", log)
+
+
+def _listed_with(guest, setting, value, available, log=None):
+	"""What a synthesizer lists under `available` with one of its settings at `value`. The settings a row
+	carries are put back after, since a voice or language can reset the others, and a guest of the language
+	table then puts its own row back for its next piece."""
 	before = {}
-	for setting in APPLY_ORDER:
+	for other in APPLY_ORDER:
 		try:
-			if guest.isSupported(setting):
-				before[setting] = read(guest, setting)
+			if guest.isSupported(other):
+				before[other] = read(guest, other)
 		except Exception:
 			pass
 	try:
-		guest.voice = voice
-		return list(guest.availableVariants.values())
+		setattr(guest, setting, value)
+		return list(getattr(guest, available).values())
 	finally:
-		for setting, value in before.items():
+		for other, old in before.items():
 			try:
-				if read(guest, setting) != value:
-					setattr(guest, setting, value)
+				if read(guest, other) != old:
+					setattr(guest, other, old)
 			except Exception:
 				if log:
 					log.debugWarning(
-						f"dialingo: could not put back {setting} on {guest.name} after listing variants",
+						f"dialingo: could not put back {other} on {guest.name} after listing {available}",
 						exc_info=True,
 					)
 		guest._mlangApplied = None

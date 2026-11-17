@@ -544,6 +544,9 @@ class RowDialog(wx.Dialog):
 		self.variants = []
 		self.languages = []
 		self.language_typed = False
+		self.synth_languages = []  # the choices of the synthesizer's own language setting, if it has one
+		self.synth_language = None  # the one of them whose voices are listed, which the row carries
+		self.voice_lists = {}  # the voices listed so far, by that language
 		self.synths = [
 			(name, desc)
 			for name, desc in synthDriverHandler.getSynthList()
@@ -568,6 +571,7 @@ class RowDialog(wx.Dialog):
 			_("&Language:"), wx.ComboBox, choices=[], style=wx.CB_DROPDOWN
 		)
 		self.langCombo.Bind(wx.EVT_TEXT, self.onLanguageTyped)
+		self.langCombo.Bind(wx.EVT_COMBOBOX, self.onLanguageTyped)
 		self.sliders = {}
 		# Translators: Labels of the parameter sliders in the language dialog.
 		for setting, label in (
@@ -643,6 +647,8 @@ class RowDialog(wx.Dialog):
 			self.variants = []
 			self.variantChoice.Clear()
 			self.languages = []
+			self.synth_languages = []
+			self.synth_language = None
 			# Nothing from another synthesizer carries over, and OK refuses until one loads.
 			for control in (
 				self.voiceChoice,
@@ -658,26 +664,20 @@ class RowDialog(wx.Dialog):
 			return
 		guest = self.guest
 		row = self.row if self.row is not None and self.row.synth == name else None
-		try:
-			self.voices = list(guest.availableVoices.values()) if guest.isSupported("voice") else []
-		except Exception:
-			log.debugWarning("dialingo: voices unavailable", exc_info=True)
-			self.voices = []
-		self.voiceChoice.Clear()
-		for info in self.voices:
-			label = info.displayName
-			if info.language:
-				label = f"{label} ({language_label(info.language)})"
-			self.voiceChoice.Append(label)
-		self.voiceChoice.Enable(bool(self.voices))
-		# A new row starts from the synthesizer's own values, the user's, so what the dialog shows is what
-		# the row would leave unchanged.
-		wanted = row.get("voice") if row else None
-		if wanted is None:
-			wanted = hosts.own_value(guest, "voice")
-		voice_index = next((i for i, v in enumerate(self.voices) if v.id == wanted), 0)
-		if self.voices:
-			self.voiceChoice.SetSelection(voice_index)
+		# A synthesizer with a language setting of its own lists only the voices of the language selected
+		# (Eloquence C), so the voices shown are those of one of its languages: the row's, else the one that
+		# speaks the row's language, else its own, the user's.
+		self.synth_languages = [key for key, _name in hosts.languages_of(guest)]
+		self.voice_lists = {}
+		self.synth_language = None
+		if self.synth_languages:
+			wanted = row.get("language") if row else None
+			if wanted not in self.synth_languages and self.row is not None:
+				wanted = hosts.language_choice(guest, self.row.lang)
+			if wanted not in self.synth_languages:
+				wanted = hosts.own_value(guest, "language")
+			self.synth_language = wanted if wanted in self.synth_languages else self.synth_languages[0]
+		self.fill_voices(row.get("voice") if row else None)
 
 		self.fill_variants(row.get("variant") if row else None)
 
@@ -699,7 +699,7 @@ class RowDialog(wx.Dialog):
 		self.rateBoostCheck.SetValue(bool(rate_boost))
 		self.testButton.Enable(True)
 
-		languages = []
+		languages = list(self.synth_languages)
 		for info in self.voices:
 			if info.language and info.language not in languages:
 				languages.append(info.language)
@@ -713,6 +713,48 @@ class RowDialog(wx.Dialog):
 			self.language_typed = True
 		else:
 			self.onVoice(None)
+
+	def fill_voices(self, wanted):
+		"""The synthesizer's voices, those of `synth_language` for one with a language setting of its own,
+		`wanted` selected if it is one of them, else the synthesizer's own, else the first. A new row so starts
+		from the synthesizer's own values, the user's, and what the dialog shows is what the row would leave
+		unchanged."""
+		key = self.synth_language
+		if key not in self.voice_lists:
+			try:
+				self.voice_lists[key] = hosts.voices_in(self.guest, key, log)
+			except Exception:
+				log.debugWarning("dialingo: voices unavailable", exc_info=True)
+				self.voice_lists[key] = []
+		self.voices = self.voice_lists[key]
+		self.voiceChoice.Clear()
+		for info in self.voices:
+			label = info.displayName
+			if info.language:
+				label = f"{label} ({language_label(info.language)})"
+			self.voiceChoice.Append(label)
+		self.voiceChoice.Enable(bool(self.voices))
+		if not self.voices:
+			return
+		ids = [v.id for v in self.voices]
+		if wanted not in ids:
+			wanted = hosts.own_value(self.guest, "voice")
+		self.voiceChoice.SetSelection(ids.index(wanted) if wanted in ids else 0)
+
+	def follow_language(self):
+		"""For a synthesizer with a language setting of its own, list the voices of the language now named
+		in the language field, keeping the voice selected where that language has it. A language the
+		synthesizer does not speak leaves the list as it is: the row then reads it in the last one named."""
+		key = hosts.language_choice(self.guest, self.language_code())
+		if key is None or key == self.synth_language:
+			return
+		i = self.voiceChoice.GetSelection()
+		voice = self.voices[i].id if 0 <= i < len(self.voices) else None
+		i = self.variantChoice.GetSelection()
+		variant = self.variants[i].id if 0 <= i < len(self.variants) else None
+		self.synth_language = key
+		self.fill_voices(voice)
+		self.fill_variants(variant)
 
 	def fill_variants(self, wanted):
 		"""The variants of the voice selected, `wanted` selected if it is one of them, else the synthesizer's
@@ -752,6 +794,11 @@ class RowDialog(wx.Dialog):
 
 	def onLanguageTyped(self, evt):
 		self.language_typed = True
+		if self.guest is not None and self.synth_languages:
+			try:
+				self.follow_language()
+			except Exception:
+				log.debugWarning("dialingo: could not list the voices of the language entered", exc_info=True)
 
 	# ------------------------------------------------------------ result
 
@@ -781,6 +828,8 @@ class RowDialog(wx.Dialog):
 			)
 			return None
 		settings = {}
+		if self.synth_language is not None:
+			settings["language"] = self.synth_language
 		i = self.voiceChoice.GetSelection()
 		if 0 <= i < len(self.voices):
 			settings["voice"] = self.voices[i].id
@@ -869,10 +918,10 @@ class RowDialog(wx.Dialog):
 
 
 def live_values(synth):
-	"""A synthesizer's current values of the settings it keeps in the configuration, voice and variant first,
-	since setting those can reset the others."""
+	"""A synthesizer's current values of the settings it keeps in the configuration, language, voice, and
+	variant first, since setting those can reset the others."""
 	ids = [s.id for s in synth.supportedSettings if getattr(s, "useConfig", True)]
-	ids.sort(key=lambda s: (s != "voice", s != "variant"))
+	ids.sort(key=lambda s: (s != "language", s != "voice", s != "variant"))
 	values = {}
 	for setting in ids:
 		try:
